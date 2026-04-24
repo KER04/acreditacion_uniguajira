@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import { statusFromScore, STATUS_LABELS, STATUS_COLOR, judgmentFromScore } from '../../../data/acreditacion'
+import FileUpload from '../FileUpload'
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 const SEDES_OPT = [['riohacha','Riohacha'],['maicao','Maicao'],['ambas','Ambas']]
@@ -116,9 +117,20 @@ function InfoTab({ factor, onSave }) {
         <ListEditor label="Oportunidades de mejora" items={oportunidades} onChange={setOportunidades} placeholder="Nueva oportunidad…" />
       </div>
 
-      <div className="field" style={{ marginBottom: 20 }}>
-        <label>URL de la presentación PowerPoint</label>
-        <input value={presentacionUrl} onChange={e => setPresentacionUrl(e.target.value)} placeholder="https://... o ruta relativa al archivo .pptx" />
+      <div style={{ marginBottom: 20 }}>
+        <FileUpload
+          tipo="presentacion"
+          extra={{ factor: String(factor.n).padStart(2, '0') }}
+          accept=".ppt,.pptx,.pdf"
+          previewType="file"
+          label="Subir presentación PowerPoint / PDF"
+          currentUrl={presentacionUrl}
+          onUploaded={url => setPresentacionUrl(url)}
+        />
+        <div className="field" style={{ marginTop: 10 }}>
+          <label>URL de la presentación (editar manualmente si es necesario)</label>
+          <input value={presentacionUrl} onChange={e => setPresentacionUrl(e.target.value)} placeholder="https://... o ruta relativa al archivo .pptx" />
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
@@ -288,7 +300,22 @@ function EquipoTab({ factor, onSave }) {
               {SEDES_OPT.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
-          <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}><label>Foto (URL — opcional)</label><input value={form.foto} onChange={e => f('foto', e.target.value)} placeholder="https://..." /></div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <FileUpload
+              tipo="docente-foto"
+              accept="image/*"
+              previewType="image"
+              label="Foto (opcional)"
+              currentUrl={form.foto}
+              onUploaded={url => f('foto', url)}
+            />
+          </div>
+          {form.foto && (
+            <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
+              <label>URL foto (editar manualmente si es necesario)</label>
+              <input value={form.foto} onChange={e => f('foto', e.target.value)} placeholder="https://..." />
+            </div>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
           <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
@@ -368,7 +395,21 @@ function DocumentosTab({ factor, onSave }) {
           </div>
           <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
           <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.fecha} onChange={e => f('fecha', e.target.value)} placeholder="ej. Abr 2026" /></div>
-          <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}><label>URL de descarga (opcional)</label><input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." /></div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <FileUpload
+              tipo="factor-doc"
+              extra={{ factor: String(factor.n).padStart(2, '0') }}
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip"
+              previewType="file"
+              label="Subir archivo"
+              currentUrl={form.url}
+              onUploaded={url => f('url', url)}
+            />
+          </div>
+          <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
+            <label>URL de descarga (editar manualmente si es necesario)</label>
+            <input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." />
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
           <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>

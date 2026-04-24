@@ -11,6 +11,7 @@ import TabEstudiantes from './tabs/TabEstudiantes'
 import TabEgresados from './tabs/TabEgresados'
 import TabFunciones from './tabs/TabFunciones'
 import TabCNA from './tabs/TabCNA'
+import TabEventos from './tabs/TabEventos'
 
 const TABS = [
   ['dashboard', 'Dashboard', '■'],
@@ -18,6 +19,7 @@ const TABS = [
   ['programa', 'Programa', '◉'],
   ['pensum', 'Plan de estudios', '◧'],
   ['noticias', 'Noticias', '◎'],
+  ['eventos', 'Eventos', '◷'],
   ['convocatorias', 'Convocatorias', '◷'],
   ['docentes', 'Docentes', '◈'],
   ['estudiantes', 'Estudiantes', '◉'],
@@ -68,6 +70,7 @@ export default function Admin() {
         {activeTab === 'estudiantes'    && <TabEstudiantes />}
         {activeTab === 'egresados'      && <TabEgresados />}
         {activeTab === 'funciones'      && <TabFunciones />}
+        {activeTab === 'eventos'        && <TabEventos />}
         {activeTab === 'cna'            && <TabCNA />}
       </main>
     </div>
