@@ -1,0 +1,131 @@
+/* UniGuajira — Ingeniería de Sistemas · Brand tokens */
+
+:root {
+  --ug-amarillo: #e2a542;
+  --ug-amarillo-deep: #c48a2e;
+  --ug-amarillo-soft: #f4d79a;
+  --ug-azul: #62a9b6;
+  --ug-azul-deep: #3d7f8c;
+  --ug-azul-soft: #a9cfd6;
+  --ug-flamingo: #cc5e50;
+  --ug-flamingo-deep: #a8443a;
+  --ug-flamingo-soft: #e9a79e;
+  --ug-negro: #03090f;
+  --ug-marino: #01616c;
+  --ug-marino-2: #014850;
+  --ug-marino-soft: #027e8c;
+
+  --paper: #f6efe3;
+  --paper-2: #efe5d2;
+  --paper-3: #e5d8bf;
+  --ink: #1a140c;
+  --ink-2: #3c3226;
+  --ink-3: #6e5f4c;
+  --ink-muted: #9a8a73;
+
+  --accent: var(--ug-azul);
+  --accent-deep: var(--ug-azul-deep);
+  --accent-soft: var(--ug-azul-soft);
+
+  --radius-sm: 6px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-sm: 0 1px 2px rgba(26,20,12,0.06), 0 2px 8px rgba(26,20,12,0.04);
+  --shadow: 0 2px 4px rgba(26,20,12,0.06), 0 12px 28px -12px rgba(26,20,12,0.18);
+  --shadow-lg: 0 4px 8px rgba(26,20,12,0.08), 0 30px 60px -20px rgba(26,20,12,0.25);
+
+  --font-display: "Jost", "Futura", "Century Gothic", system-ui, sans-serif;
+  --font-body: "Jost", "Century Gothic", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --max-w: 1320px;
+  --gutter: clamp(20px, 4vw, 48px);
+}
+
+[data-theme="dark"] {
+  --paper: #120d07;
+  --paper-2: #1a130b;
+  --paper-3: #241a0f;
+  --ink: #f4ead7;
+  --ink-2: #d9cdb5;
+  --ink-3: #a89680;
+  --ink-muted: #7a6a56;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  --shadow: 0 2px 4px rgba(0,0,0,0.5), 0 12px 28px -12px rgba(0,0,0,0.6);
+  --shadow-lg: 0 4px 8px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(0,0,0,0.7);
+}
+
+/* accent overrides — default is already azul */
+[data-accent="azul"]     { --accent: var(--ug-azul);     --accent-deep: var(--ug-azul-deep);     --accent-soft: var(--ug-azul-soft);     }
+[data-accent="amarillo"] { --accent: var(--ug-amarillo);  --accent-deep: var(--ug-amarillo-deep);  --accent-soft: var(--ug-amarillo-soft);  }
+[data-accent="flamingo"] { --accent: var(--ug-flamingo);  --accent-deep: var(--ug-flamingo-deep);  --accent-soft: var(--ug-flamingo-soft);  }
+[data-accent="marino"]   { --accent: var(--ug-azul);     --accent-deep: var(--ug-azul-deep);     --accent-soft: var(--ug-azul-soft);     }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(40px, 6vw, 88px); font-weight: 500; }
+h2 { font-size: clamp(28px, 3.2vw, 48px); }
+h3 { font-size: clamp(20px, 1.6vw, 26px); }
+p { margin: 0; }
+
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.rule { height: 1px; background: var(--ink); opacity: 0.12; border: 0; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  background: color-mix(in oklab, var(--paper-2) 80%, transparent);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: color-mix(in oklab, var(--ink) 35%, transparent); }
+.btn.accent { background: var(--accent); color: var(--ug-negro); border-color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+::selection { background: var(--accent); color: var(--ug-negro); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+html { scrollbar-color: var(--ink-muted) transparent; }
