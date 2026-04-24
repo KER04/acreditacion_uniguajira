@@ -1,0 +1,12 @@
+{
+  "proyectos": [
+    { "id": 1, "titulo": "Digitalización de artesanas wayuu", "descripcion": "Capacitación en e-commerce y diseño digital para 80 artesanas indígenas de la comunidad Mayabangloma.", "comunidad": "Comunidad Mayabangloma", "municipio": "Manaure", "sede": "riohacha", "estado": "En ejecución", "fecha_inicio": "Mar 2026", "integrantes": ["MSc. Andrea Bolaños", "MSc. Nayely Uriana", "5 estudiantes IS"] },
+    { "id": 2, "titulo": "TIC en escuelas rurales de La Guajira", "descripcion": "Dotación tecnológica y formación docente en TIC para 12 instituciones educativas de la Alta Guajira.", "comunidad": "Instituciones educativas rurales", "municipio": "Uribia", "sede": "maicao", "estado": "En ejecución", "fecha_inicio": "Ene 2026", "integrantes": ["Dr. Pablo Mengual", "8 estudiantes IS"] },
+    { "id": 3, "titulo": "Observatorio digital del empleo Caribe", "descripcion": "Sistema de información del mercado laboral TIC para el Caribe colombiano con datos de DANE y empleo formal.", "comunidad": "Empresa privada y sector público", "municipio": "Riohacha", "sede": "riohacha", "estado": "Formulación", "fecha_inicio": "Sep 2026", "integrantes": ["Dr. Samuel Cotes", "3 docentes IS"] }
+  ],
+  "alianzas": [
+    { "id": 1, "organizacion": "Cluster TIC Caribe", "tipo": "Convenio de cooperación", "descripcion": "Prácticas, pasantías y empleabilidad para estudiantes del programa.", "fecha": "Ago 2024" },
+    { "id": 2, "organizacion": "Alcaldía de Riohacha", "tipo": "Convenio interinstitucional", "descripcion": "Proyectos de transformación digital y consultoría tecnológica para el municipio.", "fecha": "Nov 2024" },
+    { "id": 3, "organizacion": "SENA Regional Guajira", "tipo": "Convenio de articulación", "descripcion": "Homologación de créditos y formación complementaria para bachilleres técnicos.", "fecha": "Feb 2025" }
+  ]
+}

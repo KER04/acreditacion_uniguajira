@@ -1,0 +1,52 @@
+{
+  "mision": "Formar ingenieros de sistemas con sólido fundamento científico-tecnológico, sentido ético, pertinencia cultural y compromiso con el desarrollo sostenible de La Guajira y el Caribe.",
+  "vision": "Para 2030, ser un programa de ingeniería de sistemas con acreditación de alta calidad, reconocido por su investigación aplicada, pertinencia social y vinculación con el ecosistema digital del Caribe colombiano.",
+  "objetivos": [
+    "Formar profesionales con dominio de las ciencias de la computación y sus aplicaciones.",
+    "Desarrollar competencias investigativas orientadas a la solución de problemas regionales.",
+    "Articular la docencia con la extensión y la proyección social.",
+    "Fortalecer la movilidad académica nacional e internacional."
+  ],
+  "perfil_egresado": "El egresado de Ingeniería de Sistemas de la Universidad de La Guajira es un profesional capaz de diseñar, desarrollar, implantar y gestionar sistemas de información y soluciones tecnológicas, con capacidad de liderazgo, pensamiento crítico y compromiso social con su región.",
+  "perfil_aspirante": "Persona con vocación tecnológica, pensamiento lógico-matemático, curiosidad científica y disposición para trabajar en equipo. Interesada en contribuir al desarrollo digital de la región Caribe colombiana.",
+  "ficha_tecnica": {
+    "snies": "17579",
+    "creditos": "169",
+    "semestres": "10",
+    "modalidad": "Presencial",
+    "jornada": "Diurno y Nocturno",
+    "titulo": "Ingeniero(a) de Sistemas",
+    "registro_calificado": "Res. 02872 — 21 feb 2018",
+    "resolucion_acreditacion": "Res. 014528 — 28 jul 2022",
+    "director": "Adanud Segundo Meza Valle",
+    "correo": "ingsistemas@uniguajira.edu.co",
+    "telefono": "+57 (605) 7282729 Ext. 240-241",
+    "direccion": "Bloque 1 — 2° piso, Km 3+354 Vía Maicao"
+  },
+  "inicio": {
+    "slogan": "Formamos ingenieros que transforman La Guajira y el Caribe.",
+    "cifras": [
+      { "label": "Estudiantes activos", "value": "1 240" },
+      { "label": "Docentes de planta", "value": "32" },
+      { "label": "Egresados", "value": "2 800+" },
+      { "label": "Años acreditados", "value": "4" }
+    ],
+    "proyectoDestacado": {
+      "titulo": "ArenaNet: IoT para comunidades Wayuu",
+      "resumen": "Sistema de monitoreo de jagüeyes usando sensores de bajo costo y visualización en tiempo real.",
+      "grupo": "Semillero IoT Wayuu · GITUG"
+    }
+  },
+  "pensum": [
+    { "semestre": 1, "materias": [{ "n": "Cálculo Diferencial", "cr": 4, "tipo": "Básica" }, { "n": "Fundamentos de Programación", "cr": 3, "tipo": "Disciplinar" }, { "n": "Álgebra Lineal", "cr": 3, "tipo": "Básica" }, { "n": "Lógica Matemática", "cr": 3, "tipo": "Básica" }, { "n": "Lenguaje y Comunicación", "cr": 2, "tipo": "Complementaria" }] },
+    { "semestre": 2, "materias": [{ "n": "Cálculo Integral", "cr": 4, "tipo": "Básica" }, { "n": "Programación Orientada a Objetos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Estadística y Probabilidad", "cr": 3, "tipo": "Básica" }, { "n": "Sistemas Operativos I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inglés I", "cr": 2, "tipo": "Complementaria" }] },
+    { "semestre": 3, "materias": [{ "n": "Cálculo Multivariable", "cr": 3, "tipo": "Básica" }, { "n": "Estructuras de Datos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Análisis y Diseño de Sistemas", "cr": 3, "tipo": "Disciplinar" }, { "n": "Bases de Datos I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inglés II", "cr": 2, "tipo": "Complementaria" }] },
+    { "semestre": 4, "materias": [{ "n": "Ecuaciones Diferenciales", "cr": 3, "tipo": "Básica" }, { "n": "Algoritmos y Complejidad", "cr": 3, "tipo": "Disciplinar" }, { "n": "Bases de Datos II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Ingeniería de Software I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Redes de Computadoras I", "cr": 3, "tipo": "Disciplinar" }] },
+    { "semestre": 5, "materias": [{ "n": "Arquitectura de Computadoras", "cr": 3, "tipo": "Disciplinar" }, { "n": "Ingeniería de Software II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Redes de Computadoras II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inteligencia Artificial I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Electiva I", "cr": 2, "tipo": "Electiva" }] },
+    { "semestre": 6, "materias": [{ "n": "Sistemas Distribuidos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Seguridad Informática", "cr": 3, "tipo": "Disciplinar" }, { "n": "Desarrollo Web", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inteligencia Artificial II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Electiva II", "cr": 2, "tipo": "Electiva" }] },
+    { "semestre": 7, "materias": [{ "n": "Gestión de Proyectos TI", "cr": 3, "tipo": "Disciplinar" }, { "n": "Computación en la Nube", "cr": 3, "tipo": "Disciplinar" }, { "n": "Minería de Datos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Emprendimiento Tecnológico", "cr": 2, "tipo": "Complementaria" }, { "n": "Electiva III", "cr": 3, "tipo": "Electiva" }] },
+    { "semestre": 8, "materias": [{ "n": "Tópicos Avanzados en IS", "cr": 3, "tipo": "Disciplinar" }, { "n": "Legislación Informática", "cr": 2, "tipo": "Complementaria" }, { "n": "Electiva IV", "cr": 3, "tipo": "Electiva" }, { "n": "Electiva V", "cr": 3, "tipo": "Electiva" }, { "n": "Seminario de Investigación", "cr": 2, "tipo": "Disciplinar" }] },
+    { "semestre": 9, "materias": [{ "n": "Práctica Profesional I", "cr": 6, "tipo": "Práctica" }, { "n": "Opción de Grado I", "cr": 4, "tipo": "Grado" }, { "n": "Electiva VI", "cr": 3, "tipo": "Electiva" }] },
+    { "semestre": 10, "materias": [{ "n": "Práctica Profesional II", "cr": 6, "tipo": "Práctica" }, { "n": "Opción de Grado II", "cr": 4, "tipo": "Grado" }, { "n": "Electiva VII", "cr": 3, "tipo": "Electiva" }] }
+  ]
+}

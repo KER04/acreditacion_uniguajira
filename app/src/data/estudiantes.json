@@ -1,0 +1,34 @@
+{
+  "honor": [
+    { "id": 1, "nombre": "María José Iguarán Pushaina", "promedio": "4.92", "semestre": "8º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 2, "nombre": "Luis Enrique Gutiérrez Epiayú", "promedio": "4.88", "semestre": "6º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 3, "nombre": "Carolina Brito Mendoza", "promedio": "4.85", "semestre": "10º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 4, "nombre": "Samuel Cotes Jr.", "promedio": "4.80", "semestre": "4º", "periodo": "2026-I", "sede": "maicao", "foto_url": "" },
+    { "id": 5, "nombre": "Andrea Uriana Jayariyú", "promedio": "4.78", "semestre": "8º", "periodo": "2026-I", "sede": "maicao", "foto_url": "" },
+    { "id": 6, "nombre": "Jorge David Palmar", "promedio": "4.76", "semestre": "2º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 7, "nombre": "Nayely Bolaños Curvelo", "promedio": "4.75", "semestre": "6º", "periodo": "2026-I", "sede": "maicao", "foto_url": "" },
+    { "id": 8, "nombre": "Héctor Mengual Solano", "promedio": "4.72", "semestre": "10º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 9, "nombre": "Catalina Ipuana Pérez", "promedio": "4.70", "semestre": "4º", "periodo": "2026-I", "sede": "riohacha", "foto_url": "" },
+    { "id": 10, "nombre": "Pablo Ramírez Jusayú", "promedio": "4.68", "semestre": "8º", "periodo": "2026-I", "sede": "maicao", "foto_url": "" }
+  ],
+  "calendario": [
+    { "id": 1, "fecha": "26 may 2026", "evento": "Inicio semestre 2026-II", "tipo": "académico", "sede": "ambas" },
+    { "id": 2, "fecha": "05 jun 2026", "evento": "Plazo matrícula ordinaria", "tipo": "administrativo", "sede": "ambas" },
+    { "id": 3, "fecha": "25 jul 2026", "evento": "Semana de receso universitario", "tipo": "académico", "sede": "ambas" },
+    { "id": 4, "fecha": "15 ago 2026", "evento": "Exámenes parciales", "tipo": "evaluacion", "sede": "ambas" },
+    { "id": 5, "fecha": "30 sep 2026", "evento": "Exámenes finales", "tipo": "evaluacion", "sede": "ambas" },
+    { "id": 6, "fecha": "10 oct 2026", "evento": "Cierre académico 2026-II", "tipo": "académico", "sede": "ambas" }
+  ],
+  "modalidades_grado": [
+    { "id": 1, "nombre": "Trabajo de grado", "desc": "Proyecto de investigación o desarrollo bajo la dirección de un docente del programa.", "documento_url": "" },
+    { "id": 2, "nombre": "Práctica empresarial", "desc": "Vinculación mínima de 6 meses con empresa en cargo relacionado con la carrera.", "documento_url": "" },
+    { "id": 3, "nombre": "Estudios de posgrado", "desc": "Aprobación de al menos 12 créditos de especialización o maestría afín.", "documento_url": "" },
+    { "id": 4, "nombre": "Emprendimiento", "desc": "Creación y formalización de empresa tecnológica con acompañamiento del programa.", "documento_url": "" }
+  ],
+  "documentos": [
+    { "id": 1, "nombre": "Reglamento estudiantil", "descripcion": "Acuerdo 018 de 2021 vigente", "url": "", "tipo": "PDF" },
+    { "id": 2, "nombre": "Calendario académico 2026", "descripcion": "Fechas oficiales semestre 2026-I y 2026-II", "url": "", "tipo": "PDF" },
+    { "id": 3, "nombre": "Guía de opciones de grado", "descripcion": "Requisitos y procedimiento para cada modalidad", "url": "", "tipo": "PDF" },
+    { "id": 4, "nombre": "Formato inscripción práctica", "descripcion": "Formulario de vinculación práctica profesional", "url": "", "tipo": "DOCX" }
+  ]
+}
