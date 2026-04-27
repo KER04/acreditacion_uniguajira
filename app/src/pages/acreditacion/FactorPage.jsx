@@ -77,7 +77,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-            <CircularProgress value={factor.score} size={240} label={`FACTOR ${String(factor.n).padStart(2,'0')} · ESCALA 1–5`} />
+            <CircularProgress value={factor.score} size={240} label={`FACTOR ${String(factor.n).padStart(2,'0')} · ESCALA 0–100`} />
             <div style={{ padding: '12px 20px', background: color, color: 'var(--ug-negro)', borderRadius: 12, fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18, textAlign: 'center' }}>
               {judgmentFromScore(factor.score)}
             </div>
@@ -96,7 +96,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(420px,1fr))', gap: 16 }}>
             {factor.caracteristicas.map(c => {
-              const st = statusFromScore(c.score)
+              const st = c.status || statusFromScore(c.score)
               const juicio = c.juicio || judgmentFromScore(c.score)
               return (
                 <div key={c.n} className="card" style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--paper)' }}>
@@ -107,11 +107,11 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                       <div style={{ fontFamily: 'var(--font-display)', fontSize: 34, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1 }}>{c.score.toFixed(1)}</div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', letterSpacing: '.1em', marginTop: 4 }}>/ 5.0</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', letterSpacing: '.1em', marginTop: 4 }}>/ 100</div>
                     </div>
                   </div>
                   <div style={{ height: 8, borderRadius: 4, background: 'color-mix(in oklab, var(--ink) 8%, transparent)', overflow: 'hidden' }}>
-                    <div style={{ width: `${(c.score/5)*100}%`, height: '100%', background: STATUS_COLOR[st], borderRadius: 4 }} />
+                    <div style={{ width: `${c.score}%`, height: '100%', background: STATUS_COLOR[st], borderRadius: 4 }} />
                   </div>
                   <div style={{ display: 'inline-flex', alignSelf: 'start', padding: '4px 10px', borderRadius: 999, background: `color-mix(in oklab, ${STATUS_COLOR[st]} 25%, transparent)`, fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>
                     {juicio}

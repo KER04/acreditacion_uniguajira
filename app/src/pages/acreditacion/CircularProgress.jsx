@@ -1,7 +1,7 @@
-export default function CircularProgress({ value, size = 220, stroke = 14, label = 'PROMEDIO · ESCALA 1.0–5.0' }) {
+export default function CircularProgress({ value, size = 220, stroke = 14, label = 'PROMEDIO · ESCALA 0–100' }) {
   const r = (size - stroke) / 2
   const cir = 2 * Math.PI * r
-  const off = cir - (value / 5) * cir
+  const off = cir - (value / 100) * cir
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <defs>

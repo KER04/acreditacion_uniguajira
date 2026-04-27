@@ -100,7 +100,7 @@ export default function Acreditacion() {
                 <div className="factor-pill">{STATUS_LABELS[f.status]}</div>
                 <div className="title">{f.t}</div>
                 <div className="score"><span>Calificación</span><b>{f.score.toFixed(1)}</b></div>
-                <div className="meter"><i style={{ width: `${(f.score/5)*100}%` }} /></div>
+                <div className="meter"><i style={{ width: `${f.score}%` }} /></div>
               </button>
             ))}
           </div>
