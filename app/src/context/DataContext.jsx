@@ -136,13 +136,16 @@ const INITIAL = {
   equipo_cna: EQUIPO_GENERAL.map(e => ({ ...e })),
   evidencias_cna: EVIDENCIAS_GENERALES.map(e => ({ ...e, url: '' })),
   cronograma_cna: [
-    { d: 'Jun 2024', t: 'Designación del comité de autoevaluación', s: 'done' },
-    { d: 'Oct 2024', t: 'Definición de instrumentos y ponderaciones', s: 'done' },
-    { d: 'Feb – Oct 2025', t: 'Recolección y análisis de información', s: 'done' },
-    { d: 'Mar 2026', t: 'Redacción informe de autoevaluación', s: 'current' },
-    { d: 'Jul 2026', t: 'Radicación ante el CNA (renovación)', s: 'next' },
-    { d: '2027', t: 'Visita de pares académicos', s: 'next' },
-    { d: '2027', t: 'Resolución de renovación de acreditación', s: 'next' },
+    { d: '2022', t: 'Acuerdo 017 — Estructura del proceso de autoevaluación', s: 'done' },
+    { d: '2022', t: 'Resolución 007 — Definición de ponderaciones', s: 'done' },
+    { d: '2022', t: 'Modelo de autoevaluación y autorregulación UniGuajira', s: 'done' },
+    { d: '2024', t: 'Conformación del comité de autoevaluación del programa', s: 'done' },
+    { d: '2025', t: 'Recolección de información — población y muestra', s: 'done' },
+    { d: '2025', t: 'Informe de Autoevaluación — resultados finales', s: 'done' },
+    { d: '28 jul 2025', t: 'Radicación del Informe ante el CNA', s: 'done' },
+    { d: '2025–2026', t: 'Ejecución del Plan de Mejoramiento', s: 'current' },
+    { d: 'Pendiente', t: 'Visita de pares académicos', s: 'next' },
+    { d: 'Pendiente', t: 'Resolución de acreditación de alta calidad', s: 'next' },
   ],
   inicio: {
     slogan: 'Formamos ingenieros que transforman La Guajira y el Caribe.',
@@ -216,7 +219,7 @@ const INITIAL = {
 /* ─── localStorage fallback ────────────────────────────────────── */
 function loadState() {
   try {
-    const s = localStorage.getItem('uniguajira_data_v3')
+    const s = localStorage.getItem('uniguajira_data_v4')
     if (!s) return INITIAL
     const saved = JSON.parse(s)
     return {
@@ -253,7 +256,7 @@ export function DataProvider({ children }) {
 
   /* Persist to localStorage on every change */
   useEffect(() => {
-    try { localStorage.setItem('uniguajira_data_v3', JSON.stringify(data)) } catch {}
+    try { localStorage.setItem('uniguajira_data_v4', JSON.stringify(data)) } catch {}
   }, [data])
 
   const update = useCallback((key, value) => {
@@ -290,7 +293,7 @@ export function DataProvider({ children }) {
   }, [])
 
   const reset = () => {
-    localStorage.removeItem('uniguajira_data_v3')
+    localStorage.removeItem('uniguajira_data_v4')
     setData(INITIAL)
   }
 

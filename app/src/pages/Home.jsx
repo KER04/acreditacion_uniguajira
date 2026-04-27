@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Icons } from '../components/Icons'
 import { WayuuBackdrop, WayuuBand, WayuuGlyph } from '../components/WayuuPatterns'
 import { useData } from '../context/DataContext'
+import { statusFromScore, STATUS_COLOR } from '../data/acreditacion'
 
 function Ticker() {
   const items = [
@@ -99,30 +100,41 @@ function Features() {
 
 function CNAPreview() {
   const nav = useNavigate()
+  const { data } = useData()
+  const factores = data.factores ?? []
+  const prom = factores.length ? factores.reduce((a, f) => a + f.score, 0) / factores.length : 0
+  const pleno = factores.filter(f => statusFromScore(f.score) === 'pleno').length
+  const alto  = factores.filter(f => statusFromScore(f.score) === 'alto').length
+  const dev   = factores.filter(f => statusFromScore(f.score) === 'desarrollo').length
+
   return (
     <section className="section" style={{ background: 'var(--paper-2)', borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)' }}>
       <div className="inner">
         <div className="section-head">
           <div className="title">
-            <div className="eyebrow" style={{ color: 'var(--ug-flamingo-deep)' }}>● Autoevaluación 2026</div>
+            <div className="eyebrow" style={{ color: 'var(--ug-flamingo-deep)' }}>● Autoevaluación 2025 · Radicado ante el CNA</div>
             <h2>Acreditación CNA — doce factores, una carrera.</h2>
           </div>
-          <p className="desc">Tablero interactivo con las 12 dimensiones del CNA, evidencias documentales, planes de mejoramiento y cronograma.</p>
+          <p className="desc">Tablero interactivo con las 12 dimensiones del CNA, evidencias documentales, plan de mejoramiento y cronograma del proceso.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 40, alignItems: 'center' }} className="cna-preview-grid">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
-            {Array.from({ length: 12 }).map((_, i) => {
-              const color = i < 6 ? 'var(--ug-azul)' : i < 10 ? 'var(--ug-amarillo)' : 'var(--ug-flamingo)'
+            {factores.length > 0 ? factores.map(f => {
+              const color = STATUS_COLOR[statusFromScore(f.score)]
               return (
-                <div key={i} style={{ aspectRatio: '1/1', background: color, borderRadius: 10, display: 'grid', placeItems: 'center', color: 'var(--ug-negro)', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22 }}>{i+1}</div>
+                <div key={f.n} onClick={() => nav('/acreditacion')} style={{ aspectRatio: '1/1', background: color, borderRadius: 10, display: 'grid', placeItems: 'center', color: 'var(--ug-negro)', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22, cursor: 'pointer' }}>{f.n}</div>
               )
-            })}
+            }) : Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} style={{ aspectRatio: '1/1', background: 'color-mix(in oklab, var(--ink) 10%, transparent)', borderRadius: 10 }} />
+            ))}
           </div>
           <div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
-              <span className="chip" style={{ background: 'color-mix(in oklab, var(--ug-azul) 30%, transparent)', borderColor: 'transparent' }}>Cumplimiento pleno · 6</span>
-              <span className="chip" style={{ background: 'color-mix(in oklab, var(--ug-amarillo) 30%, transparent)', borderColor: 'transparent' }}>Cumplimiento alto · 4</span>
-              <span className="chip" style={{ background: 'color-mix(in oklab, var(--ug-flamingo) 30%, transparent)', borderColor: 'transparent' }}>En desarrollo · 2</span>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 4 }}>{prom.toFixed(1)}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.15em', color: 'var(--ink-3)', textTransform: 'uppercase', marginBottom: 20 }}>Promedio · Escala 0–100</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
+              {pleno > 0 && <span className="chip" style={{ background: 'color-mix(in oklab, #62a9b6 30%, transparent)', borderColor: 'transparent' }}>Se cumple plenamente · {pleno}</span>}
+              {alto  > 0 && <span className="chip" style={{ background: 'color-mix(in oklab, #e2a542 30%, transparent)', borderColor: 'transparent' }}>Se cumple en alto grado · {alto}</span>}
+              {dev   > 0 && <span className="chip" style={{ background: 'color-mix(in oklab, #cc5e50 30%, transparent)', borderColor: 'transparent' }}>En desarrollo · {dev}</span>}
             </div>
             <button className="btn" onClick={() => nav('/acreditacion')}>Ir al tablero CNA <Icons.arrow /></button>
           </div>
