@@ -8,6 +8,7 @@ const AREA_CFG = {
     label:       'Ciencias Básicas',
     border:      '#62a9b6',
     borderMuted: 'rgba(98,169,182,0.6)',
+    badge:       'rgba(98,169,182,0.5)',
     bg:          'rgba(98,169,182,0.15)',
     hover:       'rgba(98,169,182,0.25)',
   },
@@ -16,6 +17,7 @@ const AREA_CFG = {
     label:       'Ciencias Básicas de Ingeniería',
     border:      '#01616c',
     borderMuted: 'rgba(1,97,108,0.6)',
+    badge:       'rgba(1,97,108,0.5)',
     bg:          'rgba(1,97,108,0.15)',
     hover:       'rgba(1,97,108,0.25)',
   },
@@ -24,6 +26,7 @@ const AREA_CFG = {
     label:       'Perfil Profesional',
     border:      '#cc5e50',
     borderMuted: 'rgba(204,94,80,0.6)',
+    badge:       'rgba(204,94,80,0.5)',
     bg:          'rgba(204,94,80,0.15)',
     hover:       'rgba(204,94,80,0.25)',
   },
@@ -32,6 +35,7 @@ const AREA_CFG = {
     label:       'Socio Humanístico — Complementaria',
     border:      '#e2a542',
     borderMuted: 'rgba(226,165,66,0.6)',
+    badge:       'rgba(226,165,66,0.5)',
     bg:          'rgba(226,165,66,0.15)',
     hover:       'rgba(226,165,66,0.25)',
   },
@@ -40,6 +44,7 @@ const AREA_CFG = {
     label:       'Socio Humanístico — Investigativo',
     border:      '#b5832e',
     borderMuted: 'rgba(181,131,46,0.6)',
+    badge:       'rgba(181,131,46,0.5)',
     bg:          'rgba(181,131,46,0.15)',
     hover:       'rgba(181,131,46,0.25)',
   },
@@ -179,8 +184,14 @@ export default function Pensum() {
                       onClick={() => setSelected(isActive ? null : { si, mi, m, sem, cfg })}
                     >
                       <strong style={{ fontWeight: 600 }}>{m.nombre}</strong>
-                      <span className="cr">
-                        {m.creditos} cr · {m.horas_semana} h/sem
+                      <span style={{ display: 'inline-flex', gap: 4, marginTop: 5 }}>
+                        {[`${m.creditos} cr`, `${m.horas_semana} h/sem`].map(t => (
+                          <span key={t} style={{
+                            background: cfg.badge,
+                            color: '#fff', borderRadius: 4,
+                            padding: '2px 6px', fontSize: 11, fontWeight: 700,
+                          }}>{t}</span>
+                        ))}
                       </span>
                     </button>
                   )
