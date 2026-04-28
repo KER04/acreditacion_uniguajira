@@ -112,24 +112,20 @@
 @keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 /* DRAWER */
-.drawer-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(26,20,12,.5); backdrop-filter: blur(4px); animation: fadeIn .2s ease both; }
-.drawer { position: fixed; right: 0; top: 0; bottom: 0; z-index: 101; width: min(720px,100%); background: var(--paper); overflow-y: auto; animation: slideIn .3s cubic-bezier(.2,.7,.2,1) both; box-shadow: var(--shadow-lg); }
+.drawer-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.4); animation: fadeIn .2s ease both; }
+.drawer { position: fixed; right: 0; top: 0; bottom: 0; z-index: 101; width: min(720px,100%); background: #fff; overflow-y: auto; animation: slideIn .3s cubic-bezier(.2,.7,.2,1) both; box-shadow: -4px 0 40px rgba(0,0,0,.15); border-radius: 12px 0 0 12px; }
 .drawer-head { position: sticky; top: 0; background: var(--paper); padding: 24px 32px; border-bottom: 1px solid color-mix(in oklab, var(--ink) 8%, transparent); display: flex; justify-content: space-between; align-items: start; z-index: 2; }
 .drawer-body { padding: 32px; }
 
 /* PENSUM */
-.pensum { display: grid; grid-template-columns: repeat(10, minmax(120px,1fr)); gap: 12px; overflow-x: auto; padding: 4px 4px 16px; }
-.sem-col { display: flex; flex-direction: column; gap: 8px; min-width: 140px; }
-.sem-head { font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; color: var(--ink-3); text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid color-mix(in oklab, var(--ink) 12%, transparent); margin-bottom: 4px; }
-.course { padding: 10px 12px; background: var(--paper-2); border: 1px solid color-mix(in oklab, var(--ink) 7%, transparent); border-radius: 10px; font-size: 12px; cursor: pointer; transition: all .15s ease; line-height: 1.25; }
-.course:hover { background: var(--paper); border-color: color-mix(in oklab, var(--accent) 60%, transparent); }
-.course.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.course .cr { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; color: var(--ink-3); display: block; margin-top: 4px; }
-.course.active .cr { color: rgba(246,239,227,.55); }
-.course[data-area="basicas"] { border-left: 3px solid var(--ug-azul); }
-.course[data-area="ingenieria"] { border-left: 3px solid var(--ug-amarillo); }
-.course[data-area="socio"] { border-left: 3px solid var(--ug-flamingo); }
-.course[data-area="profundizacion"] { border-left: 3px solid var(--ink); }
+.pensum { display: grid; grid-template-columns: repeat(10, minmax(115px,1fr)); gap: 10px; overflow-x: auto; padding: 16px 0; }
+.sem-col { display: flex; flex-direction: column; gap: 5px; min-width: 115px; }
+.sem-head { font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; color: var(--ink-3); text-transform: uppercase; padding: 6px 8px; border-bottom: 1px solid rgba(3,9,15,.1); margin-bottom: 2px; }
+.course { padding: 8px; background: var(--c-bg, #ffffff); color: #03090f; border: 1px solid transparent; border-left: 4px solid var(--c-border, #d4cfc6); border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.3s ease; line-height: 1.25; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+.course:hover { background: var(--c-hover, rgba(212,207,198,.18)); }
+.course.active { background: var(--c-border, #01616c); color: #fff; border-color: transparent; box-shadow: none; }
+.course .cr { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; color: rgba(3,9,15,.45); display: block; margin-top: 3px; }
+.course.active .cr { color: rgba(255,255,255,.65); }
 
 /* CNA HERO */
 .cna-hero { position: relative; padding: clamp(60px,8vw,120px) var(--gutter) clamp(60px,8vw,100px); background: var(--paper-2); overflow: hidden; border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent); }
