@@ -70,6 +70,7 @@ export default function Pensum() {
   const [filter,      setFilter]      = useState('all')
   const [campoFilter, setCampoFilter] = useState('all')
 
+
   const { semestres, total_creditos } = pensumData
   const totalMaterias = semestres.reduce((a, s) => a + s.materias.length, 0)
 
