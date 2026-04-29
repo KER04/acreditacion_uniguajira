@@ -65,6 +65,35 @@ const LEGEND = [
   { key: 'investigativo',     label: 'Investigativo',                           colors: ['#b5832e'] },
 ]
 
+// ── Donut chart ──
+const _cr = {}
+pensumData.semestres.forEach(s => s.materias.forEach(m => { _cr[m.area] = (_cr[m.area] || 0) + m.creditos }))
+
+const CHART_DATA = [
+  { area: 'Ciencias Básicas',               label: 'Ciencias Básicas',     color: '#62a9b6', filterKey: 'basicas',     campoKey: 'basico-general'    },
+  { area: 'Ciencias Básicas de Ingeniería', label: 'Cs. Básicas Ing.',     color: '#01616c', filterKey: 'ingenieria',  campoKey: 'basico-general'    },
+  { area: 'Perfil Profesional',             label: 'Perfil Profesional',   color: '#cc5e50', filterKey: 'profesional', campoKey: 'basico-especifico' },
+  { area: 'Complementaria',                 label: 'Complementaria',       color: '#e2a542', filterKey: 'socio',       campoKey: 'socio'             },
+  { area: 'Investigativo',                  label: 'Investigativo',        color: '#b5832e', filterKey: 'socio',       campoKey: 'investigativo'     },
+].map(s => ({ ...s, credits: _cr[s.area] || 0 }))
+
+function polarXY(cx, cy, r, deg) {
+  const rad = ((deg - 90) * Math.PI) / 180
+  return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)]
+}
+
+function donutArc(cx, cy, oR, iR, a0, a1) {
+  if (a1 - a0 >= 359.99) {
+    const [ax, ay] = polarXY(cx, cy, oR, 0), [bx, by] = polarXY(cx, cy, oR, 180)
+    const [ix, iy] = polarXY(cx, cy, iR, 0), [jx, jy] = polarXY(cx, cy, iR, 180)
+    return `M${ax} ${ay}A${oR} ${oR} 0 1 1 ${bx} ${by}A${oR} ${oR} 0 1 1 ${ax} ${ay}M${ix} ${iy}A${iR} ${iR} 0 1 0 ${jx} ${jy}A${iR} ${iR} 0 1 0 ${ix} ${iy}`
+  }
+  const lg = a1 - a0 > 180 ? 1 : 0
+  const [ox1, oy1] = polarXY(cx, cy, oR, a0), [ox2, oy2] = polarXY(cx, cy, oR, a1)
+  const [ix1, iy1] = polarXY(cx, cy, iR, a1), [ix2, iy2] = polarXY(cx, cy, iR, a0)
+  return `M${ox1} ${oy1}A${oR} ${oR} 0 ${lg} 1 ${ox2} ${oy2}L${ix1} ${iy1}A${iR} ${iR} 0 ${lg} 0 ${ix2} ${iy2}Z`
+}
+
 export default function Pensum() {
   const [selected,    setSelected]    = useState(null)
   const [filter,      setFilter]      = useState('all')
@@ -75,6 +104,21 @@ export default function Pensum() {
   const totalMaterias = semestres.reduce((a, s) => a + s.materias.length, 0)
 
   const isFiltering = filter !== 'all' || campoFilter !== 'all'
+
+  // Donut chart computations
+  const chartActive = new Set()
+  if (filter !== 'all')      CHART_DATA.forEach(s => { if (s.filterKey === filter)      chartActive.add(s.area) })
+  else if (campoFilter !== 'all') CHART_DATA.forEach(s => { if (s.campoKey === campoFilter) chartActive.add(s.area) })
+  const totalCr  = CHART_DATA.reduce((a, s) => a + s.credits, 0)
+  const activeCr = isFiltering ? CHART_DATA.filter(s => chartActive.has(s.area)).reduce((a, s) => a + s.credits, 0) : totalCr
+  const centerTxt = isFiltering ? `${Math.round(activeCr / totalCr * 100)}%` : `${totalCr}cr`
+  let cum = 0
+  const chartSegs = CHART_DATA.map(s => {
+    const angle = (s.credits / totalCr) * 360
+    const seg = { ...s, a0: cum, a1: cum + angle }
+    cum += angle
+    return seg
+  })
 
   return (
     <div className="page-in">
@@ -100,55 +144,98 @@ export default function Pensum() {
             </button>
           </div>
 
-          {/* Filtros de área */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 28 }}>
-            {FILTERS.map(f => {
-              const active = filter === f.k && campoFilter === 'all'
-              return (
-                <button
-                  key={f.k}
-                  onClick={() => { setFilter(f.k); setCampoFilter('all') }}
-                  style={{
-                    padding: '8px 16px', borderRadius: 20, cursor: 'pointer',
-                    fontSize: 12, fontWeight: 500, transition: 'all 0.2s ease',
-                    background:  active ? f.color : 'transparent',
-                    color:       active ? f.text  : '#03090f',
-                    border:      active ? `1px solid ${f.color}` : '1px solid #d4cfc6',
-                  }}
-                >
-                  {f.l}
-                </button>
-              )
-            })}
-          </div>
+          {/* Filtros + leyenda + gráfico en fila */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 24, marginTop: 28 }}>
 
-          {/* Leyenda de campos de formación — clicable */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
-            {LEGEND.map(l => {
-              const active = campoFilter === l.key
-              return (
-                <button
-                  key={l.key}
-                  onClick={() => { setCampoFilter(active ? 'all' : l.key); setFilter('all') }}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    padding: '5px 12px', borderRadius: 20, cursor: 'pointer',
-                    border:      active ? `1px solid ${l.colors[0]}` : '1px solid #d4cfc6',
-                    background:  active ? l.colors[0] : 'transparent',
-                    fontSize: 11, fontWeight: 500,
-                    color:       active ? '#fff' : '#03090f',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <span style={{ display: 'inline-flex', gap: 3 }}>
-                    {l.colors.map((c, i) => (
-                      <span key={i} style={{ width: 8, height: 8, borderRadius: 2, background: c, flexShrink: 0 }} />
-                    ))}
-                  </span>
-                  {l.label}
-                </button>
-              )
-            })}
+            {/* Columna izquierda: filtros y leyenda */}
+            <div style={{ flex: 1 }}>
+              {/* Filtros de área */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {FILTERS.map(f => {
+                  const active = filter === f.k && campoFilter === 'all'
+                  return (
+                    <button
+                      key={f.k}
+                      onClick={() => { setFilter(f.k); setCampoFilter('all') }}
+                      style={{
+                        padding: '8px 16px', borderRadius: 20, cursor: 'pointer',
+                        fontSize: 12, fontWeight: 500, transition: 'all 0.2s ease',
+                        background:  active ? f.color : 'transparent',
+                        color:       active ? f.text  : '#03090f',
+                        border:      active ? `1px solid ${f.color}` : '1px solid #d4cfc6',
+                      }}
+                    >
+                      {f.l}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Leyenda de campos de formación — clicable */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+                {LEGEND.map(l => {
+                  const active = campoFilter === l.key
+                  return (
+                    <button
+                      key={l.key}
+                      onClick={() => { setCampoFilter(active ? 'all' : l.key); setFilter('all') }}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        padding: '5px 12px', borderRadius: 20, cursor: 'pointer',
+                        border:      active ? `1px solid ${l.colors[0]}` : '1px solid #d4cfc6',
+                        background:  active ? l.colors[0] : 'transparent',
+                        fontSize: 11, fontWeight: 500,
+                        color:       active ? '#fff' : '#03090f',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <span style={{ display: 'inline-flex', gap: 3 }}>
+                        {l.colors.map((c, i) => (
+                          <span key={i} style={{ width: 8, height: 8, borderRadius: 2, background: c, flexShrink: 0 }} />
+                        ))}
+                      </span>
+                      {l.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Gráfico de dona */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+              <svg width={120} height={120} viewBox="0 0 120 120">
+                {chartSegs.map(s => (
+                  <path key={s.area} d={donutArc(60, 60, 52, 34, s.a0, s.a1)}
+                    fill={s.color} stroke="#fff" strokeWidth={1.5}
+                    opacity={isFiltering && !chartActive.has(s.area) ? 0.15 : 1}
+                    style={{ transition: 'opacity 0.3s ease' }} />
+                ))}
+                <text x={60} y={isFiltering ? 57 : 61} textAnchor="middle" dominantBaseline="middle"
+                  fontSize={18} fontWeight={700} fill="#03090f">{centerTxt}</text>
+                {isFiltering && (
+                  <text x={60} y={74} textAnchor="middle" fontSize={9} fill="rgba(3,9,15,.4)">del total</text>
+                )}
+              </svg>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                {chartSegs.map(s => {
+                  const pct = Math.round(s.credits / totalCr * 100)
+                  return (
+                    <div key={s.area} style={{
+                      display: 'flex', alignItems: 'center', gap: 5,
+                      opacity: isFiltering && !chartActive.has(s.area) ? 0.3 : 1,
+                      transition: 'opacity 0.3s ease',
+                    }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 2, background: s.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: 11, color: '#03090f', whiteSpace: 'nowrap' }}>
+                        {s.label}{' '}
+                        <span style={{ color: 'rgba(3,9,15,.45)' }}>· {pct}% · {s.credits}cr</span>
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>

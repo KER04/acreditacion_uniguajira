@@ -10,7 +10,7 @@
         { "nombre": "Lógica Y Teoría De Conjuntos", "codigo": "273112", "creditos": 3, "horas_semana": 3, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
         { "nombre": "Introducción A La Ingeniería De Sistemas", "codigo": "273313", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Algoritmo Y Programación I", "codigo": "273314", "creditos": 5, "horas_semana": 6, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
-        { "nombre": "Competencia Comunicativa I", "codigo": "273515", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" },
+        { "nombre": "Competencia Comunicativa I", "codigo": "273515", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Complementaria" },
         { "nombre": "Cátedra Uniguajira", "codigo": "273516", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
       ]
     },
@@ -22,7 +22,7 @@
         { "nombre": "Cálculo Integral", "codigo": "273121", "creditos": 3, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
         { "nombre": "Física I Mecánica Y Laboratorio", "codigo": "273122", "creditos": 4, "horas_semana": 5, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
         { "nombre": "Álgebra Lineal", "codigo": "273123", "creditos": 3, "horas_semana": 3, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
-        { "nombre": "Algoritmo Y Programación II", "codigo": "273324", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Algoritmo Y Programación II", "codigo": "273324", "creditos": 5, "horas_semana": 6, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Competencia Comunicativa II", "codigo": "273525", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" },
         { "nombre": "Humanidades", "codigo": "273526", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
       ]
@@ -63,7 +63,7 @@
         { "nombre": "Base De Datos I", "codigo": "273353", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Análisis Y Diseño De Sistemas", "codigo": "273354", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Compiladores", "codigo": "273355", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
-        { "nombre": "Organizaciones", "codigo": "273556", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Complementaria" }
+        { "nombre": "Organizaciones", "codigo": "273556", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
       ]
     },
     {
@@ -85,10 +85,10 @@
       "total_horas": 17,
       "materias": [
         { "nombre": "Modelos", "codigo": "273372", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
-        { "nombre": "Ingeniería de Software II", "codigo": "273374", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Ingeniería de Software II", "codigo": "273374", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Redes II", "codigo": "273375", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Formulación y Evaluación de Proyectos", "codigo": "273271", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Investigativo" },
-        { "nombre": "Ingeniería Económica", "codigo": "273576", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+        { "nombre": "Ingeniería Económica", "codigo": "273576", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Complementaria" }
       ]
     },
     {
@@ -100,7 +100,7 @@
         { "nombre": "Electiva de Profundización I", "codigo": "273382", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Gerencia de Proyectos", "codigo": "273383", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Sistemas de Información", "codigo": "273384", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
-        { "nombre": "Desarrollo Web", "codigo": "273385", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Desarrollo Web", "codigo": "273385", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Auditoría y Seguridad de la Información", "codigo": "273386", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" }
       ]
     },
@@ -113,7 +113,7 @@
         { "nombre": "Inteligencia Artificial", "codigo": "273392", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Electiva de Profundización II", "codigo": "273393", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
         { "nombre": "Desarrollo Móvil", "codigo": "273394", "creditos": 3, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
-        { "nombre": "Proyecto I", "codigo": "273595", "creditos": 5, "horas_semana": 6, "campo": "Socio Humanístico", "area": "Investigativo" }
+        { "nombre": "Proyecto I", "codigo": "273595", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Investigativo" }
       ]
     },
     {
