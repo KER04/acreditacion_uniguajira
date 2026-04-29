@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { FACTORES, EQUIPO_GENERAL, EVIDENCIAS_GENERALES } from '../data/acreditacion'
+import pensumData from '../data/pensum.json'
 
 /* ─── API helpers ──────────────────────────────────────────────── */
 const API = 'http://localhost:3001/api'
@@ -177,18 +178,7 @@ const INITIAL = {
       acreditacion: '014528 (28 jul 2022 – 28 jul 2026)', snies: '17579',
     },
   },
-  pensum: [
-    { semestre: 1, materias: [{ n: 'Cálculo Diferencial', cr: 4, tipo: 'Básica' }, { n: 'Fundamentos de Programación', cr: 3, tipo: 'Disciplinar' }, { n: 'Álgebra Lineal', cr: 3, tipo: 'Básica' }, { n: 'Lógica Matemática', cr: 3, tipo: 'Básica' }, { n: 'Lenguaje y Comunicación', cr: 2, tipo: 'Complementaria' }] },
-    { semestre: 2, materias: [{ n: 'Cálculo Integral', cr: 4, tipo: 'Básica' }, { n: 'Programación Orientada a Objetos', cr: 3, tipo: 'Disciplinar' }, { n: 'Estadística y Probabilidad', cr: 3, tipo: 'Básica' }, { n: 'Sistemas Operativos I', cr: 3, tipo: 'Disciplinar' }, { n: 'Inglés I', cr: 2, tipo: 'Complementaria' }] },
-    { semestre: 3, materias: [{ n: 'Cálculo Multivariable', cr: 3, tipo: 'Básica' }, { n: 'Estructuras de Datos', cr: 3, tipo: 'Disciplinar' }, { n: 'Análisis y Diseño de Sistemas', cr: 3, tipo: 'Disciplinar' }, { n: 'Bases de Datos I', cr: 3, tipo: 'Disciplinar' }, { n: 'Inglés II', cr: 2, tipo: 'Complementaria' }] },
-    { semestre: 4, materias: [{ n: 'Ecuaciones Diferenciales', cr: 3, tipo: 'Básica' }, { n: 'Algoritmos y Complejidad', cr: 3, tipo: 'Disciplinar' }, { n: 'Bases de Datos II', cr: 3, tipo: 'Disciplinar' }, { n: 'Ingeniería de Software I', cr: 3, tipo: 'Disciplinar' }, { n: 'Redes de Computadoras I', cr: 3, tipo: 'Disciplinar' }] },
-    { semestre: 5, materias: [{ n: 'Arquitectura de Computadoras', cr: 3, tipo: 'Disciplinar' }, { n: 'Ingeniería de Software II', cr: 3, tipo: 'Disciplinar' }, { n: 'Redes de Computadoras II', cr: 3, tipo: 'Disciplinar' }, { n: 'Inteligencia Artificial I', cr: 3, tipo: 'Disciplinar' }, { n: 'Electiva I', cr: 2, tipo: 'Electiva' }] },
-    { semestre: 6, materias: [{ n: 'Sistemas Distribuidos', cr: 3, tipo: 'Disciplinar' }, { n: 'Seguridad Informática', cr: 3, tipo: 'Disciplinar' }, { n: 'Desarrollo Web', cr: 3, tipo: 'Disciplinar' }, { n: 'Inteligencia Artificial II', cr: 3, tipo: 'Disciplinar' }, { n: 'Electiva II', cr: 2, tipo: 'Electiva' }] },
-    { semestre: 7, materias: [{ n: 'Gestión de Proyectos TI', cr: 3, tipo: 'Disciplinar' }, { n: 'Computación en la Nube', cr: 3, tipo: 'Disciplinar' }, { n: 'Minería de Datos', cr: 3, tipo: 'Disciplinar' }, { n: 'Emprendimiento Tecnológico', cr: 2, tipo: 'Complementaria' }, { n: 'Electiva III', cr: 3, tipo: 'Electiva' }] },
-    { semestre: 8, materias: [{ n: 'Tópicos Avanzados en IS', cr: 3, tipo: 'Disciplinar' }, { n: 'Legislación Informática', cr: 2, tipo: 'Complementaria' }, { n: 'Electiva IV', cr: 3, tipo: 'Electiva' }, { n: 'Electiva V', cr: 3, tipo: 'Electiva' }, { n: 'Seminario de Investigación', cr: 2, tipo: 'Disciplinar' }] },
-    { semestre: 9, materias: [{ n: 'Práctica Profesional I', cr: 6, tipo: 'Práctica' }, { n: 'Opción de Grado I', cr: 4, tipo: 'Grado' }, { n: 'Electiva VI', cr: 3, tipo: 'Electiva' }] },
-    { semestre: 10, materias: [{ n: 'Práctica Profesional II', cr: 6, tipo: 'Práctica' }, { n: 'Opción de Grado II', cr: 4, tipo: 'Grado' }, { n: 'Electiva VII', cr: 3, tipo: 'Electiva' }] },
-  ],
+  pensum: pensumData.semestres,
   calendario: [
     { id: 1, fecha: '26 may 2026', evento: 'Inicio semestre 2026-II', tipo: 'académico', sede: 'ambas' },
     { id: 2, fecha: '05 jun 2026', evento: 'Plazo matrícula ordinaria', tipo: 'administrativo', sede: 'ambas' },
@@ -219,7 +209,7 @@ const INITIAL = {
 /* ─── localStorage fallback ────────────────────────────────────── */
 function loadState() {
   try {
-    const s = localStorage.getItem('uniguajira_data_v4')
+    const s = localStorage.getItem('uniguajira_data_v5')
     if (!s) return INITIAL
     const saved = JSON.parse(s)
     return {
@@ -256,7 +246,7 @@ export function DataProvider({ children }) {
 
   /* Persist to localStorage on every change */
   useEffect(() => {
-    try { localStorage.setItem('uniguajira_data_v4', JSON.stringify(data)) } catch {}
+    try { localStorage.setItem('uniguajira_data_v5', JSON.stringify(data)) } catch {}
   }, [data])
 
   const update = useCallback((key, value) => {
@@ -293,7 +283,7 @@ export function DataProvider({ children }) {
   }, [])
 
   const reset = () => {
-    localStorage.removeItem('uniguajira_data_v4')
+    localStorage.removeItem('uniguajira_data_v5')
     setData(INITIAL)
   }
 

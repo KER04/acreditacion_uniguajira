@@ -1,8 +1,32 @@
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
-import { PENSUM, AREA_LABELS } from '../../data/pensum'
+import pensumData from '../../data/pensum.json'
 import { useState } from 'react'
+
+const AREA_FILTER = {
+  'Ciencias Básicas':               'basicas',
+  'Ciencias Básicas de Ingeniería': 'ingenieria',
+  'Perfil Profesional':             'profesional',
+  'Complementaria':                 'socio',
+  'Investigativo':                  'investigativo',
+}
+
+const AREA_COLOR = {
+  'Ciencias Básicas':               '#62a9b6',
+  'Ciencias Básicas de Ingeniería': '#01616c',
+  'Perfil Profesional':             '#cc5e50',
+  'Complementaria':                 '#e2a542',
+  'Investigativo':                  '#b5832e',
+}
+
+const EMBED_FILTERS = [
+  { k: 'all',         l: 'Todas' },
+  { k: 'basicas',     l: 'Ciencias Básicas' },
+  { k: 'ingenieria',  l: 'Cs. Básicas Ing.' },
+  { k: 'profesional', l: 'Perfil Profesional' },
+  { k: 'socio',       l: 'Socio Humanístico' },
+]
 
 function PensumEmbed() {
   const [selected, setSelected] = useState(null)
@@ -11,7 +35,7 @@ function PensumEmbed() {
     <>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto', padding: '0 var(--gutter)' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
-          {[{k:'all',l:'Todas'},{k:'basicas',l:'Ciencias básicas'},{k:'ingenieria',l:'Ingeniería'},{k:'socio',l:'Socio-humanística'},{k:'profundizacion',l:'Profundización'}].map(f => (
+          {EMBED_FILTERS.map(f => (
             <button key={f.k} onClick={() => setFilter(f.k)} className="chip"
               style={{ cursor: 'pointer', background: filter===f.k ? 'var(--ink)' : undefined, color: filter===f.k ? 'var(--paper)' : undefined, borderColor: filter===f.k ? 'var(--ink)' : undefined }}>
               {f.l}
@@ -22,25 +46,25 @@ function PensumEmbed() {
       <div style={{ padding: '0 var(--gutter) 40px' }}>
         <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
           <div className="pensum">
-            {PENSUM.map((sem, si) => {
-              const semTotal = sem.reduce((a,c) => a+c.c, 0)
-              return (
-                <div key={si} className="sem-col">
-                  <div className="sem-head">Sem · {String(si+1).padStart(2,'0')} · {semTotal} cr</div>
-                  {sem.map((course, ci) => {
-                    const dimmed = filter !== 'all' && course.a !== filter
-                    const isActive = selected && selected.si===si && selected.ci===ci
-                    return (
-                      <button key={ci} className={'course'+(isActive?' active':'')} data-area={course.a}
-                        style={{ opacity: dimmed ? 0.3 : 1, textAlign: 'left' }}
-                        onClick={() => setSelected(isActive ? null : {si,ci,course})}>
-                        {course.n}<span className="cr">{course.c} cr · {AREA_LABELS[course.a]}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              )
-            })}
+            {pensumData.semestres.map(sem => (
+              <div key={sem.numero} className="sem-col">
+                <div className="sem-head">Sem · {String(sem.numero).padStart(2,'0')} · {sem.total_creditos} cr</div>
+                {sem.materias.map((m, ci) => {
+                  const filterKey = AREA_FILTER[m.area] ?? 'all'
+                  const color     = AREA_COLOR[m.area]  ?? '#d4cfc6'
+                  const dimmed    = filter !== 'all' && filterKey !== filter
+                  const isActive  = selected?.semNum === sem.numero && selected?.ci === ci
+                  return (
+                    <button key={ci} className={'course'+(isActive?' active':'')}
+                      style={{ opacity: dimmed ? 0.3 : 1, textAlign: 'left', '--c-border': color }}
+                      onClick={() => setSelected(isActive ? null : { semNum: sem.numero, ci, m })}>
+                      {m.nombre}
+                      <span className="cr">{m.creditos} cr · {m.area}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -50,20 +74,19 @@ function PensumEmbed() {
           <aside className="drawer">
             <div className="drawer-head">
               <div>
-                <div className="eyebrow">Sem {String(selected.si+1).padStart(2,'0')} · {AREA_LABELS[selected.course.a]}</div>
-                <h2 style={{ marginTop: 8, fontSize: 30 }}>{selected.course.n}</h2>
+                <div className="eyebrow">Sem {String(selected.semNum).padStart(2,'0')} · {selected.m.area}</div>
+                <h2 style={{ marginTop: 8, fontSize: 30 }}>{selected.m.nombre}</h2>
               </div>
               <button className="icon-btn" onClick={() => setSelected(null)}><Icons.close /></button>
             </div>
             <div className="drawer-body">
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 24 }}>
-                <span className="chip">{selected.course.c} créditos</span>
-                <span className="chip">Obligatoria</span>
+                <span className="chip">{selected.m.creditos} créditos</span>
+                <span className="chip">{selected.m.horas_semana} h/sem</span>
+                <span className="chip">{selected.m.campo}</span>
               </div>
-              <h3 style={{ fontSize: 16, marginBottom: 10 }}>Descripción</h3>
-              <p style={{ color: 'var(--ink-2)', marginBottom: 24 }}>
-                Curso del área {AREA_LABELS[selected.course.a].toLowerCase()} que integra fundamentos teóricos con ejercicios aplicados al contexto caribeño.
-              </p>
+              <h3 style={{ fontSize: 16, marginBottom: 10 }}>Código</h3>
+              <p style={{ color: 'var(--ink-2)', marginBottom: 24 }}>{selected.m.codigo}</p>
               <div style={{ marginTop: 32, display: 'flex', gap: 10 }}>
                 <button className="btn"><Icons.download /> Microcurrículo PDF</button>
                 <button className="btn ghost" onClick={() => setSelected(null)}>Cerrar</button>
