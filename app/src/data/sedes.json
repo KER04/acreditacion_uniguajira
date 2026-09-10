@@ -1,0 +1,22 @@
+{
+  "riohacha": {
+    "nombre": "Sede Riohacha",
+    "direccion": "Bloque 1 — 2.° piso, Km 3+354 Vía Maicao",
+    "telefono": "+57 (605) 7282729",
+    "extension": "240, 241",
+    "correo": "ingsistemas@uniguajira.edu.co",
+    "horario": "Lunes a viernes 8:00 am – 12:00 m / 2:00 pm – 6:00 pm",
+    "director": "Adanud Segundo Meza Valle",
+    "snies": "17579"
+  },
+  "maicao": {
+    "nombre": "Sede Maicao",
+    "direccion": "Calle 15 No. 14-37, Centro, Maicao",
+    "telefono": "+57 (605) 7271500",
+    "extension": "110",
+    "correo": "sistemas.maicao@uniguajira.edu.co",
+    "horario": "Lunes a viernes 8:00 am – 12:00 m / 2:00 pm – 6:00 pm",
+    "director": "Coordinador por designar",
+    "snies": ""
+  }
+}

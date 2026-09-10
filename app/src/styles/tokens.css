@@ -1,0 +1,162 @@
+/* UniGuajira — Ingeniería de Sistemas · Tokens de marca
+ *
+ * Los valores salen de la identidad institucional publicada en uniguajira.edu.co:
+ *   · uniguajira-design-tokens.css  -> primary #62a9b6, secondary #cc5e50,
+ *     text #03090f, muted #4a5560, borde rgba(98,169,182,.22), radio 16px,
+ *     tipografías Montserrat (texto) y Roboto (títulos).
+ *   · Colores tomados del sitio ya renderizado -> cabecera #01616c,
+ *     fondo #f9fafa, superficies #ffffff / #f2f2f2, ámbar #f5a539.
+ *
+ * Los NOMBRES de las variables se mantienen tal cual para no romper los
+ * cientos de usos repartidos por los componentes: lo que cambia son los valores.
+ */
+
+:root {
+  /* Ámbar institucional (#f5a539 es el que pinta el sitio real) */
+  --ug-amarillo: #f5a539;
+  --ug-amarillo-deep: #d9861c;
+  --ug-amarillo-soft: #fdeed5;
+
+  /* Primario: el teal de la marca */
+  --ug-azul: #62a9b6;
+  --ug-azul-deep: #4f95a2;
+  --ug-azul-soft: #e8f4f6;
+
+  /* Secundario: la terracota de la marca */
+  --ug-flamingo: #cc5e50;
+  --ug-flamingo-deep: #b54f43;
+  --ug-flamingo-soft: #f7e0dc;
+
+  --ug-negro: #03090f;
+
+  /* Teal profundo de la cabecera institucional */
+  --ug-marino: #01616c;
+  --ug-marino-2: #014850;
+  --ug-marino-soft: #027e8c;
+
+  /* Superficies. Ojo: en la marca la página es gris muy claro y las tarjetas
+     son blancas, al revés de la relación que tenía antes el tema crema. */
+  --paper: #f9fafa;
+  --paper-2: #ffffff;
+  --paper-3: #f2f2f2;
+
+  --ink: #03090f;
+  --ink-2: #222222;
+  --ink-3: #4a5560;
+  --ink-muted: #5c6670;
+
+  --accent: var(--ug-azul);
+  --accent-deep: var(--ug-azul-deep);
+  --accent-soft: var(--ug-azul-soft);
+
+  --borde: rgba(98, 169, 182, 0.22);
+
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 1px 2px rgba(3, 9, 15, 0.05), 0 2px 8px rgba(3, 9, 15, 0.04);
+  --shadow: 0 10px 30px rgba(3, 9, 15, 0.08);
+  --shadow-lg: 0 4px 10px rgba(3, 9, 15, 0.06), 0 30px 60px -20px rgba(3, 9, 15, 0.18);
+
+  --font-display: "Roboto", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-body: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --max-w: 1320px;
+  --gutter: clamp(20px, 4vw, 48px);
+
+  /* Franja tejida del pie. Antes solo la definía el prototipo HTML, así que en
+     la app de React la variable no existía y la franja salía invisible. */
+  --wayuu-url: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 28' width='56' height='28'%3E%3Cg fill='%23f5a539'%3E%3Cpath d='M14 0 L28 14 L14 28 L0 14 Z'/%3E%3Cpath d='M42 0 L56 14 L42 28 L28 14 Z' opacity='0.55'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Modo oscuro: la marca no lo define, así que se deriva en neutros fríos
+   coherentes con #03090f en vez de los marrones cálidos que había antes. */
+[data-theme="dark"] {
+  --paper: #0d1117;
+  --paper-2: #151b23;
+  --paper-3: #1e262f;
+  --ink: #f0f3f5;
+  --ink-2: #d3dade;
+  --ink-3: #9aa6b0;
+  --ink-muted: #6f7c88;
+  --borde: rgba(98, 169, 182, 0.28);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
+  --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  --shadow-lg: 0 4px 10px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(0,0,0,0.7);
+}
+
+/* Acentos seleccionables. Todos salen de la paleta institucional. */
+[data-accent="azul"]     { --accent: var(--ug-azul);      --accent-deep: var(--ug-azul-deep);      --accent-soft: var(--ug-azul-soft);      }
+[data-accent="amarillo"] { --accent: var(--ug-amarillo);  --accent-deep: var(--ug-amarillo-deep);  --accent-soft: var(--ug-amarillo-soft);  }
+[data-accent="flamingo"] { --accent: var(--ug-flamingo);  --accent-deep: var(--ug-flamingo-deep);  --accent-soft: var(--ug-flamingo-soft);  }
+[data-accent="marino"]   { --accent: var(--ug-marino-soft); --accent-deep: var(--ug-marino);       --accent-soft: var(--ug-azul-soft);      }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(38px, 5.4vw, 76px); font-weight: 700; }
+h2 { font-size: clamp(26px, 3vw, 44px); }
+h3 { font-size: clamp(19px, 1.5vw, 25px); }
+p { margin: 0; }
+
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.rule { height: 1px; background: var(--ink); opacity: 0.12; border: 0; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  background: var(--paper-2);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: color-mix(in oklab, var(--ink) 35%, transparent); }
+.btn.accent { background: var(--accent); color: var(--ug-negro); border-color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+::selection { background: var(--accent); color: var(--ug-negro); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+html { scrollbar-color: var(--ink-muted) transparent; }

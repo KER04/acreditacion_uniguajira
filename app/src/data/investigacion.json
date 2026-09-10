@@ -1,0 +1,19 @@
+{
+  "grupos": [
+    { "id": 1, "nombre": "GITUG", "cat": "A1", "lider": "Dr. Héctor Brito Mendoza", "sede": "riohacha", "desc": "Grupo de Investigación en TIC de La Guajira. Énfasis en ciberseguridad, redes y sistemas embebidos.", "foto_url": "" },
+    { "id": 2, "nombre": "WayuuLab", "cat": "B", "lider": "Dra. Luz Marina Ipuana", "sede": "riohacha", "desc": "Laboratorio de innovación social y cultural digital. Diseño de tecnologías situadas culturalmente.", "foto_url": "" },
+    { "id": 3, "nombre": "Caribe.AI", "cat": "B", "lider": "Dr. Samuel Cotes Ramírez", "sede": "maicao", "desc": "Investigación en inteligencia artificial aplicada al contexto caribeño colombiano.", "foto_url": "" }
+  ],
+  "semilleros": [
+    { "id": 1, "nombre": "IoT Wayuu", "grupo": "GITUG", "lider": "MSc. Andrea Bolaños", "sede": "riohacha", "desc": "Internet de las cosas para comunidades indígenas y rurales.", "integrantes": 8 },
+    { "id": 2, "nombre": "CiberSeg", "grupo": "GITUG", "lider": "Dr. Héctor Brito", "sede": "riohacha", "desc": "Ciberseguridad, hacking ético y forensia digital.", "integrantes": 6 },
+    { "id": 3, "nombre": "DataCaribe", "grupo": "Caribe.AI", "lider": "Dr. Samuel Cotes", "sede": "maicao", "desc": "Ciencia de datos aplicada al contexto caribeño.", "integrantes": 5 },
+    { "id": 4, "nombre": "WebDev IS", "grupo": "GITUG", "lider": "MSc. Catalina Uriana", "sede": "riohacha", "desc": "Desarrollo web moderno y aplicaciones móviles.", "integrantes": 7 },
+    { "id": 5, "nombre": "AlgoLab", "grupo": "WayuuLab", "lider": "Dr. Pablo Mengual", "sede": "maicao", "desc": "Algoritmos, complejidad computacional y optimización.", "integrantes": 4 }
+  ],
+  "proyectos": [
+    { "id": 1, "titulo": "ArenaNet: IoT para jagüeyes Wayuu", "investigador": "MSc. Andrea Bolaños Curvelo", "estado": "En ejecución", "financiacion": "Minciencias – Convocatoria 852", "sede": "riohacha", "descripcion": "Sistema de monitoreo de jagüeyes usando sensores de bajo costo y visualización en tiempo real.", "fecha_inicio": "Feb 2025", "fecha_fin": "Feb 2027" },
+    { "id": 2, "titulo": "Caribe-SIEM: Detección de amenazas en redes universitarias", "investigador": "Dr. Héctor Brito Mendoza", "estado": "En ejecución", "financiacion": "UniGuajira – VCTI 2025", "sede": "riohacha", "descripcion": "Plataforma de detección y respuesta ante incidentes de seguridad para redes educativas del Caribe.", "fecha_inicio": "Ene 2026", "fecha_fin": "Dic 2026" },
+    { "id": 3, "titulo": "WayuuML: NLP para lengua wayuunaiki", "investigador": "Dra. Luz Marina Ipuana", "estado": "Formulación", "financiacion": "Pendiente – FCTE", "sede": "riohacha", "descripcion": "Corpus y modelos de procesamiento de lenguaje natural para la lengua indígena wayuunaiki.", "fecha_inicio": "Jul 2026", "fecha_fin": "Jun 2028" }
+  ]
+}

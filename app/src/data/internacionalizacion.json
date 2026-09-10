@@ -1,0 +1,20 @@
+{
+  "convenios": [
+    { "id": 1, "universidad": "Universidad Nacional Autónoma de México (UNAM)", "pais": "México", "tipo": "Doble titulación y movilidad", "descripcion": "Intercambio estudiantil semestral con homologación de créditos y co-tutela de trabajos de grado.", "vigente": true },
+    { "id": 2, "universidad": "Universidad Politécnica de Valencia (UPV)", "pais": "España", "tipo": "Movilidad docente y estudiantil", "descripcion": "Estancias de investigación y docencia. Proyectos conjuntos en sistemas embebidos e IA.", "vigente": true },
+    { "id": 3, "universidad": "Universidad del Magdalena", "pais": "Colombia", "tipo": "Cooperación académica", "descripcion": "Movilidad interna, cursos compartidos y proyectos de investigación en red.", "vigente": true },
+    { "id": 4, "universidad": "Universidad del Norte", "pais": "Colombia", "tipo": "Intercambio estudiantil", "descripcion": "Homologación de electivas y participación en programas de posgrado.", "vigente": true }
+  ],
+  "movilidad_estudiantil": [
+    { "id": 1, "nombre": "Daniela Pushaina", "destino": "UNAM – México", "tipo": "Saliente", "semestre": "2025-II", "sede": "riohacha" },
+    { "id": 2, "nombre": "Carlos López (UNAM)", "destino": "UniGuajira – Colombia", "tipo": "Entrante", "semestre": "2026-I", "sede": "riohacha" }
+  ],
+  "movilidad_docente": [
+    { "id": 1, "nombre": "Dr. Héctor Brito Mendoza", "destino": "UPV – España", "tipo": "Estancia investigativa", "duracion": "3 meses", "año": "2025" },
+    { "id": 2, "nombre": "Dra. Luz Marina Ipuana", "destino": "UNAM – México", "tipo": "Docencia invitada", "duracion": "2 semanas", "año": "2025" }
+  ],
+  "redes": [
+    { "id": 1, "nombre": "Red Colombiana de Ingeniería de Sistemas (REDIS)", "tipo": "Red nacional", "descripcion": "Red que agrupa programas de ingeniería de sistemas de universidades colombianas.", "activo": true },
+    { "id": 2, "nombre": "IEEE Colombia", "tipo": "Asociación profesional", "descripcion": "Membresía institucional con acceso a recursos, conferencias y publicaciones IEEE.", "activo": true }
+  ]
+}

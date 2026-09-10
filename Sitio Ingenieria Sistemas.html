@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ingeniería de Sistemas — Universidad de La Guajira</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/app.css" />
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    // Wayuu pattern URL injected as CSS variable for CSS-only usages
+    (function(){
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 28" width="56" height="28">
+        <g fill="#e2a542">
+          <path d="M14 0 L28 14 L14 28 L0 14 Z"/>
+          <path d="M42 0 L56 14 L42 28 L28 14 Z" opacity="0.55"/>
+        </g>
+      </svg>`;
+      document.documentElement.style.setProperty('--wayuu-url', `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`);
+    })();
+  </script>
+
+  <script type="text/babel" src="src/shared.jsx"></script>
+  <script type="text/babel" src="src/pages-main.jsx"></script>
+  <script type="text/babel" src="src/page-acreditacion.jsx"></script>
+  <script type="text/babel" src="src/pages-rest.jsx"></script>
+  <script type="text/babel" src="src/pages-community.jsx"></script>
+  <script type="text/babel" src="src/pages-new.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "accent": "azul",
+      "theme": "light",
+      "heroVariant": "v2"
+    }/*EDITMODE-END*/;
+
+    function Tweaks({ state, setState, visible }) {
+      if (!visible) return null;
+      const set = (k, v) => {
+        const next = { ...state, [k]: v };
+        setState(next);
+        try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*'); } catch(e) {}
+      };
+      return (
+        <aside className="tweaks">
+          <h5>Tweaks <span style={{fontFamily:"var(--font-mono)", color:"var(--ink-3)"}}>v1</span></h5>
+
+          <div className="group">
+            <label>Color de acento</label>
+            <div className="swatches">
+              {[["amarillo","#e2a542"],["azul","#62a9b6"],["flamingo","#cc5e50"]].map(([k,c]) => (
+                <button key={k} className={"sw" + (state.accent === k ? " on" : "")} style={{background:c}} onClick={()=>set("accent", k)} aria-label={k}/>
+              ))}
+            </div>
+          </div>
+
+          <div className="group">
+            <label>Tema</label>
+            <div className="seg">
+              <button className={state.theme==="light"?"on":""} onClick={()=>set("theme","light")}>Claro</button>
+              <button className={state.theme==="dark"?"on":""} onClick={()=>set("theme","dark")}>Oscuro</button>
+              <button onClick={()=>set("theme", state.theme === "dark" ? "light" : "dark")}>Auto</button>
+            </div>
+          </div>
+
+          <div className="group">
+            <label>Variante de hero</label>
+            <div className="seg">
+              <button className={state.heroVariant==="v1"?"on":""} onClick={()=>set("heroVariant","v1")}>Editorial</button>
+              <button className={state.heroVariant==="v2"?"on":""} onClick={()=>set("heroVariant","v2")}>Split</button>
+              <button className={state.heroVariant==="v3"?"on":""} onClick={()=>set("heroVariant","v3")}>Centrado</button>
+            </div>
+          </div>
+        </aside>
+      );
+    }
+
+    function App() {
+      const [tw, setTw] = useState(() => {
+        try { const s = localStorage.getItem("ug-tweaks"); if (s) return { ...TWEAK_DEFAULTS, ...JSON.parse(s) }; } catch(e){}
+        return TWEAK_DEFAULTS;
+      });
+      const [tweaksOpen, setTweaksOpen] = useState(false);
+
+      useEffect(() => {
+        document.documentElement.setAttribute("data-accent", tw.accent);
+        document.documentElement.setAttribute("data-theme", tw.theme);
+        try { localStorage.setItem("ug-tweaks", JSON.stringify(tw)); } catch(e){}
+      }, [tw]);
+
+      useEffect(() => {
+        const onMsg = (e) => {
+          if (!e.data || !e.data.type) return;
+          if (e.data.type === "__activate_edit_mode") setTweaksOpen(true);
+          if (e.data.type === "__deactivate_edit_mode") setTweaksOpen(false);
+        };
+        window.addEventListener("message", onMsg);
+        try { window.parent.postMessage({ type: "__edit_mode_available" }, "*"); } catch(e){}
+        return () => window.removeEventListener("message", onMsg);
+      }, []);
+
+      return (
+        <Router>
+          <AppBody heroVariant={tw.heroVariant} theme={tw.theme} setTheme={(t)=>setTw({...tw, theme:t})} />
+          <Tweaks state={tw} setState={setTw} visible={tweaksOpen} />
+        </Router>
+      );
+    }
+
+    function AppBody({ heroVariant, theme, setTheme }) {
+      const { route } = useRoute();
+      const isAdmin = route === "admin";
+      if (isAdmin) return <Admin />;
+      return (
+        <>
+          <Header theme={theme} setTheme={setTheme} />
+          {route === "inicio" && <Home heroVariant={heroVariant} />}
+          {route === "programa" && <Programa />}
+          {route === "pensum" && <Pensum />}
+          {route === "programa-resoluciones" && <ProgramaResolucionesPage />}
+          {route === "programa-contacto" && <ProgramaContactoPage />}
+          {route === "acreditacion" && <Acreditacion />}
+          {route.startsWith("factor-") && <Acreditacion />}
+          {route === "investigacion" && <Investigacion />}
+          {route === "extension" && <Extension />}
+          {route === "internacionalizacion" && <Internacionalizacion />}
+          {route === "convocatorias" && <Convocatorias />}
+          {route === "estudiantes" && <Estudiantes />}
+          {route === "docentes" && <DocentesPage />}
+          {route === "egresados" && <Egresados />}
+          {route === "proyectos" && <Proyectos />}
+          {route === "noticias" && <Noticias />}
+          {route === "admisiones" && <Admisiones />}
+          {route === "recursos" && <Recursos />}
+          {route === "contacto" && <Contacto />}
+          <Footer />
+        </>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
