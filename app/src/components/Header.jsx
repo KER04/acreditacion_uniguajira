@@ -7,6 +7,7 @@ const NAV = [
   { label: 'Programa', children: [
     { path: '/programa', label: 'Presentación', desc: 'Misión, visión, objetivos, perfiles' },
     { path: '/pensum', label: 'Plan de estudios', desc: '169 créditos · 10 semestres' },
+    { path: '/pensum-propuesto', label: 'Propuesta de actualización curricular', desc: '134 créditos · 8 semestres · en trámite' },
     { path: '/resoluciones', label: 'Resoluciones', desc: 'Registro calificado y acreditación' },
     { path: '/contacto', label: 'Dirección y contacto', desc: 'Adanud Segundo Meza Valle' },
   ]},

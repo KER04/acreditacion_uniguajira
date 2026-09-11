@@ -67,12 +67,14 @@ function resumenDe(docentes) {
   return [
     {
       k: 'posgrado',
+      tono: 'acento',
       valor: total ? `${Math.round((conPosgrado / total) * 100)}%` : '—',
       etiqueta: 'Docentes con posgrado activo',
     },
     { k: 'scienti', valor: 'ScienTI / MinCiencias', etiqueta: 'Vinculación institucional' },
     {
       k: 'sedes',
+      tono: 'ambar',
       valor: `${sedes.length} ${sedes.length === 1 ? 'Sede' : 'Sedes'}`,
       etiqueta: nombresSede || 'Sin sedes registradas',
     },
@@ -329,34 +331,34 @@ export default function Docentes() {
 
   return (
     <div className="page-in docentes-page">
-      <nav className="docentes-miga" aria-label="Ruta de navegación">
+      <nav className="miga" aria-label="Ruta de navegación">
         <span>Comunidad</span>
         <span aria-hidden="true">/</span>
-        <span className="docentes-miga__actual">Cuerpo Docente</span>
+        <span className="miga__actual">Cuerpo Docente</span>
       </nav>
 
-      <header className="docentes-hero">
-        <div className="docentes-hero__patron" aria-hidden="true" />
-        <div className="docentes-hero__contenido">
-          <p className="docentes-hero__insignia">
-            <span className="docentes-hero__punto" aria-hidden="true" />
+      <header className="hero-card">
+        <div className="hero-card__patron" aria-hidden="true" />
+        <div className="hero-card__contenido">
+          <p className="hero-card__insignia">
+            <span className="hero-card__punto" aria-hidden="true" />
             Cuerpo profesoral e investigador · Ingeniería de Sistemas
           </p>
 
-          <h1 className="docentes-hero__titulo">
+          <h1 className="hero-card__titulo">
             Quienes enseñan aquí, <span>transforman la región.</span>
           </h1>
 
-          <p className="docentes-hero__texto">
+          <p className="hero-card__texto">
             Ingeniería contextualizada con el territorio: desde inteligencia artificial y
             telemática hasta gobernanza tecnológica en el Caribe colombiano. Conoce las líneas
             de investigación, formación doctoral y producción científica de nuestro equipo
             docente en Riohacha y Maicao.
           </p>
 
-          <dl className="docentes-hero__cifras">
+          <dl className="hero-card__cifras">
             {resumen.map(c => (
-              <div key={c.k} className={`docentes-hero__cifra docentes-hero__cifra--${c.k}`}>
+              <div key={c.k} className={'hero-card__cifra' + (c.tono ? ` hero-card__cifra--${c.tono}` : '')}>
                 <dt>{c.valor}</dt>
                 <dd>{c.etiqueta}</dd>
               </div>
@@ -364,7 +366,7 @@ export default function Docentes() {
           </dl>
 
           <a
-            className="docentes-hero__cta"
+            className="hero-card__cta"
             href={GRUPLAC_URL}
             target="_blank"
             rel="noopener noreferrer"

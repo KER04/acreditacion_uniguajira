@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Programa from './pages/programa/Programa'
 import Pensum from './pages/programa/Pensum'
+import PensumPropuesto from './pages/programa/PensumPropuesto'
 import Resoluciones from './pages/programa/Resoluciones'
 import Contacto from './pages/programa/Contacto'
 import Acreditacion from './pages/acreditacion'
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Home /></Shell>} />
         <Route path="/programa" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Programa /></Shell>} />
         <Route path="/pensum" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Pensum /></Shell>} />
+        <Route path="/pensum-propuesto" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PensumPropuesto /></Shell>} />
         <Route path="/resoluciones" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Resoluciones /></Shell>} />
         <Route path="/contacto" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Contacto /></Shell>} />
         <Route path="/acreditacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Acreditacion /></Shell>} />

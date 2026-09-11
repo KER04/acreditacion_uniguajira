@@ -1,0 +1,156 @@
+{
+  "titulo": "Propuesta de actualización curricular",
+  "vigente": false,
+  "total_creditos": 134,
+  "total_asignaturas": 47,
+  "total_semestres": 8,
+
+  "comparado_con": {
+    "creditos": 169,
+    "asignaturas": 56,
+    "semestres": 10
+  },
+
+  "tramite": [
+    {
+      "clave": "calidad",
+      "etapa": "Revisión de aseguramiento de la calidad",
+      "detalle": "La oficina de Aseguramiento de la Calidad revisa el documento maestro y la coherencia del plan con el Proyecto Educativo del Programa."
+    },
+    {
+      "clave": "consejo-facultad",
+      "etapa": "Aprobación por Consejo de Facultad",
+      "detalle": "El Consejo de la Facultad de Ingeniería avala la propuesta y la remite a la instancia académica central."
+    },
+    {
+      "clave": "consejo-academico",
+      "etapa": "Aprobación de Consejo Académico",
+      "detalle": "El Consejo Académico adopta el plan mediante acuerdo y autoriza su trámite ante el Ministerio."
+    },
+    {
+      "clave": "ministerio",
+      "etapa": "Radicación al Ministerio",
+      "detalle": "Se radica la modificación del registro calificado en la plataforma SACES del Ministerio de Educación Nacional."
+    },
+    {
+      "clave": "aprobado",
+      "etapa": "Aprobado",
+      "detalle": "El Ministerio expide la resolución de modificación del registro calificado y el plan entra en vigencia para las cohortes nuevas."
+    }
+  ],
+
+  "etapa_actual": "calidad",
+
+  "extracurriculares": [
+    "Recreación y Deportes",
+    "Lengua Nativa (Wayuunaiki)",
+    "Asignaturas Electivas",
+    "Electivas Sociohumanísticas"
+  ],
+
+  "semestres": [
+    {
+      "numero": 1,
+      "total_creditos": 18,
+      "total_horas": 18,
+      "materias": [
+        { "nombre": "Cálculo I", "creditos": 4, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Lógica y Teoría de Conjuntos", "creditos": 2, "horas_semana": 2, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Álgebra Lineal", "creditos": 3, "horas_semana": 3, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Algoritmos y Programación I", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Introducción a la Ingeniería de Sistemas", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Cátedra Uniguajira", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 2,
+      "total_creditos": 18,
+      "total_horas": 18,
+      "materias": [
+        { "nombre": "Cálculo II", "creditos": 4, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Física I", "creditos": 4, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Matemática Discreta", "creditos": 2, "horas_semana": 2, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas de Ingeniería" },
+        { "nombre": "Algoritmos y Programación II", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Electiva Sociohumanística I", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" },
+        { "nombre": "Inglés I", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 3,
+      "total_creditos": 18,
+      "total_horas": 18,
+      "materias": [
+        { "nombre": "Cálculo III", "creditos": 4, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Física II", "creditos": 4, "horas_semana": 4, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas" },
+        { "nombre": "Estructura de Datos", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Arquitectura de Computadores", "creditos": 2, "horas_semana": 2, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Electiva Sociohumanística II", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" },
+        { "nombre": "Inglés II", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 4,
+      "total_creditos": 17,
+      "total_horas": 17,
+      "materias": [
+        { "nombre": "Métodos Numéricos", "creditos": 3, "horas_semana": 3, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas de Ingeniería" },
+        { "nombre": "Estadística Descriptiva y Probabilidad", "creditos": 3, "horas_semana": 3, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas de Ingeniería" },
+        { "nombre": "Técnicas Avanzadas de Programación", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Sistemas Operativos", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Pensamiento Crítico", "creditos": 3, "horas_semana": 3, "campo": "Socio Humanístico", "area": "Complementaria" },
+        { "nombre": "Inglés III", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 5,
+      "total_creditos": 17,
+      "total_horas": 17,
+      "materias": [
+        { "nombre": "Investigación de Operaciones", "creditos": 2, "horas_semana": 2, "campo": "Básico General Científico Disciplinar", "area": "Ciencias Básicas de Ingeniería" },
+        { "nombre": "Análisis y Diseño de Sistemas", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Bases de Datos I (Datos estructurados)", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Redes de Computadores I", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Metodología de la Investigación I", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Investigativo" },
+        { "nombre": "Inglés IV", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 6,
+      "total_creditos": 17,
+      "total_horas": 17,
+      "materias": [
+        { "nombre": "Ingeniería de Software", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Bases de Datos II", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Redes de Computadores II", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Desarrollo Web", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Metodología de la Investigación II", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Investigativo" },
+        { "nombre": "Inglés V", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 7,
+      "total_creditos": 15,
+      "total_horas": 15,
+      "materias": [
+        { "nombre": "Modelos y Simulación", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Sistemas de Información", "creditos": 2, "horas_semana": 2, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Inteligencia Artificial", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Electiva I", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Proyecto de Grado I", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Investigativo" },
+        { "nombre": "Legislación Informática", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Complementaria" }
+      ]
+    },
+    {
+      "numero": 8,
+      "total_creditos": 14,
+      "total_horas": 14,
+      "materias": [
+        { "nombre": "Desarrollo Móvil", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Ciberseguridad", "creditos": 4, "horas_semana": 4, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Electiva II", "creditos": 3, "horas_semana": 3, "campo": "Básico Específico Profesional", "area": "Perfil Profesional" },
+        { "nombre": "Proyecto de Grado II", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Investigativo" },
+        { "nombre": "Innovación y Emprendimiento", "creditos": 2, "horas_semana": 2, "campo": "Socio Humanístico", "area": "Investigativo" }
+      ]
+    }
+  ]
+}
