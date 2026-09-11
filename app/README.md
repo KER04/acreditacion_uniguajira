@@ -23,14 +23,28 @@ una base real detrás, con migraciones versionadas y semilla idempotente.
 | [app/server/db/create.js](app/server/db/create.js) | Crea la base si no existe (se conecta a `postgres` porque `CREATE DATABASE` no corre desde dentro de sí misma) |
 | [app/server/db/migrate.js](app/server/db/migrate.js) | Corre las migraciones pendientes en orden alfabético; cada una en su transacción y registrada en `_migraciones` |
 | [app/server/db/seed.js](app/server/db/seed.js) | Primer administrador + contenido inicial del módulo Estudiantes. Idempotente: no duplica |
+| [app/server/db/importar-docentes.js](app/server/db/importar-docentes.js) | Importa la planilla de docentes de la facultad, normalizando nombres y desglosando la formación. Idempotente: identifica por correo, así que reimportar actualiza en vez de duplicar |
+| [app/server/db/datos/docentes-planilla.json](app/server/db/datos/docentes-planilla.json) | La planilla misma, versionada. Es la fuente con la que se pobló el directorio; estar en el repo es lo que hace que `db:setup` deje la base igual en cualquier máquina |
 
 **Scripts de npm añadidos** en [app/package.json](app/package.json):
 
 ```
-npm run db:create    # crea la base
-npm run db:migrate   # aplica migraciones pendientes
-npm run db:seed      # siembra admin y contenido inicial
-npm run db:setup     # los tres de corrido
+npm run db:create            # crea la base
+npm run db:migrate           # aplica migraciones pendientes
+npm run db:seed              # siembra admin y contenido inicial
+npm run db:importar-docentes # carga el directorio docente desde la planilla versionada
+npm run db:setup             # los cuatro de corrido
+```
+
+Tras un `git pull` que traiga migraciones nuevas hay que correr `npm run db:migrate`
+a mano: ni el pull ni `npm run dev` lo hacen solos. `db:setup` es seguro de
+repetir —los cuatro pasos son idempotentes— así que ante la duda, ese.
+
+El importador acepta otra planilla como argumento y tiene modo de prueba:
+
+```
+npm run db:importar-docentes -- --simular            # muestra qué haría, sin escribir
+npm run db:importar-docentes -- planilla-nueva.json  # importa otra planilla
 ```
 
 **Dependencias nuevas:** `pg`, `dotenv`, `cookie-parser`, `multer`.
@@ -55,6 +69,15 @@ npm run db:setup     # los tres de corrido
 - **[005_archivos_en_base.sql](app/server/db/migrations/005_archivos_en_base.sql)** —
   tabla única `archivos` (contenido en base64) más `documentos_honor`, y las
   columnas `archivo_id` / `foto_id` que la referencian.
+- **[006_docentes.sql](app/server/db/migrations/006_docentes.sql)** — el cuerpo
+  docente sale de `src/data/docentes.json` y pasa a la base, en dos tablas:
+  `docente` y `docente_formacion`. La formación va aparte porque es una lista
+  por persona y venía aplastada en un solo campo de texto; separarla permite
+  contar doctorados y maestrías —lo que pide el Factor 3 del CNA— sin analizar
+  cadenas. El texto original de la planilla se conserva en `docente.posgrado`.
+
+  Las fotos **no** llegan por aquí: en la planilla son enlaces de Google Drive,
+  no imágenes, así que hay que subirlas desde el panel de administración.
 
 ### Configuración
 
@@ -234,8 +257,17 @@ cada cambio, para recibir ids, orden y campos calculados.
 cd app
 cp .env.example .env      # completar PGPASSWORD y ADMIN_PASSWORD
 npm install
-npm run db:setup          # crea la base + migra + siembra
+npm run db:setup          # crea la base + migra + siembra + importa docentes
 npm run dev               # backend en :3001 y front en :5173
+```
+
+Si ya tenías la base creada y solo estás actualizando tras un `git pull`:
+
+```bash
+cd app
+npm install
+npm run db:setup          # es idempotente: aplica lo que falte y no duplica nada
+npm run dev
 ```
 
 ---

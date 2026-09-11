@@ -1,113 +1,514 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Icons } from '../../components/Icons'
-import { WayuuBackdrop } from '../../components/WayuuPatterns'
+import Portal from '../../components/Portal'
+import { sedeMatch } from '../../components/SedeFilter'
 import { useData } from '../../context/DataContext'
-import SedeFilter, { sedeMatch } from '../../components/SedeFilter'
+
+
+/* Buscador de grupos de MinCiencias. Si el programa ya tiene la URL directa de
+   su GrupLAC, se reemplaza aquí. */
+const GRUPLAC_URL = 'https://scienti.minciencias.gov.co/gruplac/'
+
+/* Tipo de vinculación. Es lo que trae la planilla de la facultad; sustituye al
+   escalafón (titular/asociado/asistente), que son cosas distintas y que esa
+   fuente no registra.
+
+   El color va por nombre de color y no por vinculación a propósito: si mañana
+   aparece otra figura contractual, basta con añadirla aquí. */
+const VINCULACIONES = [
+  { k: 'planta',      l: 'Planta',      clase: 'planta' },
+  { k: 'catedratico', l: 'Catedrático', clase: 'catedratico' },
+  { k: 'ocasional',   l: 'Ocasional',   clase: 'ocasional' },
+]
+
+/* Respaldo para un valor desconocido o vacío: se pinta en gris en vez de
+   romper la tarjeta. */
+const VINCULACION_OTRA = { k: 'otra', l: 'Sin registrar', clase: 'otra' }
+
+function vinculacionDe(d) {
+  return VINCULACIONES.find(v => v.k === d.vinculacion) ?? VINCULACION_OTRA
+}
+
+const SEDES = [
+  { k: 'ambas',    l: 'Ambas sedes' },
+  { k: 'riohacha', l: 'Riohacha' },
+  { k: 'maicao',   l: 'Maicao' },
+]
+
+const NOMBRE_SEDE = { riohacha: 'Sede Riohacha', maicao: 'Sede Maicao' }
+
+/* Contadores del directorio. Como todo lo demás, salen de los datos: cuando
+   entre o salga un docente el número se corrige solo.
+
+   Un docente con doctorado y maestría cuenta en ambos: son títulos que tiene,
+   no un nivel máximo. */
+function contadoresDe(docentes) {
+  const conNivel = nivel => docentes.filter(d => (d.formacion ?? []).some(f => f.nivel === nivel)).length
+  const sedes = new Set(docentes.map(d => d.sede)).size
+
+  return [
+    { k: 'docentes',   valor: docentes.length,          etiqueta: docentes.length === 1 ? 'docente del programa' : 'docentes del programa' },
+    { k: 'doctorados', valor: conNivel('doctorado'),    etiqueta: 'con doctorado' },
+    { k: 'maestrias',  valor: conNivel('maestria'),     etiqueta: 'con maestría' },
+    { k: 'sedes',      valor: sedes,                    etiqueta: sedes === 1 ? 'sede universitaria' : 'sedes universitarias' },
+  ]
+}
+
+/* Las cifras del hero se calculan del listado: así no hay un número escrito a
+   mano que quede mintiendo cuando entren o salgan docentes. */
+function resumenDe(docentes) {
+  const total = docentes.length
+  const conPosgrado = docentes.filter(d => d.formacion?.length > 0).length
+  const sedes = [...new Set(docentes.map(d => d.sede))]
+  const nombresSede = sedes
+    .map(s => (NOMBRE_SEDE[s] ?? s).replace('Sede ', ''))
+    .join(' & ')
+
+  return [
+    {
+      k: 'posgrado',
+      valor: total ? `${Math.round((conPosgrado / total) * 100)}%` : '—',
+      etiqueta: 'Docentes con posgrado activo',
+    },
+    { k: 'scienti', valor: 'ScienTI / MinCiencias', etiqueta: 'Vinculación institucional' },
+    {
+      k: 'sedes',
+      valor: `${sedes.length} ${sedes.length === 1 ? 'Sede' : 'Sedes'}`,
+      etiqueta: nombresSede || 'Sin sedes registradas',
+    },
+  ]
+}
+
+/* Iniciales para el rombo: nombre de pila + primer apellido.
+   Con cuatro palabras el apellido es la tercera (dos nombres de pila);
+   con tres, la segunda. */
+function iniciales(nombre) {
+  /* Un registro sin nombre no debe tumbar la página entera. */
+  if (!nombre) return '—'
+  const p = String(nombre).trim().split(/\s+/)
+  const apellido = p.length >= 4 ? p[2] : p[1]
+  return ((p[0]?.[0] ?? '') + (apellido?.[0] ?? '')).toUpperCase()
+}
+
+/* ────────────────────────────────────────────────────────────────
+   FICHA AMPLIADA
+
+   Se abre creciendo desde la tarjeta que se tocó: se mide su posición y se
+   anima el panel desde ese rectángulo hasta su tamaño final (técnica FLIP),
+   de modo que la tarjeta parece adelantarse y abrirse. Al cerrar, vuelve.
+   ──────────────────────────────────────────────────────────────── */
+const ANIM = { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' }
+
+function sinMovimiento() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+}
+
+/* Fotogramas que llevan el panel desde el rectángulo de la tarjeta al suyo. */
+function fotogramas(desde, hasta) {
+  return [
+    {
+      transform: `translate(${desde.left - hasta.left}px, ${desde.top - hasta.top}px)`
+        + ` scale(${desde.width / hasta.width}, ${desde.height / hasta.height})`,
+      opacity: 0.5,
+    },
+    { transform: 'none', opacity: 1 },
+  ]
+}
+
+function FichaDocente({ d, rect, onCerrar }) {
+  const v = vinculacionDe(d)
+  const panelRef = useRef(null)
+  const fondoRef = useRef(null)
+  const cerrandoRef = useRef(false)
+
+  /* Apertura: el panel arranca donde estaba la tarjeta. */
+  useLayoutEffect(() => {
+    const panel = panelRef.current
+    if (!panel || !rect || sinMovimiento()) return
+    panel.animate(fotogramas(rect, panel.getBoundingClientRect()), ANIM)
+    fondoRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], ANIM)
+  }, [rect])
+
+  const cerrar = useCallback(() => {
+    if (cerrandoRef.current) return
+    cerrandoRef.current = true
+    const panel = panelRef.current
+    if (!panel || !rect || sinMovimiento()) { onCerrar(); return }
+    const anim = panel.animate(fotogramas(rect, panel.getBoundingClientRect()).reverse(), ANIM)
+    fondoRef.current?.animate([{ opacity: 1 }, { opacity: 0 }], ANIM)
+    anim.onfinish = onCerrar
+    anim.oncancel = onCerrar
+  }, [rect, onCerrar])
+
+  /* Escape para salir y bloqueo del scroll del fondo mientras está abierta. */
+  useEffect(() => {
+    const alTeclear = e => { if (e.key === 'Escape') cerrar() }
+    const previo = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', alTeclear)
+    return () => {
+      document.body.style.overflow = previo
+      document.removeEventListener('keydown', alTeclear)
+    }
+  }, [cerrar])
+
+  const contacto = [
+    ['Correo', <a key="e" href={`mailto:${d.email}`}>{d.email}</a>],
+    d.oficina   && ['Oficina', d.oficina],
+    d.extension && ['Extensión', d.extension],
+    d.horario   && ['Atención a estudiantes', d.horario],
+  ].filter(Boolean)
+
+  const enlaces = [
+    ['CvLAC', d.cvlac_url],
+    ['ORCID', d.orcid_url],
+    ['Google Scholar', d.scholar_url],
+  ].filter(([, url]) => url)
+
+  return (
+    <Portal>
+      <div ref={fondoRef} className="ficha-fondo" onClick={cerrar} />
+      <div className="ficha-capa" role="presentation">
+        <article
+          ref={panelRef}
+          className="ficha"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={`ficha-nombre-${d.id}`}
+        >
+          <div className="ficha__patron" aria-hidden="true" />
+
+          <button type="button" className="ficha__cerrar" onClick={cerrar} autoFocus aria-label="Cerrar ficha">
+            <Icons.close />
+          </button>
+
+          <header className="ficha__encabezado">
+            <div className={`ficha__foto ficha__foto--${v.clase}`}>
+              {d.foto_url
+                ? <img src={d.foto_url} alt={`Fotografía de ${d.nombre}`} />
+                : (
+                  <span className={`docente-rombo docente-rombo--${v.clase} ficha__rombo`} aria-hidden="true">
+                    <span className="docente-rombo__texto">{iniciales(d.nombre)}</span>
+                  </span>
+                )}
+            </div>
+
+            <div className="ficha__identidad">
+              <span className={`docente-pastilla docente-pastilla--${v.clase}`}>{v.l}</span>
+              <h2 className="ficha__nombre" id={`ficha-nombre-${d.id}`}>{d.nombre}</h2>
+              <p className="ficha__sede">
+                <span className={`docente-punto docente-punto--${d.sede}`} aria-hidden="true" />
+                {NOMBRE_SEDE[d.sede]}
+                {d.dedicacion && <span className="ficha__dedicacion">{d.dedicacion}</span>}
+              </p>
+              <p className="ficha__posgrado">{d.posgrado}</p>
+            </div>
+          </header>
+
+          <div className="ficha__cuerpo">
+            {d.formacion?.length > 0 && (
+              <section className="docente-detalle__bloque">
+                <h3>Formación académica</h3>
+                <ul className="docente-detalle__formacion">
+                  {d.formacion.map((f, i) => (
+                    <li key={i}>
+                      <span className="docente-detalle__grado">
+                        {f.titulo}
+                        {f.en_curso && <em className="docente-detalle__curso">en curso</em>}
+                      </span>
+                      {(f.institucion || f.anio) && (
+                        <span className="docente-detalle__meta">
+                          {[f.institucion, f.anio].filter(Boolean).join(' · ')}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {(d.grupo || d.semillero) && (
+              <section className="docente-detalle__bloque">
+                <h3>Investigación</h3>
+                <ul className="docente-detalle__formacion">
+                  {d.grupo && (
+                    <li>
+                      <span className="docente-detalle__grado">
+                        {d.grupo}
+                        {d.grupo_categoria && (
+                          <em className="docente-detalle__minciencias">Categoría {d.grupo_categoria}</em>
+                        )}
+                      </span>
+                      <span className="docente-detalle__meta">Grupo de investigación</span>
+                    </li>
+                  )}
+                  {d.semillero && (
+                    <li>
+                      <span className="docente-detalle__grado">{d.semillero}</span>
+                      <span className="docente-detalle__meta">Semillero</span>
+                    </li>
+                  )}
+                </ul>
+              </section>
+            )}
+
+            <section className="docente-detalle__bloque">
+              <h3>Contacto</h3>
+              <dl className="docente-detalle__contacto">
+                {contacto.map(([rotulo, valor]) => (
+                  <div key={rotulo}>
+                    <dt>{rotulo}</dt>
+                    <dd>{valor}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+
+            <section className="docente-detalle__bloque">
+              <h3>Perfiles académicos</h3>
+              <div className="docente-detalle__enlaces">
+                {enlaces.map(([rotulo, url]) => (
+                  <a
+                    key={rotulo}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${rotulo} de ${d.nombre} (abre en una pestaña nueva)`}
+                  >
+                    {rotulo}
+                    <Icons.external />
+                  </a>
+                ))}
+              </div>
+            </section>
+          </div>
+        </article>
+      </div>
+    </Portal>
+  )
+}
 
 export default function Docentes() {
   const { data } = useData()
+  const docentes = data.docentes ?? []
+
   const [q, setQ] = useState('')
-  const [cat, setCat] = useState('all')
+  const [vinculacion, setVinculacion] = useState('todas')
   const [sede, setSede] = useState('ambas')
+  /* { d, rect }: el docente abierto y el rectángulo de su tarjeta, que es de
+     donde crece la ficha. */
+  const [ficha, setFicha] = useState(null)
 
-  const filtered = (data.docentes ?? []).filter(d => {
-    const matchQ = !q || d.n.toLowerCase().includes(q.toLowerCase()) || d.a.toLowerCase().includes(q.toLowerCase())
-    const matchC = cat === 'all' || d.cat.toLowerCase() === cat
-    const matchSede = sedeMatch(d.sede, sede)
-    return matchQ && matchC && matchSede
-  })
+  const abrir = useCallback((d, evento) => {
+    const tarjeta = evento.currentTarget.closest('.docente-card')
+    setFicha({ d, rect: tarjeta.getBoundingClientRect() })
+  }, [])
 
-  const bgColors = ['var(--ug-amarillo-soft)','var(--ug-azul-soft)','var(--ug-flamingo-soft)','var(--paper-3)']
+  /* Al cerrar, el foco vuelve a la tarjeta desde donde se abrió. */
+  const cerrar = useCallback(() => {
+    const id = ficha?.d.id
+    setFicha(null)
+    if (id != null) {
+      requestAnimationFrame(() => document.getElementById(`docente-abrir-${id}`)?.focus())
+    }
+  }, [ficha])
+
+  const filtrados = useMemo(() => {
+    const texto = q.trim().toLowerCase()
+    return docentes.filter(d => {
+      const coincideTexto = !texto
+        || d.nombre.toLowerCase().includes(texto)
+        || (d.posgrado ?? '').toLowerCase().includes(texto)
+      const coincideVinculacion = vinculacion === 'todas' || d.vinculacion === vinculacion
+      return coincideTexto && coincideVinculacion && sedeMatch(d.sede, sede)
+    })
+  }, [docentes, q, vinculacion, sede])
+
+  const resumen = useMemo(() => resumenDe(docentes), [docentes])
+  const contadores = useMemo(() => contadoresDe(docentes), [docentes])
 
   return (
-    <div className="page-in">
-      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)' }}>
-        <div className="inner">
-          <div className="eyebrow">Comunidad · Docentes</div>
-          <h1 style={{ marginTop: 14, maxWidth: '18ch' }}>Quienes enseñan aquí, hacen también.</h1>
-          <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '58ch' }}>
-            Directorio completo con áreas de trabajo, correos institucionales y horarios de atención a estudiantes.
-          </p>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 36, alignItems: 'center' }}>
-            <div className="chip"><b style={{ marginRight: 6 }}>28</b> docentes</div>
-            <div className="chip"><b style={{ marginRight: 6 }}>9</b> doctorados</div>
-            <div className="chip"><b style={{ marginRight: 6 }}>17</b> maestrías</div>
-            <div style={{ flex: 1 }} />
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar por nombre o área..."
-              style={{ padding: '10px 14px', borderRadius: 999, border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', background: 'var(--paper-2)', minWidth: 260, font: 'inherit', color: 'inherit' }} />
-          </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-            {[['all','Todas las categorías'],['titular','Titular'],['asociado','Asociado'],['asistente','Asistente']].map(([k,l]) => (
-              <button key={k} className="chip" onClick={() => setCat(k)}
-                style={{ cursor: 'pointer', background: cat===k ? 'var(--ink)' : undefined, color: cat===k ? 'var(--paper)' : undefined, borderColor: cat===k ? 'var(--ink)' : undefined }}>{l}</button>
-            ))}
-            <div style={{ flex: 1 }} />
-            <SedeFilter value={sede} onChange={setSede} />
-          </div>
-        </div>
-      </section>
+    <div className="page-in docentes-page">
+      <nav className="docentes-miga" aria-label="Ruta de navegación">
+        <span>Comunidad</span>
+        <span aria-hidden="true">/</span>
+        <span className="docentes-miga__actual">Cuerpo Docente</span>
+      </nav>
 
-      <section className="section" style={{ paddingTop: 20 }}>
-        <div className="inner">
-          {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--ink-3)' }}>No se encontraron docentes con ese criterio.</div>
-          )}
-          <div className="grid-2">
-            {filtered.map((d,i) => (
-              <div key={d.id} className="card" style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 20, background: 'var(--paper-2)' }}>
-                <div style={{ width: 100, height: 100, borderRadius: 14, background: bgColors[i%4], position: 'relative', overflow: 'hidden' }}>
-                  <WayuuBackdrop variant="a" />
-                  <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, color: 'var(--ug-negro)', opacity: .6 }}>
-                    {d.n.split(' ').filter(w => /^[A-ZÁÉÍÓÚ]/.test(w)).slice(0,2).map(w => w[0]).join('')}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>{d.r}</div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18, marginTop: 4, letterSpacing: '-0.01em' }}>{d.n}</div>
-                  <div style={{ fontSize: 13, color: 'var(--ink-2)', marginTop: 6 }}>{d.a}</div>
-                  <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-2)' }}>✉ {d.e}</div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>🕑 {d.h}</div>
-                  <div style={{ marginTop: 10 }}><span className="chip" style={{ fontSize: 10 }}>{d.cat}</span></div>
-                </div>
+      <header className="docentes-hero">
+        <div className="docentes-hero__patron" aria-hidden="true" />
+        <div className="docentes-hero__contenido">
+          <p className="docentes-hero__insignia">
+            <span className="docentes-hero__punto" aria-hidden="true" />
+            Cuerpo profesoral e investigador · Ingeniería de Sistemas
+          </p>
+
+          <h1 className="docentes-hero__titulo">
+            Quienes enseñan aquí, <span>transforman la región.</span>
+          </h1>
+
+          <p className="docentes-hero__texto">
+            Ingeniería contextualizada con el territorio: desde inteligencia artificial y
+            telemática hasta gobernanza tecnológica en el Caribe colombiano. Conoce las líneas
+            de investigación, formación doctoral y producción científica de nuestro equipo
+            docente en Riohacha y Maicao.
+          </p>
+
+          <dl className="docentes-hero__cifras">
+            {resumen.map(c => (
+              <div key={c.k} className={`docentes-hero__cifra docentes-hero__cifra--${c.k}`}>
+                <dt>{c.valor}</dt>
+                <dd>{c.etiqueta}</dd>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
+          </dl>
 
-      <section className="section" style={{ background: 'var(--paper-2)' }}>
-        <div className="inner">
-          <div className="section-head">
-            <div className="title">
-              <div className="eyebrow">Documentos institucionales</div>
-              <h2 style={{ marginTop: 10 }}>Recursos para el cuerpo docente.</h2>
+          <a
+            className="docentes-hero__cta"
+            href={GRUPLAC_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Explorar grupos de investigación (GrupLAC)
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </header>
+
+      <section className="docentes-panel" aria-label="Resumen y filtros del directorio">
+        <div className="docentes-cifras">
+          {contadores.map(c => (
+            <span key={c.k} className={`docentes-cifra docentes-cifra--${c.k}`}>
+              <strong>{c.valor}</strong> {c.etiqueta}
+            </span>
+          ))}
+        </div>
+
+        <div className="docentes-filtros">
+          <div className="docentes-chips" role="group" aria-label="Filtrar por tipo de vinculación">
+            {[{ k: 'todas', l: 'Toda la planta docente' }, ...VINCULACIONES].map(c => (
+              <button
+                key={c.k}
+                type="button"
+                className={`docentes-chip${vinculacion === c.k ? ' is-activo' : ''}`}
+                aria-pressed={vinculacion === c.k}
+                onClick={() => setVinculacion(c.k)}
+              >
+                {c.l}
+              </button>
+            ))}
+          </div>
+
+          <div className="docentes-herramientas">
+            <div className="docentes-buscador">
+              <span className="docentes-buscador__icono" aria-hidden="true"><Icons.search /></span>
+              <input
+                type="search"
+                className="docentes-buscador__campo"
+                value={q}
+                onChange={e => setQ(e.target.value)}
+                placeholder="Buscar por nombre o área"
+                aria-label="Buscar docente por nombre o área"
+              />
+            </div>
+
+            <div className="docentes-sedes" role="group" aria-label="Filtrar por sede">
+              {SEDES.map(s => (
+                <button
+                  key={s.k}
+                  type="button"
+                  className={`docentes-sede${sede === s.k ? ' is-activo' : ''}`}
+                  aria-pressed={sede === s.k}
+                  onClick={() => setSede(s.k)}
+                >
+                  {s.l}
+                </button>
+              ))}
             </div>
           </div>
-          <div className="grid-3">
-            {[
-              ['Estatuto profesoral','Acuerdo 045 de 2020','PDF · 1.2 MB'],
-              ['Plan de desarrollo profesoral','2024 – 2028','PDF · 780 KB'],
-              ['Formato de autoevaluación docente','Vigencia 2026','DOC · 64 KB'],
-              ['Guía para puntos salariales','Sistema interno UniGuajira','PDF · 420 KB'],
-              ['Reglamento de propiedad intelectual','Acuerdo 022 de 2019','PDF · 640 KB'],
-              ['Políticas de investigación','VCTI UniGuajira','PDF · 580 KB'],
-              ['Manual de identidad visual','Versión 2023','PDF · 3.4 MB'],
-              ['Formato de registro de producción','CvLac interno','DOC · 58 KB'],
-              ['Política de bienestar docente','Vigente 2026','PDF · 390 KB'],
-            ].map(([t,s,sz],i) => (
-              <div key={i} style={{ padding: '20px 22px', background: 'var(--paper)', borderRadius: 12, display: 'flex', alignItems: 'start', gap: 14, border: '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' }}>
-                <div style={{ width: 38, height: 38, borderRadius: 8, background: 'var(--paper-2)', display: 'grid', placeItems: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--ink-3)', flexShrink: 0 }}>{sz.split('·')[0].trim()}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 500, fontSize: 15 }}>{t}</div>
-                  <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 4 }}>{s}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.08em', color: 'var(--ink-3)', marginTop: 4 }}>{sz}</div>
-                </div>
-                <button className="icon-btn" style={{ width: 32, height: 32 }}><Icons.download /></button>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
+
+      {filtrados.length === 0 ? (
+        <p className="docentes-vacio">
+          {docentes.length === 0
+            ? 'El directorio docente se está cargando. Vuelve pronto.'
+            : 'No se encontraron docentes con ese criterio.'}
+        </p>
+      ) : (
+        <section className="docentes-grid">
+          {filtrados.map(d => {
+            const abierta = ficha?.d.id === d.id
+            const v = vinculacionDe(d)
+            return (
+              <article key={d.id} className={`docente-card${abierta ? ' is-abierta' : ''}`}>
+                <div className="docente-card__patron" aria-hidden="true" />
+                <div className="docente-card__cuerpo">
+                  <div className={`docente-card__acento docente-card__acento--${v.clase}`} aria-hidden="true" />
+                  <div className="docente-card__contenido">
+                    <h2 className="docente-card__encabezado">
+                    <button
+                      type="button"
+                      id={`docente-abrir-${d.id}`}
+                      className="docente-card__toggle"
+                      aria-haspopup="dialog"
+                      onClick={e => abrir(d, e)}
+                    >
+                      <span className="docente-card__cabecera">
+                        {/* Con fotografía manda la foto; sin ella, el rombo con
+                            las iniciales. El borde conserva el color de la
+                            vinculación en ambos casos. */}
+                        {d.foto_url ? (
+                          <span className={`docente-card__foto docente-card__foto--${v.clase}`}>
+                            <img src={d.foto_url} alt="" loading="lazy" />
+                          </span>
+                        ) : (
+                          <span className={`docente-rombo docente-rombo--${v.clase}`} aria-hidden="true">
+                            <span className="docente-rombo__texto">{iniciales(d.nombre)}</span>
+                          </span>
+                        )}
+                        <span className="docente-card__identidad">
+                          <span className="docente-card__nombre">{d.nombre}</span>
+                          <span className={`docente-pastilla docente-pastilla--${v.clase}`}>{v.l}</span>
+                        </span>
+                        <span className="docente-card__chevron" aria-hidden="true"><Icons.arrow /></span>
+                      </span>
+
+                      <span className="docente-card__datos">
+                        <span className="docente-card__sede">
+                          <span className={`docente-punto docente-punto--${d.sede}`} aria-hidden="true" />
+                          {NOMBRE_SEDE[d.sede]}
+                        </span>
+                        <span className="docente-card__posgrado">{d.posgrado}</span>
+                      </span>
+                    </button>
+                    </h2>
+
+                    <div className="docente-card__pie">
+                      <a
+                        className="docente-card__cvlac"
+                        href={d.cvlac_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Ver CVLAC de ${d.nombre} (abre en una pestaña nueva)`}
+                      >
+                        Ver CVLAC
+                        <Icons.external />
+                      </a>
+                      <p className="docente-card__correo">
+                        <Icons.mail />
+                        <a href={`mailto:${d.email}`}>{d.email}</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
+        </section>
+      )}
+
+      {ficha && <FichaDocente d={ficha.d} rect={ficha.rect} onCerrar={cerrar} />}
     </div>
   )
 }

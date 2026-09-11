@@ -11,7 +11,7 @@ import auth from './routes/auth.js'
 import archivos from './routes/archivos.js'
 
 import acreditacion from './routes/acreditacion.js'
-import docentes from './routes/docentes.js'
+import docentes, { leerDocentes } from './routes/docentes.js'
 import estudiantes, { bloquesEstudiantes } from './routes/estudiantes.js'
 import egresados from './routes/egresados.js'
 import investigacion from './routes/investigacion.js'
@@ -89,7 +89,7 @@ app.get('/api/all', async (_req, res) => {
     ] = await Promise.all([
       readData('noticias.json'),
       readData('convocatorias.json'),
-      readData('docentes.json'),
+      leerDocentes(),         // ya viene de PostgreSQL, no del JSON
       bloquesEstudiantes(),   // ya viene de PostgreSQL, no del JSON
       readData('egresados.json'),
       readData('investigacion.json'),

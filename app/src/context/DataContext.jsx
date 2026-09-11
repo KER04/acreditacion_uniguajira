@@ -13,6 +13,7 @@ const API = '/api'
    El resto de claves sigue con el flujo viejo de "PUT del arreglo completo"
    contra los archivos JSON, hasta que les toque su turno de migración. */
 const EN_BASE = {
+  docentes:               'docentes',
   honor:                  'estudiantes/honor',
   calendario:             'estudiantes/calendario',
   modalidades_grado:      'estudiantes/modalidades',
@@ -134,6 +135,30 @@ export async function apiBorrarDocumentoHonor(docId) {
   return cuerpo
 }
 
+/* ─── Foto y formación de un docente ───────────────────────────── */
+
+export function apiSubirFotoDocente(docenteId, file) {
+  const fd = new FormData()
+  fd.append('foto', file)
+  return enviarArchivo(`docentes/${docenteId}/foto`, fd)
+}
+
+export async function apiBorrarFotoDocente(docenteId) {
+  const res = await fetch(`${API}/docentes/${docenteId}/foto`, {
+    method: 'DELETE',
+    credentials: 'include',
+  })
+  const cuerpo = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(cuerpo.error ?? 'No se pudo quitar la foto')
+  return cuerpo
+}
+
+/* Reemplaza de una vez toda la formación del docente: el formulario la edita
+   como lista, así que mandar la lista entera evita contar altas y bajas. */
+export function apiGuardarFormacion(docenteId, formacion) {
+  return apiJSON(`docentes/${docenteId}/formacion`, { method: 'PUT', body: { formacion } })
+}
+
 export async function apiUpload(tipo, file, extra = {}) {
   const fd = new FormData()
   fd.append('archivo', file)
@@ -167,17 +192,10 @@ const INITIAL = {
   ],
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. */
   honor: [],
-  docentes: [
-    { id: 1, n: 'Dra. Luz Marina Ipuana', r: 'Directora de Programa', a: 'IA aplicada · Datos territoriales', e: 'direccion.is@uniguajira.edu.co', h: 'Lun–Mié · 2:00–4:00 pm · Oficina 4-302', cat: 'Titular', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 2, n: 'MSc. Jorge Epieyú Palmar', r: 'Docente tiempo completo', a: 'Ingeniería de software · DevOps', e: 'jepalmar@uniguajira.edu.co', h: 'Mar y Jue · 10:00–12:00 am · Lab Software', cat: 'Asociado', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 3, n: 'Dr. Héctor Brito Mendoza', r: 'Investigador GITUG', a: 'Ciberseguridad · Redes', e: 'hbrito@uniguajira.edu.co', h: 'Lun y Vie · 3:00–5:00 pm · Oficina 4-205', cat: 'Titular', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 4, n: 'MSc. Catalina Uriana Iguarán', r: 'Docente tiempo completo', a: 'Bases de datos · Ingeniería web', e: 'cuiguaran@uniguajira.edu.co', h: 'Mié · 9:00–11:00 am · Oficina 4-210', cat: 'Asistente', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 5, n: 'Dr. Samuel Cotes Ramírez', r: 'Investigador Caribe.AI', a: 'Machine learning · Visión', e: 'scotes@uniguajira.edu.co', h: 'Mar y Jue · 2:00–4:00 pm · Lab IA', cat: 'Asociado', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 6, n: 'MSc. Andrea Bolaños Curvelo', r: 'Coord. semilleros', a: 'IoT · Sistemas embebidos', e: 'abolanos@uniguajira.edu.co', h: 'Lun y Mié · 10:00–12:00 am · Lab Hardware', cat: 'Asistente', sede: 'riohacha', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 7, n: 'Dr. Pablo Mengual Solano', r: 'Docente tiempo completo', a: 'Algoritmos · Ciencias básicas', e: 'pmengual@uniguajira.edu.co', h: 'Mar y Vie · 8:00–10:00 am · Oficina 4-207', cat: 'Asociado', sede: 'maicao', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 8, n: 'MSc. Nayely Uriana Jayariyú', r: 'Docente tiempo completo', a: 'HCI · Diseño interacción', e: 'nuriana@uniguajira.edu.co', h: 'Jue · 1:00–4:00 pm · Oficina 4-215', cat: 'Asistente', sede: 'maicao', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-    { id: 9, n: 'Esp. Carlos Pushaina Iguarán', r: 'Docente cátedra', a: 'Telecomunicaciones · Redes', e: 'cpushaina@uniguajira.edu.co', h: 'Lun y Jue · 6:00–8:00 pm', cat: 'Asistente', sede: 'maicao', foto_url: '', telefono: '', hoja_vida_url: '', activo: true },
-  ],
+  /* Vive en PostgreSQL: se llena al hidratar desde /api/all. Antes había aquí
+     una lista de ejemplo con la forma vieja (n, r, a, e...), que reventaba la
+     vista pública en el primer render, antes de que respondiera la API. */
+  docentes: [],
   ofertas: [
     { id: 1, emp: 'Cluster TIC Caribe', p: 'Desarrollador(a) Full-stack Jr.', loc: 'Barranquilla · Híbrido', tipo: 'Tiempo completo', s: '$3.2M – $4.5M', t: ['React','Node','Postgres'], url: '', fecha: 'Abr 2026' },
     { id: 2, emp: 'Ecopetrol Digital', p: 'Analista de datos', loc: 'Bogotá · Presencial', tipo: 'Tiempo completo', s: '$4.0M – $5.5M', t: ['Python','SQL','PowerBI'], url: '', fecha: 'Abr 2026' },
@@ -273,7 +291,7 @@ const INITIAL = {
 /* ─── localStorage fallback ────────────────────────────────────── */
 function loadState() {
   try {
-    const s = localStorage.getItem('uniguajira_data_v7')
+    const s = localStorage.getItem('uniguajira_data_v8')
     if (!s) return INITIAL
     const saved = JSON.parse(s)
     return {
@@ -313,7 +331,7 @@ export function DataProvider({ children }) {
 
   /* Persist to localStorage on every change */
   useEffect(() => {
-    try { localStorage.setItem('uniguajira_data_v7', JSON.stringify(data)) } catch {}
+    try { localStorage.setItem('uniguajira_data_v8', JSON.stringify(data)) } catch {}
   }, [data])
 
   /* Espejo del estado para poder calcular el "siguiente" arreglo sin meter
@@ -381,7 +399,7 @@ export function DataProvider({ children }) {
   }, [recargar])
 
   const reset = () => {
-    localStorage.removeItem('uniguajira_data_v7')
+    localStorage.removeItem('uniguajira_data_v8')
     setData(INITIAL)
   }
 

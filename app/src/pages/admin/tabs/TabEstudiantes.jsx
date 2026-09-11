@@ -6,6 +6,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import { useFormulario, Campo, Acciones } from '../formulario'
 import {
   validar, hayErrores, ESQUEMAS, ordinalSemestre,
   SEDES, SEDES_CON_AMBAS, TIPOS_CALENDARIO, TIPOS_DOCUMENTO, GRUPOS_DOCUMENTO,
@@ -28,70 +29,6 @@ const COLORES = [
 const fila = {
   display: 'grid', gap: 12, padding: '12px 0', alignItems: 'center',
   borderBottom: '1px solid var(--borde)',
-}
-
-/* ─── Motor de formulario ──────────────────────────────────────────
-   Usa exactamente el mismo esquema que valida la API (shared/validacion.js),
-   así que el panel nunca deja enviar algo que el servidor vaya a rechazar. */
-function useFormulario(recurso, vacio, normalizar = x => x) {
-  const [valores, setValores] = useState(vacio)
-  const [errores, setErrores] = useState({})
-  const [tocado, setTocado] = useState({})
-
-  const set = (campo, valor) => {
-    const siguiente = { ...valores, [campo]: valor }
-    setValores(siguiente)
-    // Solo se revalida lo que el usuario ya tocó: no se le grita mientras escribe.
-    if (tocado[campo]) setErrores(validar(recurso, normalizar(siguiente)))
-  }
-
-  const alSalir = campo => {
-    setTocado(t => ({ ...t, [campo]: true }))
-    setErrores(validar(recurso, normalizar(valores)))
-  }
-
-  const validarTodo = () => {
-    const errs = validar(recurso, normalizar(valores))
-    setErrores(errs)
-    setTocado(Object.fromEntries(Object.keys(ESQUEMAS[recurso]).map(k => [k, true])))
-    return !hayErrores(errs)
-  }
-
-  const reiniciar = (nuevos = vacio) => { setValores(nuevos); setErrores({}); setTocado({}) }
-  const error = campo => (tocado[campo] ? errores[campo] : undefined)
-  const invalido = hayErrores(errores)
-
-  return { valores, set, alSalir, validarTodo, reiniciar, error, invalido }
-}
-
-/* Campo con etiqueta, control y mensaje de error debajo. */
-function Campo({ etiqueta, error, opcional, children, style }) {
-  return (
-    <div className={'field' + (error ? ' con-error' : '')} style={{ margin: 0, ...style }}>
-      <label>
-        {etiqueta}
-        {opcional && <span style={{ color: 'var(--ink-muted)', fontWeight: 400 }}> (opcional)</span>}
-      </label>
-      {children}
-      {error && <div role="alert" className="mensaje-error">{error}</div>}
-    </div>
-  )
-}
-
-function Acciones({ editando, onCancelar, bloqueado }) {
-  return (
-    <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-      <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-        {editando ? 'Guardar' : 'Agregar'} <Icons.check />
-      </button>
-      {editando && (
-        <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={onCancelar}>Cancelar</button>
-      )}
-      {bloqueado && (
-        <span style={{ fontSize: 12, color: 'var(--ug-flamingo-deep)' }}>Corrige los campos marcados</span>
-      )}
-    </div>
-  )
 }
 
 export default function TabEstudiantes() {

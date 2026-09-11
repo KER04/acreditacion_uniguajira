@@ -56,6 +56,33 @@ export function tipoDesdeArchivo(original) {
 }
 export const GRUPOS_DOCUMENTO = ['Académicos', 'Trabajo de grado', 'Prácticas y extensión', 'Bienestar y apoyos']
 
+/* ─── Cuerpo docente ───────────────────────────────────────────── */
+
+/* Tipo de vinculación contractual, no escalafón. El vacío es un valor legítimo:
+   docente cargado sin que nadie haya registrado todavía su vinculación. */
+export const VINCULACIONES = ['', 'planta', 'catedratico', 'ocasional']
+export const ETIQUETA_VINCULACION = {
+  '': 'Sin registrar',
+  planta: 'Planta',
+  catedratico: 'Catedrático',
+  ocasional: 'Ocasional',
+}
+
+export const NIVELES_FORMACION = ['', 'especializacion', 'maestria', 'doctorado', 'posdoctorado', 'otro']
+export const ETIQUETA_NIVEL = {
+  '': 'Sin clasificar',
+  especializacion: 'Especialización',
+  maestria: 'Maestría',
+  doctorado: 'Doctorado',
+  posdoctorado: 'Posdoctorado',
+  otro: 'Otro',
+}
+
+export const CATEGORIAS_GRUPO = ['', 'A1', 'A', 'B', 'C', 'Reconocido']
+
+export const ANIO_FORMACION_MIN = 1950
+export const ANIO_FORMACION_MAX = new Date().getFullYear() + 1
+
 /* ─── Expresiones ──────────────────────────────────────────────── */
 const RE_ENTERO   = /^-?\d+$/
 const RE_DECIMAL  = /^-?\d+(?:[.,]\d+)?$/
@@ -159,6 +186,16 @@ export function rutaOUrl(v, etiqueta = 'URL') {
   return `${etiqueta} debe empezar por / o ser una dirección http(s)://`
 }
 
+/* Correo electrónico. Deliberadamente laxo: validar direcciones con una
+   expresión estricta rechaza correos válidos y no evita los inventados. Solo
+   se comprueba la forma mínima y que no venga con espacios. */
+export function correo(v, etiqueta = 'Correo') {
+  if (vacio(v)) return null
+  const s = String(v).trim()
+  if (/\s/.test(s)) return `${etiqueta} no puede llevar espacios`
+  return /^[^@]+@[^@]+\.[^@]+$/.test(s) ? null : `${etiqueta} no tiene forma de dirección válida`
+}
+
 /* '1.8 MB', '420 KB' */
 export function tamanoArchivo(v, etiqueta = 'Peso') {
   if (vacio(v)) return null
@@ -170,6 +207,38 @@ export function tamanoArchivo(v, etiqueta = 'Peso') {
    `validar` corre siempre que el campo venga con valor. */
 
 export const ESQUEMAS = {
+  /* Docente. Solo el nombre es obligatorio: la planilla llega incompleta y es
+     preferible cargar al profesor y completar después que bloquear el registro
+     por un dato que nadie tiene todavía. */
+  docentes: {
+    nombre:          { etiqueta: 'Nombre',        obligatorio: true,  validar: v => nombrePersona(v, 'Nombre') },
+    vinculacion:     { etiqueta: 'Vinculación',   obligatorio: false, validar: v => enumerado(v, VINCULACIONES, 'Vinculación') },
+    sede:            { etiqueta: 'Sede',          obligatorio: false, validar: v => enumerado(v, SEDES, 'Sede') },
+    email:           { etiqueta: 'Correo',        obligatorio: false, validar: v => correo(v, 'Correo') },
+    cvlac_url:       { etiqueta: 'CvLAC',         obligatorio: false, validar: v => rutaOUrl(v, 'CvLAC') },
+    orcid_url:       { etiqueta: 'ORCID',         obligatorio: false, validar: v => rutaOUrl(v, 'ORCID') },
+    scholar_url:     { etiqueta: 'Google Scholar', obligatorio: false, validar: v => rutaOUrl(v, 'Google Scholar') },
+    posgrado:        { etiqueta: 'Posgrado',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Posgrado', max: 800 }) },
+    dedicacion:      { etiqueta: 'Dedicación',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Dedicación', max: 80 }) },
+    oficina:         { etiqueta: 'Oficina',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Oficina', max: 120 }) },
+    extension:       { etiqueta: 'Extensión',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Extensión', max: 40 }) },
+    horario:         { etiqueta: 'Horario',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Horario', max: 200 }) },
+    grupo:           { etiqueta: 'Grupo',         obligatorio: false, validar: v => texto(v, { etiqueta: 'Grupo', max: 160 }) },
+    grupo_categoria: { etiqueta: 'Categoría del grupo', obligatorio: false, validar: v => enumerado(v, CATEGORIAS_GRUPO, 'Categoría del grupo') },
+    semillero:       { etiqueta: 'Semillero',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Semillero', max: 160 }) },
+    activo:          { etiqueta: 'Activo',        obligatorio: false, validar: v => booleano(v, 'Activo') },
+  },
+
+  /* Un título de posgrado del docente. */
+  formacion: {
+    titulo:      { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 240 }) },
+    nivel:       { etiqueta: 'Nivel',       obligatorio: false, validar: v => enumerado(v, NIVELES_FORMACION, 'Nivel') },
+    institucion: { etiqueta: 'Institución', obligatorio: false, validar: v => texto(v, { etiqueta: 'Institución', max: 160 }) },
+    anio:        { etiqueta: 'Año',         obligatorio: false, validar: v => entero(v, { etiqueta: 'Año', min: ANIO_FORMACION_MIN, max: ANIO_FORMACION_MAX }) },
+    en_curso:    { etiqueta: 'En curso',    obligatorio: false, validar: v => booleano(v, 'En curso') },
+    orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
   honor: {
     nombre:   { etiqueta: 'Nombre',   obligatorio: true,  validar: v => nombrePersona(v, 'Nombre') },
     promedio: { etiqueta: 'Promedio', obligatorio: true,  validar: v => decimal(v, { etiqueta: 'Promedio', min: PROMEDIO_MIN, max: PROMEDIO_MAX, decimales: 2 }) },
