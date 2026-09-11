@@ -34,14 +34,13 @@ async function apiJSON(endpoint, { method = 'GET', body } = {}) {
   return res.json()
 }
 
+/* Camino antiguo: claves que todavía se guardan como un PUT del arreglo
+   completo contra un archivo JSON. Las claves de EN_BASE NO van aquí: esas
+   viajan por REST elemento a elemento y listarlas otra vez solo confundiría. */
 const KEY_ENDPOINT = {
   noticias:              'noticias',
+  eventos:               'eventos',
   convocatorias:         'convocatorias',
-  docentes:              'docentes',
-  honor:                 'estudiantes/honor',
-  calendario:            'estudiantes/calendario',
-  modalidades_grado:     'estudiantes/modalidades',
-  documentos_estudiantes:'estudiantes/documentos',
   destacados:            'egresados/destacados',
   ofertas:               'egresados/ofertas',
   grupos:                'investigacion/grupos',
@@ -52,14 +51,21 @@ const KEY_ENDPOINT = {
   evidencias_cna:        'acreditacion/evidencias',
   info_sedes:            'sedes',
   inicio:                'programa/inicio',
+  programa:              'programa/info',
   pensum:                'programa/pensum',
 }
 
-/* Camino antiguo, para las claves que todavía se guardan en archivos JSON.
-   Devuelve el mensaje de error si el servidor rechaza, o null si todo fue bien. */
+/* Devuelve el mensaje de error si el guardado falló, o null si todo fue bien.
+
+   Una clave sin endpoint es un ERROR, no un caso normal: significa que la
+   pestaña cree estar guardando contra el servidor y en realidad su cambio solo
+   existe en este navegador. Antes esto devolvía null —la señal de éxito— y así
+   se perdieron en silencio los eventos y la ficha del programa. */
 async function syncToAPI(key, value) {
   const endpoint = KEY_ENDPOINT[key]
-  if (!endpoint) return null
+  if (!endpoint) {
+    return `"${key}" no está conectado con el servidor: el cambio solo quedó en este navegador y se perderá al recargar`
+  }
   try {
     const res = await fetch(`${API}/${endpoint}`, {
       method: 'PUT',
@@ -352,10 +358,6 @@ export function DataProvider({ children }) {
     if (fallo) setError(fallo)
   }, [])
 
-  const updateNested = useCallback((key, subKey, value) => {
-    setData(d => ({ ...d, [key]: { ...d[key], [subKey]: value } }))
-  }, [])
-
   const addItem = useCallback(async (key, item) => {
     if (EN_BASE[key]) {
       try {
@@ -406,7 +408,7 @@ export function DataProvider({ children }) {
   const limpiarError = useCallback(() => setError(null), [])
 
   return (
-    <DataContext.Provider value={{ data, update, updateNested, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError }}>
+    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError }}>
       {children}
     </DataContext.Provider>
   )
