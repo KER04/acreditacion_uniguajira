@@ -80,51 +80,75 @@ app.post('/api/upload/:tipo', requireAdmin, upload.single('archivo'), (req, res)
   res.json({ url, filename: ext })
 })
 
-/* Aggregate endpoint: all data in one call */
-app.get('/api/all', async (_req, res) => {
-  try {
-    const [
-      noticiasD, convocatoriasD, docentesD, estudiantesD,
-      egresadosD, investigacionD, acreditacionD, programaD, sedesD, eventosD,
-    ] = await Promise.all([
-      readData('noticias.json'),
-      readData('convocatorias.json'),
-      leerDocentes(),         // ya viene de PostgreSQL, no del JSON
-      bloquesEstudiantes(),   // ya viene de PostgreSQL, no del JSON
-      readData('egresados.json'),
-      readData('investigacion.json'),
-      readData('acreditacion.json'),
-      readData('programa.json'),
-      readData('sedes.json'),
-      readData('eventos.json'),
-    ])
+/* Agregado: todos los datos del sitio en una sola llamada.
 
-    res.json({
-      noticias:            noticiasD ?? [],
-      convocatorias:       convocatoriasD ?? [],
-      docentes:            docentesD ?? [],
-      honor:               estudiantesD?.honor ?? [],
-      calendario:          estudiantesD?.calendario ?? [],
-      modalidades_grado:   estudiantesD?.modalidades_grado ?? [],
-      documentos_estudiantes: estudiantesD?.documentos ?? [],
-      destacados:          egresadosD?.destacados ?? [],
-      ofertas:             egresadosD?.ofertas ?? [],
-      grupos:              investigacionD?.grupos ?? [],
-      semilleros:          investigacionD?.semilleros ?? [],
-      factores:            acreditacionD?.factores ?? [],
-      cronograma_cna:      acreditacionD?.cronograma ?? [],
-      equipo_cna:          acreditacionD?.equipo ?? [],
-      evidencias_cna:      acreditacionD?.evidencias ?? [],
-      inicio:              programaD?.inicio ?? {},
-      programa:            { mision: programaD?.mision, vision: programaD?.vision, objetivos: programaD?.objetivos, perfilEgresado: programaD?.perfil_egresado, ficha: programaD?.ficha_tecnica ?? {} },
-      pensum:              programaD?.pensum ?? [],
-      info_sedes:          sedesD ?? {},
-      eventos:             eventosD ?? [],
-    })
-  } catch (e) {
-    console.error(e)
-    res.status(500).json({ error: 'Error leyendo datos' })
+   Cada origen se resuelve por separado con allSettled. Antes iban en un
+   Promise.all dentro de un try/catch único, así que una caída de PostgreSQL
+   tumbaba la respuesta entera y se llevaba por delante noticias, eventos y
+   convocatorias, que viven en archivos y se habrían leído sin problema. El
+   cliente recibía un 500, se quedaba con lo que tuviera en localStorage y no
+   avisaba de nada: datos de hace días con aspecto de recién cargados.
+
+   Ahora lo que falla viaja en `fallos` y el resto llega igual. */
+app.get('/api/all', async (_req, res) => {
+  const origenes = {
+    noticias:      () => readData('noticias.json'),
+    convocatorias: () => readData('convocatorias.json'),
+    docentes:      () => leerDocentes(),        // PostgreSQL
+    estudiantes:   () => bloquesEstudiantes(),  // PostgreSQL
+    egresados:     () => readData('egresados.json'),
+    investigacion: () => readData('investigacion.json'),
+    acreditacion:  () => readData('acreditacion.json'),
+    programa:      () => readData('programa.json'),
+    sedes:         () => readData('sedes.json'),
+    eventos:       () => readData('eventos.json'),
   }
+
+  const nombres = Object.keys(origenes)
+  const resultados = await Promise.allSettled(nombres.map(n => origenes[n]()))
+
+  const datos = {}
+  const fallos = []
+  resultados.forEach((r, i) => {
+    if (r.status === 'fulfilled') {
+      datos[nombres[i]] = r.value
+    } else {
+      fallos.push(nombres[i])
+      console.error(`[/api/all] origen "${nombres[i]}" falló:`, r.reason?.message ?? r.reason)
+    }
+  })
+
+  const {
+    noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
+    estudiantes: estudiantesD, egresados: egresadosD, investigacion: investigacionD,
+    acreditacion: acreditacionD, programa: programaD, sedes: sedesD, eventos: eventosD,
+  } = datos
+
+  res.json({
+    /* Qué no se pudo leer. El cliente lo usa para avisar en pantalla en vez
+       de presentar datos incompletos como si estuvieran completos. */
+    fallos,
+    noticias:            noticiasD ?? [],
+    convocatorias:       convocatoriasD ?? [],
+    docentes:            docentesD ?? [],
+    honor:               estudiantesD?.honor ?? [],
+    calendario:          estudiantesD?.calendario ?? [],
+    modalidades_grado:   estudiantesD?.modalidades_grado ?? [],
+    documentos_estudiantes: estudiantesD?.documentos ?? [],
+    destacados:          egresadosD?.destacados ?? [],
+    ofertas:             egresadosD?.ofertas ?? [],
+    grupos:              investigacionD?.grupos ?? [],
+    semilleros:          investigacionD?.semilleros ?? [],
+    factores:            acreditacionD?.factores ?? [],
+    cronograma_cna:      acreditacionD?.cronograma ?? [],
+    equipo_cna:          acreditacionD?.equipo ?? [],
+    evidencias_cna:      acreditacionD?.evidencias ?? [],
+    inicio:              programaD?.inicio ?? {},
+    programa:            { mision: programaD?.mision, vision: programaD?.vision, objetivos: programaD?.objetivos, perfilEgresado: programaD?.perfil_egresado, ficha: programaD?.ficha_tecnica ?? {} },
+    pensum:              programaD?.pensum ?? [],
+    info_sedes:          sedesD ?? {},
+    eventos:             eventosD ?? [],
+  })
 })
 
 /* Devuelve 500 con JSON en vez de un stack HTML cuando un handler async falla.

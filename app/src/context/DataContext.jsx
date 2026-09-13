@@ -317,13 +317,26 @@ export function DataProvider({ children }) {
   /* Ultimo fallo de guardado. Antes los errores se tragaban en silencio y el
      panel parecia haber guardado cuando el servidor habia respondido 401. */
   const [error, setError] = useState(null)
+  /* Aviso de LECTURA (datos viejos o incompletos), distinto del de escritura. */
+  const [avisoCarga, setAvisoCarga] = useState(null)
 
-  /* Hydrate from backend on mount */
+  /* Hydrate from backend on mount.
+
+     Si esto falla, lo que queda en pantalla es el contenido de localStorage:
+     una foto de la última vez que el servidor respondió. Antes el fallo se
+     tragaba en silencio y esos datos viejos se presentaban como recién
+     cargados; ahora se avisa. `fallos` viene de /api/all y dice qué orígenes
+     concretos no se pudieron leer cuando el resto sí. */
   useEffect(() => {
     fetch(`${API}/all`, { signal: AbortSignal.timeout(3000) })
-      .then(r => r.ok ? r.json() : null)
+      .then(r => {
+        if (!r.ok) throw new Error(`el servidor respondió ${r.status}`)
+        return r.json()
+      })
       .then(remote => {
-        if (!remote) return
+        setAvisoCarga(remote.fallos?.length
+          ? `No se pudo cargar: ${remote.fallos.join(', ')}. Esas secciones muestran lo último guardado en este navegador.`
+          : null)
         setData(d => ({
           ...d, ...remote,
           inicio: { ...d.inicio, ...remote.inicio },
@@ -332,7 +345,9 @@ export function DataProvider({ children }) {
         }))
         setApiReady(true)
       })
-      .catch(() => { /* backend not running — use localStorage */ })
+      .catch(() => {
+        setAvisoCarga('Sin conexión con el servidor: estás viendo los últimos datos guardados en este navegador y pueden estar desactualizados. No guardes cambios hasta que vuelva la conexión.')
+      })
   }, [])
 
   /* Persist to localStorage on every change */
@@ -408,7 +423,7 @@ export function DataProvider({ children }) {
   const limpiarError = useCallback(() => setError(null), [])
 
   return (
-    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError }}>
+    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError, avisoCarga }}>
       {children}
     </DataContext.Provider>
   )

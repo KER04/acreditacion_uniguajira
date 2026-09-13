@@ -42,6 +42,19 @@ function AvisoError() {
   )
 }
 
+/* Aviso de LECTURA: el servidor no respondió, o respondió a medias. Lo que se
+   ve en pantalla es el caché del navegador, que puede tener días. Sin esto el
+   panel mostraba datos viejos con el mismo aspecto que los recién cargados. */
+function AvisoCarga() {
+  const { avisoCarga } = useData()
+  if (!avisoCarga) return null
+  return (
+    <div role="status" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: '12px 16px', borderRadius: 10, background: 'color-mix(in oklab, var(--ug-amarillo) 18%, transparent)', border: '1px solid var(--ug-amarillo)', fontSize: 13 }}>
+      <span style={{ flex: 1 }}>{avisoCarga}</span>
+    </div>
+  )
+}
+
 function Verificando() {
   return (
     <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--paper-2)', color: 'var(--ink-3)', fontSize: 14 }}>
@@ -100,6 +113,7 @@ export default function Admin() {
 
       {/* Content */}
       <main style={{ padding: 'clamp(24px,4vw,48px)', overflowY: 'auto', maxHeight: '100vh' }}>
+        <AvisoCarga />
         <AvisoError />
         {activeTab === 'dashboard'      && <Dashboard />}
         {activeTab === 'inicio'         && <TabInicio />}

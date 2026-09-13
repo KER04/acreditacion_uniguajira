@@ -72,16 +72,44 @@ export async function leerArchivo(id) {
   return { nombre_original, mime, bytes, buffer: Buffer.from(contenido, 'base64') }
 }
 
+/* Quién apunta a archivos.id, preguntándoselo al catálogo en vez de mantener
+   una lista a mano.
+ *
+ * Esto no es un lujo: la lista se escribía a mano y cuando llegó la tabla
+ * `docente` con su foto_id nadie la añadió, así que el barrido consideraba
+ * huérfana toda foto de docente y la borraba a las 24 horas. Como la FK es
+ * ON DELETE SET NULL, el borrado no fallaba: el docente simplemente se quedaba
+ * sin foto y nadie se enteraba. Derivarlo del catálogo hace que cualquier
+ * tabla futura quede cubierta el día que se crea su clave foránea. */
+async function referenciasAArchivos() {
+  const { rows } = await query(
+    `SELECT c.conrelid::regclass::text AS tabla, a.attname AS columna
+       FROM pg_constraint c
+       JOIN unnest(c.conkey) WITH ORDINALITY AS k(attnum, ord) ON true
+       JOIN pg_attribute a ON a.attrelid = c.conrelid AND a.attnum = k.attnum
+      WHERE c.contype = 'f'
+        AND c.confrelid = 'archivos'::regclass`,
+  )
+  return rows
+}
+
 /* Subir un archivo y guardar el registro son dos pasos: si alguien sube algo en
    el formulario y luego no guarda, el adjunto queda sin dueño. Este barrido los
    retira pasadas unas horas, dejando margen para formularios a medio llenar. */
 export async function borrarHuerfanosAntiguos(horas = 24) {
+  const refs = await referenciasAArchivos()
+  /* Sin referencias conocidas no se borra nada: es más seguro acumular
+     adjuntos sueltos que vaciar la tabla por una consulta que no devolvió. */
+  if (refs.length === 0) return 0
+
+  const enUso = refs
+    .map(r => `NOT EXISTS (SELECT 1 FROM ${r.tabla} WHERE ${r.columna} = a.id)`)
+    .join('\n        AND ')
+
   const { rowCount } = await query(
     `DELETE FROM archivos a
       WHERE a.creado_en < now() - ($1 || ' hours')::interval
-        AND NOT EXISTS (SELECT 1 FROM documentos_estudiantes d WHERE d.archivo_id = a.id)
-        AND NOT EXISTS (SELECT 1 FROM documentos_honor      h WHERE h.archivo_id = a.id)
-        AND NOT EXISTS (SELECT 1 FROM cuadro_honor          c WHERE c.foto_id    = a.id)`,
+        AND ${enUso}`,
     [String(horas)],
   )
   return rowCount
@@ -91,13 +119,14 @@ export async function borrarHuerfanosAntiguos(horas = 24) {
    para que la base no acumule adjuntos sueltos. */
 export async function borrarSiHuerfano(id) {
   if (!id) return false
-  const { rows } = await query(
-    `SELECT
-       (SELECT COUNT(*) FROM documentos_estudiantes WHERE archivo_id = $1) +
-       (SELECT COUNT(*) FROM documentos_honor       WHERE archivo_id = $1) +
-       (SELECT COUNT(*) FROM cuadro_honor           WHERE foto_id    = $1) AS usos`,
-    [id],
-  )
+  const refs = await referenciasAArchivos()
+  if (refs.length === 0) return false
+
+  const suma = refs
+    .map(r => `(SELECT COUNT(*) FROM ${r.tabla} WHERE ${r.columna} = $1)`)
+    .join(' + ')
+
+  const { rows } = await query(`SELECT ${suma} AS usos`, [id])
   if (Number(rows[0].usos) > 0) return false
   await query('DELETE FROM archivos WHERE id = $1', [id])
   return true
