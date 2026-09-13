@@ -3,6 +3,7 @@ import { Icons } from '../components/Icons'
 import { WayuuBackdrop, WayuuBand, WayuuGlyph } from '../components/WayuuPatterns'
 import { useData } from '../context/DataContext'
 import { statusFromScore, STATUS_COLOR } from '../data/acreditacion'
+import { fechaLarga } from '../../shared/validacion'
 
 function Ticker() {
   const items = [
@@ -184,7 +185,13 @@ function Missions() {
 function Convocatorias() {
   const nav = useNavigate()
   const { data } = useData()
-  const convos = data.convocatorias.filter(c => c.s === 'Abierta').slice(0, 4)
+  /* Estaba filtrando por `c.s`, `c.t` y `c.d`, campos que no existen en los
+     datos: el tablero de la portada salía siempre vacío. Los nombres reales
+     son estado, titulo y fecha_cierre. Se descartan además las que ya
+     vencieron aunque nadie haya cambiado su estado a mano. */
+  const convos = data.convocatorias
+    .filter(c => (c.estado ?? 'Abierta') === 'Abierta' && !c.vencida)
+    .slice(0, 4)
   return (
     <section className="section" style={{ background: 'var(--paper-2)' }}>
       <div className="inner">
@@ -199,13 +206,13 @@ function Convocatorias() {
           {convos.map((c, i) => (
             <div key={i} className="card" style={{ background: 'var(--paper)', display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="chip">{c.cat}</span>
-                <span className="chip" style={{ background: 'color-mix(in oklab, var(--ug-azul) 30%, transparent)', borderColor: 'transparent' }}>{c.s}</span>
+                <span className="chip">{c.categoria}</span>
+                <span className="chip" style={{ background: 'color-mix(in oklab, var(--ug-azul) 30%, transparent)', borderColor: 'transparent' }}>{c.estado}</span>
               </div>
-              <h3 style={{ fontSize: 22, marginTop: 4 }}>{c.t}</h3>
-              <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{c.desc}</p>
+              <h3 style={{ fontSize: 22, marginTop: 4 }}>{c.titulo}</h3>
+              <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{c.descripcion}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, paddingTop: 14, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Cierra {c.d}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Cierra {fechaLarga(c.fecha_cierre)}</div>
                 <button className="btn ghost" style={{ padding: '6px 14px', fontSize: 13 }} onClick={() => nav('/convocatorias')}>Ver <Icons.arrow /></button>
               </div>
             </div>

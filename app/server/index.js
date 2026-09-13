@@ -17,9 +17,9 @@ import egresados from './routes/egresados.js'
 import investigacion from './routes/investigacion.js'
 import extension from './routes/extension.js'
 import internacionalizacion from './routes/internacionalizacion.js'
-import convocatorias from './routes/convocatorias.js'
-import eventos from './routes/eventos.js'
-import noticias from './routes/noticias.js'
+import convocatorias, { leerConvocatorias } from './routes/convocatorias.js'
+import eventos, { leerEventos } from './routes/eventos.js'
+import noticias, { leerNoticias } from './routes/noticias.js'
 import programa from './routes/programa.js'
 import sedes from './routes/sedes.js'
 import { upload } from './middleware/upload.js'
@@ -92,8 +92,8 @@ app.post('/api/upload/:tipo', requireAdmin, upload.single('archivo'), (req, res)
    Ahora lo que falla viaja en `fallos` y el resto llega igual. */
 app.get('/api/all', async (_req, res) => {
   const origenes = {
-    noticias:      () => readData('noticias.json'),
-    convocatorias: () => readData('convocatorias.json'),
+    noticias:      () => leerNoticias(),        // PostgreSQL
+    convocatorias: () => leerConvocatorias(),   // PostgreSQL
     docentes:      () => leerDocentes(),        // PostgreSQL
     estudiantes:   () => bloquesEstudiantes(),  // PostgreSQL
     egresados:     () => readData('egresados.json'),
@@ -101,7 +101,7 @@ app.get('/api/all', async (_req, res) => {
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
     sedes:         () => readData('sedes.json'),
-    eventos:       () => readData('eventos.json'),
+    eventos:       () => leerEventos(),         // PostgreSQL
   }
 
   const nombres = Object.keys(origenes)

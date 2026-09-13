@@ -202,6 +202,72 @@ export function tamanoArchivo(v, etiqueta = 'Peso') {
   return RE_PESO.test(String(v).trim()) ? null : `${etiqueta} debe tener el formato "1.8 MB" o "420 KB"`
 }
 
+/* ─── Contenidos del portal ────────────────────────────────────── */
+
+/* Forma canónica de las categorías. Existe una sola lista y la usan el panel,
+   la API y el CHECK de la base.
+   Antes el panel ofrecía 'investigación' en minúscula mientras el contenido
+   guardaba 'Investigación': como el filtro público compara con ===, la noticia
+   desaparecía al filtrar por su propia categoría. */
+export const CATEGORIAS_NOTICIA = [
+  'Académico', 'Investigación', 'Extensión', 'Institucional',
+  'Acreditación', 'Egresados', 'Docencia',
+]
+export const CATEGORIAS_EVENTO = [
+  'Académico', 'Cultural', 'Investigación', 'Extensión', 'Institucional',
+  'Deportivo', 'Competencia', 'Taller', 'Laboral',
+]
+export const CATEGORIAS_CONVOCATORIA = [
+  'Investigación', 'Internacionalización', 'Extensión', 'Prácticas',
+  'Estímulos', 'Becas', 'Eventos',
+]
+
+/* Del evento solo se guarda lo que NO se deduce del calendario: si está
+   próximo, en curso o pasado lo dice `faseEvento()` comparando con hoy. */
+export const ESTADOS_EVENTO = ['programado', 'cancelado', 'aplazado']
+export const ESTADOS_CONVOCATORIA = ['Abierta', 'Próxima', 'Cerrada']
+
+const RE_HORA_24 = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/
+
+/* Hora en formato de 24 horas, que es lo que entrega <input type="time">. */
+export function hora24(v, etiqueta = 'Hora') {
+  if (vacio(v)) return null
+  return RE_HORA_24.test(String(v).trim()) ? null : `${etiqueta} debe tener el formato HH:MM`
+}
+
+/* '2026-04-12' -> '12 abr 2026'. La base guarda la fecha; el formato largo es
+   cosa de la vista, igual que el ordinal del semestre. */
+const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+
+export function fechaLarga(iso) {
+  const m = RE_FECHA.exec(String(iso ?? '').trim())
+  if (!m) return String(iso ?? '')
+  const [, a, mes, d] = m
+  return `${d} ${MESES_CORTOS[Number(mes) - 1]} ${a}`
+}
+
+/* '14:00:00' -> '2:00 PM'. */
+export function horaLarga(v) {
+  const m = RE_HORA_24.exec(String(v ?? '').trim())
+  if (!m) return ''
+  const h = Number(m[1])
+  const sufijo = h < 12 ? 'AM' : 'PM'
+  const h12 = h % 12 === 0 ? 12 : h % 12
+  return `${h12}:${m[2]} ${sufijo}`
+}
+
+/* En qué punto del calendario está un evento. No se persiste: se calcula, para
+   que la cartelera no dependa de que alguien vaya cambiando un campo a mano. */
+export function faseEvento({ fecha, fecha_fin, estado } = {}, hoy = new Date()) {
+  if (estado && estado !== 'programado') return estado
+  const dia = hoy.toISOString().slice(0, 10)
+  const fin = fecha_fin || fecha
+  if (!fecha) return 'programado'
+  if (dia < fecha) return 'proximo'
+  if (dia <= fin) return 'en_curso'
+  return 'pasado'
+}
+
 /* ─── Esquemas por recurso ─────────────────────────────────────── */
 /* `obligatorio` marca lo que no puede faltar al crear.
    `validar` corre siempre que el campo venga con valor. */
@@ -295,6 +361,60 @@ export const ESQUEMAS = {
     peso:        { etiqueta: 'Peso',        obligatorio: false, validar: v => tamanoArchivo(v) },
     orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
+
+  /* ─── Contenidos del portal ──────────────────────────────────── */
+
+  noticias: {
+    titulo:     { etiqueta: 'Título',     obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    fecha:      { etiqueta: 'Fecha',      obligatorio: true,  validar: v => fechaISO(v, 'Fecha') },
+    categoria:  { etiqueta: 'Categoría',  obligatorio: false, validar: v => enumerado(v, CATEGORIAS_NOTICIA, 'Categoría') },
+    resumen:    { etiqueta: 'Resumen',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Resumen', max: 600 }) },
+    cuerpo:     { etiqueta: 'Cuerpo',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Cuerpo', max: 20000 }) },
+    autor:      { etiqueta: 'Autor',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Autor', max: 120 }) },
+    sede:       { etiqueta: 'Sede',       obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    imagen_url: { etiqueta: 'Imagen',     obligatorio: false, validar: v => rutaOUrl(v, 'Imagen') },
+    publicada:  { etiqueta: 'Publicada',  obligatorio: false, validar: v => booleano(v, 'Publicada') },
+  },
+
+  eventos: {
+    titulo:          { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    fecha:           { etiqueta: 'Fecha',       obligatorio: true,  validar: v => fechaISO(v, 'Fecha') },
+    fecha_fin:       { etiqueta: 'Fecha final', obligatorio: false, validar: v => fechaISO(v, 'Fecha final') },
+    hora:            { etiqueta: 'Hora',        obligatorio: false, validar: v => hora24(v, 'Hora') },
+    hora_fin:        { etiqueta: 'Hora final',  obligatorio: false, validar: v => hora24(v, 'Hora final') },
+    categoria:       { etiqueta: 'Categoría',   obligatorio: false, validar: v => enumerado(v, CATEGORIAS_EVENTO, 'Categoría') },
+    descripcion:     { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    lugar:           { etiqueta: 'Lugar',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Lugar', max: 200 }) },
+    ponente:         { etiqueta: 'Ponente',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Ponente', max: 160 }) },
+    sede:            { etiqueta: 'Sede',        obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    estado:          { etiqueta: 'Estado',      obligatorio: false, validar: v => enumerado(v, ESTADOS_EVENTO, 'Estado') },
+    imagen_url:      { etiqueta: 'Imagen',      obligatorio: false, validar: v => rutaOUrl(v, 'Imagen') },
+    url_inscripcion: { etiqueta: 'Inscripción', obligatorio: false, validar: v => rutaOUrl(v, 'Inscripción') },
+  },
+
+  convocatorias: {
+    titulo:          { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    categoria:       { etiqueta: 'Categoría',   obligatorio: false, validar: v => enumerado(v, CATEGORIAS_CONVOCATORIA, 'Categoría') },
+    estado:          { etiqueta: 'Estado',      obligatorio: false, validar: v => enumerado(v, ESTADOS_CONVOCATORIA, 'Estado') },
+    descripcion:     { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    fecha_apertura:  { etiqueta: 'Apertura',    obligatorio: false, validar: v => fechaISO(v, 'Apertura') },
+    fecha_cierre:    { etiqueta: 'Cierre',      obligatorio: false, validar: v => fechaISO(v, 'Cierre') },
+    dirigida_a:      { etiqueta: 'Dirigida a',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Dirigida a', max: 120 }) },
+    sede:            { etiqueta: 'Sede',        obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    url_postulacion: { etiqueta: 'Postulación', obligatorio: false, validar: v => rutaOUrl(v, 'Postulación') },
+    documento_url:   { etiqueta: 'Documento',   obligatorio: false, validar: v => rutaOUrl(v, 'Documento') },
+    requisitos:      {
+      etiqueta: 'Requisitos', obligatorio: false,
+      validar: v => {
+        if (v === undefined || v === null) return null
+        if (!Array.isArray(v)) return 'Requisitos debe ser una lista'
+        if (v.length > 20) return 'Requisitos no puede pasar de 20 elementos'
+        if (v.some(r => typeof r !== 'string' || r.trim() === '')) return 'Los requisitos no pueden estar vacíos'
+        if (v.some(r => r.length > 200)) return 'Cada requisito debe caber en 200 caracteres'
+        return null
+      },
+    },
+  },
 }
 
 /* Comprobaciones que necesitan mirar más de un campo a la vez. */
@@ -304,6 +424,22 @@ export const REGLAS_CRUZADAS = {
     if (!fecha_inicio || !fecha_fin) return null
     if (fecha_fin < fecha_inicio) {
       return { campo: 'fecha_fin', mensaje: 'La fecha final no puede ser anterior a la inicial' }
+    }
+    return null
+  },
+  eventos(datos) {
+    const { fecha, fecha_fin } = datos
+    if (!fecha || !fecha_fin) return null
+    if (fecha_fin < fecha) {
+      return { campo: 'fecha_fin', mensaje: 'El evento no puede terminar antes de empezar' }
+    }
+    return null
+  },
+  convocatorias(datos) {
+    const { fecha_apertura, fecha_cierre } = datos
+    if (!fecha_apertura || !fecha_cierre) return null
+    if (fecha_cierre < fecha_apertura) {
+      return { campo: 'fecha_cierre', mensaje: 'El cierre no puede ser anterior a la apertura' }
     }
     return null
   },

@@ -18,6 +18,9 @@ const EN_BASE = {
   calendario:             'estudiantes/calendario',
   modalidades_grado:      'estudiantes/modalidades',
   documentos_estudiantes: 'estudiantes/documentos',
+  noticias:               'noticias',
+  eventos:                'eventos',
+  convocatorias:          'convocatorias',
 }
 
 async function apiJSON(endpoint, { method = 'GET', body } = {}) {
@@ -38,9 +41,6 @@ async function apiJSON(endpoint, { method = 'GET', body } = {}) {
    completo contra un archivo JSON. Las claves de EN_BASE NO van aquí: esas
    viajan por REST elemento a elemento y listarlas otra vez solo confundiría. */
 const KEY_ENDPOINT = {
-  noticias:              'noticias',
-  eventos:               'eventos',
-  convocatorias:         'convocatorias',
   destacados:            'egresados/destacados',
   ofertas:               'egresados/ofertas',
   grupos:                'investigacion/grupos',
@@ -180,22 +180,12 @@ export async function apiUpload(tipo, file, extra = {}) {
 
 /* ─── Estado inicial ───────────────────────────────────────────── */
 const INITIAL = {
-  noticias: [
-    { id: 1, fecha: '12 abr 2026', cat: 'Investigación', titulo: 'Semillero IoT Wayuu presenta ponencia en IEEE Colombia 2026', resumen: 'El estudiante Luis Enrique Gutiérrez presentó resultados del proyecto ArenaNet en el encuentro nacional.', cuerpo: '', imagen_url: '', autor: 'Comunicaciones IS', sede: 'riohacha' },
-    { id: 2, fecha: '05 abr 2026', cat: 'Acreditación', titulo: 'Avanza el proceso de autoevaluación con miras a acreditación CNA', resumen: 'El programa completó la recolección documental de los 12 factores y entra en fase de redacción del informe.', cuerpo: '', imagen_url: '', autor: 'Dirección del programa', sede: 'ambas' },
-    { id: 3, fecha: '28 mar 2026', cat: 'Egresados', titulo: 'Egresada de Ingeniería de Sistemas lidera área de datos en empresa global', resumen: 'Diana Cotes (2018) asumió recientemente el cargo de Head of Data en una multinacional con sede en Bogotá.', cuerpo: '', imagen_url: '', autor: 'Egresados IS', sede: 'ambas' },
-    { id: 4, fecha: '14 mar 2026', cat: 'Extensión', titulo: 'Firmado convenio con Cluster TIC del Caribe', resumen: 'La alianza permitirá a estudiantes acceder a prácticas profesionales en empresas del gremio regional.', cuerpo: '', imagen_url: '', autor: 'Extensión IS', sede: 'riohacha' },
-    { id: 5, fecha: '01 mar 2026', cat: 'Docencia', titulo: 'Nuevo laboratorio de ciberseguridad habilitado en el bloque 4', resumen: 'Dotación con 20 estaciones, rack para cyber-range y licencias académicas de herramientas SIEM.', cuerpo: '', imagen_url: '', autor: 'Dirección del programa', sede: 'riohacha' },
-    { id: 6, fecha: '15 feb 2026', cat: 'Extensión', titulo: 'Estudiantes de Maicao ganan primer lugar en hackathon regional', resumen: "El equipo 'Guajira Data' de la sede Maicao obtuvo el primer puesto en el Hackathon Guajira Tech 2026.", cuerpo: '', imagen_url: '', autor: 'Comunicaciones IS', sede: 'maicao' },
-  ],
-  convocatorias: [
-    { id: 1, cat: 'Investigación', titulo: 'Jóvenes Investigadores 2026', estado: 'Abierta', cierre: '28 may 2026', sede: 'ambas', requisitos: ['Estudiantes de 6.º a 10.º semestre', 'Promedio acumulado ≥ 3.8'], desc: 'Vinculación semestral remunerada a grupos de investigación. Cupos: 6.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-    { id: 2, cat: 'Internacionalización', titulo: 'Intercambio UNAM 2026-II', estado: 'Abierta', cierre: '15 jul 2026', sede: 'riohacha', requisitos: ['Promedio ≥ 4.0', 'Haber cursado al menos 5 semestres'], desc: 'Un semestre en Ciudad de México con homologación de créditos.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-    { id: 3, cat: 'Extensión', titulo: 'Hackathon Guajira Tech 2026', estado: 'Abierta', cierre: '15 may 2026', sede: 'ambas', requisitos: ['Todos los estudiantes activos'], desc: 'Reto de 48 horas con Cluster TIC Caribe. Premio $8M y prácticas aseguradas.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-    { id: 4, cat: 'Prácticas', titulo: 'Práctica profesional 2026-II', estado: 'Abierta', cierre: '30 jun 2026', sede: 'ambas', requisitos: ['Estudiantes de 9.º semestre', 'Haber aprobado seminario de investigación'], desc: '22 empresas aliadas con cupos garantizados en el Caribe y Bogotá.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-    { id: 5, cat: 'Investigación', titulo: 'Semilleros 2026-II', estado: 'Abierta', cierre: '10 ago 2026', sede: 'ambas', requisitos: ['Estudiantes de 2.º a 8.º semestre'], desc: '14 semilleros activos con plazas en IA, IoT, Ciberseguridad y HCI.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-    { id: 6, cat: 'Estímulos', titulo: 'Beca de excelencia académica', estado: 'Próxima', cierre: '15 ago 2026', sede: 'maicao', requisitos: ['Promedio ≥ 4.5', 'No tener materias reprobadas'], desc: 'Cubrimiento del 100% de matrícula durante el semestre 2026-II.', fecha_apertura: '', dirigida_a: 'Estudiantes', url_postulacion: '', documento_url: '' },
-  ],
+  /* Vacíos a propósito: noticias, eventos y convocatorias viven en
+     PostgreSQL. Sembrar aquí ejemplos inventados hacía que un visitante con
+     el caché vacío y el backend caído los viera como contenido real. */
+  noticias: [],
+  eventos: [],
+  convocatorias: [],
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. */
   honor: [],
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. Antes había aquí

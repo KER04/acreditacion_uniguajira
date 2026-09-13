@@ -3,10 +3,20 @@ import { Icons } from '../components/Icons'
 import { WayuuBackdrop } from '../components/WayuuPatterns'
 import { useData } from '../context/DataContext'
 import SedeFilter, { sedeMatch } from '../components/SedeFilter'
+import { fechaLarga, CATEGORIAS_NOTICIA } from '../../shared/validacion'
 
-const CATS = [['all', 'Todas'], ['académico', 'Académico'], ['investigación', 'Investigación'], ['extensión', 'Extensión'], ['institucional', 'Institucional'], ['Acreditación', 'Acreditación'], ['Egresados', 'Egresados']]
+/* Una sola lista canónica, la misma que validan la API y la base. Antes aquí
+   había 'investigación' en minúscula mientras el contenido guardaba
+   'Investigación', y como el filtro compara con === la noticia desaparecía
+   al filtrar por su propia categoría. */
+const CATS = [['all', 'Todas'], ...CATEGORIAS_NOTICIA.map(c => [c, c])]
 
-const colorCat = { académico: 'var(--ug-azul)', investigación: 'var(--ug-amarillo)', extensión: 'var(--ug-flamingo)', institucional: 'var(--ug-marino)', Acreditación: 'var(--ug-azul)', Egresados: 'var(--ug-amarillo)', Docencia: 'var(--ug-flamingo)' }
+const colorCat = {
+  'Académico': 'var(--ug-azul)', 'Investigación': 'var(--ug-amarillo)',
+  'Extensión': 'var(--ug-flamingo)', 'Institucional': 'var(--ug-marino)',
+  'Acreditación': 'var(--ug-azul)', 'Egresados': 'var(--ug-amarillo)',
+  'Docencia': 'var(--ug-flamingo)',
+}
 
 export default function Noticias() {
   const { data } = useData()
@@ -16,7 +26,7 @@ export default function Noticias() {
   const [active, setActive] = useState(null)
 
   const items = (data.noticias ?? []).filter(n => {
-    const matchCat = cat === 'all' || n.cat === cat
+    const matchCat = cat === 'all' || n.categoria === cat
     const matchQ = !q || n.titulo.toLowerCase().includes(q.toLowerCase())
     const matchSede = sedeMatch(n.sede, sede)
     return matchCat && matchQ && matchSede
@@ -34,10 +44,10 @@ export default function Noticias() {
             <button className="btn ghost" style={{ marginBottom: 28, padding: '8px 16px', fontSize: 13 }} onClick={() => setActive(null)}>
               ← Volver a noticias
             </button>
-            <span className="chip" style={{ fontSize: 11, background: colorCat[n.cat], color: 'var(--ug-negro)', border: 'none' }}>{n.cat}</span>
+            <span className="chip" style={{ fontSize: 11, background: colorCat[n.categoria], color: 'var(--ug-negro)', border: 'none' }}>{n.categoria}</span>
             <h1 style={{ marginTop: 16, maxWidth: '32ch' }}>{n.titulo}</h1>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)', marginTop: 12, letterSpacing: '.1em' }}>{n.fecha}</div>
-            <div style={{ height: 320, background: colorCat[n.cat] ?? 'var(--ug-azul)', borderRadius: 14, marginTop: 32, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)', marginTop: 12, letterSpacing: '.1em' }}>{fechaLarga(n.fecha)}</div>
+            <div style={{ height: 320, background: colorCat[n.categoria] ?? 'var(--ug-azul)', borderRadius: 14, marginTop: 32, position: 'relative', overflow: 'hidden' }}>
               <WayuuBackdrop variant="b" />
             </div>
             <div style={{ marginTop: 32, fontSize: 17, lineHeight: 1.75, color: 'var(--ink-2)', whiteSpace: 'pre-line' }}>
@@ -83,15 +93,15 @@ export default function Noticias() {
               <div className="inner">
                 <div className="card featured-news" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper-2)', cursor: 'pointer', display: 'grid', gridTemplateColumns: '1fr 1fr' }}
                   onClick={() => setActive(featured.id)}>
-                  <div style={{ aspectRatio: '4/3', background: colorCat[featured.cat] ?? 'var(--ug-azul)', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ aspectRatio: '4/3', background: colorCat[featured.categoria] ?? 'var(--ug-azul)', position: 'relative', overflow: 'hidden' }}>
                     <WayuuBackdrop variant="a" />
                   </div>
                   <div style={{ padding: 36, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <span className="chip" style={{ fontSize: 11, background: colorCat[featured.cat], color: 'var(--ug-negro)', border: 'none', alignSelf: 'start' }}>{featured.cat}</span>
+                    <span className="chip" style={{ fontSize: 11, background: colorCat[featured.categoria], color: 'var(--ug-negro)', border: 'none', alignSelf: 'start' }}>{featured.categoria}</span>
                     <h2 style={{ marginTop: 16, fontSize: 'clamp(20px,2.2vw,28px)', letterSpacing: '-0.02em' }}>{featured.titulo}</h2>
                     <p style={{ marginTop: 14, fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6 }}>{featured.resumen}</p>
                     <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginTop: 24 }}>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>{featured.fecha}</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>{fechaLarga(featured.fecha)}</div>
                       <button className="btn accent" style={{ padding: '8px 20px', fontSize: 13 }}>Leer más <Icons.arrow /></button>
                     </div>
                   </div>
@@ -107,13 +117,13 @@ export default function Noticias() {
                   {rest.map((n, i) => (
                     <div key={n.id ?? i} className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper-2)', cursor: 'pointer' }}
                       onClick={() => setActive(n.id)}>
-                      <div style={{ height: 140, background: colorCat[n.cat] ?? 'var(--paper-3)', position: 'relative', overflow: 'hidden' }}>
+                      <div style={{ height: 140, background: colorCat[n.categoria] ?? 'var(--paper-3)', position: 'relative', overflow: 'hidden' }}>
                         <WayuuBackdrop variant="b" />
                       </div>
                       <div style={{ padding: 22 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                          <span className="chip" style={{ fontSize: 10 }}>{n.cat}</span>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)' }}>{n.fecha}</span>
+                          <span className="chip" style={{ fontSize: 10 }}>{n.categoria}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)' }}>{fechaLarga(n.fecha)}</span>
                         </div>
                         <div style={{ fontWeight: 500, fontSize: 16, letterSpacing: '-0.01em', lineHeight: 1.3 }}>{n.titulo}</div>
                         <p style={{ fontSize: 13, color: 'var(--ink-2)', marginTop: 10 }}>{n.resumen}</p>

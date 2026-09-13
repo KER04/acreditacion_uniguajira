@@ -27,3 +27,10 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Contenido migrado a PostgreSQL: estos archivos ya no son la fuente de
+# verdad y dejarlos versionados hacía que un git pull revirtiera lo publicado.
+# La copia original vive en app/server/db/datos/*-original.json
+app/src/data/noticias.json
+app/src/data/eventos.json
+app/src/data/convocatorias.json
