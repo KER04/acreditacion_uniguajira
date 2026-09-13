@@ -5,6 +5,27 @@ import { useData } from '../context/DataContext'
 import SedeFilter, { sedeMatch } from '../components/SedeFilter'
 import { fechaLarga, CATEGORIAS_NOTICIA } from '../../shared/validacion'
 
+/* Portada de la noticia.
+ *
+ * El panel permitía subir una imagen desde el principio y la guardaba bien,
+ * pero esta vista nunca la pintaba: los tres huecos donde debía ir mostraban
+ * un bloque de color con el patrón wayuu. Se veía tan intencional que parecía
+ * el diseño, no un campo sin conectar.
+ *
+ * El bloque se conserva como respaldo: la mayoría de las noticias no tienen
+ * imagen y quedarían con un hueco blanco. */
+function Portada({ noticia, estilo, variante = 'b' }) {
+  const fondo = colorCat[noticia.categoria] ?? 'var(--paper-3)'
+  return (
+    <div style={{ background: fondo, position: 'relative', overflow: 'hidden', ...estilo }}>
+      {noticia.imagen_url
+        ? <img src={noticia.imagen_url} alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        : <WayuuBackdrop variant={variante} />}
+    </div>
+  )
+}
+
 /* Una sola lista canónica, la misma que validan la API y la base. Antes aquí
    había 'investigación' en minúscula mientras el contenido guardaba
    'Investigación', y como el filtro compara con === la noticia desaparecía
@@ -47,9 +68,7 @@ export default function Noticias() {
             <span className="chip" style={{ fontSize: 11, background: colorCat[n.categoria], color: 'var(--ug-negro)', border: 'none' }}>{n.categoria}</span>
             <h1 style={{ marginTop: 16, maxWidth: '32ch' }}>{n.titulo}</h1>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)', marginTop: 12, letterSpacing: '.1em' }}>{fechaLarga(n.fecha)}</div>
-            <div style={{ height: 320, background: colorCat[n.categoria] ?? 'var(--ug-azul)', borderRadius: 14, marginTop: 32, position: 'relative', overflow: 'hidden' }}>
-              <WayuuBackdrop variant="b" />
-            </div>
+            <Portada noticia={n} variante="a" estilo={{ height: 320, borderRadius: 14, marginTop: 32 }} />
             <div style={{ marginTop: 32, fontSize: 17, lineHeight: 1.75, color: 'var(--ink-2)', whiteSpace: 'pre-line' }}>
               {n.cuerpo ?? n.resumen}
             </div>
@@ -93,9 +112,7 @@ export default function Noticias() {
               <div className="inner">
                 <div className="card featured-news" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper-2)', cursor: 'pointer', display: 'grid', gridTemplateColumns: '1fr 1fr' }}
                   onClick={() => setActive(featured.id)}>
-                  <div style={{ aspectRatio: '4/3', background: colorCat[featured.categoria] ?? 'var(--ug-azul)', position: 'relative', overflow: 'hidden' }}>
-                    <WayuuBackdrop variant="a" />
-                  </div>
+                  <Portada noticia={featured} variante="a" estilo={{ aspectRatio: '4/3' }} />
                   <div style={{ padding: 36, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <span className="chip" style={{ fontSize: 11, background: colorCat[featured.categoria], color: 'var(--ug-negro)', border: 'none', alignSelf: 'start' }}>{featured.categoria}</span>
                     <h2 style={{ marginTop: 16, fontSize: 'clamp(20px,2.2vw,28px)', letterSpacing: '-0.02em' }}>{featured.titulo}</h2>
@@ -117,9 +134,7 @@ export default function Noticias() {
                   {rest.map((n, i) => (
                     <div key={n.id ?? i} className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper-2)', cursor: 'pointer' }}
                       onClick={() => setActive(n.id)}>
-                      <div style={{ height: 140, background: colorCat[n.categoria] ?? 'var(--paper-3)', position: 'relative', overflow: 'hidden' }}>
-                        <WayuuBackdrop variant="b" />
-                      </div>
+                      <Portada noticia={n} estilo={{ height: 140 }} />
                       <div style={{ padding: 22 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                           <span className="chip" style={{ fontSize: 10 }}>{n.categoria}</span>

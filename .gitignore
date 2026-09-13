@@ -34,3 +34,13 @@ Thumbs.db
 app/src/data/noticias.json
 app/src/data/eventos.json
 app/src/data/convocatorias.json
+
+# Archivos subidos desde el panel. Son contenido, no codigo: versionarlos
+# hace que un git pull pueda borrar o resucitar lo que alguien publico.
+# Los logos de marca si van en git (app/public/images/marca).
+app/public/images/docentes/
+app/public/images/egresados/
+app/public/images/noticias/
+app/public/images/general/
+app/public/docs/
+app/public/presentaciones/
