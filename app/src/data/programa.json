@@ -26,10 +26,22 @@
   "inicio": {
     "slogan": "Formamos ingenieros que transforman La Guajira y el Caribe.",
     "cifras": [
-      { "label": "Estudiantes activos", "value": "1 240" },
-      { "label": "Docentes de planta", "value": "32" },
-      { "label": "Egresados", "value": "2 800+" },
-      { "label": "Años acreditados", "value": "4" }
+      {
+        "label": "Estudiantes activos",
+        "value": "1 240"
+      },
+      {
+        "label": "Docentes de planta",
+        "value": "32"
+      },
+      {
+        "label": "Egresados",
+        "value": "2 800+"
+      },
+      {
+        "label": "Años acreditados",
+        "value": "4"
+      }
     ],
     "proyectoDestacado": {
       "titulo": "ArenaNet: IoT para comunidades Wayuu",
@@ -38,15 +50,285 @@
     }
   },
   "pensum": [
-    { "semestre": 1, "materias": [{ "n": "Cálculo Diferencial", "cr": 4, "tipo": "Básica" }, { "n": "Fundamentos de Programación", "cr": 3, "tipo": "Disciplinar" }, { "n": "Álgebra Lineal", "cr": 3, "tipo": "Básica" }, { "n": "Lógica Matemática", "cr": 3, "tipo": "Básica" }, { "n": "Lenguaje y Comunicación", "cr": 2, "tipo": "Complementaria" }] },
-    { "semestre": 2, "materias": [{ "n": "Cálculo Integral", "cr": 4, "tipo": "Básica" }, { "n": "Programación Orientada a Objetos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Estadística y Probabilidad", "cr": 3, "tipo": "Básica" }, { "n": "Sistemas Operativos I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inglés I", "cr": 2, "tipo": "Complementaria" }] },
-    { "semestre": 3, "materias": [{ "n": "Cálculo Multivariable", "cr": 3, "tipo": "Básica" }, { "n": "Estructuras de Datos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Análisis y Diseño de Sistemas", "cr": 3, "tipo": "Disciplinar" }, { "n": "Bases de Datos I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inglés II", "cr": 2, "tipo": "Complementaria" }] },
-    { "semestre": 4, "materias": [{ "n": "Ecuaciones Diferenciales", "cr": 3, "tipo": "Básica" }, { "n": "Algoritmos y Complejidad", "cr": 3, "tipo": "Disciplinar" }, { "n": "Bases de Datos II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Ingeniería de Software I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Redes de Computadoras I", "cr": 3, "tipo": "Disciplinar" }] },
-    { "semestre": 5, "materias": [{ "n": "Arquitectura de Computadoras", "cr": 3, "tipo": "Disciplinar" }, { "n": "Ingeniería de Software II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Redes de Computadoras II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inteligencia Artificial I", "cr": 3, "tipo": "Disciplinar" }, { "n": "Electiva I", "cr": 2, "tipo": "Electiva" }] },
-    { "semestre": 6, "materias": [{ "n": "Sistemas Distribuidos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Seguridad Informática", "cr": 3, "tipo": "Disciplinar" }, { "n": "Desarrollo Web", "cr": 3, "tipo": "Disciplinar" }, { "n": "Inteligencia Artificial II", "cr": 3, "tipo": "Disciplinar" }, { "n": "Electiva II", "cr": 2, "tipo": "Electiva" }] },
-    { "semestre": 7, "materias": [{ "n": "Gestión de Proyectos TI", "cr": 3, "tipo": "Disciplinar" }, { "n": "Computación en la Nube", "cr": 3, "tipo": "Disciplinar" }, { "n": "Minería de Datos", "cr": 3, "tipo": "Disciplinar" }, { "n": "Emprendimiento Tecnológico", "cr": 2, "tipo": "Complementaria" }, { "n": "Electiva III", "cr": 3, "tipo": "Electiva" }] },
-    { "semestre": 8, "materias": [{ "n": "Tópicos Avanzados en IS", "cr": 3, "tipo": "Disciplinar" }, { "n": "Legislación Informática", "cr": 2, "tipo": "Complementaria" }, { "n": "Electiva IV", "cr": 3, "tipo": "Electiva" }, { "n": "Electiva V", "cr": 3, "tipo": "Electiva" }, { "n": "Seminario de Investigación", "cr": 2, "tipo": "Disciplinar" }] },
-    { "semestre": 9, "materias": [{ "n": "Práctica Profesional I", "cr": 6, "tipo": "Práctica" }, { "n": "Opción de Grado I", "cr": 4, "tipo": "Grado" }, { "n": "Electiva VI", "cr": 3, "tipo": "Electiva" }] },
-    { "semestre": 10, "materias": [{ "n": "Práctica Profesional II", "cr": 6, "tipo": "Práctica" }, { "n": "Opción de Grado II", "cr": 4, "tipo": "Grado" }, { "n": "Electiva VII", "cr": 3, "tipo": "Electiva" }] }
+    {
+      "semestre": 1,
+      "materias": [
+        {
+          "n": "Cálculo Diferencial",
+          "cr": 4,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Fundamentos de Programación",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Álgebra Lineal",
+          "cr": 3,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Lógica Matemática",
+          "cr": 3,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Lenguaje y Comunicación",
+          "cr": 2,
+          "tipo": "Complementaria"
+        }
+      ]
+    },
+    {
+      "semestre": 2,
+      "materias": [
+        {
+          "n": "Cálculo Integral",
+          "cr": 4,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Programación Orientada a Objetos",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Estadística y Probabilidad",
+          "cr": 3,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Sistemas Operativos I",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Inglés I",
+          "cr": 2,
+          "tipo": "Complementaria"
+        }
+      ]
+    },
+    {
+      "semestre": 3,
+      "materias": [
+        {
+          "n": "Cálculo Multivariable",
+          "cr": 3,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Estructuras de Datos",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Análisis y Diseño de Sistemas",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Bases de Datos I",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Inglés II",
+          "cr": 2,
+          "tipo": "Complementaria"
+        }
+      ]
+    },
+    {
+      "semestre": 4,
+      "materias": [
+        {
+          "n": "Ecuaciones Diferenciales",
+          "cr": 3,
+          "tipo": "Básica"
+        },
+        {
+          "n": "Algoritmos y Complejidad",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Bases de Datos II",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Ingeniería de Software I",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Redes de Computadoras I",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        }
+      ]
+    },
+    {
+      "semestre": 5,
+      "materias": [
+        {
+          "n": "Arquitectura de Computadoras",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Ingeniería de Software II",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Redes de Computadoras II",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Inteligencia Artificial I",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Electiva I",
+          "cr": 2,
+          "tipo": "Electiva"
+        }
+      ]
+    },
+    {
+      "semestre": 6,
+      "materias": [
+        {
+          "n": "Sistemas Distribuidos",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Seguridad Informática",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Desarrollo Web",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Inteligencia Artificial II",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Electiva II",
+          "cr": 2,
+          "tipo": "Electiva"
+        }
+      ]
+    },
+    {
+      "semestre": 7,
+      "materias": [
+        {
+          "n": "Gestión de Proyectos TI",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Computación en la Nube",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Minería de Datos",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Emprendimiento Tecnológico",
+          "cr": 2,
+          "tipo": "Complementaria"
+        },
+        {
+          "n": "Electiva III",
+          "cr": 3,
+          "tipo": "Electiva"
+        }
+      ]
+    },
+    {
+      "semestre": 8,
+      "materias": [
+        {
+          "n": "Tópicos Avanzados en IS",
+          "cr": 3,
+          "tipo": "Disciplinar"
+        },
+        {
+          "n": "Legislación Informática",
+          "cr": 2,
+          "tipo": "Complementaria"
+        },
+        {
+          "n": "Electiva IV",
+          "cr": 3,
+          "tipo": "Electiva"
+        },
+        {
+          "n": "Electiva V",
+          "cr": 3,
+          "tipo": "Electiva"
+        },
+        {
+          "n": "Seminario de Investigación",
+          "cr": 2,
+          "tipo": "Disciplinar"
+        }
+      ]
+    },
+    {
+      "semestre": 9,
+      "materias": [
+        {
+          "n": "Práctica Profesional I",
+          "cr": 6,
+          "tipo": "Práctica"
+        },
+        {
+          "n": "Opción de Grado I",
+          "cr": 4,
+          "tipo": "Grado"
+        },
+        {
+          "n": "Electiva VI",
+          "cr": 3,
+          "tipo": "Electiva"
+        }
+      ]
+    },
+    {
+      "semestre": 10,
+      "materias": [
+        {
+          "n": "Práctica Profesional II",
+          "cr": 6,
+          "tipo": "Práctica"
+        },
+        {
+          "n": "Opción de Grado II",
+          "cr": 4,
+          "tipo": "Grado"
+        },
+        {
+          "n": "Electiva VII",
+          "cr": 3,
+          "tipo": "Electiva"
+        }
+      ]
+    }
   ]
 }

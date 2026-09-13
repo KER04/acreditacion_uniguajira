@@ -7,21 +7,25 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
-import pensumData from '../../data/pensum.json'
+import { useData } from '../../context/DataContext'
 import propuesta from '../../data/pensum-propuesto.json'
 import {
   Donut, FiltrosMalla, MallaGrid, MateriaDrawer, creditosPorArea,
 } from './malla'
 
-const CHART_DATA = creditosPorArea(pensumData.semestres)
-
 export default function Pensum() {
+  /* La malla viene de la API (migracion 008). Antes se importaba el JSON en
+     tiempo de compilacion, asi que editarla en el panel no cambiaba nada. */
+  const { data } = useData()
+  const semestres = data.pensum ?? []
+  const total_creditos = data.pensum_info?.total_creditos ?? 0
+  const CHART_DATA = creditosPorArea(semestres)
+
   const [selected,    setSelected]    = useState(null)
   const [filter,      setFilter]      = useState('all')
   const [campoFilter, setCampoFilter] = useState('all')
 
-  const { semestres, total_creditos } = pensumData
-  const totalMaterias = semestres.reduce((a, s) => a + s.materias.length, 0)
+  const totalMaterias = data.pensum_info?.total_materias ?? 0
 
   return (
     <div className="page-in">

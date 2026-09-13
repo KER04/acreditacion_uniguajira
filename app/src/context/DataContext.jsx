@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { FACTORES, EQUIPO_GENERAL, EVIDENCIAS_GENERALES } from '../data/acreditacion'
-import pensumData from '../data/pensum.json'
 
 /* ─── API helpers ──────────────────────────────────────────────── */
 /* Ruta relativa: Vite hace de proxy hacia :3001 (ver vite.config.js), así que
@@ -52,7 +51,6 @@ const KEY_ENDPOINT = {
   info_sedes:            'sedes',
   inicio:                'programa/inicio',
   programa:              'programa/info',
-  pensum:                'programa/pensum',
 }
 
 /* Devuelve el mensaje de error si el guardado falló, o null si todo fue bien.
@@ -165,6 +163,36 @@ export function apiGuardarFormacion(docenteId, formacion) {
   return apiJSON(`docentes/${docenteId}/formacion`, { method: 'PUT', body: { formacion } })
 }
 
+/* ─── Plan de estudios ─────────────────────────────────────────── */
+
+/* El pensum no encaja en addItem/updateItem: son dos recursos distintos —el
+   catálogo de materias y la malla que las coloca en semestres— y la respuesta
+   es un objeto con los semestres armados, no un arreglo de elementos. Por eso
+   lleva sus propias funciones y su propia recarga. */
+
+export const apiMaterias = ({ libres } = {}) =>
+  apiJSON('pensum/materias' + (libres ? `?libres=${libres}` : ''))
+
+export const apiCrearMateria = datos =>
+  apiJSON('pensum/materias', { method: 'POST', body: datos })
+
+export const apiEditarMateria = (id, datos) =>
+  apiJSON(`pensum/materias/${id}`, { method: 'PATCH', body: datos })
+
+export const apiBorrarMateria = id =>
+  apiJSON(`pensum/materias/${id}`, { method: 'DELETE' })
+
+/* Las tres siguientes devuelven la malla completa ya recalculada, para que la
+   vista no tenga que sumar créditos por su cuenta ni volver a pedirla. */
+export const apiAgregarAMalla = (planId, datos) =>
+  apiJSON(`pensum/plan/${planId}/materias`, { method: 'POST', body: datos })
+
+export const apiEditarEnMalla = (planMateriaId, datos) =>
+  apiJSON(`pensum/plan-materia/${planMateriaId}`, { method: 'PATCH', body: datos })
+
+export const apiQuitarDeMalla = planMateriaId =>
+  apiJSON(`pensum/plan-materia/${planMateriaId}`, { method: 'DELETE' })
+
 export async function apiUpload(tipo, file, extra = {}) {
   const fd = new FormData()
   fd.append('archivo', file)
@@ -270,7 +298,9 @@ const INITIAL = {
       acreditacion: '014528 (28 jul 2022 – 28 jul 2026)', snies: '17579',
     },
   },
-  pensum: pensumData.semestres,
+  /* Vive en PostgreSQL (migracion 008). Se llena al hidratar desde /api/all. */
+  pensum: [],
+  pensum_info: null,
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. */
   calendario: [],
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. */
@@ -412,8 +442,18 @@ export function DataProvider({ children }) {
 
   const limpiarError = useCallback(() => setError(null), [])
 
+  /* Guarda la malla que devuelven las operaciones del pensum. Evita una
+     segunda petición: el servidor ya la mandó recalculada. */
+  const aplicarPensum = useCallback(malla => {
+    setData(d => ({
+      ...d,
+      pensum: malla.semestres ?? [],
+      pensum_info: { plan: malla.plan, total_creditos: malla.total_creditos, total_materias: malla.total_materias },
+    }))
+  }, [])
+
   return (
-    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError, avisoCarga }}>
+    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError, avisoCarga, aplicarPensum, setError }}>
       {children}
     </DataContext.Provider>
   )

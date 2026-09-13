@@ -13,10 +13,11 @@ router.put('/inicio', requireAdmin, async (req, res) => {
   const d = await readData(FILE) ?? {}; await writeData(FILE, { ...d, inicio: req.body }); res.json({ ok: true })
 })
 
-router.get('/pensum', async (_req, res) => { const d = await readData(FILE); res.json(d?.pensum ?? []) })
-router.put('/pensum', requireAdmin, async (req, res) => {
-  const d = await readData(FILE) ?? {}; await writeData(FILE, { ...d, pensum: req.body }); res.json({ ok: true })
-})
+/* El pensum se fue a PostgreSQL en la migración 008 y lo sirve /api/pensum.
+   Aquí había un GET y un PUT sobre programa.json que ya no usa nadie; dejarlos
+   vivos significaba tener dos sitios donde escribir la malla y que el panel
+   pudiera guardar en el equivocado. La clave `pensum` que queda dentro de
+   programa.json es el histórico previo a la migración. */
 
 /* Ficha institucional editable desde TabPrograma.
    No se puede usar el PUT de '/' para esto: aquel reemplaza el archivo entero

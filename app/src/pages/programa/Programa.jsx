@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import Portal from '../../components/Portal'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
-import pensumData from '../../data/pensum.json'
+import { useData } from '../../context/DataContext'
 import { useState } from 'react'
 
 const AREA_FILTER = {
@@ -30,6 +30,9 @@ const EMBED_FILTERS = [
 ]
 
 function PensumEmbed() {
+  /* Desde la migracion 008 la malla llega por API, no del JSON compilado. */
+  const { data } = useData()
+  const semestres = data.pensum ?? []
   const [selected, setSelected] = useState(null)
   const [filter, setFilter] = useState('all')
   return (
@@ -47,7 +50,7 @@ function PensumEmbed() {
       <div style={{ padding: '0 var(--gutter) 40px' }}>
         <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
           <div className="pensum">
-            {pensumData.semestres.map(sem => (
+            {semestres.map(sem => (
               <div key={sem.numero} className="sem-col">
                 <div className="sem-head">Sem · {String(sem.numero).padStart(2,'0')} · {sem.total_creditos} cr</div>
                 {sem.materias.map((m, ci) => {

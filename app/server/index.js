@@ -21,6 +21,7 @@ import convocatorias, { leerConvocatorias } from './routes/convocatorias.js'
 import eventos, { leerEventos } from './routes/eventos.js'
 import noticias, { leerNoticias } from './routes/noticias.js'
 import programa from './routes/programa.js'
+import pensum, { leerPensum } from './routes/pensum.js'
 import sedes from './routes/sedes.js'
 import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
@@ -59,6 +60,7 @@ app.use('/api/convocatorias', convocatorias)
 app.use('/api/eventos', eventos)
 app.use('/api/noticias', noticias)
 app.use('/api/programa', programa)
+app.use('/api/pensum', pensum)
 app.use('/api/sedes', sedes)
 
 /* Generic file upload endpoint */
@@ -100,6 +102,7 @@ app.get('/api/all', async (_req, res) => {
     investigacion: () => readData('investigacion.json'),
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
+    pensum:        () => leerPensum(),          // PostgreSQL
     sedes:         () => readData('sedes.json'),
     eventos:       () => leerEventos(),         // PostgreSQL
   }
@@ -121,7 +124,7 @@ app.get('/api/all', async (_req, res) => {
   const {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
     estudiantes: estudiantesD, egresados: egresadosD, investigacion: investigacionD,
-    acreditacion: acreditacionD, programa: programaD, sedes: sedesD, eventos: eventosD,
+    acreditacion: acreditacionD, programa: programaD, pensum: pensumD, sedes: sedesD, eventos: eventosD,
   } = datos
 
   res.json({
@@ -145,7 +148,8 @@ app.get('/api/all', async (_req, res) => {
     evidencias_cna:      acreditacionD?.evidencias ?? [],
     inicio:              programaD?.inicio ?? {},
     programa:            { mision: programaD?.mision, vision: programaD?.vision, objetivos: programaD?.objetivos, perfilEgresado: programaD?.perfil_egresado, ficha: programaD?.ficha_tecnica ?? {} },
-    pensum:              programaD?.pensum ?? [],
+    pensum:              pensumD?.semestres ?? [],
+    pensum_info:         pensumD ? { plan: pensumD.plan, total_creditos: pensumD.total_creditos, total_materias: pensumD.total_materias } : null,
     info_sedes:          sedesD ?? {},
     eventos:             eventosD ?? [],
   })

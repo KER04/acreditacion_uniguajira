@@ -202,6 +202,20 @@ export function tamanoArchivo(v, etiqueta = 'Peso') {
   return RE_PESO.test(String(v).trim()) ? null : `${etiqueta} debe tener el formato "1.8 MB" o "420 KB"`
 }
 
+/* ─── Plan de estudios ─────────────────────────────────────────── */
+
+/* Clasificación curricular de la materia. Las dos listas son del plan de
+   estudios de la facultad y las comparten el panel, la API y el CHECK. */
+export const AREAS_MATERIA = [
+  'Ciencias Básicas', 'Ciencias Básicas de Ingeniería',
+  'Perfil Profesional', 'Complementaria', 'Investigativo',
+]
+export const CAMPOS_MATERIA = [
+  'Básico General Científico Disciplinar',
+  'Básico Específico Profesional',
+  'Socio Humanístico',
+]
+
 /* ─── Contenidos del portal ────────────────────────────────────── */
 
 /* Forma canónica de las categorías. Existe una sola lista y la usan el panel,
@@ -360,6 +374,25 @@ export const ESQUEMAS = {
     grupo:       { etiqueta: 'Grupo',       obligatorio: false, validar: v => enumerado(v, GRUPOS_DOCUMENTO, 'Grupo') },
     peso:        { etiqueta: 'Peso',        obligatorio: false, validar: v => tamanoArchivo(v) },
     orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  /* ─── Plan de estudios ───────────────────────────────────────── */
+
+  /* La materia del catálogo: lo que es cierto de ella en cualquier malla. */
+  materias: {
+    nombre: { etiqueta: 'Nombre', obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 3, max: 160 }) },
+    codigo: { etiqueta: 'Código', obligatorio: false, validar: v => texto(v, { etiqueta: 'Código', max: 20 }) },
+    area:   { etiqueta: 'Área',   obligatorio: false, validar: v => enumerado(v, AREAS_MATERIA, 'Área') },
+    campo:  { etiqueta: 'Campo',  obligatorio: false, validar: v => enumerado(v, CAMPOS_MATERIA, 'Campo') },
+  },
+
+  /* La materia dentro de una malla: lo que cambia de un plan a otro. */
+  plan_materia: {
+    materia_id:   { etiqueta: 'Materia',  obligatorio: true,  validar: v => entero(v, { etiqueta: 'Materia', min: 1 }) },
+    semestre:     { etiqueta: 'Semestre', obligatorio: true,  validar: v => entero(v, { etiqueta: 'Semestre', min: 1, max: 14 }) },
+    creditos:     { etiqueta: 'Créditos', obligatorio: false, validar: v => entero(v, { etiqueta: 'Créditos', min: 0, max: 12 }) },
+    horas_semana: { etiqueta: 'Horas',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Horas', min: 0, max: 40 }) },
+    orden:        { etiqueta: 'Orden',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 
   /* ─── Contenidos del portal ──────────────────────────────────── */
