@@ -241,6 +241,181 @@ export const CATEGORIAS_CONVOCATORIA = [
 export const ESTADOS_EVENTO = ['programado', 'cancelado', 'aplazado']
 export const ESTADOS_CONVOCATORIA = ['Abierta', 'Próxima', 'Cerrada']
 
+/* --- Egresados y bolsa de empleo ------------------------------- */
+
+export const MODALIDADES_OFERTA = ['Presencial', 'Remoto', 'Híbrido']
+export const CONTRATOS_OFERTA = [
+  'Tiempo completo', 'Medio tiempo', 'Práctica', 'Contrato por obra', 'Prestación de servicios',
+]
+export const ESTADOS_OFERTA = ['abierta', 'cerrada', 'borrador']
+export const ESTADOS_POSTULACION = ['recibida', 'revisada', 'preseleccionada', 'descartada']
+export const ETIQUETA_POSTULACION = {
+  recibida: 'Recibida',
+  revisada: 'Revisada',
+  preseleccionada: 'Preseleccionada',
+  descartada: 'Descartada',
+}
+export const FORMACION_POSTERIOR = [
+  'Ninguna', 'Especialización', 'Maestría en curso', 'Maestría terminada',
+  'Doctorado en curso', 'Doctorado terminado',
+]
+
+/* Tokens de la paleta institucional, no hex sueltos: así la tarjeta sigue al
+   tema claro/oscuro sin que nadie tenga que reescribir el color. */
+export const COLORES_TARJETA = [
+  ['var(--ug-azul)', 'Teal institucional'],
+  ['var(--ug-amarillo)', 'Ámbar'],
+  ['var(--ug-flamingo)', 'Terracota'],
+  ['var(--ug-marino)', 'Teal profundo'],
+]
+
+/* Año de grado. La base lo guarda como texto porque la planilla trae tanto
+   "2018" como "2018-II", pero "cualquier cosa" no es un año: sin esto el
+   formulario público aceptaba lo que se escribiera. */
+export const ANIO_GRADO_MIN = 1976        // primera promoción del programa
+const RE_ANIO_GRADO = /^(\d{4})(?:-(I|II))?$/
+
+export function anioGrado(v, etiqueta = 'Año de grado') {
+  if (vacio(v)) return null
+  const m = RE_ANIO_GRADO.exec(String(v).trim())
+  if (!m) return `${etiqueta} debe ser un año de cuatro cifras (2018) o un período (2018-II)`
+  const a = Number(m[1])
+  const max = new Date().getFullYear() + 1
+  if (a < ANIO_GRADO_MIN || a > max) return `${etiqueta} debe estar entre ${ANIO_GRADO_MIN} y ${max}`
+  return null
+}
+
+/* Documento de identidad: solo dígitos. Se admiten los puntos con que mucha
+   gente los escribe, pero se cuentan las cifras, no los caracteres. */
+export function documentoIdentidad(v, etiqueta = 'Documento') {
+  if (vacio(v)) return null
+  const s = String(v).trim()
+  if (/[^\d.\s]/.test(s)) return `${etiqueta} solo admite números`
+  const digitos = s.replace(/\D/g, '')
+  if (digitos.length < 6 || digitos.length > 12) return `${etiqueta} debe tener entre 6 y 12 cifras`
+  return null
+}
+
+/* --- Saber Pro --------------------------------------------------
+   La estructura sale del reporte del ICFES: cinco módulos genéricos en escala
+   0-300 y un global que es su promedio simple. El orden es el del reporte. */
+
+export const PUNTAJE_SABERPRO_MIN = 0
+export const PUNTAJE_SABERPRO_MAX = 300
+
+export const MODULOS_SABERPRO = [
+  ['lectura_critica', 'Lectura Crítica', 'LC'],
+  ['razonamiento_cuantitativo', 'Razonamiento Cuantitativo', 'RC'],
+  ['competencias_ciudadanas', 'Competencias Ciudadanas', 'CC'],
+  ['comunicacion_escrita', 'Comunicación Escrita', 'CE'],
+  ['ingles', 'Inglés', 'IN'],
+]
+
+export const CLAVES_MODULOS = MODULOS_SABERPRO.map(m => m[0])
+export const ETIQUETA_MODULO = Object.fromEntries(MODULOS_SABERPRO.map(m => [m[0], m[1]]))
+export const SIGLA_MODULO = Object.fromEntries(MODULOS_SABERPRO.map(m => [m[0], m[2]]))
+
+/* Marco Común Europeo, tal como lo reporta el módulo de inglés. */
+export const NIVELES_INGLES = ['', '-A1', 'A1', 'A2', 'B1', 'B2']
+
+/* El mismo cálculo que hace la columna generada de la base y que define el
+   ICFES: promedio simple de los cinco módulos. Está aquí para que el panel
+   pueda enseñar el global mientras se teclea, antes de guardar nada. */
+export function globalSaberPro(fila) {
+  const valores = CLAVES_MODULOS.map(k => Number(fila?.[k]))
+  if (valores.some(v => !Number.isFinite(v))) return null
+  return Math.round(valores.reduce((a, b) => a + b, 0) / valores.length)
+}
+
+/* Si una fila cumple el acuerdo de grado por Saber Pro. Vive aquí, y no en el
+   servidor ni en la página, porque las tres cosas tienen que responder lo
+   mismo: la lista pública, el panel y cualquier informe que salga después. */
+export function cumpleGrado(fila, parametros) {
+  if (!fila || !parametros) return false
+  const global = fila.puntaje_global ?? globalSaberPro(fila)
+  if (global === null || global < parametros.puntaje_minimo) return false
+
+  if (parametros.percentil_minimo !== null && parametros.percentil_minimo !== undefined) {
+    if ((fila.percentil_nacional ?? -1) < parametros.percentil_minimo) return false
+  }
+  if (parametros.minimo_por_modulo !== null && parametros.minimo_por_modulo !== undefined) {
+    if (CLAVES_MODULOS.some(k => Number(fila[k]) < parametros.minimo_por_modulo)) return false
+  }
+  return true
+}
+
+export function puntajeSaberPro(v, etiqueta = 'Puntaje') {
+  return entero(v, { etiqueta, min: PUNTAJE_SABERPRO_MIN, max: PUNTAJE_SABERPRO_MAX })
+}
+
+/* --- Infraestructura tecnológica ---------------------------------- */
+
+export const CATEGORIAS_INFRA = [
+  ['computo', 'Salas de informática'],
+  ['laboratorio', 'Laboratorios'],
+  ['audiovisual', 'Salas de audiovisuales'],
+  ['conectividad', 'Conectividad y red'],
+  ['plataforma', 'Plataformas y sistemas'],
+  ['espacio', 'Otros espacios'],
+]
+
+export const CLAVES_INFRA = CATEGORIAS_INFRA.map(c => c[0])
+export const ETIQUETA_INFRA = Object.fromEntries(CATEGORIAS_INFRA)
+
+/* Las sedes de la universidad, que son más que las dos del programa. */
+export const SEDES_INFRA = ['ambas', 'riohacha', 'maicao', 'fonseca', 'villanueva']
+export const ETIQUETA_SEDE_INFRA = {
+  ambas: 'Todas las sedes',
+  riohacha: 'Riohacha',
+  maicao: 'Maicao',
+  fonseca: 'Fonseca',
+  villanueva: 'Villanueva',
+}
+
+/* Puestos totales que aporta un recurso: 22 salas de 30 puestos son 660.
+   Se calcula, nunca se guarda, para que no pueda dejar de cuadrar con sus
+   dos factores cuando alguien corrija uno de ellos. */
+export function puestosDe(recurso) {
+  const cantidad = Number(recurso?.cantidad)
+  const capacidad = Number(recurso?.capacidad)
+  if (!Number.isFinite(capacidad)) return null
+  return (Number.isFinite(cantidad) ? cantidad : 1) * capacidad
+}
+
+const RE_YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/
+
+/* Acepta el identificador pelado o cualquiera de las formas en que YouTube
+   reparte un enlace (watch?v=, youtu.be/, /embed/, /shorts/) y devuelve solo
+   el id. La base guarda el id, no la URL: volver a analizarla en cada render
+   sería repetir este trabajo en cada tarjeta. Devuelve '' si no reconoce nada. */
+export function idYouTube(entrada) {
+  const s = String(entrada ?? '').trim()
+  if (!s) return ''
+  if (RE_YOUTUBE_ID.test(s)) return s
+  const m = /(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/.exec(s)
+  return m ? m[1] : ''
+}
+
+export function youtube(v, etiqueta = 'Vídeo de YouTube') {
+  if (vacio(v)) return null
+  return idYouTube(v) ? null : `${etiqueta} no parece un enlace ni un identificador de YouTube`
+}
+
+/* Teléfonos colombianos y extranjeros: dígitos, espacios, guiones, paréntesis
+   y un + inicial. No se normaliza a un formato porque el dato lo escribe el
+   propio egresado y forzarlo haría rechazar números válidos de otros países;
+   lo que sí se cuenta son las CIFRAS, no los caracteres, que es lo que dejaba
+   pasar un "((((((((" de ocho signos como si fuera un número. */
+export function telefono(v, etiqueta = 'Teléfono') {
+  if (vacio(v)) return null
+  const s = String(v).trim()
+  if (!/^\+?[\d\s().-]+$/.test(s)) return `${etiqueta} solo admite números, espacios, guiones y paréntesis`
+  const digitos = s.replace(/\D/g, '')
+  if (digitos.length < 7) return `${etiqueta} debe tener al menos 7 cifras`
+  if (digitos.length > 15) return `${etiqueta} no puede pasar de 15 cifras`
+  return null
+}
+
 const RE_HORA_24 = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/
 
 /* Hora en formato de 24 horas, que es lo que entrega <input type="time">. */
@@ -448,6 +623,138 @@ export const ESQUEMAS = {
       },
     },
   },
+
+  /* --- Egresados ----------------------------------------------- */
+
+  /* Solo el nombre es obligatorio: la coordinación carga al egresado con lo
+     que tenga y completa cuando el propio egresado actualiza sus datos. */
+  egresados: {
+    nombre:        { etiqueta: 'Nombre',       obligatorio: true,  validar: v => nombrePersona(v, 'Nombre') },
+    anio_grado:    { etiqueta: 'Año de grado', obligatorio: false, validar: v => anioGrado(v) },
+    cargo:         { etiqueta: 'Cargo',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Cargo', max: 120 }) },
+    empresa:       { etiqueta: 'Empresa',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Empresa', max: 120 }) },
+    ciudad:        { etiqueta: 'Ciudad',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Ciudad', max: 80 }) },
+    pais:          { etiqueta: 'País',         obligatorio: false, validar: v => texto(v, { etiqueta: 'País', max: 60 }) },
+    sede:          { etiqueta: 'Sede',         obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    testimonio:    { etiqueta: 'Testimonio',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Testimonio', max: 600 }) },
+    linkedin_url:  { etiqueta: 'LinkedIn',     obligatorio: false, validar: v => rutaOUrl(v, 'LinkedIn') },
+    color:         { etiqueta: 'Color',        obligatorio: false, validar: v => enumerado(v, COLORES_TARJETA.map(c => c[0]), 'Color') },
+    video_youtube: { etiqueta: 'Vídeo',        obligatorio: false, validar: v => youtube(v, 'Vídeo') },
+    video_url:     { etiqueta: 'Vídeo MP4',    obligatorio: false, validar: v => rutaOUrl(v, 'Vídeo MP4') },
+    destacado:     { etiqueta: 'Destacado',    obligatorio: false, validar: v => booleano(v, 'Destacado') },
+    activo:        { etiqueta: 'Activo',       obligatorio: false, validar: v => booleano(v, 'Activo') },
+    orden:         { etiqueta: 'Orden',        obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  ofertas: {
+    cargo:             { etiqueta: 'Cargo',             obligatorio: true,  validar: v => texto(v, { etiqueta: 'Cargo', min: 3, max: 160 }) },
+    empresa:           { etiqueta: 'Empresa',           obligatorio: true,  validar: v => texto(v, { etiqueta: 'Empresa', min: 2, max: 120 }) },
+    ubicacion:         { etiqueta: 'Ubicación',         obligatorio: false, validar: v => texto(v, { etiqueta: 'Ubicación', max: 120 }) },
+    modalidad:         { etiqueta: 'Modalidad',         obligatorio: false, validar: v => enumerado(v, MODALIDADES_OFERTA, 'Modalidad') },
+    tipo_contrato:     { etiqueta: 'Contrato',          obligatorio: false, validar: v => enumerado(v, CONTRATOS_OFERTA, 'Contrato') },
+    salario:           { etiqueta: 'Salario',           obligatorio: false, validar: v => texto(v, { etiqueta: 'Salario', max: 80 }) },
+    vacantes:          { etiqueta: 'Vacantes',          obligatorio: false, validar: v => entero(v, { etiqueta: 'Vacantes', min: 1, max: 999 }) },
+    descripcion:       { etiqueta: 'Descripción',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 4000 }) },
+    responsabilidades: { etiqueta: 'Responsabilidades', obligatorio: false, validar: v => texto(v, { etiqueta: 'Responsabilidades', max: 4000 }) },
+    requisitos:        { etiqueta: 'Requisitos',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Requisitos', max: 4000 }) },
+    beneficios:        { etiqueta: 'Beneficios',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Beneficios', max: 4000 }) },
+    contacto_email:    { etiqueta: 'Correo de contacto', obligatorio: false, validar: v => correo(v, 'Correo de contacto') },
+    url_externa:       { etiqueta: 'Portal externo',    obligatorio: false, validar: v => rutaOUrl(v, 'Portal externo') },
+    fecha_publicacion: { etiqueta: 'Publicación',       obligatorio: false, validar: v => fechaISO(v, 'Publicación') },
+    fecha_cierre:      { etiqueta: 'Cierre',            obligatorio: false, validar: v => fechaISO(v, 'Cierre') },
+    estado:            { etiqueta: 'Estado',            obligatorio: false, validar: v => enumerado(v, ESTADOS_OFERTA, 'Estado') },
+    tags:              {
+      etiqueta: 'Tecnologías', obligatorio: false,
+      validar: v => {
+        if (v === undefined || v === null) return null
+        if (!Array.isArray(v)) return 'Tecnologías debe ser una lista'
+        if (v.length > 20) return 'Tecnologías no puede pasar de 20 elementos'
+        if (v.some(t => typeof t !== 'string' || t.trim() === '')) return 'Las tecnologías no pueden estar vacías'
+        if (v.some(t => t.length > 40)) return 'Cada tecnología debe caber en 40 caracteres'
+        return null
+      },
+    },
+  },
+
+  /* Lo que llena quien aplica a una vacante. Aquí sí se exige lo mínimo para
+     poder responderle: sin correo la postulación no le sirve a nadie. */
+  postulaciones: {
+    nombre:       { etiqueta: 'Nombre',       obligatorio: true,  validar: v => nombrePersona(v, 'Nombre') },
+    email:        { etiqueta: 'Correo',       obligatorio: true,  validar: v => correo(v, 'Correo') },
+    documento:    { etiqueta: 'Documento',    obligatorio: false, validar: v => documentoIdentidad(v) },
+    telefono:     { etiqueta: 'Celular',      obligatorio: false, validar: v => telefono(v, 'Celular') },
+    anio_grado:   { etiqueta: 'Año de grado', obligatorio: false, validar: v => anioGrado(v) },
+    linkedin_url: { etiqueta: 'LinkedIn',     obligatorio: false, validar: v => rutaOUrl(v, 'LinkedIn') },
+    mensaje:      { etiqueta: 'Mensaje',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Mensaje', max: 1500 }) },
+    estado:       { etiqueta: 'Estado',       obligatorio: false, validar: v => enumerado(v, ESTADOS_POSTULACION, 'Estado') },
+    notas:        { etiqueta: 'Notas',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Notas', max: 1000 }) },
+  },
+
+  actualizaciones: {
+    nombre:              { etiqueta: 'Nombre',       obligatorio: true,  validar: v => nombrePersona(v, 'Nombre') },
+    email:               { etiqueta: 'Correo',       obligatorio: true,  validar: v => correo(v, 'Correo') },
+    documento:           { etiqueta: 'Documento',    obligatorio: false, validar: v => documentoIdentidad(v) },
+    anio_grado:          { etiqueta: 'Año de grado', obligatorio: false, validar: v => anioGrado(v) },
+    telefono:            { etiqueta: 'Celular',      obligatorio: false, validar: v => telefono(v, 'Celular') },
+    ciudad:              { etiqueta: 'Ciudad',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Ciudad', max: 80 }) },
+    empresa:             { etiqueta: 'Empresa',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Empresa', max: 120 }) },
+    cargo:               { etiqueta: 'Cargo',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Cargo', max: 120 }) },
+    formacion_posterior: { etiqueta: 'Formación',    obligatorio: false, validar: v => enumerado(v, FORMACION_POSTERIOR, 'Formación') },
+    resumen:             { etiqueta: 'Resumen',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Resumen', max: 600 }) },
+    autoriza_datos:      { etiqueta: 'Autorización', obligatorio: false, validar: v => booleano(v, 'Autorización') },
+    atendida:            { etiqueta: 'Atendida',     obligatorio: false, validar: v => booleano(v, 'Atendida') },
+  },
+
+  /* --- Saber Pro ------------------------------------------------ */
+
+  /* Los cinco módulos son obligatorios: el global se calcula con ellos y un
+     reporte del ICFES sin alguno no es un reporte. `puntaje_global` no está
+     en el esquema a propósito, porque no se recibe: lo genera la base. */
+  saberpro: {
+    estudiante:                { etiqueta: 'Estudiante', obligatorio: true,  validar: v => nombrePersona(v, 'Estudiante') },
+    documento:                 { etiqueta: 'Documento',  obligatorio: false, validar: v => documentoIdentidad(v) },
+    registro:                  { etiqueta: 'Registro',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Registro', max: 30 }) },
+    anio:                      { etiqueta: 'Año',        obligatorio: true,  validar: v => entero(v, { etiqueta: 'Año', min: 2010, max: new Date().getFullYear() + 1 }) },
+    periodo:                   { etiqueta: 'Período',    obligatorio: false, validar: v => periodo(v) },
+    sede:                      { etiqueta: 'Sede',       obligatorio: false, validar: v => enumerado(v, SEDES, 'Sede') },
+
+    lectura_critica:           { etiqueta: 'Lectura Crítica',           obligatorio: true, validar: v => puntajeSaberPro(v, 'Lectura Crítica') },
+    razonamiento_cuantitativo: { etiqueta: 'Razonamiento Cuantitativo', obligatorio: true, validar: v => puntajeSaberPro(v, 'Razonamiento Cuantitativo') },
+    competencias_ciudadanas:   { etiqueta: 'Competencias Ciudadanas',   obligatorio: true, validar: v => puntajeSaberPro(v, 'Competencias Ciudadanas') },
+    comunicacion_escrita:      { etiqueta: 'Comunicación Escrita',      obligatorio: true, validar: v => puntajeSaberPro(v, 'Comunicación Escrita') },
+    ingles:                    { etiqueta: 'Inglés',                    obligatorio: true, validar: v => puntajeSaberPro(v, 'Inglés') },
+
+    percentil_nacional:        { etiqueta: 'Percentil nacional', obligatorio: false, validar: v => entero(v, { etiqueta: 'Percentil nacional', min: 0, max: 100 }) },
+    percentil_nbc:             { etiqueta: 'Percentil NBC',      obligatorio: false, validar: v => entero(v, { etiqueta: 'Percentil NBC', min: 0, max: 100 }) },
+    nivel_ingles:              { etiqueta: 'Nivel de inglés',    obligatorio: false, validar: v => enumerado(v, NIVELES_INGLES, 'Nivel de inglés') },
+    observaciones:             { etiqueta: 'Observaciones',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Observaciones', max: 600 }) },
+  },
+
+  infraestructura: {
+    nombre:        { etiqueta: 'Nombre',       obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 3, max: 160 }) },
+    categoria:     { etiqueta: 'Categoría',    obligatorio: false, validar: v => enumerado(v, CLAVES_INFRA, 'Categoría') },
+    descripcion:   { etiqueta: 'Descripción',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    sede:          { etiqueta: 'Sede',         obligatorio: false, validar: v => enumerado(v, SEDES_INFRA, 'Sede') },
+    ubicacion:     { etiqueta: 'Ubicación',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Ubicación', max: 160 }) },
+    cantidad:      { etiqueta: 'Cantidad',     obligatorio: false, validar: v => entero(v, { etiqueta: 'Cantidad', min: 1, max: 10000 }) },
+    capacidad:     { etiqueta: 'Puestos',      obligatorio: false, validar: v => entero(v, { etiqueta: 'Puestos', min: 1, max: 10000 }) },
+    area_m2:       { etiqueta: 'Área (m²)',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Área', min: 1, max: 1000000 }) },
+    anio:          { etiqueta: 'Año',          obligatorio: false, validar: v => entero(v, { etiqueta: 'Año', min: 1976, max: new Date().getFullYear() + 1 }) },
+    equipamiento:  { etiqueta: 'Equipamiento', obligatorio: false, validar: v => texto(v, { etiqueta: 'Equipamiento', max: 3000 }) },
+    fuente_url:    { etiqueta: 'Fuente',       obligatorio: false, validar: v => rutaOUrl(v, 'Fuente') },
+    fuente_nombre: { etiqueta: 'Nombre de la fuente', obligatorio: false, validar: v => texto(v, { etiqueta: 'Nombre de la fuente', max: 160 }) },
+    destacado:     { etiqueta: 'Destacado',    obligatorio: false, validar: v => booleano(v, 'Destacado') },
+    activo:        { etiqueta: 'Visible',      obligatorio: false, validar: v => booleano(v, 'Visible') },
+    orden:         { etiqueta: 'Orden',        obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  saberpro_parametros: {
+    puntaje_minimo:    { etiqueta: 'Puntaje mínimo',     obligatorio: true,  validar: v => puntajeSaberPro(v, 'Puntaje mínimo') },
+    percentil_minimo:  { etiqueta: 'Percentil mínimo',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Percentil mínimo', min: 0, max: 100 }) },
+    minimo_por_modulo: { etiqueta: 'Mínimo por módulo',  obligatorio: false, validar: v => puntajeSaberPro(v, 'Mínimo por módulo') },
+    norma:             { etiqueta: 'Norma',              obligatorio: false, validar: v => texto(v, { etiqueta: 'Norma', max: 200 }) },
+    vigente_desde:     { etiqueta: 'Vigente desde',      obligatorio: false, validar: v => fechaISO(v, 'Vigente desde') },
+  },
 }
 
 /* Comprobaciones que necesitan mirar más de un campo a la vez. */
@@ -465,6 +772,14 @@ export const REGLAS_CRUZADAS = {
     if (!fecha || !fecha_fin) return null
     if (fecha_fin < fecha) {
       return { campo: 'fecha_fin', mensaje: 'El evento no puede terminar antes de empezar' }
+    }
+    return null
+  },
+  ofertas(datos) {
+    const { fecha_publicacion, fecha_cierre } = datos
+    if (!fecha_publicacion || !fecha_cierre) return null
+    if (fecha_cierre < fecha_publicacion) {
+      return { campo: 'fecha_cierre', mensaje: 'El cierre no puede ser anterior a la publicación' }
     }
     return null
   },

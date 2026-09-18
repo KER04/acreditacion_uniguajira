@@ -13,6 +13,8 @@ const API = '/api'
    contra los archivos JSON, hasta que les toque su turno de migración. */
 const EN_BASE = {
   docentes:               'docentes',
+  destacados:             'egresados/destacados',
+  ofertas:                'egresados/ofertas',
   honor:                  'estudiantes/honor',
   calendario:             'estudiantes/calendario',
   modalidades_grado:      'estudiantes/modalidades',
@@ -40,8 +42,6 @@ async function apiJSON(endpoint, { method = 'GET', body } = {}) {
    completo contra un archivo JSON. Las claves de EN_BASE NO van aquí: esas
    viajan por REST elemento a elemento y listarlas otra vez solo confundiría. */
 const KEY_ENDPOINT = {
-  destacados:            'egresados/destacados',
-  ofertas:               'egresados/ofertas',
   grupos:                'investigacion/grupos',
   semilleros:            'investigacion/semilleros',
   factores:              'acreditacion/factores',
@@ -193,6 +193,85 @@ export const apiEditarEnMalla = (planMateriaId, datos) =>
 export const apiQuitarDeMalla = planMateriaId =>
   apiJSON(`pensum/plan-materia/${planMateriaId}`, { method: 'DELETE' })
 
+/* ─── Egresados ────────────────────────────────────────────────── */
+
+/* Foto redonda del egresado y fotograma del vídeo. Son la misma operación
+   contra columnas distintas, así que comparten el envío. */
+export function apiSubirFotoEgresado(egresadoId, file, campo = 'foto') {
+  const fd = new FormData()
+  fd.append('foto', file)
+  return enviarArchivo(`egresados/destacados/${egresadoId}/${campo}`, fd)
+}
+
+export async function apiBorrarFotoEgresado(egresadoId, campo = 'foto') {
+  const res = await fetch(`${API}/egresados/destacados/${egresadoId}/${campo}`, {
+    method: 'DELETE',
+    credentials: 'include',
+  })
+  const cuerpo = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(cuerpo.error ?? 'No se pudo quitar la imagen')
+  return cuerpo
+}
+
+/* Ficha de una vacante. La pide la página propia de la oferta, que se abre en
+   su pestaña y no puede depender del estado cargado en la otra. */
+export const apiOferta = id => apiJSON(`egresados/ofertas/${id}`)
+
+/* Postularse. Va como multipart porque puede traer la hoja de vida adjunta.
+   No exige sesión: quien aplica es alguien de fuera. */
+export function apiPostular(ofertaId, datos, hojaVida) {
+  const fd = new FormData()
+  for (const [k, v] of Object.entries(datos)) if (v !== undefined && v !== null) fd.append(k, v)
+  if (hojaVida) fd.append('hoja_vida', hojaVida)
+  return enviarArchivo(`egresados/ofertas/${ofertaId}/postulaciones`, fd)
+}
+
+export const apiActualizarDatos = datos =>
+  apiJSON('egresados/actualizaciones', { method: 'POST', body: datos })
+
+/* Las dos bandejas del panel: datos personales, solo para administradores. */
+export const apiPostulaciones = ofertaId =>
+  apiJSON('egresados/postulaciones' + (ofertaId ? `?oferta=${ofertaId}` : ''))
+
+export const apiEstadoPostulacion = (id, cambios) =>
+  apiJSON(`egresados/postulaciones/${id}`, { method: 'PATCH', body: cambios })
+
+export const apiBorrarPostulacion = id =>
+  apiJSON(`egresados/postulaciones/${id}`, { method: 'DELETE' })
+
+export const apiActualizaciones = () => apiJSON('egresados/actualizaciones')
+
+export const apiMarcarActualizacion = (id, atendida) =>
+  apiJSON(`egresados/actualizaciones/${id}`, { method: 'PATCH', body: { atendida } })
+
+export const apiBorrarActualizacion = id =>
+  apiJSON(`egresados/actualizaciones/${id}`, { method: 'DELETE' })
+
+/* ─── Infraestructura tecnológica ──────────────────────────────── */
+
+/* Contenido institucional publico; el listado del panel incluye los ocultos. */
+export const apiInfraestructura = () => apiJSON('infraestructura')
+export const apiInfraRecursos = () => apiJSON('infraestructura/recursos')
+export const apiInfraCrear = datos => apiJSON('infraestructura/recursos', { method: 'POST', body: datos })
+export const apiInfraEditar = (id, datos) => apiJSON(`infraestructura/recursos/${id}`, { method: 'PATCH', body: datos })
+export const apiInfraBorrar = id => apiJSON(`infraestructura/recursos/${id}`, { method: 'DELETE' })
+
+/* ─── Saber Pro ────────────────────────────────────────────────── */
+
+/* La página pide sus propios datos: el módulo no entra en /api/all para no
+   engordar la carga inicial de todo el sitio con agregados que solo usa él. */
+export const apiSaberPro = anio => apiJSON('saberpro' + (anio ? `?anio=${anio}` : ''))
+
+/* Listado fila a fila, con documento y registro del ICFES: solo panel. */
+export const apiSaberProResultados = () => apiJSON('saberpro/resultados')
+export const apiSaberProCrear = datos => apiJSON('saberpro/resultados', { method: 'POST', body: datos })
+export const apiSaberProEditar = (id, datos) => apiJSON(`saberpro/resultados/${id}`, { method: 'PATCH', body: datos })
+export const apiSaberProBorrar = id => apiJSON(`saberpro/resultados/${id}`, { method: 'DELETE' })
+
+export const apiSaberProParametros = () => apiJSON('saberpro/parametros')
+export const apiSaberProGuardarParametros = datos =>
+  apiJSON('saberpro/parametros', { method: 'PATCH', body: datos })
+
 export async function apiUpload(tipo, file, extra = {}) {
   const fd = new FormData()
   fd.append('archivo', file)
@@ -220,18 +299,11 @@ const INITIAL = {
      una lista de ejemplo con la forma vieja (n, r, a, e...), que reventaba la
      vista pública en el primer render, antes de que respondiera la API. */
   docentes: [],
-  ofertas: [
-    { id: 1, emp: 'Cluster TIC Caribe', p: 'Desarrollador(a) Full-stack Jr.', loc: 'Barranquilla · Híbrido', tipo: 'Tiempo completo', s: '$3.2M – $4.5M', t: ['React','Node','Postgres'], url: '', fecha: 'Abr 2026' },
-    { id: 2, emp: 'Ecopetrol Digital', p: 'Analista de datos', loc: 'Bogotá · Presencial', tipo: 'Tiempo completo', s: '$4.0M – $5.5M', t: ['Python','SQL','PowerBI'], url: '', fecha: 'Abr 2026' },
-    { id: 3, emp: 'TejerData SAS', p: 'Ingeniero(a) DevOps', loc: 'Riohacha · Remoto', tipo: 'Tiempo completo', s: '$5.0M – $7.0M', t: ['AWS','K8s','CI/CD'], url: '', fecha: 'Mar 2026' },
-  ],
-  destacados: [
-    { id: 1, n: 'Diana Cotes Ramírez', y: '2018', r: 'Head of Data', c: 'Grupo Éxito', ciudad: 'Bogotá', color: 'var(--ug-azul)', q: 'Estudié aquí, pero el mundo cabe en La Guajira. Solo hay que saber mirarlo.', foto_url: '', sede: 'riohacha' },
-    { id: 2, n: 'Luis Enrique Ariza', y: '2015', r: 'Senior SWE', c: 'Globant', ciudad: 'Medellín', color: 'var(--ug-amarillo)', q: 'La ingeniería te da el método; La Guajira te da el alma.', foto_url: '', sede: 'riohacha' },
-    { id: 3, n: 'Nayely Epieyú Pushaina', y: '2020', r: 'CTO & Co-founder', c: 'TejerData SAS', ciudad: 'Riohacha', color: 'var(--ug-flamingo)', q: 'Volví para fundar una empresa donde mis tías wayuu venden por internet.', foto_url: '', sede: 'riohacha' },
-    { id: 4, n: 'Samuel Palmar Iguarán', y: '2012', r: 'Security Architect', c: 'BBVA Digital', ciudad: 'Ciudad de México', color: 'var(--ug-azul)', q: 'Ningún framework me enseñó tanto como sustentar una tesis frente a mis profesores.', foto_url: '', sede: 'maicao' },
-    { id: 5, n: 'Carolina Brito Solano', y: '2019', r: 'PhD Researcher', c: 'MIT Media Lab', ciudad: 'Cambridge, MA', color: 'var(--ug-flamingo)', q: 'Hago investigación en interfaces culturalmente situadas. Mi pregrado me dio ese marco.', foto_url: '', sede: 'riohacha' },
-  ],
+  /* Viven en PostgreSQL (migración 009): se llenan al hidratar desde /api/all.
+     Antes había aquí cinco egresados y tres vacantes de ejemplo, y un visitante
+     con el caché vacío y el backend caído los veía como contenido real. */
+  ofertas: [],
+  destacados: [],
   grupos: [
     { id: 1, nombre: 'GITUG', cat: 'A1', lider: 'Dr. Héctor Brito Mendoza', sede: 'riohacha', desc: 'Grupo de Investigación en TIC de La Guajira. Énfasis en ciberseguridad, redes y sistemas embebidos.', foto_url: '' },
     { id: 2, nombre: 'WayuuLab', cat: 'B', lider: 'Dra. Luz Marina Ipuana', sede: 'riohacha', desc: 'Laboratorio de innovación social y cultural digital. Diseño de tecnologías situadas culturalmente.', foto_url: '' },
@@ -314,10 +386,14 @@ const INITIAL = {
   eventos: [],
 }
 
-/* ─── localStorage fallback ────────────────────────────────────── */
+/* ─── localStorage fallback ──────────────────────────────────────
+   La clave lleva versión y sube cuando cambia la FORMA de los datos, no su
+   contenido: al migrar egresados (009) las claves de una letra —n, y, r, c—
+   pasaron a nombre, anio_grado, cargo y empresa, y un visitante con el caché
+   viejo habría visto la red de egresados con todos los nombres en blanco. */
 function loadState() {
   try {
-    const s = localStorage.getItem('uniguajira_data_v8')
+    const s = localStorage.getItem('uniguajira_data_v9')
     if (!s) return INITIAL
     const saved = JSON.parse(s)
     return {
@@ -372,7 +448,7 @@ export function DataProvider({ children }) {
 
   /* Persist to localStorage on every change */
   useEffect(() => {
-    try { localStorage.setItem('uniguajira_data_v8', JSON.stringify(data)) } catch {}
+    try { localStorage.setItem('uniguajira_data_v9', JSON.stringify(data)) } catch {}
   }, [data])
 
   /* Espejo del estado para poder calcular el "siguiente" arreglo sin meter

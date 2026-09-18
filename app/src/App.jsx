@@ -15,6 +15,9 @@ import Noticias from './pages/Noticias'
 import Estudiantes from './pages/comunidad/Estudiantes'
 import Docentes from './pages/comunidad/Docentes'
 import Egresados from './pages/comunidad/Egresados'
+import Vacante from './pages/comunidad/Vacante'
+import SaberPro from './pages/comunidad/SaberPro'
+import Infraestructura from './pages/programa/Infraestructura'
 
 import Investigacion from './pages/misionales/Investigacion'
 import Extension from './pages/misionales/Extension'
@@ -71,13 +74,16 @@ export default function App() {
         <Route path="/pensum" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Pensum /></Shell>} />
         <Route path="/pensum-propuesto" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PensumPropuesto /></Shell>} />
         <Route path="/resoluciones" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Resoluciones /></Shell>} />
+        <Route path="/infraestructura" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Infraestructura /></Shell>} />
         <Route path="/contacto" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Contacto /></Shell>} />
         <Route path="/acreditacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Acreditacion /></Shell>} />
         <Route path="/noticias" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Noticias /></Shell>} />
 
         <Route path="/estudiantes" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Estudiantes /></Shell>} />
+        <Route path="/saber-pro" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><SaberPro /></Shell>} />
         <Route path="/docentes" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Docentes /></Shell>} />
         <Route path="/egresados" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Egresados /></Shell>} />
+        <Route path="/egresados/vacante/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Vacante /></Shell>} />
 
         <Route path="/investigacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Investigacion /></Shell>} />
         <Route path="/extension" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Extension /></Shell>} />

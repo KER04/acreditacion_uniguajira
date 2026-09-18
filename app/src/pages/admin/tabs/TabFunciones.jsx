@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { usePestana } from '../../../hooks/useParametroURL'
 import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
@@ -6,15 +7,17 @@ import RowActions from '../RowActions'
 const SEDES = [['riohacha','Riohacha'],['maicao','Maicao']]
 const CATS_GRUPO = ['A1','A','B','C','Reconocido']
 
+const SUBPESTANAS = [['grupos', 'Grupos de investigación'], ['semilleros', 'Semilleros']]
+
 export default function TabFunciones() {
   const { data, addItem, removeItem, updateItem } = useData()
-  const [tab, setTab] = useState('grupos')
+  const [tab, setTab] = usePestana(SUBPESTANAS, { clave: 'sub' })
 
   return (
     <div>
       <h3 style={{ marginBottom: 16 }}>Funciones Misionales</h3>
       <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {[['grupos','Grupos de investigación'],['semilleros','Semilleros']].map(([k,l]) => (
+        {SUBPESTANAS.map(([k,l]) => (
           <button key={k} className="chip" onClick={() => setTab(k)}
             style={{ cursor: 'pointer', background: tab===k ? 'var(--ink)' : undefined, color: tab===k ? 'var(--paper)' : undefined }}>{l}</button>
         ))}

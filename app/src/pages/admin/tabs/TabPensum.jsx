@@ -21,6 +21,7 @@ import {
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
 import { AREAS_MATERIA, CAMPOS_MATERIA } from '../../../../shared/validacion'
+import { usePestana } from '../../../hooks/useParametroURL'
 
 const MATERIA_VACIA = { nombre: '', codigo: '', area: AREAS_MATERIA[0], campo: CAMPOS_MATERIA[0] }
 const EN_MALLA_VACIA = { materia_id: '', creditos: 3, horas_semana: 4 }
@@ -31,7 +32,7 @@ export default function TabPensum() {
   const info = data.pensum_info
   const planId = info?.plan?.id
 
-  const [vista, setVista] = useState('malla')
+  const [vista, setVista] = usePestana(['malla', 'catalogo'], { clave: 'sub' })
   const [semestre, setSemestre] = useState(1)
   const [catalogo, setCatalogo] = useState([])
   const [libres, setLibres] = useState([])

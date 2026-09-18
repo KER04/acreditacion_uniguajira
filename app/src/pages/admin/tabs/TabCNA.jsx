@@ -3,6 +3,7 @@ import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import { statusFromScore, STATUS_LABELS, STATUS_COLOR, judgmentFromScore } from '../../../data/acreditacion'
 import FileUpload from '../FileUpload'
+import { usePestana } from '../../../hooks/useParametroURL'
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 const SEDES_OPT = [['riohacha','Riohacha'],['maicao','Maicao'],['ambas','Ambas']]
@@ -769,7 +770,7 @@ const VIEWS = [
 
 export default function TabCNA() {
   const { data, update } = useData()
-  const [view, setView] = useState('factores')
+  const [view, setView] = usePestana(VIEWS, { clave: 'sub' })
 
   const factores = (data.factores ?? []).map(f => ({
     ...f,

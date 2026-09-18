@@ -3,12 +3,14 @@
    Usa exactamente el mismo esquema que valida la API (shared/validacion.js),
    así que el panel nunca deja enviar algo que el servidor vaya a rechazar.
 
-   Vivía dentro de TabEstudiantes; se sacó aquí cuando Docentes necesitó lo
-   mismo, para que ambas pestañas se comporten igual y no haya dos copias que
-   se vayan separando con el tiempo. */
+   Vivía dentro de TabEstudiantes; se sacó a un archivo propio cuando Docentes
+   necesitó lo mismo, y de `pages/admin/` a `components/` cuando lo necesitaron
+   los formularios PÚBLICOS de egresados —postularse y actualizar datos—, que
+   hasta entonces solo validaba el servidor: el visitante escribía números en
+   el nombre o letras en el celular y no se enteraba hasta enviar. */
 import { useState } from 'react'
-import { Icons } from '../../components/Icons'
-import { validar, hayErrores, ESQUEMAS } from '../../../shared/validacion'
+import { Icons } from './Icons'
+import { validar, hayErrores, ESQUEMAS } from '../../shared/validacion'
 
 export function useFormulario(recurso, vacio, normalizar = x => x) {
   const [valores, setValores] = useState(vacio)

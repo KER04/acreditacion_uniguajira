@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { usePestana } from '../../../hooks/useParametroURL'
 import {
   useData, apiSubirDocumento,
   apiSubirFotoHonor, apiBorrarFotoHonor,
@@ -6,7 +7,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
-import { useFormulario, Campo, Acciones } from '../formulario'
+import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   validar, hayErrores, ESQUEMAS, ordinalSemestre,
   SEDES, SEDES_CON_AMBAS, TIPOS_CALENDARIO, TIPOS_DOCUMENTO, GRUPOS_DOCUMENTO,
@@ -31,9 +32,18 @@ const fila = {
   borderBottom: '1px solid var(--borde)',
 }
 
+/* Fuera del componente: la lista es la misma que valida el parámetro de la
+   URL, así que no puede vivir dentro del JSX. */
+const SUBPESTANAS = [
+  ['honor', 'Cuadro de honor'],
+  ['calendario', 'Calendario'],
+  ['modalidades', 'Modalidades de grado'],
+  ['documentos', 'Documentos'],
+]
+
 export default function TabEstudiantes() {
   const { data, addItem, removeItem, updateItem, recargar } = useData()
-  const [tab, setTab] = useState('honor')
+  const [tab, setTab] = usePestana(SUBPESTANAS, { clave: 'sub' })
   const props = { data, addItem, removeItem, updateItem, recargar }
 
   return (
@@ -46,7 +56,7 @@ export default function TabEstudiantes() {
         su foto de perfil</b>; con «Ver documentos» se adjuntan sus archivos propios.
       </p>
       <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {[['honor', 'Cuadro de honor'], ['calendario', 'Calendario'], ['modalidades', 'Modalidades de grado'], ['documentos', 'Documentos']].map(([k, l]) => (
+        {SUBPESTANAS.map(([k, l]) => (
           <button key={k} className="chip" onClick={() => setTab(k)}
             style={{ cursor: 'pointer', background: tab === k ? 'var(--ink)' : undefined, color: tab === k ? 'var(--paper)' : undefined }}>{l}</button>
         ))}

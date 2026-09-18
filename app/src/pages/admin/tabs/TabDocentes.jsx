@@ -4,7 +4,8 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
-import { useFormulario, Campo, Acciones } from '../formulario'
+import SelectorAnio from '../../../components/SelectorAnio'
+import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   validar, hayErrores,
   SEDES, VINCULACIONES, ETIQUETA_VINCULACION,
@@ -87,8 +88,8 @@ function EditorFormacion({ titulos, onCambiar }) {
                      placeholder="Universidad del Norte" autoComplete="off" />
             </Campo>
             <Campo etiqueta={i === 0 ? 'Año' : ''} error={t.anio ? errores.anio : undefined}>
-              <input type="number" value={t.anio} onChange={e => cambiar(i, 'anio', e.target.value)}
-                     min={ANIO_FORMACION_MIN} max={ANIO_FORMACION_MAX} placeholder="2015" />
+              <SelectorAnio valor={t.anio} desde={ANIO_FORMACION_MIN} hasta={ANIO_FORMACION_MAX}
+                            onChange={v => cambiar(i, 'anio', v)} />
             </Campo>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', paddingBottom: 4 }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, whiteSpace: 'nowrap' }}>

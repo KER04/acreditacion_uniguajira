@@ -1125,3 +1125,1729 @@
   border-color: var(--ug-azul);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--ug-azul) 20%, transparent);
 }
+
+/* ---------------------------------------------------------------------------
+   FICHA PÚBLICA DEL CUADRO DE HONOR
+   El modal era una tarjeta blanca con los datos en fila. Ahora repite los
+   recursos que ya usa el sitio institucional: la franja tejida wayuu del pie,
+   el teal profundo del encabezado de uniguajira.edu.co y el color del puesto
+   que ya bordea las tarjetas del podio. Ese color llega por --puesto.
+--------------------------------------------------------------------------- */
+.ficha-est__fondo {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(3, 9, 15, .62);
+  display: grid; place-items: center;
+  padding: 20px;
+}
+
+.ficha-est {
+  --puesto: var(--accent);
+  width: 100%;
+  max-width: 560px;
+  max-height: 86vh;
+  /* En X recorta (para que la banda respete las esquinas), en Y desplaza. */
+  overflow: hidden auto;
+  background: var(--paper-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: ficha-est-entra .22s ease-out;
+}
+@keyframes ficha-est-entra {
+  from { opacity: 0; transform: translateY(12px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ficha-est { animation: none; } }
+
+.ficha-est__banda {
+  position: relative;
+  padding: 34px 26px 0;
+  text-align: center;
+  color: #ffffff;
+  background: linear-gradient(155deg, var(--ug-marino-soft) 0%, var(--ug-marino) 45%, var(--ug-marino-2) 100%);
+}
+/* La misma cinta tejida que abre el pie de página. */
+.ficha-est__banda::before {
+  content: "";
+  position: absolute; inset: 0 0 auto 0; height: 8px; z-index: 2;
+  background-image: var(--wayuu-url);
+  background-size: 56px 8px;
+  background-repeat: repeat-x;
+}
+
+.ficha-est__cerrar {
+  position: absolute; top: 16px; right: 16px;
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .10);
+  color: #ffffff;
+  transition: background .15s ease, border-color .15s ease;
+}
+.ficha-est__cerrar:hover { background: rgba(255, 255, 255, .22); border-color: rgba(255, 255, 255, .5); }
+
+.ficha-est__eyebrow,
+.ficha-est__medalla { position: relative; z-index: 1; }
+
+.ficha-est__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .72);
+}
+
+.ficha-est__medalla {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 12px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  background: rgba(255, 255, 255, .12);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.ficha-est__medalla svg { color: var(--puesto); }
+
+/* El retrato monta sobre el borde inferior de la banda: dos anillos, uno del
+   papel para separarlo del teal y otro del color del puesto. */
+.ficha-est__retrato {
+  width: fit-content;
+  margin: 24px auto -56px;
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--paper-2);
+  box-shadow: 0 0 0 3px var(--puesto), var(--shadow);
+}
+
+.ficha-est__cuerpo {
+  padding: 68px 26px 28px;
+  text-align: center;
+}
+
+.ficha-est__nombre {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3.2vw, 25px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--ink);
+}
+.ficha-est__promedio {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 7vw, 46px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  margin-top: 8px;
+  color: var(--puesto);
+}
+
+.ficha-est__datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 22px;
+}
+.ficha-est__dato {
+  padding: 12px 8px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.ficha-est__dato-valor { font-size: 14.5px; font-weight: 500; margin-top: 4px; color: var(--ink); }
+
+.ficha-est__docs {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borde);
+  text-align: left;
+}
+.ficha-est__docs-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 14px;
+}
+.ficha-est__conteo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--paper);
+  color: var(--ink-3);
+}
+.ficha-est__nota { font-size: 13px; color: var(--ink-3); }
+
+.ficha-est__vacio {
+  display: flex; align-items: center; gap: 10px;
+  padding: 18px;
+  border: 1px dashed color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.ficha-est__vacio svg { flex: none; color: var(--ink-muted); }
+
+/* Toda la fila descarga: antes solo lo hacía el botón del extremo. */
+.ficha-est__doc {
+  display: grid;
+  grid-template-columns: 38px 1fr 34px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: var(--paper);
+  text-decoration: none;
+  transition: border-color .15s ease, transform .15s ease, box-shadow .2s ease;
+}
+.ficha-est__doc:hover {
+  border-color: var(--puesto);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.ficha-est__doc-tipo {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 9px;
+  border: 1px solid var(--borde);
+  background: var(--paper-2);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.ficha-est__doc-texto { display: grid; min-width: 0; }
+.ficha-est__doc-nombre { font-size: 14px; font-weight: 500; color: var(--ink); }
+.ficha-est__doc-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+}
+.ficha-est__doc-baja {
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--paper-2);
+  color: var(--ink-3);
+  transition: color .15s ease, border-color .15s ease;
+}
+.ficha-est__doc:hover .ficha-est__doc-baja { color: var(--puesto); border-color: var(--puesto); }
+
+.ficha-est :is(a, button):focus-visible { outline: 2px solid var(--puesto); outline-offset: 2px; border-radius: 10px; }
+
+@media (max-width: 460px) {
+  .ficha-est__cuerpo { padding: 62px 18px 24px; }
+  .ficha-est__datos { grid-template-columns: 1fr 1fr; }
+  .ficha-est__dato:first-child { grid-column: span 2; }
+}
+
+/* ---------------------------------------------------------------------------
+   EGRESADOS — tarjeta con vídeo, bolsa de empleo y formularios
+   Mismos recursos que el resto del sitio institucional: el teal del
+   encabezado, la cinta tejida del pie, el ámbar para lo urgente y la
+   terracota para lo cerrado. El color de cada egresado entra por --tono.
+--------------------------------------------------------------------------- */
+
+/* --- Marco del vídeo (fachada: póster primero, reproductor después) ------- */
+.video-eg {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--ug-marino-2);
+  isolation: isolate;
+}
+.video-eg__poster,
+.video-eg__medio {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  z-index: 0;
+}
+/* Un iframe de 16:9 metido en una caja de otra proporción deja franjas negras.
+   width/height en auto con las dos medidas mínimas al 100% y la proporción
+   fijada da el equivalente a object-fit: cover, que en un iframe no funciona.
+   Se mide contra la propia tarjeta; con unidades de viewport el encuadre se
+   descolocaba en cuanto la ventana no tenía la proporción de la caja. */
+.video-eg__medio {
+  /* `inset` PRIMERO y top/left después. Al revés —que es como estaba— el
+     shorthand `inset: auto` pisaba el top y el left que acababan de ponerse,
+     el iframe perdía el centrado y el vídeo se veía corrido hacia un lado con
+     una caja negra al aire. */
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+/* El <video> sí entiende object-fit, así que no necesita el rodeo. */
+video.video-eg__medio {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+.video-eg__velo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(1, 72, 80, .18) 0%, rgba(1, 72, 80, .55) 48%, rgba(1, 45, 50, .88) 100%),
+    linear-gradient(90deg, rgba(3, 9, 15, .5) 0%, transparent 62%);
+}
+.video-eg__play {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  margin: auto;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background: rgba(3, 9, 15, .5);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+.video-eg__play:hover { background: rgba(3, 9, 15, .7); border-color: #ffffff; }
+/* Barra de controles, arriba a la derecha. El sonido y el enlace a la fuente
+   comparten fila para no dejar dos islas sueltas sobre el fotograma. */
+.video-eg__barra {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.video-eg__fuente,
+.video-eg__sonido {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(3, 9, 15, .48);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  backdrop-filter: blur(3px);
+  transition: background .15s ease, border-color .15s ease;
+}
+.video-eg__fuente:hover,
+.video-eg__sonido:hover { background: rgba(3, 9, 15, .72); border-color: rgba(255, 255, 255, .55); }
+
+/* Con el sonido puesto el botón se marca en ámbar: de un vistazo se sabe cuál
+   de las tarjetas de la página es la que está sonando. */
+.video-eg__sonido[aria-pressed="true"] {
+  background: var(--ug-amarillo);
+  border-color: var(--ug-amarillo);
+  color: var(--ug-negro);
+}
+.video-eg__sonido[aria-pressed="true"]:hover { background: var(--ug-amarillo-deep); border-color: var(--ug-amarillo-deep); }
+.video-eg__sonido svg { flex: none; }
+
+/* En pantallas estrechas el texto sobra: el icono ya lo dice y la fila cabe. */
+@media (max-width: 560px) {
+  .video-eg__sonido span { display: none; }
+  .video-eg__sonido { padding: 9px; }
+}
+
+/* --- Egresado protagonista ------------------------------------------------ */
+.eg-hero {
+  min-height: clamp(360px, 46vw, 520px);
+  display: flex;
+  align-items: flex-end;
+  /* La cinta tejida del pie, también aquí: ata la tarjeta a la marca aunque
+     el fotograma del vídeo sea cualquier cosa. */
+  box-shadow: inset 0 8px 0 0 transparent;
+}
+.eg-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 8px;
+  z-index: 2;
+  /* Con el fondo transparente los rombos quedaban flotando sueltos sobre el
+     fotograma y no se leían como una cinta. El teal profundo se la devuelve. */
+  background-color: var(--ug-marino-2);
+  background-image: var(--wayuu-url);
+  background-size: 56px 8px;
+  background-repeat: repeat-x;
+}
+.eg-hero__contenido {
+  position: relative;
+  z-index: 2;
+  padding: clamp(24px, 4vw, 44px);
+  padding-right: clamp(24px, 14vw, 190px);
+  color: #ffffff;
+  max-width: 62ch;
+}
+.eg-hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .78);
+}
+.eg-hero__nombre {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4.2vw, 44px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.08;
+  margin: 12px 0 0;
+  color: #ffffff;
+}
+.eg-hero__cargo {
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 600;
+  margin-top: 10px;
+  color: var(--tono, var(--ug-amarillo));
+  /* El tono puede ser un teal oscuro sobre un fondo ya oscuro: el filtro lo
+     aclara sin tener que declarar una variante clara de cada color. */
+  filter: brightness(1.5) saturate(1.1);
+}
+.eg-hero__donde { font-size: 14px; color: rgba(255, 255, 255, .84); margin-top: 4px; }
+.eg-hero__cita {
+  margin: 18px 0 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--tono, var(--ug-amarillo));
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-style: italic;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .92);
+}
+/* El círculo de la esquina, montado sobre el vídeo. */
+.eg-hero__retrato {
+  position: absolute;
+  z-index: 3;
+  right: clamp(20px, 3vw, 36px);
+  bottom: clamp(20px, 3vw, 36px);
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--paper-2);
+  box-shadow: 0 0 0 3px var(--tono, var(--ug-amarillo)), var(--shadow-lg);
+}
+@media (max-width: 720px) {
+  .eg-hero { min-height: 0; }
+  .eg-hero__contenido { padding-right: clamp(24px, 4vw, 44px); padding-bottom: 96px; }
+  .eg-hero__retrato { right: auto; left: clamp(20px, 4vw, 44px); bottom: 20px; }
+  .eg-hero__retrato > * { width: 76px !important; height: 76px !important; }
+}
+
+/* --- Rejilla del resto ---------------------------------------------------- */
+.eg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.eg-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-2);
+  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.eg-card:hover {
+  border-color: var(--tono, var(--accent));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.eg-card__cabecera {
+  position: relative;
+  height: 108px;
+  background: var(--tono, var(--ug-azul));
+  overflow: hidden;
+}
+.eg-card__promo {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  left: 16px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ug-negro);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.eg-card__retrato {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  bottom: -32px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--paper-2);
+  box-shadow: 0 0 0 2px var(--tono, var(--ug-azul));
+}
+.eg-card__cuerpo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 46px 20px 20px;
+}
+.eg-card__nombre {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--ink);
+}
+.eg-card__cargo {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 8px;
+}
+.eg-card__donde { font-size: 14px; font-weight: 500; margin-top: 4px; color: var(--ink-2); }
+.eg-card__cita {
+  flex: 1;
+  margin: 14px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--tono, var(--ug-azul));
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.eg-card__linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ug-azul-deep);
+  text-decoration: none;
+  width: fit-content;
+}
+.eg-card__linkedin:hover { text-decoration: underline; }
+
+/* --- Bolsa de empleo ------------------------------------------------------ */
+.eg-filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+.eg-filtros .btn { padding: 9px 18px; font-size: 14px; }
+.eg-filtros__n { font-family: var(--font-mono); font-size: 11px; opacity: .75; }
+
+.eg-vacio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 26px;
+  border: 1px dashed color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: var(--radius);
+  color: var(--ink-3);
+  font-size: 14px;
+}
+.eg-vacio svg { flex: none; color: var(--ink-muted); }
+
+.eg-ofertas { display: flex; flex-direction: column; gap: 12px; }
+
+.oferta-fila {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr .9fr .9fr auto;
+  gap: 22px;
+  align-items: center;
+  padding: 20px 22px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radius);
+  background: var(--paper);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s ease, transform .15s ease, box-shadow .2s ease;
+}
+.oferta-fila:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.oferta-fila__emp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.oferta-fila__loc {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+.oferta-fila__loc svg { flex: none; color: var(--ink-muted); }
+.oferta-fila__cargo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.oferta-fila__tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.oferta-fila__tags .chip { font-size: 10px; padding: 3px 9px; }
+.oferta-fila__modo { display: flex; flex-direction: column; gap: 6px; align-items: start; }
+.oferta-fila__modo .chip { font-size: 10px; padding: 3px 9px; }
+.oferta-fila__contrato { font-size: 12px; color: var(--ink-3); }
+.oferta-fila__salario {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.oferta-fila__accion { display: flex; flex-direction: column; align-items: end; gap: 6px; }
+.oferta-fila__btn { padding: 9px 16px; font-size: 13px; white-space: nowrap; }
+.oferta-fila:hover .oferta-fila__btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ug-negro);
+}
+.oferta-fila__cerrada {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ug-flamingo-deep);
+}
+.oferta-fila__urgente {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ug-amarillo) 22%, transparent);
+  color: var(--ug-amarillo-deep);
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .oferta-fila { grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+  .oferta-fila__puesto { grid-column: 1 / -1; order: -1; }
+  .oferta-fila__accion { align-items: start; grid-column: 1 / -1; }
+}
+
+/* --- Formularios y acuses (la página y la vacante los comparten) ---------- */
+.eg-alerta {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--ug-flamingo) 45%, transparent);
+  background: color-mix(in oklab, var(--ug-flamingo) 10%, var(--paper-2));
+  color: var(--ug-flamingo-deep);
+  font-size: 13.5px;
+  margin-bottom: 18px;
+}
+
+.eg-form { background: var(--paper-2); padding: clamp(22px, 3vw, 32px); }
+.eg-form__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.eg-form__pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borde);
+}
+.eg-form__habeas {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  max-width: 55ch;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.eg-form__habeas input { margin-top: 3px; flex: none; }
+@media (max-width: 640px) { .eg-form__campos { grid-template-columns: 1fr; } }
+
+.eg-gracias,
+.vac-gracias {
+  text-align: center;
+  padding: clamp(40px, 6vw, 64px) 24px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(155deg, var(--ug-marino-soft) 0%, var(--ug-marino) 55%, var(--ug-marino-2) 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+.eg-gracias::before,
+.vac-gracias::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 8px;
+  background-image: var(--wayuu-url);
+  background-size: 56px 8px;
+  background-repeat: repeat-x;
+}
+.eg-gracias__marca,
+.vac-gracias__marca {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ug-amarillo);
+  color: var(--ug-negro);
+}
+.eg-gracias h3,
+.vac-gracias h3 { font-size: clamp(22px, 3vw, 28px); color: #ffffff; }
+.eg-gracias p,
+.vac-gracias p {
+  max-width: 48ch;
+  margin: 14px auto 0;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .9);
+}
+.eg-gracias .btn { margin-top: 26px; color: #ffffff; border-color: rgba(255, 255, 255, .45); }
+.eg-gracias .btn:hover { background: rgba(255, 255, 255, .14); }
+
+/* --- Página de la vacante ------------------------------------------------- */
+.vac-cabecera {
+  padding: clamp(36px, 6vw, 64px) var(--gutter) clamp(28px, 4vw, 44px);
+  color: #ffffff;
+  background: linear-gradient(155deg, var(--ug-marino-soft) 0%, var(--ug-marino) 45%, var(--ug-marino-2) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.vac-cabecera::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 8px;
+  background-image: var(--wayuu-url);
+  background-size: 56px 8px;
+  background-repeat: repeat-x;
+}
+.vac-cabecera .inner { max-width: var(--max-w); margin: 0 auto; }
+.vac-volver {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .78);
+  text-decoration: none;
+}
+.vac-volver:hover { color: #ffffff; }
+.vac-cabecera__estado { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.vac-pildora {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.vac-pildora--abierta { background: var(--ug-amarillo); color: var(--ug-negro); }
+.vac-pildora--cerrada { background: rgba(255, 255, 255, .16); color: #ffffff; border: 1px solid rgba(255, 255, 255, .3); }
+.vac-cabecera__plazo { font-size: 12.5px; color: rgba(255, 255, 255, .82); }
+.vac-titulo {
+  font-size: clamp(28px, 4.6vw, 52px);
+  line-height: 1.06;
+  margin: 16px 0 0;
+  color: #ffffff;
+  max-width: 24ch;
+}
+.vac-empresa { font-size: clamp(16px, 1.8vw, 19px); font-weight: 600; margin-top: 12px; color: var(--ug-amarillo); }
+.vac-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+.vac-tags .chip { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .26); color: #ffffff; }
+
+.vac-cuerpo { padding-top: clamp(36px, 5vw, 60px); }
+.vac-cuerpo__rejilla { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: clamp(28px, 4vw, 56px); align-items: start; }
+@media (max-width: 900px) { .vac-cuerpo__rejilla { grid-template-columns: 1fr; } }
+
+.vac-datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.vac-dato { padding: 14px 16px; border: 1px solid var(--borde); border-radius: 12px; background: var(--paper-2); }
+.vac-dato__etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.vac-dato__etiqueta svg { flex: none; color: var(--ink-muted); }
+.vac-dato__valor { font-size: 15px; font-weight: 500; margin-top: 6px; color: var(--ink); }
+
+.vac-bloque { margin-bottom: 34px; }
+.vac-bloque__titulo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -.01em;
+  margin: 0 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--borde);
+  color: var(--ink);
+}
+.vac-bloque__titulo svg { color: var(--accent); flex: none; }
+.vac-parrafo { font-size: 15.5px; line-height: 1.7; color: var(--ink-2); margin-bottom: 12px; }
+.vac-lista { margin: 0 0 12px; padding-left: 0; list-style: none; }
+.vac-lista li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 9px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+/* Rombo wayuu en vez de la viñeta redonda del navegador. */
+.vac-lista li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: .62em;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+.vac-contacto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-3);
+  padding-top: 18px;
+  border-top: 1px solid var(--borde);
+}
+.vac-contacto a { color: var(--ug-azul-deep); }
+
+.vac-lateral { position: sticky; top: 100px; }
+@media (max-width: 900px) { .vac-lateral { position: static; } }
+.vac-caja {
+  padding: 24px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+}
+.vac-caja__fecha { font-family: var(--font-display); font-size: 19px; margin-top: 6px; color: var(--ink); }
+.vac-caja__aviso { font-size: 13.5px; line-height: 1.55; color: var(--ink-3); margin-top: 16px; }
+.vac-caja__btn { width: 100%; justify-content: center; margin-top: 14px; }
+
+.vac-form {
+  margin-top: clamp(32px, 5vw, 56px);
+  padding: clamp(24px, 3.4vw, 40px);
+  border: 1px solid var(--borde);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  scroll-margin-top: 90px;
+}
+.vac-form__cabecera { margin-bottom: 24px; }
+.vac-form__titulo { font-size: clamp(22px, 3vw, 30px); margin-top: 10px; }
+.vac-form__nota { font-size: 14.5px; color: var(--ink-2); margin-top: 12px; max-width: 58ch; line-height: 1.6; }
+.vac-form__campos { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+@media (max-width: 640px) { .vac-form__campos { grid-template-columns: 1fr; } }
+.vac-form__enviar { margin-top: 22px; }
+
+/* El adjunto es una etiqueta entera y clicable: un input[type=file] pelado no
+   se deja dar estilo y se veía como un cuerpo extraño en el formulario. */
+.vac-cv {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  margin-top: 10px;
+  border: 1px dashed color-mix(in oklab, var(--ink) 22%, transparent);
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.vac-cv:hover { border-color: var(--accent); background: var(--accent-soft); }
+.vac-cv:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent); }
+.vac-cv__icono {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--paper-2);
+  border: 1px solid var(--borde);
+  color: var(--ink-3);
+}
+.vac-cv__texto { display: grid; min-width: 0; }
+.vac-cv__titulo { font-size: 14px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.vac-cv__meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); margin-top: 3px; }
+
+.vac-error { text-align: center; padding: clamp(40px, 8vw, 90px) 0; }
+.vac-error p { color: var(--ink-3); margin: 16px 0 28px; }
+
+/* --- Portada rotativa ----------------------------------------------------
+   El escenario agrupa la tarjeta grande con sus controles; el margen inferior
+   que tenía .eg-hero se mueve aquí, porque ahora debajo va la ronda. */
+.eg-escenario { margin-bottom: 44px; }
+
+.eg-ronda {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.eg-ronda__btn,
+.eg-ronda__pausa {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--paper-2);
+  color: var(--ink-2);
+  font-size: 20px;
+  line-height: 1;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.eg-ronda__btn:hover,
+.eg-ronda__pausa:hover { border-color: var(--accent); color: var(--accent-deep); }
+.eg-ronda__pausa svg { width: 14px; height: 14px; }
+
+/* Dos barras dibujadas con un borde: no hace falta un icono para una pausa. */
+.eg-punto__pausa {
+  display: block;
+  width: 10px;
+  height: 12px;
+  border-left: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+
+.eg-ronda__puntos { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; min-width: 0; }
+
+/* El punto lleva el nombre de pila, no solo una bolita: en una ronda de tres o
+   cuatro testimonios, un círculo anónimo no dice a quién vas a saltar. */
+.eg-punto {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--paper-2);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.eg-punto::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .45;
+}
+.eg-punto:hover { border-color: var(--accent); color: var(--ink); }
+.eg-punto.es-activo {
+  border-color: var(--ug-marino);
+  background: var(--ug-marino);
+  color: #ffffff;
+}
+.eg-punto.es-activo::before { opacity: 1; background: var(--ug-amarillo); }
+
+@media (max-width: 560px) {
+  /* En móvil solo las bolitas: cuatro nombres no caben en una fila. */
+  .eg-punto__nombre { display: none; }
+  .eg-punto { padding: 10px; }
+  .eg-punto::before { width: 8px; height: 8px; }
+}
+
+/* --- Añadidos a la tarjeta pequeña --------------------------------------- */
+
+/* Marca de que esa tarjeta es la que está ocupando la portada ahora mismo. */
+.eg-card.es-en-portada {
+  border-color: var(--tono, var(--accent));
+  box-shadow: 0 0 0 1px var(--tono, var(--accent)), var(--shadow);
+}
+
+/* Distintivo de "esta tiene vídeo", para que se entienda por qué unas entran
+   en la ronda y otras no. */
+.eg-card__video {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .4);
+  background: rgba(3, 9, 15, .45);
+  color: #ffffff;
+}
+.eg-card__video svg { width: 12px; height: 12px; }
+
+.eg-card__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borde);
+}
+/* El enlace ya vive en el pie: el margen que traía sobraba. */
+.eg-card__pie .eg-card__linkedin { margin-top: 0; }
+
+.eg-card__portada {
+  margin-left: auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  background: var(--paper);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.eg-card__portada:hover:not(:disabled) {
+  border-color: var(--tono, var(--accent));
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.eg-card__portada:disabled {
+  cursor: default;
+  border-color: var(--tono, var(--accent));
+  background: color-mix(in oklab, var(--tono, var(--accent)) 16%, transparent);
+  color: var(--ink-2);
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   POSTULACIONES DEL PANEL — color por estado y visor de la hoja de vida
+
+   Cada estado toma un color de la paleta institucional y lo publica en --sello,
+   del que cuelgan el borde, el tinte, la píldora y el selector. Así el estado
+   se ve antes de leer la tarjeta y añadir un estado nuevo es una línea, no
+   cuatro reglas repartidas.
+--------------------------------------------------------------------------- */
+.post-tarjeta,
+.post-pildora,
+.post-selector,
+.post-conteo { --sello: var(--ink-3); }
+
+/* Recibida: sin color todavía. Nadie la ha mirado y el panel no debe insinuar
+   un juicio que aún no existe. */
+[data-estado="recibida"]        { --sello: var(--ink-muted); }
+/* Revisada: el teal de la marca, el color de lo que ya está en marcha. */
+[data-estado="revisada"]        { --sello: var(--ug-azul); }
+/* Preseleccionada: el ámbar con el que el sitio destaca todo lo importante. */
+[data-estado="preseleccionada"] { --sello: var(--ug-amarillo); }
+/* Descartada: la terracota que el sitio ya usa para errores y cierres. */
+[data-estado="descartada"]      { --sello: var(--ug-flamingo); }
+
+.post-cabecera {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.post-resumen { display: flex; gap: 8px; flex-wrap: wrap; }
+.post-conteo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--sello) 45%, transparent);
+  background: color-mix(in oklab, var(--sello) 10%, var(--paper-2));
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+.post-conteo b { font-family: var(--font-display); font-size: 14px; color: var(--ink); }
+
+.post-tarjeta {
+  position: relative;
+  padding: 18px 20px 18px 24px;
+  margin-bottom: 12px;
+  border: 1px solid color-mix(in oklab, var(--sello) 30%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--sello) 6%, var(--paper-2));
+  transition: border-color .2s ease, background .2s ease;
+}
+/* La banda del costado es lo que se lee de un vistazo al recorrer la lista. */
+.post-tarjeta::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--sello);
+}
+/* Una descartada no tiene por qué pedir la misma atención que el resto. */
+.post-tarjeta[data-estado="descartada"] { opacity: .72; }
+.post-tarjeta[data-estado="descartada"]:hover { opacity: 1; }
+
+.post-tarjeta__arriba {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.post-tarjeta__quien { min-width: 0; flex: 1; }
+.post-tarjeta__nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+}
+.post-pildora {
+  padding: 3px 11px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--sello) 55%, transparent);
+  background: color-mix(in oklab, var(--sello) 18%, transparent);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.post-tarjeta__contacto { font-size: 12.5px; color: var(--ink-3); margin-top: 5px; overflow-wrap: anywhere; }
+.post-tarjeta__contacto a { color: var(--ug-azul-deep); text-decoration: none; }
+.post-tarjeta__contacto a:hover { text-decoration: underline; }
+.post-tarjeta__vacante {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+  margin-top: 8px;
+}
+.post-tarjeta__mensaje {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid color-mix(in oklab, var(--sello) 25%, transparent);
+}
+
+.post-tarjeta__acciones { display: flex; gap: 8px; align-items: start; flex-wrap: wrap; }
+.post-btn { padding: 7px 14px; font-size: 13px; }
+
+.post-selector {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--sello) 55%, transparent);
+  background: color-mix(in oklab, var(--sello) 16%, var(--paper-2));
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+}
+.post-selector:focus-visible { outline: 2px solid var(--sello); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .post-tarjeta__acciones { width: 100%; }
+  .post-tarjeta__acciones .post-selector { flex: 1; }
+}
+
+/* --- Visor de documentos -------------------------------------------------- */
+.visor__fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(3, 9, 15, .72);
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 32px);
+}
+.visor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 960px;
+  height: min(88vh, 1100px);
+  background: var(--paper-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.visor__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borde);
+  background: var(--paper);
+}
+.visor__id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.visor__ext {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  border: 1px solid var(--borde);
+  background: var(--paper-2);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.visor__texto { min-width: 0; }
+.visor__nombre { font-size: 14.5px; font-weight: 500; color: var(--ink); overflow-wrap: anywhere; }
+.visor__peso { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.visor__acciones { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.visor__btn { padding: 7px 14px; font-size: 12.5px; }
+
+/* El gris de fondo es el que ponen los lectores de PDF: así el documento no
+   parece flotar sobre el papel del panel. */
+.visor__lienzo {
+  flex: 1;
+  min-height: 0;
+  background: var(--paper-3);
+  display: grid;
+  place-items: center;
+  overflow: auto;
+}
+.visor__marco { width: 100%; height: 100%; border: 0; }
+.visor__imagen { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.visor__sinvista {
+  text-align: center;
+  padding: clamp(28px, 5vw, 56px);
+  max-width: 52ch;
+}
+.visor__sinvista svg { width: 34px; height: 34px; color: var(--ink-muted); }
+.visor__sinvista h4 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  margin: 16px 0 0;
+  color: var(--ink);
+}
+.visor__sinvista p { font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 12px 0 22px; }
+.visor__truco { font-size: 12.5px !important; color: var(--ink-3) !important; margin: 20px 0 0 !important; }
+
+/* ---------------------------------------------------------------------------
+   TRAMA DE MARCA — el fondo por defecto de quien no tiene portada
+   Tres capas alineadas al mismo paso: el emblema teselado y dos juegos de
+   líneas finas que dibujan la cuadrícula. Sin las líneas la repetición se lee
+   como un azulejo accidental; con ellas se lee como una retícula a propósito.
+--------------------------------------------------------------------------- */
+.trama-marca {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--trama-opacidad, .14);
+  background-image:
+    url("/images/marca/favicon.webp"),
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size:
+    calc(var(--trama-escala, 96px) * .52) auto,
+    var(--trama-escala, 96px) var(--trama-escala, 96px),
+    var(--trama-escala, 96px) var(--trama-escala, 96px);
+  /* El emblema va centrado en cada celda, no pegado a la esquina. */
+  background-position: center, center, center;
+  background-repeat: repeat, repeat, repeat;
+  /* Las líneas de la retícula se dibujan con currentColor; de aquí sale. */
+  color: var(--trama-color, var(--ink));
+}
+
+/* Filigrana monocroma para fondos oscuros: el emblema a todo color competiría
+   con el texto de encima en vez de quedarse detrás. */
+.trama-marca--blanco {
+  filter: brightness(0) invert(1);
+  color: #ffffff;
+  opacity: var(--trama-opacidad, .1);
+}
+
+/* --- Tarjeta del podio del cuadro de honor -------------------------------
+   Lo que antes iba en estilos en línea. Se mueve aquí porque la tarjeta ahora
+   lleva la cuadrícula del emblema de fondo, y eso exige contexto de
+   posicionamiento propio y recorte en las esquinas. */
+.honor-podio {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-2);
+  border: 2px solid var(--puesto, var(--accent));
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+}
+/* El contenido por encima de la trama: un elemento posicionado pinta sobre el
+   contenido en flujo aunque su z-index sea 0, así que hay que levantarlo. */
+.honor-podio__cuerpo { position: relative; z-index: 1; }
+
+.honor-podio:hover { border-color: var(--puesto, var(--accent)); box-shadow: var(--shadow); }
+.honor-podio:focus-visible { outline: 2px solid var(--puesto, var(--accent)); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------------------
+   SABER PRO
+   La escala del examen (0–300) es el denominador de todas las barras, así que
+   un año se puede comparar con otro de un vistazo. Cada competencia conserva
+   su color en la tabla, en el podio y en la leyenda.
+--------------------------------------------------------------------------- */
+.sp-cabecera {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(48px, 8vw, 96px) var(--gutter) clamp(36px, 5vw, 56px);
+  color: #ffffff;
+  background: linear-gradient(155deg, var(--ug-marino-soft) 0%, var(--ug-marino) 45%, var(--ug-marino-2) 100%);
+}
+.sp-cabecera::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 8px;
+  z-index: 2;
+  background-color: var(--ug-marino-2);
+  background-image: var(--wayuu-url);
+  background-size: 56px 8px;
+  background-repeat: repeat-x;
+}
+.sp-cabecera .inner { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; }
+.sp-cabecera__eyebrow { color: rgba(255, 255, 255, .74); }
+.sp-cabecera__titulo { margin-top: 14px; color: #ffffff; max-width: 20ch; }
+.sp-cabecera__texto {
+  font-size: 17px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .88);
+  margin-top: 22px;
+  max-width: 60ch;
+}
+
+.sp-cifras { display: flex; gap: clamp(20px, 4vw, 52px); flex-wrap: wrap; margin-top: 36px; }
+.sp-cifras div { display: grid; }
+.sp-cifras b {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ug-amarillo);
+}
+.sp-cifras span {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .78);
+  margin-top: 8px;
+}
+
+.sp-anios { display: flex; gap: 8px; flex-wrap: wrap; }
+.sp-anios .btn { padding: 8px 18px; font-size: 14px; }
+
+/* --- Tabla ---------------------------------------------------------------- */
+/* Una tabla con siete columnas de números no cabe en un teléfono. Desplaza en
+   horizontal ella sola, en vez de estrujar las celdas hasta lo ilegible. */
+.sp-tabla-marco {
+  overflow-x: auto;
+  border: 1px solid var(--borde);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+}
+.sp-tabla { width: 100%; border-collapse: collapse; min-width: 720px; }
+.sp-tabla th,
+.sp-tabla td { padding: 14px 16px; text-align: left; vertical-align: middle; }
+.sp-tabla thead th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--paper);
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+.sp-tabla tbody tr { border-top: 1px solid var(--borde); }
+.sp-tabla tbody tr:first-child { border-top: 0; }
+.sp-tabla tbody tr:hover { background: color-mix(in oklab, var(--accent) 5%, transparent); }
+.sp-num { text-align: right !important; }
+.sp-anio { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--ink); }
+.sp-nombre { font-weight: 500; font-size: 14.5px; color: var(--ink); white-space: nowrap; }
+.sp-extremos { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+
+.sp-global__n {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.sp-celda__n { display: block; font-size: 14px; color: var(--ink-2); line-height: 1.2; }
+
+.sp-barra {
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 9%, transparent);
+  overflow: hidden;
+  min-width: 52px;
+}
+.sp-barra i { display: block; height: 100%; border-radius: 999px; }
+
+.sp-pildora {
+  display: inline-block;
+  min-width: 46px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ug-amarillo) 22%, transparent);
+  border: 1px solid color-mix(in oklab, var(--ug-amarillo) 50%, transparent);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ink);
+}
+
+.sp-leyenda { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+.sp-leyenda__item { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-3); }
+.sp-leyenda__item i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.sp-leyenda__item b { font-family: var(--font-mono); font-size: 11px; color: var(--ink-2); }
+
+/* --- Podio de media general ----------------------------------------------- */
+.sp-podio { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
+.sp-podio__tarjeta {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 18px;
+  text-align: center;
+  border: 2px solid var(--puesto, var(--accent));
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+.sp-podio__cuerpo { position: relative; z-index: 1; }
+.sp-podio__puesto {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--puesto, var(--accent));
+  letter-spacing: -.03em;
+}
+.sp-podio__nombre { font-weight: 600; font-size: 14.5px; margin-top: 14px; line-height: 1.3; color: var(--ink); }
+.sp-podio__puntaje {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  margin-top: 12px;
+  color: var(--puesto, var(--accent));
+}
+.sp-podio__escala {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* --- Podio por competencia ------------------------------------------------ */
+.sp-competencias { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.sp-comp {
+  padding: 20px;
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--tono, var(--accent));
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+.sp-comp__titulo {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+.sp-comp__vacio { font-size: 13px; color: var(--ink-3); margin: 0; }
+.sp-comp__fila {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--borde);
+}
+.sp-comp__fila:first-of-type { border-top: 0; }
+.sp-comp__pos { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.sp-comp__nombre { font-size: 13.5px; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+.sp-comp__anio { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3); }
+.sp-comp__puntaje {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--tono, var(--accent));
+}
+
+/* --- Regla de grado ------------------------------------------------------- */
+.sp-regla {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  border: 1px solid color-mix(in oklab, var(--ug-amarillo) 45%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--ug-amarillo) 10%, var(--paper-2));
+}
+.sp-regla__icono {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ug-amarillo);
+  color: var(--ug-negro);
+}
+.sp-regla__titulo { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.sp-regla__fuente { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 5px; }
+.sp-regla__conteo { margin-left: auto; display: grid; justify-items: end; text-align: right; }
+.sp-regla__conteo b { font-family: var(--font-display); font-size: 28px; line-height: 1; color: var(--ug-amarillo-deep); }
+.sp-regla__conteo { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+@media (max-width: 560px) {
+  .sp-regla__conteo { margin-left: 0; justify-items: start; text-align: left; }
+}
+
+/* El global que el panel calcula mientras se teclea, para contrastarlo con el
+   PDF del ICFES que quien carga tiene delante. */
+.sp-admin-global {
+  display: grid;
+  justify-items: end;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--borde);
+  background: var(--paper);
+}
+.sp-admin-global b {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--ink-3);
+}
+.sp-admin-global[data-listo="true"] b { color: var(--ug-marino); }
+.sp-admin-global span {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 5px;
+}
+
+/* ---------------------------------------------------------------------------
+   INFRAESTRUCTURA TECNOLÓGICA
+   Reutiliza la cabecera de Saber Pro (.sp-cabecera, .sp-cifras): son dos
+   páginas institucionales del mismo tipo y duplicar el bloque solo abriría la
+   puerta a que se separaran con el tiempo.
+--------------------------------------------------------------------------- */
+.infra-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.infra-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.infra-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+/* Lo que la coordinación marca como destacado: el ámbar con que el sitio
+   señala lo importante en todas partes. */
+.infra-card.es-destacado {
+  border-color: color-mix(in oklab, var(--ug-amarillo) 55%, transparent);
+  box-shadow: inset 4px 0 0 0 var(--ug-amarillo);
+}
+.infra-card__cuerpo { position: relative; z-index: 1; padding: 24px; }
+
+.infra-card__cabecera { display: flex; gap: 14px; align-items: start; }
+.infra-card__icono {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  border: 1px solid var(--borde);
+  background: var(--paper);
+  color: var(--accent-deep);
+}
+.infra-card__nombre {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--ink);
+}
+.infra-card__donde {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+.infra-card__cifras {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+.infra-card__cifras div { display: grid; }
+.infra-card__cifras b {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ug-marino);
+}
+.infra-card__cifras span {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+.infra-card__texto { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); margin: 16px 0 0; }
+
+.infra-lista { margin: 14px 0 0; padding: 0; list-style: none; }
+.infra-lista li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 7px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+/* Rombo wayuu en vez de la viñeta del navegador, como en la vacante. */
+.infra-lista li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: .6em;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+.infra-card__fuente {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borde);
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+.infra-card__fuente:hover { color: var(--ug-azul-deep); text-decoration: underline; }
+.infra-card__fuente svg { flex: none; }
+
+.infra-fuentes {
+  padding: 26px;
+  border: 1px dashed color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: var(--radius);
+}
+.infra-fuentes__nota { font-size: 13.5px; color: var(--ink-3); margin: 10px 0 16px; }
+.infra-fuentes ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.infra-fuentes a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--ug-azul-deep);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.infra-fuentes a:hover { text-decoration: underline; }

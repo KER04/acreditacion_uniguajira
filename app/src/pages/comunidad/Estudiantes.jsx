@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Icons } from '../../components/Icons'
 import Portal from '../../components/Portal'
+import Retrato from '../../components/Retrato'
+import TramaMarca from '../../components/TramaMarca'
 import { useData, apiDocumentosHonor } from '../../context/DataContext'
 import { ordinalSemestre } from '../../../shared/validacion'
+import { usePestana } from '../../hooks/useParametroURL'
 
 function MiniMonth({ month, start, days, marks, legendLabel }) {
   const names = ['L','M','X','J','V','S','D']
@@ -130,29 +133,12 @@ function Calendario() {
   )
 }
 
-/* Foto de perfil o iniciales, para reutilizar en podio, tabla y ficha. */
-function Retrato({ estudiante, size, borde }) {
-  const base = {
-    width: size, height: size, borderRadius: 999, flex: 'none',
-    objectFit: 'cover', border: borde ? '2px solid ' + borde : undefined,
-  }
-  if (estudiante.foto_url) {
-    return <img src={estudiante.foto_url} alt={'Foto de ' + estudiante.nombre} loading="lazy" style={base} />
-  }
-  return (
-    <div style={{
-      ...base, display: 'grid', placeItems: 'center',
-      background: 'var(--ug-azul-soft)', color: 'var(--ug-marino)',
-      fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: size * 0.34,
-    }}>
-      {(estudiante.nombre ?? '').split(' ').filter(Boolean).slice(0, 2).map(x => x[0]).join('')}
-    </div>
-  )
-}
-
-/* Ficha que ve el visitante: foto grande, datos y documentos descargables.
-   Los documentos se piden al abrirla, no antes, para no cargar de mas. */
-function FichaPublica({ estudiante, onCerrar }) {
+/* Ficha que ve el visitante. Antes era una tarjeta blanca con los datos en
+   fila; ahora abre con la franja tejida y el teal del encabezado de
+   uniguajira.edu.co, y el retrato monta sobre la banda con el color del
+   puesto, el mismo que bordea las tarjetas del podio. Los documentos se piden
+   al abrirla, no antes, para no cargar de mas. */
+function FichaPublica({ estudiante, puesto, color, onCerrar }) {
   const [docs, setDocs] = useState(null)
   const [error, setError] = useState('')
 
@@ -171,74 +157,77 @@ function FichaPublica({ estudiante, onCerrar }) {
   }, [onCerrar])
 
   const dato = (etiqueta, valor) => (
-    <div>
+    <div className="ficha-est__dato">
       <div className="eyebrow" style={{ fontSize: 10 }}>{etiqueta}</div>
-      <div style={{ fontSize: 15, marginTop: 2 }}>{valor || '—'}</div>
+      <div className="ficha-est__dato-valor">{valor || '—'}</div>
     </div>
   )
+
+  const medalla = puesto <= 3
+    ? ['1.er lugar', '2.º lugar', '3.er lugar'][puesto - 1]
+    : 'Puesto ' + puesto
 
   return (
     <Portal>
     <div role="dialog" aria-modal="true" aria-label={'Ficha de ' + estudiante.nombre} onClick={onCerrar}
-         style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(3,9,15,.62)',
-                  display: 'grid', placeItems: 'center', padding: 20 }}>
-      <div className="card" onClick={e => e.stopPropagation()}
-           style={{ background: 'var(--paper-2)', width: '100%', maxWidth: 580, maxHeight: '86vh', overflowY: 'auto' }}>
+         className="ficha-est__fondo">
+      <div className="ficha-est" onClick={e => e.stopPropagation()} style={{ '--puesto': color }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 16 }}>
-          <div className="eyebrow">Cuadro de honor {estudiante.periodo}</div>
-          <button className="icon-btn" style={{ width: 32, height: 32 }} onClick={onCerrar} aria-label="Cerrar ficha">
+        <div className="ficha-est__banda">
+          {/* La banda hace de portada de la ficha y no lleva imagen propia:
+              la cuadrícula del emblema la sostiene en vez del teal a secas. */}
+          <TramaMarca blanco escala={104} opacidad={0.08} />
+          <button className="ficha-est__cerrar" onClick={onCerrar} aria-label="Cerrar ficha">
             <Icons.close />
           </button>
-        </div>
-
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center', marginTop: 16 }}>
-          <Retrato estudiante={estudiante} size={110} borde="var(--accent)" />
-          <div>
-            <h3 style={{ fontSize: 24 }}>{estudiante.nombre}</h3>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: 34, color: 'var(--accent-deep)', lineHeight: 1.1, marginTop: 6 }}>
-              {Number(estudiante.promedio).toFixed(2)}
-            </div>
-            <div className="eyebrow" style={{ fontSize: 10 }}>Promedio ponderado</div>
+          <div className="ficha-est__eyebrow">Cuadro de honor · Ingeniería de Sistemas</div>
+          <div className="ficha-est__medalla"><Icons.sparkle /> {medalla}</div>
+          <div className="ficha-est__retrato">
+            <Retrato persona={estudiante} size={112} />
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginTop: 22,
-                      paddingTop: 18, borderTop: '1px solid var(--borde)' }}>
-          {dato('Semestre', ordinalSemestre(estudiante.semestre))}
-          {dato('Período', estudiante.periodo)}
-          {dato('Sede', estudiante.sede === 'maicao' ? 'Maicao' : 'Riohacha')}
-        </div>
+        <div className="ficha-est__cuerpo">
+          <h3 className="ficha-est__nombre">{estudiante.nombre}</h3>
+          <div className="ficha-est__promedio">{Number(estudiante.promedio).toFixed(2)}</div>
+          <div className="eyebrow" style={{ fontSize: 10 }}>Promedio ponderado</div>
 
-        <div style={{ marginTop: 24, paddingTop: 18, borderTop: '1px solid var(--borde)' }}>
-          <div className="eyebrow" style={{ marginBottom: 12 }}>Documentos</div>
+          <div className="ficha-est__datos">
+            {dato('Semestre', ordinalSemestre(estudiante.semestre))}
+            {dato('Período', estudiante.periodo)}
+            {dato('Sede', estudiante.sede === 'maicao' ? 'Maicao' : 'Riohacha')}
+          </div>
 
-          {error && <div role="alert" className="mensaje-error">{error}</div>}
-          {docs === null && <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>Cargando documentos…</div>}
-          {docs?.length === 0 && (
-            <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>Este estudiante no tiene documentos publicados.</div>
-          )}
-
-          {docs?.map(d => (
-            <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 0',
-                                     borderBottom: '1px solid var(--borde)' }}>
-              <div style={{ width: 34, height: 34, borderRadius: 6, background: 'var(--paper)', flex: 'none',
-                            display: 'grid', placeItems: 'center', fontFamily: 'var(--font-mono)',
-                            fontSize: 10, fontWeight: 700, color: 'var(--ink-3)' }}>
-                {d.tipo}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>{d.nombre}</div>
-                <div style={{ fontSize: 11, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', letterSpacing: '.08em', marginTop: 2 }}>
-                  {[d.tipo, d.peso, d.descripcion].filter(Boolean).join(' · ')}
-                </div>
-              </div>
-              <a className="icon-btn" href={d.descarga || d.url} style={{ width: 34, height: 34, display: 'grid', placeItems: 'center' }}
-                 aria-label={'Descargar ' + d.nombre}>
-                <Icons.download />
-              </a>
+          <div className="ficha-est__docs">
+            <div className="ficha-est__docs-head">
+              <div className="eyebrow">Documentos</div>
+              {docs?.length > 0 && <span className="ficha-est__conteo">{docs.length}</span>}
             </div>
-          ))}
+
+            {error && <div role="alert" className="mensaje-error">{error}</div>}
+            {docs === null && <div className="ficha-est__nota">Cargando documentos…</div>}
+
+            {docs?.length === 0 && !error && (
+              <div className="ficha-est__vacio">
+                <Icons.archivo />
+                <span>Este estudiante todavía no tiene documentos publicados.</span>
+              </div>
+            )}
+
+            {docs?.map(d => (
+              <a key={d.id} className="ficha-est__doc" href={d.descarga || d.url}
+                 aria-label={'Descargar ' + d.nombre}>
+                <span className="ficha-est__doc-tipo">{d.tipo}</span>
+                <span className="ficha-est__doc-texto">
+                  <span className="ficha-est__doc-nombre">{d.nombre}</span>
+                  <span className="ficha-est__doc-meta">
+                    {[d.tipo, d.peso, d.descripcion].filter(Boolean).join(' · ')}
+                  </span>
+                </span>
+                <span className="ficha-est__doc-baja"><Icons.download /></span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -265,9 +254,12 @@ function Honor() {
   const rest = top.slice(3)
   const colors = ['var(--ug-amarillo)', 'var(--ug-azul)', 'var(--ug-flamingo)']
 
-  /* La ficha se abre desde el podio y desde la tabla. */
-  const abrir = e => setDetalle(e)
-  const teclaAbre = (ev, e) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); abrir(e) } }
+  /* La ficha se abre desde el podio y desde la tabla. Viaja el puesto para que
+     la ficha pueda anunciarlo y pintarse con el color que le corresponde. */
+  const abrir = (e, puesto) => setDetalle({ estudiante: e, puesto })
+  const teclaAbre = (ev, e, puesto) => {
+    if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); abrir(e, puesto) }
+  }
 
   return (
     <section className="section" style={{ paddingTop: 30 }}>
@@ -289,24 +281,31 @@ function Honor() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, marginBottom: 40 }} className="podium">
           {podium.map((e, i) => (
-            <div key={e.id ?? i} className="card" role="button" tabIndex={0}
-                 onClick={() => abrir(e)} onKeyDown={ev => teclaAbre(ev, e)}
-                 style={{ background: 'var(--paper-2)', textAlign: 'center', padding: '32px 20px',
-                          border: '2px solid ' + colors[i], cursor: 'pointer' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 72, fontWeight: 500, lineHeight: 1, color: colors[i], letterSpacing: '-0.04em' }}>
-                {i === 0 ? '1°' : i === 1 ? '2°' : '3°'}
+            /* Las medidas pasan a .honor-podio porque la tarjeta necesita
+               position/overflow propios: sin ellos la cuadrícula del emblema se
+               saldría por las esquinas redondeadas y taparía el contenido. */
+            <div key={e.id ?? i} className="card honor-podio" role="button" tabIndex={0}
+                 onClick={() => abrir(e, i + 1)} onKeyDown={ev => teclaAbre(ev, e, i + 1)}
+                 style={{ '--puesto': colors[i] }}>
+              {/* El podio no tiene portada: la cuadrícula hace de fondo por
+                  defecto y toma el color del puesto. */}
+              <TramaMarca escala={82} opacidad={0.09} tono={colors[i]} />
+              <div className="honor-podio__cuerpo">
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 72, fontWeight: 500, lineHeight: 1, color: colors[i], letterSpacing: '-0.04em' }}>
+                  {i === 0 ? '1°' : i === 1 ? '2°' : '3°'}
+                </div>
+                <div style={{ margin: '20px auto', display: 'grid', placeItems: 'center' }}>
+                  <Retrato persona={e} size={80} borde={colors[i]} />
+                </div>
+                <div style={{ fontWeight: 600, fontSize: 17 }}>{e.nombre}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--ink-3)', textTransform: 'uppercase', marginTop: 6 }}>
+                  Semestre {ordinalSemestre(e.semestre)}
+                </div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, marginTop: 14, color: colors[i] }}>
+                  {Number(e.promedio).toFixed(2)}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--accent-deep)', marginTop: 10 }}>Ver ficha</div>
               </div>
-              <div style={{ margin: '20px auto', display: 'grid', placeItems: 'center' }}>
-                <Retrato estudiante={e} size={80} borde={colors[i]} />
-              </div>
-              <div style={{ fontWeight: 600, fontSize: 17 }}>{e.nombre}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--ink-3)', textTransform: 'uppercase', marginTop: 6 }}>
-                Semestre {ordinalSemestre(e.semestre)}
-              </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, marginTop: 14, color: colors[i] }}>
-                {Number(e.promedio).toFixed(2)}
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--accent-deep)', marginTop: 10 }}>Ver ficha</div>
             </div>
           ))}
         </div>
@@ -318,12 +317,12 @@ function Honor() {
             </div>
             {rest.map((e, i) => (
               <div key={e.id ?? i} role="button" tabIndex={0}
-                   onClick={() => abrir(e)} onKeyDown={ev => teclaAbre(ev, e)}
+                   onClick={() => abrir(e, i + 4)} onKeyDown={ev => teclaAbre(ev, e, i + 4)}
                    style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 100px', padding: '16px 24px',
                             borderTop: '1px solid var(--borde)', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--ink-3)' }}>{i + 4}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontWeight: 500 }}>
-                  <Retrato estudiante={e} size={34} />
+                  <Retrato persona={e} size={34} />
                   {e.nombre}
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--ink-2)' }}>Sem {ordinalSemestre(e.semestre)}</div>
@@ -362,7 +361,13 @@ function Honor() {
         )}
       </div>
 
-      {detalle && <FichaPublica estudiante={detalle} onCerrar={() => setDetalle(null)} />}
+      {detalle && (
+        <FichaPublica
+          estudiante={detalle.estudiante}
+          puesto={detalle.puesto}
+          color={colors[detalle.puesto - 1] ?? 'var(--accent)'}
+          onCerrar={() => setDetalle(null)} />
+      )}
     </section>
   )
 }
@@ -535,9 +540,12 @@ function Docs() {
   )
 }
 
+const tabs = [{id:'calendario',l:'Calendario'},{id:'honor',l:'Cuadro de Honor'},{id:'reglamento',l:'Reglamento'},{id:'grado',l:'Opciones de grado'},{id:'docs',l:'Documentos'}]
+
 export default function Estudiantes() {
-  const [tab, setTab] = useState('calendario')
-  const tabs = [{id:'calendario',l:'Calendario'},{id:'honor',l:'Cuadro de Honor'},{id:'reglamento',l:'Reglamento'},{id:'grado',l:'Opciones de grado'},{id:'docs',l:'Documentos'}]
+  /* En la URL: recargar deja de mandar al calendario, y se puede enlazar
+     directo a una sección (#/estudiantes?seccion=honor). */
+  const [tab, setTab] = usePestana(tabs.map(t => t.id), { clave: 'seccion' })
 
   return (
     <div className="page-in">

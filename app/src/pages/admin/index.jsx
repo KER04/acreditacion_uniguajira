@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { usePestana } from '../../hooks/useParametroURL'
 import Login from './Login'
 import { useData } from '../../context/DataContext'
 import Dashboard from './Dashboard'
@@ -10,6 +11,8 @@ import TabConvocatorias from './tabs/TabConvocatorias'
 import TabDocentes from './tabs/TabDocentes'
 import TabEstudiantes from './tabs/TabEstudiantes'
 import TabEgresados from './tabs/TabEgresados'
+import TabSaberPro from './tabs/TabSaberPro'
+import TabInfraestructura from './tabs/TabInfraestructura'
 import TabFunciones from './tabs/TabFunciones'
 import TabCNA from './tabs/TabCNA'
 import TabEventos from './tabs/TabEventos'
@@ -19,12 +22,14 @@ const TABS = [
   ['inicio', 'Inicio', '◈'],
   ['programa', 'Programa', '◉'],
   ['pensum', 'Plan de estudios', '◧'],
+  ['infraestructura', 'Infraestructura', '◨'],
   ['noticias', 'Noticias', '◎'],
   ['eventos', 'Eventos', '◷'],
   ['convocatorias', 'Convocatorias', '◷'],
   ['docentes', 'Docentes', '◈'],
   ['estudiantes', 'Estudiantes', '◉'],
   ['egresados', 'Egresados', '◎'],
+  ['saberpro', 'Saber Pro', '◷'],
   ['funciones', 'Funciones misionales', '◧'],
   ['cna', 'Acreditación CNA', '◈'],
 ]
@@ -66,7 +71,9 @@ function Verificando() {
 export default function Admin() {
   const [usuario, setUsuario] = useState(null)
   const [verificando, setVerificando] = useState(true)
-  const [activeTab, setActiveTab] = useState('dashboard')
+  /* En la URL: recargar el panel ya no devuelve al dashboard, y una
+     sección concreta se puede dejar en un marcador. */
+  const [activeTab, setActiveTab] = usePestana(TABS, { clave: 'seccion' })
 
   /* La sesión vive en una cookie httpOnly, invisible para JavaScript: la única
      forma de saber si sigue abierta es preguntárselo al servidor al montar. */
@@ -124,6 +131,8 @@ export default function Admin() {
         {activeTab === 'docentes'       && <TabDocentes />}
         {activeTab === 'estudiantes'    && <TabEstudiantes />}
         {activeTab === 'egresados'      && <TabEgresados />}
+        {activeTab === 'saberpro'       && <TabSaberPro />}
+        {activeTab === 'infraestructura' && <TabInfraestructura />}
         {activeTab === 'funciones'      && <TabFunciones />}
         {activeTab === 'eventos'        && <TabEventos />}
         {activeTab === 'cna'            && <TabCNA />}

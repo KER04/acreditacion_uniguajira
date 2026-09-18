@@ -13,7 +13,9 @@ import archivos from './routes/archivos.js'
 import acreditacion from './routes/acreditacion.js'
 import docentes, { leerDocentes } from './routes/docentes.js'
 import estudiantes, { bloquesEstudiantes } from './routes/estudiantes.js'
-import egresados from './routes/egresados.js'
+import egresados, { bloquesEgresados } from './routes/egresados.js'
+import saberpro from './routes/saberpro.js'
+import infraestructura from './routes/infraestructura.js'
 import investigacion from './routes/investigacion.js'
 import extension from './routes/extension.js'
 import internacionalizacion from './routes/internacionalizacion.js'
@@ -53,6 +55,10 @@ app.use('/api/acreditacion', acreditacion)
 app.use('/api/docentes', docentes)
 app.use('/api/estudiantes', estudiantes)
 app.use('/api/egresados', egresados)
+/* Saber Pro trae su propia página y pide sus datos aparte: no entra en
+   /api/all para no engordar la carga inicial de todo el sitio. */
+app.use('/api/saberpro', saberpro)
+app.use('/api/infraestructura', infraestructura)
 app.use('/api/investigacion', investigacion)
 app.use('/api/extension', extension)
 app.use('/api/internacionalizacion', internacionalizacion)
@@ -98,7 +104,7 @@ app.get('/api/all', async (_req, res) => {
     convocatorias: () => leerConvocatorias(),   // PostgreSQL
     docentes:      () => leerDocentes(),        // PostgreSQL
     estudiantes:   () => bloquesEstudiantes(),  // PostgreSQL
-    egresados:     () => readData('egresados.json'),
+    egresados:     () => bloquesEgresados(),    // PostgreSQL
     investigacion: () => readData('investigacion.json'),
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
