@@ -17,7 +17,7 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   useData, apiMaterias, apiCrearMateria, apiEditarMateria, apiBorrarMateria,
   apiAgregarAMalla, apiEditarEnMalla, apiQuitarDeMalla,
-  apiPlanes, apiPensum, apiAgregarPrerrequisito, apiQuitarPrerrequisito,
+  apiPlanes, apiPensum, apiAgregarPrerrequisito, apiQuitarPrerrequisito, apiEditarPlan,
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
@@ -134,6 +134,8 @@ export default function TabPensum() {
 
   const borrarMateria = conError(async id => { await apiBorrarMateria(id); await recargarTodo(planId) })
 
+  const cambiarEtapa = conError(async clave => aplicar(await apiEditarPlan(planId, { etapa_tramite: clave })))
+
   /* ─── Render ─── */
 
   if (!malla?.plan) {
@@ -166,6 +168,48 @@ export default function TabPensum() {
           </button>
         ))}
       </div>
+
+      {/* Estado del trámite. Solo aparece si el plan tiene etapas registradas:
+          la malla vigente ya está aprobada y no tiene nada que seguir.
+          Es lo que pinta la línea de tiempo de la página pública, así que
+          moverlo aquí mueve lo que ve el visitante. */}
+      {malla.tramite.length > 0 && (() => {
+        const actual = malla.tramite.findIndex(t => t.clave === malla.plan.etapa_tramite)
+        const i = Math.max(0, actual)
+        const etapa = malla.tramite[i]
+        return (
+          <div className="card" style={{ background: 'var(--paper-2)', marginBottom: 18, padding: '14px 16px' }}>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <label htmlFor="etapa-tramite" style={{ fontWeight: 600, fontSize: 13 }}>
+                Estado del trámite
+              </label>
+              <select id="etapa-tramite" value={malla.plan.etapa_tramite}
+                onChange={e => cambiarEtapa(e.target.value)}
+                style={{ padding: '6px 10px', fontSize: 13, minWidth: 280 }}>
+                {malla.tramite.map((t, n) => (
+                  <option key={t.clave} value={t.clave}>{n + 1}. {t.etapa}</option>
+                ))}
+              </select>
+              <span className="chip" style={{ fontSize: 11 }}>
+                Etapa {i + 1} de {malla.tramite.length}
+              </span>
+              {actual < 0 && (
+                <span style={{ fontSize: 11, color: 'var(--ug-flamingo)' }}>
+                  la etapa guardada no coincide con ninguna: elige una
+                </span>
+              )}
+            </div>
+            {etapa?.detalle && (
+              <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-3)', maxWidth: '76ch' }}>
+                {etapa.detalle}
+              </p>
+            )}
+            <p style={{ margin: '8px 0 0', fontSize: 11.5, color: 'var(--ink-3)' }}>
+              Se guarda al elegir, y cambia de inmediato la línea de tiempo de la página pública.
+            </p>
+          </div>
+        )
+      })()}
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 18, fontSize: 13, color: 'var(--ink-3)', flexWrap: 'wrap' }}>
         <span><b>{malla.total_materias}</b> asignaturas</span><span>·</span>

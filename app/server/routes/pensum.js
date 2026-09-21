@@ -353,6 +353,21 @@ router.patch('/plan/:planId(\\d+)', requireAdmin, async (req, res) => {
   const campos = camposDe(COLUMNAS_PLAN, req.body)
   if (!campos.length) return res.status(400).json({ error: 'Nada que actualizar' })
   try {
+    /* La etapa tiene que ser una de las registradas para este plan. Sin esta
+       comprobación, un valor cualquiera se guardaría y la línea de tiempo
+       pública —que busca la etapa por clave— caería al primer paso, dando por
+       no empezado un trámite que sí avanzó. */
+    if (req.body.etapa_tramite !== undefined) {
+      const { rows } = await query(
+        'SELECT clave FROM plan_tramite WHERE plan_id = $1', [req.params.planId])
+      const claves = rows.map(r => r.clave)
+      if (claves.length && !claves.includes(req.body.etapa_tramite)) {
+        return res.status(400).json({
+          error: `Etapa no válida. Las de este plan son: ${claves.join(', ')}`,
+        })
+      }
+    }
+
     const { rowCount } = await query(
       sentenciaUpdate('plan_estudio', campos, 'id'),
       [req.params.planId, ...campos.map(c => req.body[c])],
