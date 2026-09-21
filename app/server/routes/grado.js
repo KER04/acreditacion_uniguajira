@@ -1,16 +1,21 @@
 /* Módulo Egresados / trámite de grado — respaldado por PostgreSQL.
  *
- * Alimenta la vista pública "Egresados", que reúne cuatro bloques. Solo dos
- * nacen aquí; los otros dos se leen de donde ya vivían, para que el panel
- * siga teniendo un único sitio donde editarlos:
+ * Alimenta la vista pública "Egresados", que reúne cuatro bloques. Tres se
+ * editan aquí; el cuarto se lee de donde ya vivía, para que el panel siga
+ * teniendo un único sitio donde editarlo:
  *
- *   modalidades de grado     ->  modalidades_grado        (módulo Estudiantes)
- *   convocatorias de práctica->  convocatoria 'Prácticas' (módulo Convocatorias)
+ *   modalidades de grado     ->  modalidades_grado        (aquí)
  *   normativas               ->  normativa_grado          (aquí)
  *   ideas de investigación   ->  idea_investigacion       (aquí)
+ *   convocatorias de práctica->  convocatoria 'Prácticas' (módulo Convocatorias)
  *
- * De ahí que `bloquesGrado()` haga cuatro consultas y no dos: la vista pide
- * una sola cosa y esto le arma la respuesta completa.
+ * Las modalidades vivían en el módulo Estudiantes. Se mudaron con la tabla
+ * intacta —sigue llamándose `modalidades_grado`— porque pertenecen al trámite
+ * de grado, no a la vida del estudiante que todavía cursa: quien las consulta
+ * ya terminó materias.
+ *
+ * De ahí que `bloquesGrado()` haga cuatro consultas: la vista pide una sola
+ * cosa y esto le arma la respuesta completa.
  */
 import { Router } from 'express'
 import { query } from '../db/pool.js'
@@ -24,6 +29,7 @@ import {
 const router = Router()
 
 const MENSAJES = {
+  modalidades_nombre_no_vacio: 'El nombre debe tener al menos 3 caracteres',
   normativa_titulo_no_vacio: 'El título debe tener al menos 3 caracteres',
   normativa_tipo_valido:     'Tipo de norma no válido',
   normativa_anio_valido:     'El año debe estar entre 1976 y 2100',
@@ -33,6 +39,18 @@ const MENSAJES = {
 }
 
 const enlaceArchivo = id => '/api/archivos/' + id
+
+/* ─── Modalidades de grado ─────────────────────────────────────── */
+
+const COL_MODALIDAD = ['nombre', 'descripcion', 'requisitos', 'duracion', 'color', 'documento_url', 'orden']
+
+const SEL_MODALIDAD = 'id, nombre, descripcion, requisitos, duracion, color, documento_url, orden'
+
+export async function leerModalidades() {
+  const { rows } = await query(
+    'SELECT ' + SEL_MODALIDAD + ' FROM modalidades_grado ORDER BY orden ASC, id ASC')
+  return rows.map(m => ({ ...m, requisitos: m.requisitos ?? [] }))
+}
 
 /* ─── Normativas ───────────────────────────────────────────────── */
 
@@ -149,6 +167,17 @@ function recurso({ ruta, tabla, esquema, columnas, nulas, leer, seleccion, mapea
 }
 
 recurso({
+  ruta: 'modalidades',
+  tabla: 'modalidades_grado',
+  esquema: 'modalidades',
+  columnas: COL_MODALIDAD,
+  nulas: new Set(),
+  leer: leerModalidades,
+  seleccion: SEL_MODALIDAD,
+  mapear: async f => ({ ...f, requisitos: f.requisitos ?? [] }),
+})
+
+recurso({
   ruta: 'normativas',
   tabla: 'normativa_grado',
   esquema: 'normativas',
@@ -180,14 +209,13 @@ recurso({
 
 /* ─── Los cuatro bloques de una vez ────────────────────────────── */
 
-/* Lo usan GET /api/grado y el agregador GET /api/all. Las modalidades y las
-   prácticas se leen de sus tablas de siempre, no de una copia. */
+/* Lo usan GET /api/grado y el agregador GET /api/all. Las prácticas se leen
+   de la tabla de convocatorias, no de una copia. */
 export async function bloquesGrado() {
   const [normativas, ideas, modalidades, practicas] = await Promise.all([
     leerNormativas(),
     leerIdeas(),
-    query('SELECT id, nombre, descripcion, requisitos, duracion, color, documento_url, orden' +
-          ' FROM modalidades_grado ORDER BY orden ASC, id ASC'),
+    leerModalidades(),
     query("SELECT id, titulo, descripcion, estado, dirigida_a, sede, requisitos," +
           " to_char(fecha_apertura, 'YYYY-MM-DD') AS fecha_apertura," +
           " to_char(fecha_cierre, 'YYYY-MM-DD') AS fecha_cierre," +
@@ -200,7 +228,7 @@ export async function bloquesGrado() {
   return {
     normativas,
     ideas,
-    modalidades: modalidades.rows,
+    modalidades,
     /* `vencida` es derivado, como en convocatorias: dice si el cierre ya pasó
        aunque el estado siga diciendo "Abierta" porque nadie lo actualizó. */
     practicas: practicas.rows.map(p => ({

@@ -1,9 +1,13 @@
 /* Panel — Egresados / trámite de grado.
  *
- * Solo edita lo que nace en este módulo: normativas e ideas de investigación.
- * Los otros dos bloques de la vista pública se editan donde siempre —las
- * modalidades en Estudiantes y las prácticas en Convocatorias— y aquí hay un
- * aviso que dice dónde, en vez de un segundo editor que acabaría dando dos
+ * Edita los tres bloques que nacen en este módulo: modalidades de grado,
+ * normativas e ideas de investigación. Las modalidades estaban en Estudiantes
+ * y se mudaron aquí con la vista pública: pertenecen al trámite de grado, no
+ * a la vida del estudiante que todavía cursa.
+ *
+ * El cuarto bloque —las convocatorias de prácticas— se sigue editando en
+ * Convocatorias, marcando la categoría «Prácticas». Aquí solo hay un aviso
+ * que dice dónde, en vez de un segundo editor que acabaría dando dos
  * catálogos que se contradicen.
  */
 import { useState } from 'react'
@@ -11,12 +15,22 @@ import { useData, apiSubirDocumento } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import { usePestana } from '../../../hooks/useParametroURL'
 import RowActions from '../RowActions'
+import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   TIPOS_NORMATIVA, ESTADOS_IDEA, DIFICULTADES_IDEA,
-  ANIO_NORMATIVA_MIN, ANIO_NORMATIVA_MAX,
+  ANIO_NORMATIVA_MIN, ANIO_NORMATIVA_MAX, COLORES_TARJETA,
 } from '../../../../shared/validacion'
 
-const SUB = [['normativas', 'Normativas'], ['ideas', 'Ideas de investigación']]
+const SUB = [
+  ['modalidades', 'Modalidades de grado'],
+  ['normativas', 'Normativas'],
+  ['ideas', 'Ideas de investigación'],
+]
+
+const fila = {
+  display: 'grid', gap: 12, padding: '12px 0', alignItems: 'center',
+  borderBottom: '1px solid var(--borde)',
+}
 
 /* Las listas (palabras clave) se editan como líneas y se guardan como
    arreglo. La conversión ocurre en el borde, igual que en convocatorias. */
@@ -30,6 +44,96 @@ function SelectorOpcional({ valor, onChange, opciones, vacio }) {
       <option value="">{vacio}</option>
       {opciones.map(o => <option key={o.id} value={o.id}>{o.nombre}</option>)}
     </select>
+  )
+}
+
+/* ─── Modalidades de grado ─────────────────────────────────────── */
+
+/* En el formulario los requisitos son un textarea; en la base son TEXT[]. */
+const normalizaModalidad = v => ({ ...v, requisitos: aLista(v.requisitos) })
+
+const MODALIDAD_VACIA = {
+  nombre: '', descripcion: '', requisitos: '', duracion: '', color: 'var(--ug-azul)',
+}
+
+function Modalidades() {
+  const { data, addItem, removeItem, updateItem } = useData()
+  const form = useFormulario('modalidades', MODALIDAD_VACIA, normalizaModalidad)
+  const [editando, setEditando] = useState(null)
+
+  const guardar = e => {
+    e.preventDefault()
+    if (!form.validarTodo()) return
+    const payload = { ...normalizaModalidad(form.valores), nombre: form.valores.nombre.trim() }
+    if (editando !== null) updateItem('modalidades_grado', editando, payload)
+    else addItem('modalidades_grado', payload)
+    form.reiniciar(); setEditando(null)
+  }
+
+  const editar = m => {
+    form.reiniciar({
+      nombre: m.nombre, descripcion: m.descripcion ?? '',
+      requisitos: (m.requisitos ?? []).join('\n'),
+      duracion: m.duracion ?? '', color: m.color ?? 'var(--ug-azul)',
+    })
+    setEditando(m.id)
+  }
+
+  const v = form.valores
+
+  return (
+    <>
+      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
+        <div style={{ fontWeight: 600, marginBottom: 14 }}>
+          {editando !== null ? 'Editar modalidad' : 'Agregar modalidad de grado'}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Campo etiqueta="Nombre" error={form.error('nombre')}>
+            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
+          </Campo>
+          <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
+            <textarea rows="2" value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
+          </Campo>
+          <Campo etiqueta="Requisitos (uno por línea)" opcional error={form.error('requisitos')}>
+            <textarea rows="4" value={v.requisitos} onChange={e => form.set('requisitos', e.target.value)} onBlur={() => form.alSalir('requisitos')}
+                      placeholder={'Haber aprobado 140 créditos\nPropuesta avalada por comité'} />
+          </Campo>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <Campo etiqueta="Duración" opcional error={form.error('duracion')}>
+              <input value={v.duracion} onChange={e => form.set('duracion', e.target.value)} onBlur={() => form.alSalir('duracion')} placeholder="2 semestres" />
+            </Campo>
+            {/* El color tiñe la franja lateral de la tarjeta en la vista
+                pública, así que se escoge de la paleta y no a mano. */}
+            <Campo etiqueta="Color de la tarjeta">
+              <select value={v.color} onChange={e => form.set('color', e.target.value)}>
+                {COLORES_TARJETA.map(([val, l]) => <option key={val} value={val}>{l}</option>)}
+              </select>
+            </Campo>
+          </div>
+        </div>
+        <Acciones editando={editando !== null} bloqueado={form.invalido}
+                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+      </form>
+
+      {(data.modalidades_grado ?? []).length === 0 ? (
+        <div style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay modalidades registradas.</div>
+      ) : (data.modalidades_grado ?? []).map(m => (
+        <div key={m.id} style={{ ...fila, gridTemplateColumns: '14px 1fr 130px auto' }}>
+          <span style={{ width: 14, height: 14, borderRadius: 4, background: m.color || 'var(--ug-azul)' }} />
+          <div>
+            <div style={{ fontWeight: 500, fontSize: 14 }}>{m.nombre}</div>
+            <div style={{ fontSize: 13, color: 'var(--ink-3)', marginTop: 4 }}>{m.descripcion}</div>
+            {(m.requisitos ?? []).length > 0 && (
+              <div style={{ fontSize: 11, color: 'var(--ink-muted)', marginTop: 4, fontFamily: 'var(--font-mono)' }}>
+                {m.requisitos.length} requisito(s)
+              </div>
+            )}
+          </div>
+          <span className="chip" style={{ fontSize: 10 }}>{m.duracion}</span>
+          <RowActions onEdit={() => editar(m)} onDelete={() => removeItem('modalidades_grado', m.id)} />
+        </div>
+      ))}
+    </>
   )
 }
 
@@ -350,17 +454,16 @@ export default function TabGrado() {
   const { data } = useData()
   const [sub, setSub] = usePestana(SUB, { clave: 'sub' })
 
-  const modalidades = (data.modalidades_grado ?? []).length
   const practicas = (data.convocatorias ?? []).filter(c => c.categoria === 'Prácticas').length
 
   return (
     <div>
       <h3 style={{ marginBottom: 6 }}>Egresados · trámite de grado</h3>
       <p style={{ fontSize: 13, color: 'var(--ink-3)', marginBottom: 20, maxWidth: '70ch' }}>
-        Alimenta la vista pública <strong>Egresados</strong>. Los otros dos bloques de esa página se
-        editan en su módulo de siempre: las <strong>{modalidades} modalidades de grado</strong> en
-        Estudiantes → Opciones de grado, y las <strong>{practicas} convocatorias de prácticas</strong> en
-        Convocatorias, marcando la categoría «Prácticas».
+        Alimenta la vista pública <strong>Egresados</strong>. Las modalidades de grado se editan
+        aquí desde ahora —antes estaban en Estudiantes—. El cuarto bloque de esa página, las{' '}
+        <strong>{practicas} convocatorias de prácticas</strong>, se sigue publicando en
+        Convocatorias marcando la categoría «Prácticas».
       </p>
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
@@ -372,6 +475,7 @@ export default function TabGrado() {
         ))}
       </div>
 
+      {sub === 'modalidades' && <Modalidades />}
       {sub === 'normativas' && <Normativas />}
       {sub === 'ideas' && <Ideas />}
     </div>

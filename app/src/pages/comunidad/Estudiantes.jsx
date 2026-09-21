@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import Portal from '../../components/Portal'
 import Retrato from '../../components/Retrato'
@@ -434,55 +435,6 @@ function Reglamento() {
   )
 }
 
-function Grado() {
-  const { data } = useData()
-  const modalidades = data.modalidades_grado ?? []
-
-  return (
-    <section className="section" style={{ paddingTop: 30 }}>
-      <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Modalidades de grado</div>
-            <h2 style={{ marginTop: 10 }}>
-              {modalidades.length > 0 ? modalidades.length + ' caminos validos hacia tu titulo.' : 'Modalidades de grado.'}
-            </h2>
-          </div>
-          <p className="desc">Elige la modalidad que mejor se alinea a tu perfil. Todas exigen paz y salvo financiero y dominio de lengua extranjera (B1).</p>
-        </div>
-        {modalidades.length === 0 ? (
-          <div style={{ color: 'var(--ink-3)' }}>Todavia no hay modalidades publicadas.</div>
-        ) : (
-          <div className="grid-3">
-            {modalidades.map(m => (
-              <div key={m.id} className="card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 14, minHeight: 340 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: m.color || 'var(--ug-azul)' }} />
-                <h3 style={{ fontSize: 20 }}>{m.nombre}</h3>
-                <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{m.descripcion}</p>
-                <div style={{ marginTop: 'auto', paddingTop: 14, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)' }}>
-                  {(m.requisitos ?? []).length > 0 && (
-                    <>
-                      <div className="eyebrow" style={{ marginBottom: 10 }}>Requisitos</div>
-                      <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        {m.requisitos.map((r, j) => (
-                          <li key={j} style={{ display: 'flex', alignItems: 'start', gap: 8, fontSize: 13, color: 'var(--ink-2)' }}><Icons.check /> {r}</li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                  {m.duracion && (
-                    <div style={{ marginTop: 14, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Duracion . {m.duracion}</div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  )
-}
-
 function Docs() {
   const { data } = useData()
 
@@ -540,7 +492,9 @@ function Docs() {
   )
 }
 
-const tabs = [{id:'calendario',l:'Calendario'},{id:'honor',l:'Cuadro de Honor'},{id:'reglamento',l:'Reglamento'},{id:'grado',l:'Opciones de grado'},{id:'docs',l:'Documentos'}]
+/* Las modalidades de grado se fueron a la vista Egresados: son del trámite
+   de grado y quien las consulta ya terminó materias. */
+const tabs = [{id:'calendario',l:'Calendario'},{id:'honor',l:'Cuadro de Honor'},{id:'reglamento',l:'Reglamento'},{id:'docs',l:'Documentos'}]
 
 export default function Estudiantes() {
   /* En la URL: recargar deja de mandar al calendario, y se puede enlazar
@@ -554,7 +508,14 @@ export default function Estudiantes() {
           <div className="eyebrow">Comunidad · Estudiantes</div>
           <h1 style={{ marginTop: 14, maxWidth: '20ch' }}>Todo lo que necesitas, en un solo lugar.</h1>
           <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '58ch' }}>
-            Calendario, fechas clave, cuadro de honor, reglamento y modalidades de grado — organizado para que no pierdas tiempo buscando.
+            Calendario, fechas clave, cuadro de honor, reglamento y documentos — organizado para que no pierdas tiempo buscando.
+          </p>
+          {/* Las modalidades de grado se fueron a Egresados. Este enlace evita
+              que quien venga buscándolas aquí crea que desaparecieron. */}
+          <p style={{ fontSize: 14, color: 'var(--ink-3)', marginTop: 12, maxWidth: '58ch' }}>
+            ¿Buscas las modalidades de grado? Están en{' '}
+            <Link to="/egresados" style={{ color: 'var(--ug-azul-deep)' }}>Egresados</Link>, junto con
+            la normativa del trámite, las convocatorias de prácticas y las ideas de investigación.
           </p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 36 }}>
             {tabs.map(t => (
@@ -570,7 +531,6 @@ export default function Estudiantes() {
       {tab === 'calendario' && <Calendario />}
       {tab === 'honor' && <Honor />}
       {tab === 'reglamento' && <Reglamento />}
-      {tab === 'grado' && <Grado />}
       {tab === 'docs' && <Docs />}
     </div>
   )

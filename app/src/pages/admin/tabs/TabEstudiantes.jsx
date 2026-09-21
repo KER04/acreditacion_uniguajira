@@ -20,13 +20,6 @@ const ETIQUETA_TIPO_CAL = {
   academico: 'Académico', administrativo: 'Administrativo',
   evaluacion: 'Evaluación', grado: 'Grado', otro: 'Otro',
 }
-const COLORES = [
-  ['var(--ug-azul)', 'Teal institucional'],
-  ['var(--ug-amarillo)', 'Ámbar'],
-  ['var(--ug-flamingo)', 'Terracota'],
-  ['var(--ug-marino)', 'Teal profundo'],
-]
-
 const fila = {
   display: 'grid', gap: 12, padding: '12px 0', alignItems: 'center',
   borderBottom: '1px solid var(--borde)',
@@ -37,7 +30,6 @@ const fila = {
 const SUBPESTANAS = [
   ['honor', 'Cuadro de honor'],
   ['calendario', 'Calendario'],
-  ['modalidades', 'Modalidades de grado'],
   ['documentos', 'Documentos'],
 ]
 
@@ -64,7 +56,6 @@ export default function TabEstudiantes() {
 
       {tab === 'honor' && <Honor {...props} />}
       {tab === 'calendario' && <Calendario {...props} />}
-      {tab === 'modalidades' && <Modalidades {...props} />}
       {tab === 'documentos' && <Documentos {...props} />}
     </div>
   )
@@ -428,89 +419,6 @@ function Calendario({ data, addItem, removeItem, updateItem }) {
           <span className="chip" style={{ fontSize: 10 }}>{ETIQUETA_TIPO_CAL[ev.tipo] ?? ev.tipo}</span>
           <span className="chip" style={{ fontSize: 10 }}>{ETIQUETA_SEDE[ev.sede] ?? ev.sede}</span>
           <RowActions onEdit={() => editar(ev)} onDelete={() => removeItem('calendario', ev.id)} />
-        </div>
-      ))}
-    </>
-  )
-}
-
-/* ─── Modalidades de grado ─────────────────────────────────────── */
-
-/* En el formulario los requisitos son un textarea; en la base son TEXT[]. */
-const normalizaModalidad = v => ({
-  ...v,
-  requisitos: String(v.requisitos ?? '').split('\n').map(r => r.trim()).filter(Boolean),
-})
-
-function Modalidades({ data, addItem, removeItem, updateItem }) {
-  const vacio = { nombre: '', descripcion: '', requisitos: '', duracion: '', color: 'var(--ug-azul)' }
-  const form = useFormulario('modalidades', vacio, normalizaModalidad)
-  const [editando, setEditando] = useState(null)
-
-  const guardar = e => {
-    e.preventDefault()
-    if (!form.validarTodo()) return
-    const payload = { ...normalizaModalidad(form.valores), nombre: form.valores.nombre.trim() }
-    if (editando !== null) updateItem('modalidades_grado', editando, payload)
-    else addItem('modalidades_grado', payload)
-    form.reiniciar(); setEditando(null)
-  }
-
-  const editar = m => {
-    form.reiniciar({
-      nombre: m.nombre, descripcion: m.descripcion ?? '',
-      requisitos: (m.requisitos ?? []).join('\n'),
-      duracion: m.duracion ?? '', color: m.color ?? 'var(--ug-azul)',
-    })
-    setEditando(m.id)
-  }
-
-  const v = form.valores
-
-  return (
-    <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editando !== null ? 'Editar modalidad' : 'Agregar modalidad de grado'}</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Campo etiqueta="Nombre" error={form.error('nombre')}>
-            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
-          </Campo>
-          <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
-            <textarea rows="2" value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
-          </Campo>
-          <Campo etiqueta="Requisitos (uno por línea)" opcional error={form.error('requisitos')}>
-            <textarea rows="4" value={v.requisitos} onChange={e => form.set('requisitos', e.target.value)} onBlur={() => form.alSalir('requisitos')}
-                      placeholder={'Haber aprobado 140 créditos\nPropuesta avalada por comité'} />
-          </Campo>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Campo etiqueta="Duración" opcional error={form.error('duracion')}>
-              <input value={v.duracion} onChange={e => form.set('duracion', e.target.value)} onBlur={() => form.alSalir('duracion')} placeholder="2 semestres" />
-            </Campo>
-            <Campo etiqueta="Color de la tarjeta">
-              <select value={v.color} onChange={e => form.set('color', e.target.value)}>
-                {COLORES.map(([val, l]) => <option key={val} value={val}>{l}</option>)}
-              </select>
-            </Campo>
-          </div>
-        </div>
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
-
-      {(data.modalidades_grado ?? []).map(m => (
-        <div key={m.id} style={{ ...fila, gridTemplateColumns: '14px 1fr 130px auto' }}>
-          <span style={{ width: 14, height: 14, borderRadius: 4, background: m.color || 'var(--ug-azul)' }} />
-          <div>
-            <div style={{ fontWeight: 500, fontSize: 14 }}>{m.nombre}</div>
-            <div style={{ fontSize: 13, color: 'var(--ink-3)', marginTop: 4 }}>{m.descripcion}</div>
-            {(m.requisitos ?? []).length > 0 && (
-              <div style={{ fontSize: 11, color: 'var(--ink-muted)', marginTop: 4, fontFamily: 'var(--font-mono)' }}>
-                {m.requisitos.length} requisito(s)
-              </div>
-            )}
-          </div>
-          <span className="chip" style={{ fontSize: 10 }}>{m.duracion}</span>
-          <RowActions onEdit={() => editar(m)} onDelete={() => removeItem('modalidades_grado', m.id)} />
         </div>
       ))}
     </>

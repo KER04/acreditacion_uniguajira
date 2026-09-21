@@ -17,7 +17,7 @@ const EN_BASE = {
   ofertas:                'egresados/ofertas',
   honor:                  'estudiantes/honor',
   calendario:             'estudiantes/calendario',
-  modalidades_grado:      'estudiantes/modalidades',
+  modalidades_grado:      'grado/modalidades',
   documentos_estudiantes: 'estudiantes/documentos',
   noticias:               'noticias',
   eventos:                'eventos',

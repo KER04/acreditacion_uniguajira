@@ -103,7 +103,7 @@ Trece migraciones, 27 tablas. Lo que ya no vive en archivos JSON:
 | `010_saberpro` | `saberpro_resultado` y `saberpro_parametros` |
 | `011_infraestructura` | `recurso_infraestructura` |
 | `012_plan_propuesta` | `plan_tramite`, `plan_prerrequisito` y la propuesta curricular |
-| `013_grado` | `normativa_grado`, `idea_investigacion`: la vista Egresados |
+| `013_grado` | `normativa_grado`, `idea_investigacion`: la vista Egresados, que también sirve las modalidades de grado |
 
 Siguen en archivos JSON, por ahora: acreditación CNA, grupos y semilleros,
 extensión, internacionalización, y la ficha del programa.

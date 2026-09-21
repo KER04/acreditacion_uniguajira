@@ -14,7 +14,7 @@ const NAV = [
   ]},
   { path: '/acreditacion', label: 'Acreditación', badge: true },
   { label: 'Comunidad', children: [
-    { path: '/estudiantes', label: 'Estudiantes', desc: 'Calendario, cuadro de honor, reglamento, grados' },
+    { path: '/estudiantes', label: 'Estudiantes', desc: 'Calendario, cuadro de honor, reglamento, documentos' },
     { path: '/saber-pro', label: 'Saber Pro', desc: 'Medias por año, destacados y grado por puntaje' },
     { path: '/docentes', label: 'Docentes', desc: 'Directorio, horarios de atención, documentos' },
     /* Dos etapas, dos páginas: el egresado está en trámite de grado, el

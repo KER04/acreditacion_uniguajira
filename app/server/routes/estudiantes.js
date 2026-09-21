@@ -69,7 +69,6 @@ const MENSAJE_RESTRICCION = {
   calendario_sede_valida:      'La sede debe ser ambas, riohacha o maicao',
   calendario_periodo_valido:   'El periodo debe tener el formato 2026-I o 2026-II',
   calendario_titulo_no_vacio:  'El evento debe tener al menos 3 caracteres',
-  modalidades_nombre_no_vacio: 'El nombre debe tener al menos 3 caracteres',
   documentos_nombre_no_vacio:  'El nombre debe tener al menos 3 caracteres',
   documentos_tipo_valido:      'Tipo de documento no valido',
 }
@@ -167,7 +166,6 @@ const conEnlace = f => ({
 const SEL_CALENDARIO = "id, titulo, to_char(fecha_inicio, 'YYYY-MM-DD') AS fecha_inicio, " +
   "to_char(fecha_fin, 'YYYY-MM-DD') AS fecha_fin, tipo, periodo, sede, destacado"
 
-const SEL_MODALIDADES = 'id, nombre, descripcion, requisitos, duracion, color, documento_url, orden'
 const SEL_DOCUMENTOS = 'id, nombre, descripcion, url, tipo, grupo, peso, orden, archivo_id'
 const ORD_DOCUMENTOS = 'grupo ASC, orden ASC, id ASC'
 const SEL_DOC_HONOR = 'id, honor_id, nombre, descripcion, tipo, peso, orden, archivo_id'
@@ -195,14 +193,6 @@ recurso({
 })
 
 recurso({
-  ruta: 'modalidades',
-  tabla: 'modalidades_grado',
-  columnas: ['nombre', 'descripcion', 'requisitos', 'duracion', 'color', 'documento_url', 'orden'],
-  seleccion: SEL_MODALIDADES,
-  orden: 'orden ASC, id ASC',
-})
-
-recurso({
   ruta: 'documentos',
   tabla: 'documentos_estudiantes',
   columnas: ['nombre', 'descripcion', 'url', 'tipo', 'grupo', 'peso', 'orden', 'archivo_id'],
@@ -211,19 +201,20 @@ recurso({
   mapear: conEnlace,
 })
 
-/* Los cuatro bloques de una sola vez. Lo usan tanto GET /api/estudiantes como
-   el agregador GET /api/all que alimenta la carga inicial del sitio. */
+/* Los tres bloques de una sola vez. Lo usan tanto GET /api/estudiantes como
+   el agregador GET /api/all que alimenta la carga inicial del sitio.
+
+   Las modalidades de grado estaban aquí y se fueron al módulo Egresados: son
+   del trámite de grado, no de la vida del estudiante que todavía cursa. */
 export async function bloquesEstudiantes() {
-  const [honor, calendario, modalidades, documentos] = await Promise.all([
+  const [honor, calendario, documentos] = await Promise.all([
     query('SELECT ' + SEL_HONOR + ' FROM cuadro_honor ORDER BY ' + ORD_HONOR),
     query('SELECT ' + SEL_CALENDARIO + ' FROM calendario_academico ORDER BY fecha_inicio ASC'),
-    query('SELECT ' + SEL_MODALIDADES + ' FROM modalidades_grado ORDER BY orden ASC, id ASC'),
     query('SELECT ' + SEL_DOCUMENTOS + ' FROM documentos_estudiantes ORDER BY ' + ORD_DOCUMENTOS),
   ])
   return {
     honor: honor.rows.map(conFoto),
     calendario: calendario.rows.map(conEtiqueta),
-    modalidades_grado: modalidades.rows,
     documentos: documentos.rows.map(conEnlace),
   }
 }

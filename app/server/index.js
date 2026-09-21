@@ -146,7 +146,7 @@ app.get('/api/all', async (_req, res) => {
     docentes:            docentesD ?? [],
     honor:               estudiantesD?.honor ?? [],
     calendario:          estudiantesD?.calendario ?? [],
-    modalidades_grado:   estudiantesD?.modalidades_grado ?? [],
+    modalidades_grado:   gradoD?.modalidades ?? [],
     documentos_estudiantes: estudiantesD?.documentos ?? [],
     destacados:          egresadosD?.destacados ?? [],
     ofertas:             egresadosD?.ofertas ?? [],
