@@ -29,6 +29,25 @@ function vinculacionDe(d) {
   return VINCULACIONES.find(v => v.k === d.vinculacion) ?? VINCULACION_OTRA
 }
 
+/* Cómo se AGRUPA para filtrar, que no es lo mismo que cómo se ETIQUETA.
+ *
+ * Al visitante le sirve separar quién está de tiempo completo de quién va por
+ * horas; la diferencia entre planta y ocasional es contractual y no le dice
+ * nada. Pero en la tarjeta sí se conserva la figura exacta, porque para el
+ * docente y para la facultad no son lo mismo.
+ *
+ * Por eso son dos listas: ésta manda en los filtros, VINCULACIONES manda en
+ * la pastilla de cada tarjeta. */
+const GRUPOS_VINCULACION = [
+  { k: 'tiempo_completo', l: 'Tiempo completo', incluye: ['planta', 'ocasional'] },
+  { k: 'catedratico',     l: 'Catedrático',     incluye: ['catedratico'] },
+]
+
+function enGrupo(docente, claveGrupo) {
+  const grupo = GRUPOS_VINCULACION.find(g => g.k === claveGrupo)
+  return grupo ? grupo.incluye.includes(docente.vinculacion) : false
+}
+
 const SEDES = [
   { k: 'ambas',    l: 'Ambas sedes' },
   { k: 'riohacha', l: 'Riohacha' },
@@ -321,7 +340,7 @@ export default function Docentes() {
       const coincideTexto = !texto
         || d.nombre.toLowerCase().includes(texto)
         || (d.posgrado ?? '').toLowerCase().includes(texto)
-      const coincideVinculacion = vinculacion === 'todas' || d.vinculacion === vinculacion
+      const coincideVinculacion = vinculacion === 'todas' || enGrupo(d, vinculacion)
       return coincideTexto && coincideVinculacion && sedeMatch(d.sede, sede)
     })
   }, [docentes, q, vinculacion, sede])
@@ -388,7 +407,10 @@ export default function Docentes() {
 
         <div className="docentes-filtros">
           <div className="docentes-chips" role="group" aria-label="Filtrar por tipo de vinculación">
-            {[{ k: 'todas', l: 'Toda la planta docente' }, ...VINCULACIONES].map(c => (
+            {/* "Todo el cuerpo docente" y no "toda la planta docente": ahora que
+                el filtro de al lado dice "Tiempo completo", la palabra planta
+                se leería como la figura contractual y no como el conjunto. */}
+            {[{ k: 'todas', l: 'Todo el cuerpo docente' }, ...GRUPOS_VINCULACION].map(c => (
               <button
                 key={c.k}
                 type="button"
