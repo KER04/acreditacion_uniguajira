@@ -58,12 +58,15 @@ function falloMateria(res, e) {
    consumen malla.jsx, Pensum.jsx y Programa.jsx. Los totales por semestre y
    del plan se calculan aquí: guardarlos era lo que hacía que descuadraran
    en cuanto alguien agregaba una materia sin actualizar el número. */
+const SEL_PLAN = `id, nombre, titulo, vigente, num_semestres, etapa_tramite,
+                  extracurriculares, comparado_con`
+
 export async function leerPensum({ planId = null } = {}) {
   const plan = planId
-    ? (await query('SELECT id, nombre, vigente, num_semestres FROM plan_estudio WHERE id = $1', [planId])).rows[0]
-    : (await query('SELECT id, nombre, vigente, num_semestres FROM plan_estudio WHERE vigente ORDER BY id LIMIT 1')).rows[0]
+    ? (await query('SELECT ' + SEL_PLAN + ' FROM plan_estudio WHERE id = $1', [planId])).rows[0]
+    : (await query('SELECT ' + SEL_PLAN + ' FROM plan_estudio WHERE vigente ORDER BY id LIMIT 1')).rows[0]
 
-  if (!plan) return { plan: null, total_creditos: 0, total_materias: 0, semestres: [] }
+  if (!plan) return { plan: null, total_creditos: 0, total_materias: 0, semestres: [], tramite: [] }
 
   const { rows } = await query(
     `SELECT pm.id AS plan_materia_id, pm.semestre, pm.creditos, pm.horas_semana, pm.orden,
@@ -74,6 +77,25 @@ export async function leerPensum({ planId = null } = {}) {
       ORDER BY pm.semestre, pm.orden, pm.id`,
     [plan.id],
   )
+
+  /* Prerrequisitos del plan, agrupados por materia: la malla los dibuja como
+     flechas y la ficha los lista, así que viajan dentro de cada materia en
+     vez de obligar a una segunda petición. */
+  const { rows: prerreq } = await query(
+    `SELECT pp.materia_id, pp.prerrequisito_id, pp.tipo, m.nombre, m.codigo
+       FROM plan_prerrequisito pp
+       JOIN materia m ON m.id = pp.prerrequisito_id
+      WHERE pp.plan_id = $1
+      ORDER BY m.nombre`,
+    [plan.id],
+  )
+  const porMateria = new Map()
+  for (const p of prerreq) {
+    if (!porMateria.has(p.materia_id)) porMateria.set(p.materia_id, [])
+    porMateria.get(p.materia_id).push({
+      materia_id: p.prerrequisito_id, nombre: p.nombre, codigo: p.codigo, tipo: p.tipo,
+    })
+  }
 
   const porSemestre = new Map()
   for (const r of rows) {
@@ -87,6 +109,7 @@ export async function leerPensum({ planId = null } = {}) {
       horas_semana: r.horas_semana,
       campo: r.campo,
       area: r.area,
+      prerrequisitos: porMateria.get(r.materia_id) ?? [],
     })
   }
 
@@ -103,12 +126,39 @@ export async function leerPensum({ planId = null } = {}) {
     })
   }
 
+  const { rows: tramite } = await query(
+    'SELECT clave, etapa, detalle, orden FROM plan_tramite WHERE plan_id = $1 ORDER BY orden, id',
+    [plan.id],
+  )
+
   return {
-    plan: { id: plan.id, nombre: plan.nombre, vigente: plan.vigente, num_semestres: plan.num_semestres },
+    plan: {
+      id: plan.id,
+      nombre: plan.nombre,
+      titulo: plan.titulo || plan.nombre,
+      vigente: plan.vigente,
+      num_semestres: plan.num_semestres,
+      etapa_tramite: plan.etapa_tramite,
+      extracurriculares: plan.extracurriculares ?? [],
+      comparado_con: plan.comparado_con,
+    },
+    tramite,
     total_creditos: rows.reduce((a, r) => a + r.creditos, 0),
+    total_horas: rows.reduce((a, r) => a + r.horas_semana, 0),
     total_materias: rows.length,
+    total_prerrequisitos: prerreq.length,
     semestres,
   }
+}
+
+/* La propuesta de actualización: el plan no vigente más reciente. La usa
+   /api/all para que la página pública no tenga que pedirla aparte. */
+export async function leerPropuesta() {
+  const { rows } = await query(
+    'SELECT id FROM plan_estudio WHERE NOT vigente ORDER BY id DESC LIMIT 1',
+  )
+  if (!rows.length) return null
+  return leerPensum({ planId: rows[0].id })
 }
 
 router.get('/', async (req, res) => {
@@ -226,6 +276,89 @@ router.delete('/plan-materia/:id(\\d+)', requireAdmin, async (req, res) => {
     const { rows } = await query('DELETE FROM plan_materia WHERE id = $1 RETURNING plan_id', [req.params.id])
     if (!rows.length) return res.status(404).json({ error: 'Esa materia no está en la malla' })
     res.json(await leerPensum({ planId: rows[0].plan_id }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+/* ─── Prerrequisitos ───────────────────────────────────────────── */
+
+/* Añadir un prerrequisito a una materia dentro de un plan.
+ *
+ * La base impide que una materia se exija a sí misma y que la pareja se
+ * repita, pero no puede comprobar lo demás con un CHECK —haría falta una
+ * subconsulta—, así que aquí se verifica que ambas estén en el plan y que el
+ * requisito vaya en un semestre anterior. Un prerrequisito del mismo semestre
+ * o posterior es imposible de cursar y no tendría sentido dejarlo pasar. */
+router.post('/plan/:planId(\\d+)/prerrequisitos', requireAdmin, async (req, res) => {
+  const planId = Number(req.params.planId)
+  const materiaId = Number(req.body?.materia_id)
+  const requisitoId = Number(req.body?.prerrequisito_id)
+  const tipo = req.body?.tipo === 'correquisito' ? 'correquisito' : 'prerrequisito'
+
+  if (!materiaId || !requisitoId) {
+    return res.status(400).json({ error: 'Faltan la materia y su prerrequisito' })
+  }
+  if (materiaId === requisitoId) {
+    return res.status(400).json({ error: 'Una materia no puede ser prerrequisito de sí misma' })
+  }
+
+  try {
+    const { rows } = await query(
+      `SELECT pm.materia_id, pm.semestre, m.nombre
+         FROM plan_materia pm JOIN materia m ON m.id = pm.materia_id
+        WHERE pm.plan_id = $1 AND pm.materia_id = ANY($2)`,
+      [planId, [materiaId, requisitoId]],
+    )
+    const materia = rows.find(r => r.materia_id === materiaId)
+    const requisito = rows.find(r => r.materia_id === requisitoId)
+
+    if (!materia) return res.status(400).json({ error: 'La materia no está en esta malla' })
+    if (!requisito) return res.status(400).json({ error: 'El prerrequisito no está en esta malla' })
+
+    /* El correquisito sí puede ir en el mismo semestre: se cursan a la vez. */
+    const limite = tipo === 'correquisito' ? requisito.semestre > materia.semestre
+                                           : requisito.semestre >= materia.semestre
+    if (limite) {
+      return res.status(400).json({
+        error: `"${requisito.nombre}" va en el semestre ${requisito.semestre} y "${materia.nombre}" en el ${materia.semestre}: el prerrequisito debe cursarse antes`,
+      })
+    }
+
+    await query(
+      `INSERT INTO plan_prerrequisito (plan_id, materia_id, prerrequisito_id, tipo)
+       VALUES ($1,$2,$3,$4)
+       ON CONFLICT (plan_id, materia_id, prerrequisito_id) DO UPDATE SET tipo = EXCLUDED.tipo`,
+      [planId, materiaId, requisitoId, tipo],
+    )
+    res.status(201).json(await leerPensum({ planId }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+router.delete('/plan/:planId(\\d+)/prerrequisitos', requireAdmin, async (req, res) => {
+  const planId = Number(req.params.planId)
+  try {
+    const { rowCount } = await query(
+      'DELETE FROM plan_prerrequisito WHERE plan_id=$1 AND materia_id=$2 AND prerrequisito_id=$3',
+      [planId, Number(req.body?.materia_id), Number(req.body?.prerrequisito_id)],
+    )
+    if (!rowCount) return res.status(404).json({ error: 'Ese prerrequisito no estaba registrado' })
+    res.json(await leerPensum({ planId }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+/* ─── Datos del plan ───────────────────────────────────────────── */
+
+const COLUMNAS_PLAN = ['nombre', 'titulo', 'num_semestres', 'etapa_tramite', 'extracurriculares']
+
+router.patch('/plan/:planId(\\d+)', requireAdmin, async (req, res) => {
+  const campos = camposDe(COLUMNAS_PLAN, req.body)
+  if (!campos.length) return res.status(400).json({ error: 'Nada que actualizar' })
+  try {
+    const { rowCount } = await query(
+      sentenciaUpdate('plan_estudio', campos, 'id'),
+      [req.params.planId, ...campos.map(c => req.body[c])],
+    )
+    if (!rowCount) return res.status(404).json({ error: 'Plan no encontrado' })
+    res.json(await leerPensum({ planId: Number(req.params.planId) }))
   } catch (e) { falloMateria(res, e) }
 })
 

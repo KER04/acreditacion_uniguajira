@@ -17,6 +17,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { pool, query } from './pool.js'
+import { normalizarNombre } from './nombres.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const SIMULAR = process.argv.includes('--simular')
@@ -28,34 +29,6 @@ const PLAN = 'Plan 169 créditos (vigente)'
 
 const avisos = []
 
-/* ─── Normalización de nombres ─────────────────────────────────── */
-
-/* La fuente escribe "Lógica Y Teoría De Conjuntos": título con mayúscula en
-   cada palabra, incluidas las que no la llevan en español. Se corrigen para
-   que el catálogo no acabe con la misma materia escrita de dos formas. */
-const MINUSCULAS = new Set(['y', 'e', 'o', 'u', 'de', 'del', 'la', 'las', 'los', 'el', 'a', 'al', 'en', 'para', 'con', 'por'])
-
-/* Siglas y números romanos que deben conservar las mayúsculas. */
-const MAYUSCULAS = new Set(['I', 'II', 'III', 'IV', 'V', 'VI', 'TIC', 'TICS', 'IA', 'BD', 'SO'])
-
-export function normalizarNombre(bruto) {
-  const limpio = String(bruto ?? '').trim().replace(/\s+/g, ' ')
-  if (!limpio) return ''
-
-  return limpio
-    .split(' ')
-    .map((palabra, i) => {
-      const sinPuntos = palabra.replace(/[.,;:]/g, '')
-      if (MAYUSCULAS.has(sinPuntos.toUpperCase()) && sinPuntos.length <= 4) {
-        return palabra.toUpperCase()
-      }
-      const baja = palabra.toLowerCase()
-      /* La primera palabra siempre va capitalizada, aunque sea partícula. */
-      if (i > 0 && MINUSCULAS.has(baja)) return baja
-      return baja.charAt(0).toUpperCase() + baja.slice(1)
-    })
-    .join(' ')
-}
 
 function leerPensum() {
   for (const ruta of [VIVO, COPIA]) {

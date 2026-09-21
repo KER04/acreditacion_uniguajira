@@ -193,6 +193,24 @@ export const apiEditarEnMalla = (planMateriaId, datos) =>
 export const apiQuitarDeMalla = planMateriaId =>
   apiJSON(`pensum/plan-materia/${planMateriaId}`, { method: 'DELETE' })
 
+/* Planes: la malla vigente y la propuesta de actualización. El panel edita
+   cualquiera de las dos con la misma interfaz. */
+export const apiPlanes = () => apiJSON('pensum/planes')
+
+export const apiPensum = planId =>
+  apiJSON('pensum' + (planId ? `?plan=${planId}` : ''))
+
+export const apiEditarPlan = (planId, datos) =>
+  apiJSON(`pensum/plan/${planId}`, { method: 'PATCH', body: datos })
+
+/* Prerrequisitos. Devuelven la malla recalculada, como el resto de
+   operaciones del pensum. */
+export const apiAgregarPrerrequisito = (planId, datos) =>
+  apiJSON(`pensum/plan/${planId}/prerrequisitos`, { method: 'POST', body: datos })
+
+export const apiQuitarPrerrequisito = (planId, datos) =>
+  apiJSON(`pensum/plan/${planId}/prerrequisitos`, { method: 'DELETE', body: datos })
+
 /* ─── Egresados ────────────────────────────────────────────────── */
 
 /* Foto redonda del egresado y fotograma del vídeo. Son la misma operación

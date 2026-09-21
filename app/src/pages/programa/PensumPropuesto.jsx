@@ -8,30 +8,28 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
-import propuesta from '../../data/pensum-propuesto.json'
-import vigente from '../../data/pensum.json'
+import { useData } from '../../context/DataContext'
 import {
   Donut, FiltrosMalla, MallaGrid, MateriaDrawer, creditosPorArea,
 } from './malla'
 
-const CHART_DATA = creditosPorArea(propuesta.semestres)
-
-/* Índice de la etapa en curso. Si `etapa_actual` no coincide con ninguna clave
-   —un dato mal escrito— se asume que no ha empezado nada, en vez de dar por
-   aprobado algo que no lo está. */
-const ETAPA_ACTUAL = Math.max(0, propuesta.tramite.findIndex(t => t.clave === propuesta.etapa_actual))
+/* Índice de la etapa en curso. Si la etapa guardada no coincide con ninguna
+   clave —un dato mal escrito— se asume que no ha empezado nada, en vez de dar
+   por aprobado algo que no lo está. */
+const etapaActualDe = (tramite, clave) =>
+  Math.max(0, tramite.findIndex(t => t.clave === clave))
 
 /* ─── Línea de tiempo del trámite ──────────────────────────────── */
 
-function LineaTiempo() {
+function LineaTiempo({ tramite, ETAPA_ACTUAL, creditosVigente }) {
   const [abierta, setAbierta] = useState(ETAPA_ACTUAL)
-  const total = propuesta.tramite.length
+  const total = tramite.length
   const aprobado = ETAPA_ACTUAL === total - 1
 
   return (
     <div className="tramite">
       <ol className="tramite__pasos">
-        {propuesta.tramite.map((t, i) => {
+        {tramite.map((t, i) => {
           const estado = i < ETAPA_ACTUAL ? 'hecho' : i === ETAPA_ACTUAL ? 'curso' : 'pendiente'
           const activa = abierta === i
 
@@ -69,7 +67,7 @@ function LineaTiempo() {
         Etapa {ETAPA_ACTUAL + 1} de {total}. Mientras el Ministerio no expida la resolución,
         el plan que rige es el{' '}
         <Link to="/pensum" style={{ color: 'inherit', textDecoration: 'underline' }}>
-          vigente de {vigente.total_creditos} créditos
+          vigente de {creditosVigente} créditos
         </Link>.
       </div>
     </div>
@@ -83,7 +81,38 @@ export default function PensumPropuesto() {
   const [filter,      setFilter]      = useState('all')
   const [campoFilter, setCampoFilter] = useState('all')
 
-  const { semestres, total_creditos, total_asignaturas, total_semestres, comparado_con } = propuesta
+  /* Desde la migración 012 la propuesta vive en la base y llega por /api/all,
+     igual que la malla vigente. Antes se importaba el JSON en compilación, así
+     que editarla en el panel no cambiaba nada en el sitio. */
+  const { data } = useData()
+  const propuesta = data.pensum_propuesto
+  const vigenteInfo = data.pensum_info
+
+  if (!propuesta?.plan) {
+    return (
+      <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter)' }}>
+        <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto', color: 'var(--ink-3)' }}>
+          Todavía no hay una propuesta de actualización curricular cargada.
+        </div>
+      </div>
+    )
+  }
+
+  const semestres = propuesta.semestres
+  const total_creditos = propuesta.total_creditos
+  const total_asignaturas = propuesta.total_materias
+  const total_semestres = propuesta.plan.num_semestres
+  const tramite = propuesta.tramite ?? []
+  const CHART_DATA = creditosPorArea(semestres)
+  const ETAPA_ACTUAL = etapaActualDe(tramite, propuesta.plan.etapa_tramite)
+
+  /* El plan con el que se compara: sus cifras salen de la base, no de una
+     copia escrita a mano que quedaría desfasada. */
+  const comparado_con = {
+    creditos: vigenteInfo?.total_creditos ?? 0,
+    asignaturas: vigenteInfo?.total_materias ?? 0,
+    semestres: vigenteInfo?.plan?.num_semestres ?? 0,
+  }
 
   /* Diferencias contra el plan vigente, con signo. Se calculan y no se escriben
      a mano para que no queden desfasadas si cambia cualquiera de los dos JSON. */
@@ -92,7 +121,7 @@ export default function PensumPropuesto() {
   const dMaterias  = total_asignaturas - comparado_con.asignaturas
   const dSemestres = total_semestres   - comparado_con.semestres
 
-  const etapa = propuesta.tramite[ETAPA_ACTUAL]
+  const etapa = tramite[ETAPA_ACTUAL] ?? { etapa: 'Sin etapa registrada' }
 
   /* Las cuatro cifras de cabecera. Todas se derivan de los dos JSON: ninguna
      está escrita a mano, así que mover un dato del plan las mueve todas. */
@@ -114,7 +143,7 @@ export default function PensumPropuesto() {
     },
     {
       k: 'tramite', tono: 'ambar',
-      valor: `${ETAPA_ACTUAL + 1} de ${propuesta.tramite.length}`,
+      valor: `${ETAPA_ACTUAL + 1} de ${tramite.length}`,
       etiqueta: etapa.etapa,
     },
   ]
@@ -175,7 +204,7 @@ export default function PensumPropuesto() {
       <section style={{ padding: '0 var(--gutter) 8px' }}>
         <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
           <h2 className="tramite__titulo">Estado del trámite</h2>
-          <LineaTiempo />
+          <LineaTiempo tramite={tramite} ETAPA_ACTUAL={ETAPA_ACTUAL} creditosVigente={comparado_con.creditos} />
         </div>
       </section>
 
@@ -209,7 +238,7 @@ export default function PensumPropuesto() {
           <div className="extracurriculares">
             <div className="extracurriculares__label">Extracurriculares</div>
             <div className="extracurriculares__lista">
-              {propuesta.extracurriculares.map(e => (
+              {(propuesta.plan.extracurriculares ?? []).map(e => (
                 <span key={e} className="chip">{e}</span>
               ))}
             </div>

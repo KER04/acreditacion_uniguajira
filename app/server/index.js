@@ -23,7 +23,7 @@ import convocatorias, { leerConvocatorias } from './routes/convocatorias.js'
 import eventos, { leerEventos } from './routes/eventos.js'
 import noticias, { leerNoticias } from './routes/noticias.js'
 import programa from './routes/programa.js'
-import pensum, { leerPensum } from './routes/pensum.js'
+import pensum, { leerPensum, leerPropuesta } from './routes/pensum.js'
 import sedes from './routes/sedes.js'
 import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
@@ -109,6 +109,7 @@ app.get('/api/all', async (_req, res) => {
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
     pensum:        () => leerPensum(),          // PostgreSQL
+    propuesta:     () => leerPropuesta(),       // PostgreSQL
     sedes:         () => readData('sedes.json'),
     eventos:       () => leerEventos(),         // PostgreSQL
   }
@@ -130,7 +131,7 @@ app.get('/api/all', async (_req, res) => {
   const {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
     estudiantes: estudiantesD, egresados: egresadosD, investigacion: investigacionD,
-    acreditacion: acreditacionD, programa: programaD, pensum: pensumD, sedes: sedesD, eventos: eventosD,
+    acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, sedes: sedesD, eventos: eventosD,
   } = datos
 
   res.json({
@@ -155,7 +156,8 @@ app.get('/api/all', async (_req, res) => {
     inicio:              programaD?.inicio ?? {},
     programa:            { mision: programaD?.mision, vision: programaD?.vision, objetivos: programaD?.objetivos, perfilEgresado: programaD?.perfil_egresado, ficha: programaD?.ficha_tecnica ?? {} },
     pensum:              pensumD?.semestres ?? [],
-    pensum_info:         pensumD ? { plan: pensumD.plan, total_creditos: pensumD.total_creditos, total_materias: pensumD.total_materias } : null,
+    pensum_info:         pensumD ? { plan: pensumD.plan, total_creditos: pensumD.total_creditos, total_horas: pensumD.total_horas, total_materias: pensumD.total_materias } : null,
+    pensum_propuesto:    propuestaD ?? null,
     info_sedes:          sedesD ?? {},
     eventos:             eventosD ?? [],
   })
