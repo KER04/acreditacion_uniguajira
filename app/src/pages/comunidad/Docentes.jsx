@@ -29,19 +29,27 @@ function vinculacionDe(d) {
   return VINCULACIONES.find(v => v.k === d.vinculacion) ?? VINCULACION_OTRA
 }
 
-/* Cómo se AGRUPA para filtrar, que no es lo mismo que cómo se ETIQUETA.
+/* Cómo se AGRUPA, que no es lo mismo que cómo se ETIQUETA en detalle.
  *
- * Al visitante le sirve separar quién está de tiempo completo de quién va por
- * horas; la diferencia entre planta y ocasional es contractual y no le dice
- * nada. Pero en la tarjeta sí se conserva la figura exacta, porque para el
- * docente y para la facultad no son lo mismo.
+ * En el listado al visitante le sirve saber quién está de tiempo completo y
+ * quién va por horas; que sea planta u ocasional es una figura contractual que
+ * ahí no le dice nada. Al abrir la ficha sí aparece la figura exacta, porque
+ * para el docente y para la facultad no son lo mismo.
  *
- * Por eso son dos listas: ésta manda en los filtros, VINCULACIONES manda en
- * la pastilla de cada tarjeta. */
+ * Así que la tarjeta y los filtros usan el GRUPO, y la ficha abierta usa
+ * VINCULACIONES. El color va por grupo en ambos: si dos tarjetas dicen
+ * "Tiempo completo", pintarlas de colores distintos solo confundiría, y que
+ * la ficha herede el color de la tarjeta mantiene la animación continua. */
 const GRUPOS_VINCULACION = [
-  { k: 'tiempo_completo', l: 'Tiempo completo', incluye: ['planta', 'ocasional'] },
-  { k: 'catedratico',     l: 'Catedrático',     incluye: ['catedratico'] },
+  { k: 'tiempo_completo', l: 'Tiempo completo', clase: 'planta',      incluye: ['planta', 'ocasional'] },
+  { k: 'catedratico',     l: 'Catedrático',     clase: 'catedratico', incluye: ['catedratico'] },
 ]
+
+const GRUPO_OTRO = { k: 'otra', l: 'Sin registrar', clase: 'otra', incluye: [] }
+
+function grupoDe(d) {
+  return GRUPOS_VINCULACION.find(g => g.incluye.includes(d.vinculacion)) ?? GRUPO_OTRO
+}
 
 function enGrupo(docente, claveGrupo) {
   const grupo = GRUPOS_VINCULACION.find(g => g.k === claveGrupo)
@@ -137,7 +145,10 @@ function fotogramas(desde, hasta) {
 }
 
 function FichaDocente({ d, rect, onCerrar }) {
+  /* Aquí sí se nombra la figura exacta —planta u ocasional—; el color viene
+     del grupo para que coincida con la tarjeta de la que se abre. */
   const v = vinculacionDe(d)
+  const g = grupoDe(d)
   const panelRef = useRef(null)
   const fondoRef = useRef(null)
   const cerrandoRef = useRef(false)
@@ -204,18 +215,18 @@ function FichaDocente({ d, rect, onCerrar }) {
           </button>
 
           <header className="ficha__encabezado">
-            <div className={`ficha__foto ficha__foto--${v.clase}`}>
+            <div className={`ficha__foto ficha__foto--${g.clase}`}>
               {d.foto_url
                 ? <img src={d.foto_url} alt={`Fotografía de ${d.nombre}`} />
                 : (
-                  <span className={`docente-rombo docente-rombo--${v.clase} ficha__rombo`} aria-hidden="true">
+                  <span className={`docente-rombo docente-rombo--${g.clase} ficha__rombo`} aria-hidden="true">
                     <span className="docente-rombo__texto">{iniciales(d.nombre)}</span>
                   </span>
                 )}
             </div>
 
             <div className="ficha__identidad">
-              <span className={`docente-pastilla docente-pastilla--${v.clase}`}>{v.l}</span>
+              <span className={`docente-pastilla docente-pastilla--${g.clase}`}>{v.l}</span>
               <h2 className="ficha__nombre" id={`ficha-nombre-${d.id}`}>{d.nombre}</h2>
               <p className="ficha__sede">
                 <span className={`docente-punto docente-punto--${d.sede}`} aria-hidden="true" />
@@ -463,12 +474,12 @@ export default function Docentes() {
         <section className="docentes-grid">
           {filtrados.map(d => {
             const abierta = ficha?.d.id === d.id
-            const v = vinculacionDe(d)
+            const g = grupoDe(d)   /* la tarjeta agrupa; la figura exacta se ve al abrirla */
             return (
               <article key={d.id} className={`docente-card${abierta ? ' is-abierta' : ''}`}>
                 <div className="docente-card__patron" aria-hidden="true" />
                 <div className="docente-card__cuerpo">
-                  <div className={`docente-card__acento docente-card__acento--${v.clase}`} aria-hidden="true" />
+                  <div className={`docente-card__acento docente-card__acento--${g.clase}`} aria-hidden="true" />
                   <div className="docente-card__contenido">
                     <h2 className="docente-card__encabezado">
                     <button
@@ -483,17 +494,17 @@ export default function Docentes() {
                             las iniciales. El borde conserva el color de la
                             vinculación en ambos casos. */}
                         {d.foto_url ? (
-                          <span className={`docente-card__foto docente-card__foto--${v.clase}`}>
+                          <span className={`docente-card__foto docente-card__foto--${g.clase}`}>
                             <img src={d.foto_url} alt="" loading="lazy" />
                           </span>
                         ) : (
-                          <span className={`docente-rombo docente-rombo--${v.clase}`} aria-hidden="true">
+                          <span className={`docente-rombo docente-rombo--${g.clase}`} aria-hidden="true">
                             <span className="docente-rombo__texto">{iniciales(d.nombre)}</span>
                           </span>
                         )}
                         <span className="docente-card__identidad">
                           <span className="docente-card__nombre">{d.nombre}</span>
-                          <span className={`docente-pastilla docente-pastilla--${v.clase}`}>{v.l}</span>
+                          <span className={`docente-pastilla docente-pastilla--${g.clase}`}>{g.l}</span>
                         </span>
                         <span className="docente-card__chevron" aria-hidden="true"><Icons.arrow /></span>
                       </span>
