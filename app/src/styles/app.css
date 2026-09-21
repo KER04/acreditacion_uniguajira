@@ -3417,6 +3417,25 @@ video.video-eg__medio {
   margin: 0;
 }
 
+/* Sello del tipo de archivo en la lista de actos, como el de los documentos
+   de la página de Estudiantes: ocupa el lugar que en Egresados ocupa la
+   columna con el tipo y el número de la norma. */
+.resolucion__sello {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--paper);
+  border: 1px solid var(--doc-borde-suave);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+}
+
 .resolucion__acciones {
   margin-top: auto;
   padding-top: 6px;
