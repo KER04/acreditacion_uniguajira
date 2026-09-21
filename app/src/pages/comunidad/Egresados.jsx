@@ -32,9 +32,9 @@ function Pin({ tono = 'neutro', children }) {
 
 function Seccion({ titulo, desc, children }) {
   return (
-    <section className="grado-seccion">
-      <h2 className="grado-seccion__titulo">{titulo}</h2>
-      {desc && <p className="grado-seccion__desc">{desc}</p>}
+    <section className="doc-seccion">
+      <h2 className="doc-seccion__titulo">{titulo}</h2>
+      {desc && <p className="doc-seccion__desc">{desc}</p>}
       {children}
     </section>
   )
@@ -134,22 +134,22 @@ function Normativas() {
       {lista.length === 0 ? (
         <Vacio>{verDerogadas ? 'No hay normas derogadas registradas.' : 'Todavía no hay normativa publicada.'}</Vacio>
       ) : (
-        <div className="grado-lista">
+        <div className="doc-lista">
           {lista.map(n => (
-            <div key={n.id} className={'grado-norma' + (n.vigente ? '' : ' is-apagada')}>
-              <div className="grado-norma__ref">
+            <div key={n.id} className={'doc-norma' + (n.vigente ? '' : ' is-apagada')}>
+              <div className="doc-norma__ref">
                 <b>{n.tipo}</b>
                 <span>{n.numero || (n.anio ?? '—')}</span>
               </div>
 
-              <div className="grado-norma__cuerpo">
-                <div className="grado-norma__titulo">
+              <div className="doc-norma__cuerpo">
+                <div className="doc-norma__titulo">
                   {n.titulo}
                   {!n.vigente && <> <Pin tono="terracota">Derogada</Pin></>}
                 </div>
-                {n.descripcion && <p className="grado-norma__desc">{n.descripcion}</p>}
+                {n.descripcion && <p className="doc-norma__desc">{n.descripcion}</p>}
                 {(n.expedida_por || n.anio) && (
-                  <div className="grado-norma__fuente">
+                  <div className="doc-norma__fuente">
                     {[n.expedida_por, n.anio].filter(Boolean).join(' · ')}
                   </div>
                 )}
@@ -242,7 +242,7 @@ function Practicas() {
 
           {pasadas.length > 0 && (
             <div style={{ marginTop: 32 }}>
-              <h3 className="grado-seccion__titulo">Cerradas</h3>
+              <h3 className="doc-seccion__titulo">Cerradas</h3>
               <div className="doc-grid doc-grid--ancha">
                 {pasadas.map(p => <TarjetaPractica key={p.id} p={p} apagada />)}
               </div>
