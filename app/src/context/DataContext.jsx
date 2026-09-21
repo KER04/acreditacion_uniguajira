@@ -22,6 +22,8 @@ const EN_BASE = {
   noticias:               'noticias',
   eventos:                'eventos',
   convocatorias:          'convocatorias',
+  normativas:             'grado/normativas',
+  ideas_investigacion:    'grado/ideas',
 }
 
 async function apiJSON(endpoint, { method = 'GET', body } = {}) {
@@ -397,11 +399,15 @@ const INITIAL = {
   modalidades_grado: [],
   /* Vive en PostgreSQL: se llena al hidratar desde /api/all. */
   documentos_estudiantes: [],
+  /* Trámite de grado (vista Egresados). `practicas` es de solo lectura: son
+     las convocatorias de categoría "Prácticas", que se editan en su módulo. */
+  normativas: [],
+  ideas_investigacion: [],
+  practicas: [],
   info_sedes: {
     riohacha: { nombre: 'Sede Riohacha', direccion: 'Bloque 1 — 2.° piso, Km 3+354 Vía Maicao', tel: '+57 (605) 7282729 Ext. 240, 241', email: 'ingsistemas@uniguajira.edu.co', director: 'Adanud S. Meza Valle' },
     maicao: { nombre: 'Sede Maicao', direccion: 'Calle 15 No. 14-37, Centro, Maicao', tel: '+57 (605) 7271500 Ext. 110', email: 'sistemas.maicao@uniguajira.edu.co', director: 'Coordinador por designar' },
   },
-  eventos: [],
 }
 
 /* ─── localStorage fallback ──────────────────────────────────────

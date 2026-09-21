@@ -14,6 +14,7 @@ import Noticias from './pages/Noticias'
 
 import Estudiantes from './pages/comunidad/Estudiantes'
 import Docentes from './pages/comunidad/Docentes'
+import Graduados from './pages/comunidad/Graduados'
 import Egresados from './pages/comunidad/Egresados'
 import Vacante from './pages/comunidad/Vacante'
 import SaberPro from './pages/comunidad/SaberPro'
@@ -82,6 +83,13 @@ export default function App() {
         <Route path="/estudiantes" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Estudiantes /></Shell>} />
         <Route path="/saber-pro" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><SaberPro /></Shell>} />
         <Route path="/docentes" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Docentes /></Shell>} />
+        <Route path="/graduados" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Graduados /></Shell>} />
+        <Route path="/graduados/vacante/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Vacante /></Shell>} />
+
+        {/* /egresados ya no es la página de los graduados: ahora es la del
+            trámite de grado. La ruta de la vacante se mantiene como alias
+            porque las ofertas se abrieron con esa dirección y hay enlaces
+            repartidos que caerían en el 404. */}
         <Route path="/egresados" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Egresados /></Shell>} />
         <Route path="/egresados/vacante/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Vacante /></Shell>} />
 

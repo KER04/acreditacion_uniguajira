@@ -202,6 +202,17 @@ export function tamanoArchivo(v, etiqueta = 'Peso') {
   return RE_PESO.test(String(v).trim()) ? null : `${etiqueta} debe tener el formato "1.8 MB" o "420 KB"`
 }
 
+/* Un arreglo de cadenas cortas: requisitos, palabras clave y demás listas que
+   la base guarda como TEXT[] y el panel edita como un textarea de líneas. */
+export function listaDeTextos(v, { etiqueta = 'Lista', maximo = 20, largo = 200 } = {}) {
+  if (v === undefined || v === null) return null
+  if (!Array.isArray(v)) return `${etiqueta} debe ser una lista`
+  if (v.length > maximo) return `${etiqueta} no puede pasar de ${maximo} elementos`
+  if (v.some(x => typeof x !== 'string' || x.trim() === '')) return `${etiqueta}: ningún elemento puede ir vacío`
+  if (v.some(x => x.length > largo)) return `${etiqueta}: cada elemento debe caber en ${largo} caracteres`
+  return null
+}
+
 /* ─── Plan de estudios ─────────────────────────────────────────── */
 
 /* Clasificación curricular de la materia. Las dos listas son del plan de
@@ -240,6 +251,23 @@ export const CATEGORIAS_CONVOCATORIA = [
    próximo, en curso o pasado lo dice `faseEvento()` comparando con hoy. */
 export const ESTADOS_EVENTO = ['programado', 'cancelado', 'aplazado']
 export const ESTADOS_CONVOCATORIA = ['Abierta', 'Próxima', 'Cerrada']
+
+/* ─── Trámite de grado (vista Egresados) ───────────────────────── */
+
+/* Dos momentos que el portal separa a propósito: el *egresado* terminó el
+   plan y está en trámite de grado; el *graduado* ya tiene el título. Cada uno
+   tiene su vista porque necesitan cosas distintas. Estas listas son de la
+   primera. */
+export const TIPOS_NORMATIVA = [
+  'Acuerdo', 'Resolución', 'Circular', 'Reglamento', 'Guía', 'Formato', 'Ley', 'Decreto',
+]
+export const ESTADOS_IDEA = ['Disponible', 'Tomada', 'En curso', 'Terminada']
+export const DIFICULTADES_IDEA = ['Inicial', 'Intermedia', 'Avanzada']
+
+/* El año de una norma: 1976 es la primera promoción del programa y el tope
+   solo descarta erratas de tecleo. Coincide con el CHECK de la migración 013. */
+export const ANIO_NORMATIVA_MIN = 1976
+export const ANIO_NORMATIVA_MAX = 2100
 
 /* --- Egresados y bolsa de empleo ------------------------------- */
 
@@ -528,17 +556,7 @@ export const ESQUEMAS = {
     duracion:      { etiqueta: 'Duración',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Duración', max: 40 }) },
     documento_url: { etiqueta: 'Documento',   obligatorio: false, validar: v => rutaOUrl(v, 'Documento') },
     orden:         { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
-    requisitos:    {
-      etiqueta: 'Requisitos', obligatorio: false,
-      validar: v => {
-        if (v === undefined || v === null) return null
-        if (!Array.isArray(v)) return 'Requisitos debe ser una lista'
-        if (v.length > 20) return 'Requisitos no puede pasar de 20 elementos'
-        if (v.some(r => typeof r !== 'string' || r.trim() === '')) return 'Los requisitos no pueden estar vacíos'
-        if (v.some(r => r.length > 200)) return 'Cada requisito debe caber en 200 caracteres'
-        return null
-      },
-    },
+    requisitos:    { etiqueta: 'Requisitos', obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Requisitos' }) },
   },
 
   documentos: {
@@ -754,6 +772,37 @@ export const ESQUEMAS = {
     minimo_por_modulo: { etiqueta: 'Mínimo por módulo',  obligatorio: false, validar: v => puntajeSaberPro(v, 'Mínimo por módulo') },
     norma:             { etiqueta: 'Norma',              obligatorio: false, validar: v => texto(v, { etiqueta: 'Norma', max: 200 }) },
     vigente_desde:     { etiqueta: 'Vigente desde',      obligatorio: false, validar: v => fechaISO(v, 'Vigente desde') },
+  },
+
+  /* ─── Trámite de grado (vista Egresados) ─────────────────────── */
+
+  /* Una norma del trámite. Solo el título es obligatorio: muchas se conocen
+     por su nombre antes de que alguien consiga el número o el PDF. */
+  normativas: {
+    titulo:       { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    descripcion:  { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 1000 }) },
+    tipo:         { etiqueta: 'Tipo',        obligatorio: false, validar: v => enumerado(v, TIPOS_NORMATIVA, 'Tipo') },
+    numero:       { etiqueta: 'Número',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Número', max: 40 }) },
+    anio:         { etiqueta: 'Año',         obligatorio: false, validar: v => entero(v, { etiqueta: 'Año', min: ANIO_NORMATIVA_MIN, max: ANIO_NORMATIVA_MAX }) },
+    expedida_por: { etiqueta: 'Expedida por', obligatorio: false, validar: v => texto(v, { etiqueta: 'Expedida por', max: 160 }) },
+    url:          { etiqueta: 'Enlace',      obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    vigente:      { etiqueta: 'Vigente',     obligatorio: false, validar: v => booleano(v, 'Vigente') },
+    orden:        { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  /* Una idea de trabajo de grado. El docente y la modalidad son opcionales:
+     se puede publicar una idea antes de saber quién la dirigirá. */
+  ideas: {
+    titulo:       { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    descripcion:  { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    linea:        { etiqueta: 'Línea',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Línea', max: 160 }) },
+    docente_id:   { etiqueta: 'Docente',     obligatorio: false, validar: v => entero(v, { etiqueta: 'Docente', min: 1 }) },
+    modalidad_id: { etiqueta: 'Modalidad',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Modalidad', min: 1 }) },
+    estado:       { etiqueta: 'Estado',      obligatorio: false, validar: v => enumerado(v, ESTADOS_IDEA, 'Estado') },
+    dificultad:   { etiqueta: 'Dificultad',  obligatorio: false, validar: v => enumerado(v, DIFICULTADES_IDEA, 'Dificultad') },
+    palabras:     { etiqueta: 'Palabras clave', obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Palabras clave', maximo: 12, largo: 60 }) },
+    contacto:     { etiqueta: 'Contacto',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Contacto', max: 160 }) },
+    orden:        { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 }
 

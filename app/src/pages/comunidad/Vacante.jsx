@@ -177,7 +177,7 @@ export default function Vacante() {
         <div className="inner vac-error">
           <h1>Vacante no disponible</h1>
           <p>{error}</p>
-          <Link className="btn ghost" to="/egresados">Volver a la bolsa de empleo</Link>
+          <Link className="btn ghost" to="/graduados">Volver a la bolsa de empleo</Link>
         </div>
       </div>
     )
@@ -209,7 +209,7 @@ export default function Vacante() {
     <div className="page-in">
       <header className="vac-cabecera">
         <div className="inner">
-          <Link className="vac-volver" to="/egresados">← Bolsa de empleo</Link>
+          <Link className="vac-volver" to="/graduados">← Bolsa de empleo</Link>
 
           <div className="vac-cabecera__estado">
             {oferta.abierta
@@ -288,7 +288,7 @@ export default function Vacante() {
                 </button>
               )}
 
-              <Link className="btn ghost vac-caja__btn" to="/egresados">Ver otras vacantes</Link>
+              <Link className="btn ghost vac-caja__btn" to="/graduados">Ver otras vacantes</Link>
             </div>
           </aside>
         </div>

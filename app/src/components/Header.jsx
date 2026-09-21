@@ -17,7 +17,10 @@ const NAV = [
     { path: '/estudiantes', label: 'Estudiantes', desc: 'Calendario, cuadro de honor, reglamento, grados' },
     { path: '/saber-pro', label: 'Saber Pro', desc: 'Medias por año, destacados y grado por puntaje' },
     { path: '/docentes', label: 'Docentes', desc: 'Directorio, horarios de atención, documentos' },
-    { path: '/egresados', label: 'Egresados', desc: 'Bolsa de empleo, asociación, actualización' },
+    /* Dos etapas, dos páginas: el egresado está en trámite de grado, el
+       graduado ya tiene el título. Antes ambas cosas colgaban de "Egresados". */
+    { path: '/egresados', label: 'Egresados', desc: 'Modalidades de grado, normativas, prácticas e ideas de investigación' },
+    { path: '/graduados', label: 'Graduados', desc: 'Bolsa de empleo, asociación, actualización' },
   ]},
   { label: 'Funciones Misionales', children: [
     { path: '/investigacion', label: 'Investigación', desc: 'Grupos, semilleros y producción' },

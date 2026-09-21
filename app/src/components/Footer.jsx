@@ -46,6 +46,7 @@ export default function Footer() {
             <ul>
               <li><Link to="/estudiantes">Estudiantes</Link></li>
               <li><Link to="/docentes">Docentes</Link></li>
+              <li><Link to="/graduados">Graduados</Link></li>
               <li><Link to="/egresados">Egresados</Link></li>
               <li><Link to="/investigacion">Investigación</Link></li>
             </ul>

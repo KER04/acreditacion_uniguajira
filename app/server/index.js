@@ -14,6 +14,7 @@ import acreditacion from './routes/acreditacion.js'
 import docentes, { leerDocentes } from './routes/docentes.js'
 import estudiantes, { bloquesEstudiantes } from './routes/estudiantes.js'
 import egresados, { bloquesEgresados } from './routes/egresados.js'
+import grado, { bloquesGrado } from './routes/grado.js'
 import saberpro from './routes/saberpro.js'
 import infraestructura from './routes/infraestructura.js'
 import investigacion from './routes/investigacion.js'
@@ -55,6 +56,7 @@ app.use('/api/acreditacion', acreditacion)
 app.use('/api/docentes', docentes)
 app.use('/api/estudiantes', estudiantes)
 app.use('/api/egresados', egresados)
+app.use('/api/grado', grado)
 /* Saber Pro trae su propia página y pide sus datos aparte: no entra en
    /api/all para no engordar la carga inicial de todo el sitio. */
 app.use('/api/saberpro', saberpro)
@@ -105,6 +107,7 @@ app.get('/api/all', async (_req, res) => {
     docentes:      () => leerDocentes(),        // PostgreSQL
     estudiantes:   () => bloquesEstudiantes(),  // PostgreSQL
     egresados:     () => bloquesEgresados(),    // PostgreSQL
+    grado:         () => bloquesGrado(),        // PostgreSQL
     investigacion: () => readData('investigacion.json'),
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
@@ -130,7 +133,7 @@ app.get('/api/all', async (_req, res) => {
 
   const {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
-    estudiantes: estudiantesD, egresados: egresadosD, investigacion: investigacionD,
+    estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD,
     acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, sedes: sedesD, eventos: eventosD,
   } = datos
 
@@ -147,6 +150,9 @@ app.get('/api/all', async (_req, res) => {
     documentos_estudiantes: estudiantesD?.documentos ?? [],
     destacados:          egresadosD?.destacados ?? [],
     ofertas:             egresadosD?.ofertas ?? [],
+    normativas:          gradoD?.normativas ?? [],
+    ideas_investigacion: gradoD?.ideas ?? [],
+    practicas:           gradoD?.practicas ?? [],
     grupos:              investigacionD?.grupos ?? [],
     semilleros:          investigacionD?.semilleros ?? [],
     factores:            acreditacionD?.factores ?? [],

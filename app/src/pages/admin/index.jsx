@@ -16,6 +16,7 @@ import TabInfraestructura from './tabs/TabInfraestructura'
 import TabFunciones from './tabs/TabFunciones'
 import TabCNA from './tabs/TabCNA'
 import TabEventos from './tabs/TabEventos'
+import TabGrado from './tabs/TabGrado'
 
 const TABS = [
   ['dashboard', 'Dashboard', '■'],
@@ -28,7 +29,11 @@ const TABS = [
   ['convocatorias', 'Convocatorias', '◷'],
   ['docentes', 'Docentes', '◈'],
   ['estudiantes', 'Estudiantes', '◉'],
-  ['egresados', 'Egresados', '◎'],
+  /* La clave sigue siendo 'egresados' para no romper los enlaces guardados,
+     pero esta pestaña es la de los graduados: bolsa de empleo y testimonios.
+     El trámite de grado vive en 'grado'. */
+  ['egresados', 'Graduados', '◎'],
+  ['grado', 'Egresados · grado', '◷'],
   ['saberpro', 'Saber Pro', '◷'],
   ['funciones', 'Funciones misionales', '◧'],
   ['cna', 'Acreditación CNA', '◈'],
@@ -131,6 +136,7 @@ export default function Admin() {
         {activeTab === 'docentes'       && <TabDocentes />}
         {activeTab === 'estudiantes'    && <TabEstudiantes />}
         {activeTab === 'egresados'      && <TabEgresados />}
+        {activeTab === 'grado'          && <TabGrado />}
         {activeTab === 'saberpro'       && <TabSaberPro />}
         {activeTab === 'infraestructura' && <TabInfraestructura />}
         {activeTab === 'funciones'      && <TabFunciones />}

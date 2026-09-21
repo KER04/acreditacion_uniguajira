@@ -37,11 +37,11 @@ npm run db:setup
 npm run dev
 ```
 
-`db:setup` crea la base, aplica las 8 migraciones, siembra el usuario
+`db:setup` crea la base, aplica las 13 migraciones, siembra el usuario
 administrador y carga el contenido inicial. Al terminar deberías ver algo así:
 
 ```
-8 migracion(es) aplicada(s).
+13 migracion(es) aplicada(s).
   usuario   admin@uniguajira.edu.co creado (rol admin)
   ATENCION: contraseña generada, no vuelve a mostrarse:
       ················
@@ -89,7 +89,7 @@ npm run db:importar-pensum
 
 ## Qué hay en la base
 
-Ocho migraciones, 17 tablas. Lo que ya no vive en archivos JSON:
+Trece migraciones, 27 tablas. Lo que ya no vive en archivos JSON:
 
 | Migración | Qué trae |
 |---|---|
@@ -99,9 +99,14 @@ Ocho migraciones, 17 tablas. Lo que ya no vive en archivos JSON:
 | `006_docentes` | `docente` y `docente_formacion` |
 | `007_contenidos` | `noticia`, `evento`, `convocatoria` |
 | `008_pensum` | `materia`, `plan_estudio`, `plan_materia` |
+| `009_egresados` | `egresado`, `oferta_empleo`, `postulacion`, `actualizacion_egresado` |
+| `010_saberpro` | `saberpro_resultado` y `saberpro_parametros` |
+| `011_infraestructura` | `recurso_infraestructura` |
+| `012_plan_propuesta` | `plan_tramite`, `plan_prerrequisito` y la propuesta curricular |
+| `013_grado` | `normativa_grado`, `idea_investigacion`: la vista Egresados |
 
-Siguen en archivos JSON, por ahora: egresados, acreditación CNA, grupos y
-semilleros, extensión, internacionalización, y la ficha del programa.
+Siguen en archivos JSON, por ahora: acreditación CNA, grupos y semilleros,
+extensión, internacionalización, y la ficha del programa.
 
 ---
 

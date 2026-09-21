@@ -1,504 +1,418 @@
-import { useCallback, useEffect, useState } from 'react'
+/* Vista Egresados — el trámite de grado.
+ *
+ * Distinta de Graduados a propósito. En el uso colombiano son dos momentos:
+ * el *egresado* terminó el plan y está en trámite; el *graduado* ya tiene el
+ * título. Esta página es para el primero y reúne las cuatro cosas que busca:
+ * por dónde graduarse, qué norma lo rige, qué prácticas hay abiertas y sobre
+ * qué puede investigar.
+ *
+ * Todo sale de la base y se edita desde el panel. Dos bloques se leen de
+ * tablas que ya existían —las modalidades del módulo Estudiantes y las
+ * prácticas del de Convocatorias—, así que se editan en su sitio de siempre
+ * y aquí solo se muestran: un único catálogo, sin copias que se contradigan.
+ */
+import { useState } from 'react'
 import { Icons } from '../../components/Icons'
-import TramaMarca from '../../components/TramaMarca'
-import VideoEgresado from '../../components/VideoEgresado'
-import Retrato from '../../components/Retrato'
-import { useData, apiActualizarDatos } from '../../context/DataContext'
-import { useFormulario, Campo } from '../../components/formulario'
-import SelectorAnio from '../../components/SelectorAnio'
-import { FORMACION_POSTERIOR, ANIO_GRADO_MIN } from '../../../shared/validacion'
+import { useData } from '../../context/DataContext'
+import { usePestana } from '../../hooks/useParametroURL'
+import { fechaLarga } from '../../../shared/validacion'
 
-/* "Grupo Éxito · Bogotá", saltándose lo que esté vacío. */
-const dondeTrabaja = e => [e.empresa, e.ciudad, e.pais].filter(Boolean).join(' · ')
-
-/* ─── Portada rotativa ─────────────────────────────────────────── */
-
-/* Cada cuánto pasa a la siguiente portada. Un testimonio dura minutos, así que
-   esto no pretende que se vea entero: la portada es un adelanto y quien quiera
-   escucharlo activa el sonido —lo que detiene la rotación— o se va a YouTube. */
-const SEGUNDOS_POR_PORTADA = 16
-
-function Protagonista({ egresado, onVisibilidad, onSonido }) {
+/* Encabezado de sección, repetido cuatro veces con distinto texto. */
+function Cabecera({ eyebrow, titulo, desc }) {
   return (
-    <VideoEgresado
-      className="eg-hero"
-      videoYoutube={egresado.video_youtube}
-      videoUrl={egresado.video_url}
-      posterUrl={egresado.poster_url}
-      titulo={egresado.nombre}
-      onVisibilidad={onVisibilidad}
-      onSonido={onSonido}
-      style={{ '--tono': egresado.color || 'var(--ug-azul)' }}>
-
-      {/* Sin vídeo ni póster la caja quedaría en negro. La cuadrícula del
-          emblema hace de portada por defecto: dice de quién es la página sin
-          inventarse una foto que nadie subió. Blanca, porque debajo va el
-          degradado oscuro y encima el nombre. */}
-      {!egresado.poster_url && !egresado.tiene_video && <TramaMarca blanco escala={132} opacidad={0.18} />}
-
-      <div className="eg-hero__contenido">
-        <div className="eg-hero__eyebrow">
-          {egresado.tiene_video ? 'Testimonio en vídeo' : 'Egresado destacado'}
-          {egresado.anio_grado && ' · Promoción ' + egresado.anio_grado}
-        </div>
-        <h3 className="eg-hero__nombre">{egresado.nombre}</h3>
-        {egresado.cargo && <div className="eg-hero__cargo">{egresado.cargo}</div>}
-        {dondeTrabaja(egresado) && <div className="eg-hero__donde">{dondeTrabaja(egresado)}</div>}
-        {egresado.testimonio && <p className="eg-hero__cita">«{egresado.testimonio}»</p>}
+    <div className="section-head">
+      <div className="title">
+        <div className="eyebrow">{eyebrow}</div>
+        <h2 style={{ marginTop: 10 }}>{titulo}</h2>
       </div>
-
-      {/* El círculo con la foto, en la esquina, montado sobre el vídeo. */}
-      <div className="eg-hero__retrato">
-        <Retrato persona={egresado} size={104} />
-      </div>
-    </VideoEgresado>
+      {desc && <p className="desc">{desc}</p>}
+    </div>
   )
 }
 
-/* Decide quién ocupa la portada y la va rotando.
- *
- * Antes la portada era fija: `todos.find(e => e.destacado)`. Con dos egresados
- * marcados ganaba el primero por orden y el segundo caía al grid como uno más,
- * así que la segunda casilla marcada no hacía nada y nadie se enteraba. Ahora
- * rotan TODOS los que tienen vídeo, y la casilla "destacado" pasa a decidir
- * solo quién abre —marcar a varios ya no es ambiguo, es el orden de la ronda.
- *
- * Si nadie tiene vídeo no hay nada que rotar y la portada se queda con el
- * marcado, o con el primero. */
-function usarRotacion(todos) {
-  const conVideo = todos.filter(e => e.tiene_video)
-  const marcados = todos.filter(e => e.destacado)
-  const ronda = conVideo.length > 0
-    ? conVideo
-    : (marcados.length > 0 ? marcados : todos.slice(0, 1))
-
-  const [indice, setIndice] = useState(0)
-  const [enPantalla, setEnPantalla] = useState(true)
-  const [conRaton, setConRaton] = useState(false)
-  const [conSonido, setConSonido] = useState(false)
-  const [detenidoAMano, setDetenidoAMano] = useState(false)
-  const [menosMovimiento, setMenosMovimiento] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const aplicar = () => setMenosMovimiento(mq.matches)
-    aplicar()
-    mq.addEventListener('change', aplicar)
-    return () => mq.removeEventListener('change', aplicar)
-  }, [])
-
-  /* La ronda se arma en cada render y su longitud cambia cuando llegan los
-     datos de la API; el índice tiene que seguir cayendo dentro. */
-  const total = ronda.length
-  const posicion = total > 0 ? indice % total : 0
-  const actual = ronda[posicion] ?? null
-
-  /* Se rota sola salvo que haya motivo para no hacerlo: que no se vea, que
-     alguien esté escuchándola con sonido, que la hayan parado a mano o que el
-     sistema pida menos movimiento. */
-  const rotando = total > 1 && enPantalla && !conRaton && !conSonido && !detenidoAMano && !menosMovimiento
-
-  useEffect(() => {
-    if (!rotando) return
-    const t = setTimeout(() => setIndice(i => i + 1), SEGUNDOS_POR_PORTADA * 1000)
-    return () => clearTimeout(t)
-  }, [rotando, posicion])
-
-  /* useCallback porque VideoEgresado las tiene como dependencias de un efecto:
-     una función nueva en cada render lo haría dispararse sin parar. */
-  const alCambiarVisibilidad = useCallback(v => setEnPantalla(v), [])
-  const alCambiarSonido = useCallback(v => setConSonido(v), [])
-
-  const ir = i => { setIndice(i); setDetenidoAMano(true) }
-
-  return {
-    ronda, actual, posicion, total, rotando, detenidoAMano,
-    ir,
-    alternarPausa: () => setDetenidoAMano(p => !p),
-    alCambiarVisibilidad, alCambiarSonido,
-    /* El raton lleva su propio estado y no el de visibilidad: si compartieran
-       uno, sacar el puntero de la tarjeta diría "ya se ve" aunque la sección
-       estuviera fuera de pantalla. */
-    entraRaton: () => setConRaton(true),
-    saleRaton: () => setConRaton(false),
-  }
+function Vacio({ children }) {
+  return <div style={{ color: 'var(--ink-3)' }}>{children}</div>
 }
 
-function Destacados() {
-  const { data } = useData()
-  const todos = data.destacados ?? []
-  const r = usarRotacion(todos)
+/* ─── Modalidades de grado ─────────────────────────────────────── */
 
-  if (todos.length === 0) {
-    return (
-      <section className="section" style={{ paddingTop: 40 }}>
-        <div className="inner" style={{ color: 'var(--ink-3)' }}>Todavía no hay egresados publicados.</div>
-      </section>
-    )
-  }
+function Modalidades() {
+  const { data } = useData()
+  const modalidades = data.modalidades_grado ?? []
 
   return (
-    <section className="section" style={{ paddingTop: 40 }}>
+    <section className="section" style={{ paddingTop: 30 }}>
       <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Egresados destacados</div>
-            <h2 style={{ marginTop: 10 }}>Historias entre cientos.</h2>
+        <Cabecera
+          eyebrow="Modalidades de grado"
+          titulo={modalidades.length > 0
+            ? modalidades.length + ' caminos válidos hacia tu título.'
+            : 'Modalidades de grado.'}
+          desc="Escoge la que mejor se ajuste a tu perfil y al tiempo del que dispones. Todas exigen paz y salvo financiero y dominio de lengua extranjera (B1)." />
+
+        {modalidades.length === 0 ? (
+          <Vacio>Todavía no hay modalidades publicadas.</Vacio>
+        ) : (
+          <div className="grid-3">
+            {modalidades.map(m => (
+              <div key={m.id} className="card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 14, minHeight: 320 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: m.color || 'var(--ug-azul)' }} />
+                <h3 style={{ fontSize: 20 }}>{m.nombre}</h3>
+                {m.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{m.descripcion}</p>}
+
+                <div style={{ marginTop: 'auto', paddingTop: 14, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)' }}>
+                  {(m.requisitos ?? []).length > 0 && (
+                    <>
+                      <div className="eyebrow" style={{ marginBottom: 10 }}>Requisitos</div>
+                      <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {m.requisitos.map((r, j) => (
+                          <li key={j} style={{ display: 'flex', alignItems: 'start', gap: 8, fontSize: 13, color: 'var(--ink-2)' }}>
+                            <Icons.check /> {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 14 }}>
+                    {m.duracion
+                      ? <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Duración · {m.duracion}</span>
+                      : <span />}
+                    {m.documento_url && (
+                      <a className="btn ghost" style={{ padding: '6px 14px', fontSize: 12 }} href={m.documento_url} target="_blank" rel="noopener noreferrer">
+                        Guía <Icons.download />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <p className="desc">
-            Quiénes son, dónde están hoy y qué se llevaron del programa.
-            {r.total > 1 && ' La portada va pasando por cada testimonio en vídeo.'}
-          </p>
-        </div>
+        )}
+      </div>
+    </section>
+  )
+}
 
-        {r.actual && (
-          /* El ratón encima detiene la ronda: nadie quiere que le cambien la
-             tarjeta justo cuando se paró a leerla. */
-          <div className="eg-escenario"
-               onMouseEnter={r.entraRaton} onMouseLeave={r.saleRaton}
-               onFocusCapture={r.entraRaton} onBlurCapture={r.saleRaton}>
-            {/* key: al cambiar de egresado hay que montar otro reproductor,
-                no reaprovechar el que está sonando. */}
-            <Protagonista key={r.actual.id} egresado={r.actual}
-                          onVisibilidad={r.alCambiarVisibilidad}
-                          onSonido={r.alCambiarSonido} />
+/* ─── Normativas ───────────────────────────────────────────────── */
 
-            {r.total > 1 && (
-              <div className="eg-ronda" role="group" aria-label="Testimonios en portada">
-                <button className="eg-ronda__btn" onClick={() => r.ir(r.posicion - 1 + r.total)}
-                        aria-label="Testimonio anterior">‹</button>
+function Normativas() {
+  const { data } = useData()
+  const todas = data.normativas ?? []
+  const [verDerogadas, setVerDerogadas] = useState(false)
 
-                <div className="eg-ronda__puntos">
-                  {r.ronda.map((e, i) => (
-                    <button key={e.id}
-                            className={'eg-punto' + (i === r.posicion ? ' es-activo' : '')}
-                            onClick={() => r.ir(i)}
-                            aria-current={i === r.posicion ? 'true' : undefined}
-                            aria-label={'Ver el testimonio de ' + e.nombre}>
-                      <span className="eg-punto__nombre">{e.nombre.split(' ')[0]}</span>
-                    </button>
-                  ))}
+  const vigentes = todas.filter(n => n.vigente)
+  const derogadas = todas.filter(n => !n.vigente)
+  const lista = verDerogadas ? derogadas : vigentes
+
+  return (
+    <section className="section" style={{ paddingTop: 30 }}>
+      <div className="inner">
+        <Cabecera
+          eyebrow="Normativa aplicable"
+          titulo="Lo que dice la norma sobre tu grado."
+          desc="Acuerdos, resoluciones y reglamentos que rigen el trámite. Descarga el texto completo antes de radicar cualquier solicitud." />
+
+        {/* Las derogadas no se borran: los trámites viejos las siguen citando. */}
+        {derogadas.length > 0 && (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 24 }} role="tablist" aria-label="Vigencia de las normas">
+            <button role="tab" aria-selected={!verDerogadas}
+                    className={'btn ' + (verDerogadas ? 'ghost' : 'accent')}
+                    style={{ padding: '8px 18px', fontSize: 13 }}
+                    onClick={() => setVerDerogadas(false)}>
+              Vigentes ({vigentes.length})
+            </button>
+            <button role="tab" aria-selected={verDerogadas}
+                    className={'btn ' + (verDerogadas ? 'accent' : 'ghost')}
+                    style={{ padding: '8px 18px', fontSize: 13 }}
+                    onClick={() => setVerDerogadas(true)}>
+              Derogadas ({derogadas.length})
+            </button>
+          </div>
+        )}
+
+        {lista.length === 0 ? (
+          <Vacio>{verDerogadas ? 'No hay normas derogadas registradas.' : 'Todavía no hay normativa publicada.'}</Vacio>
+        ) : (
+          <div className="card" style={{ background: 'var(--paper-2)' }}>
+            {lista.map((n, j) => (
+              <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 0', borderBottom: j < lista.length - 1 ? '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' : 'none' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                    <span className="chip" style={{ fontSize: 10 }}>{n.tipo}</span>
+                    {n.numero && (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)' }}>
+                        {n.numero}
+                      </span>
+                    )}
+                    {!n.vigente && (
+                      <span className="chip" style={{ fontSize: 9, background: 'color-mix(in oklab, var(--ug-flamingo) 20%, transparent)' }}>derogada</span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 500, marginTop: 6 }}>{n.titulo}</div>
+                  {n.descripcion && (
+                    <p style={{ fontSize: 13, color: 'var(--ink-2)', marginTop: 4 }}>{n.descripcion}</p>
+                  )}
+                  {(n.expedida_por || n.anio) && (
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.06em', color: 'var(--ink-3)', marginTop: 6 }}>
+                      {[n.expedida_por, n.anio].filter(Boolean).join(' · ')}
+                    </div>
+                  )}
                 </div>
 
-                <button className="eg-ronda__btn" onClick={() => r.ir(r.posicion + 1)}
-                        aria-label="Testimonio siguiente">›</button>
-
-                <button className="eg-ronda__pausa" onClick={r.alternarPausa}
-                        aria-pressed={r.detenidoAMano}
-                        aria-label={r.detenidoAMano ? 'Reanudar la rotación' : 'Detener la rotación'}>
-                  {r.detenidoAMano ? <Icons.play /> : <span className="eg-punto__pausa" />}
-                </button>
+                {/* `descarga` apunta al PDF de la base o, si es un enlace
+                    externo, a la URL tal cual. */}
+                {n.descarga
+                  ? <a className="icon-btn" href={n.descarga} target="_blank" rel="noopener noreferrer"
+                       style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', flexShrink: 0 }}
+                       aria-label={'Abrir ' + n.titulo}><Icons.download /></a>
+                  : <button className="icon-btn" style={{ width: 36, height: 36, opacity: .35, flexShrink: 0 }} disabled title="Sin documento cargado"><Icons.download /></button>}
               </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* ─── Convocatorias de prácticas ───────────────────────────────── */
+
+/* Son las convocatorias de categoría "Prácticas", filtradas por el servidor.
+   No hay tabla aparte: se publican desde el módulo Convocatorias del panel. */
+function Practicas() {
+  const { data } = useData()
+  const todas = data.practicas ?? []
+
+  /* Una convocatoria cerrada o con el plazo vencido no debe competir por la
+     atención con las que todavía se pueden aprovechar. */
+  const abiertas = todas.filter(p => p.estado !== 'Cerrada' && !p.vencida)
+  const pasadas = todas.filter(p => p.estado === 'Cerrada' || p.vencida)
+
+  const Tarjeta = ({ p, apagada }) => (
+    <div className="card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 12, opacity: apagada ? .62 : 1 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span className="chip" style={{ fontSize: 10 }}>{p.estado}</span>
+        {p.vencida && p.estado !== 'Cerrada' && (
+          <span className="chip" style={{ fontSize: 9, background: 'color-mix(in oklab, var(--ug-flamingo) 20%, transparent)' }}>plazo vencido</span>
+        )}
+        {p.dirigida_a && <span className="chip" style={{ fontSize: 10 }}>{p.dirigida_a}</span>}
+      </div>
+
+      <h3 style={{ fontSize: 18 }}>{p.titulo}</h3>
+      {p.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{p.descripcion}</p>}
+
+      {(p.requisitos ?? []).length > 0 && (
+        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {p.requisitos.map((r, j) => (
+            <li key={j} style={{ display: 'flex', alignItems: 'start', gap: 8, fontSize: 13, color: 'var(--ink-2)' }}>
+              <Icons.check /> {r}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>
+          {p.fecha_cierre ? 'Cierra ' + fechaLarga(p.fecha_cierre) : 'Sin fecha de cierre'}
+        </span>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {p.documento_url && (
+            <a className="btn ghost" style={{ padding: '6px 14px', fontSize: 12 }} href={p.documento_url} target="_blank" rel="noopener noreferrer">
+              Términos <Icons.download />
+            </a>
+          )}
+          {p.url_postulacion && !apagada && (
+            <a className="btn accent" style={{ padding: '6px 14px', fontSize: 12 }} href={p.url_postulacion} target="_blank" rel="noopener noreferrer">
+              Postularme <Icons.external />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <section className="section" style={{ paddingTop: 30 }}>
+      <div className="inner">
+        <Cabecera
+          eyebrow="Convocatorias de prácticas"
+          titulo={abiertas.length > 0
+            ? abiertas.length + (abiertas.length === 1 ? ' convocatoria abierta.' : ' convocatorias abiertas.')
+            : 'Convocatorias de prácticas.'}
+          desc="Práctica empresarial, pasantía y prácticas sociales. Revisa los requisitos antes de postularte: casi todas piden estar a paz y salvo académico." />
+
+        {todas.length === 0 ? (
+          <Vacio>Ahora mismo no hay convocatorias de prácticas publicadas.</Vacio>
+        ) : (
+          <>
+            {abiertas.length === 0
+              ? <Vacio>No hay convocatorias abiertas en este momento. Abajo quedan las anteriores como referencia.</Vacio>
+              : <div className="grid-2">{abiertas.map(p => <Tarjeta key={p.id} p={p} />)}</div>}
+
+            {pasadas.length > 0 && (
+              <div style={{ marginTop: 40 }}>
+                <div className="eyebrow" style={{ marginBottom: 16 }}>Cerradas</div>
+                <div className="grid-2">{pasadas.map(p => <Tarjeta key={p.id} p={p} apagada />)}</div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* ─── Ideas de investigación ───────────────────────────────────── */
+
+const TONO_ESTADO = {
+  Disponible: 'var(--ug-azul)',
+  'En curso': 'var(--ug-amarillo)',
+  Tomada: 'var(--ink-3)',
+  Terminada: 'var(--ug-marino)',
+}
+
+function Ideas() {
+  const { data } = useData()
+  const todas = data.ideas_investigacion ?? []
+
+  /* Las líneas no son un catálogo cerrado: salen de lo que hay publicado, así
+     que el filtro se adapta solo cuando el panel añade una línea nueva. */
+  const lineas = [...new Set(todas.map(i => i.linea).filter(Boolean))].sort()
+  const [linea, setLinea] = useState('')
+  const [soloLibres, setSoloLibres] = useState(true)
+
+  const lista = todas
+    .filter(i => (linea ? i.linea === linea : true))
+    .filter(i => (soloLibres ? i.disponible : true))
+
+  const libres = todas.filter(i => i.disponible).length
+
+  return (
+    <section className="section" style={{ paddingTop: 30 }}>
+      <div className="inner">
+        <Cabecera
+          eyebrow="Ideas de investigación"
+          titulo={libres > 0
+            ? libres + (libres === 1 ? ' idea disponible para tomar.' : ' ideas disponibles para tomar.')
+            : 'Ideas de investigación.'}
+          desc="Temas que los docentes del programa proponen como punto de partida para el trabajo de grado. Escribe al tutor para conversarla antes de radicar la propuesta." />
+
+        {todas.length > 0 && (
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24, alignItems: 'center' }}>
+            <button className="chip" onClick={() => setSoloLibres(s => !s)}
+                    aria-pressed={soloLibres}
+                    style={{ cursor: 'pointer', background: soloLibres ? 'var(--ink)' : undefined, color: soloLibres ? 'var(--paper)' : undefined, borderColor: soloLibres ? 'var(--ink)' : undefined }}>
+              Solo disponibles
+            </button>
+            {lineas.length > 0 && (
+              <>
+                <button className="chip" onClick={() => setLinea('')}
+                        style={{ cursor: 'pointer', background: linea === '' ? 'var(--ink)' : undefined, color: linea === '' ? 'var(--paper)' : undefined, borderColor: linea === '' ? 'var(--ink)' : undefined }}>
+                  Todas las líneas
+                </button>
+                {lineas.map(l => (
+                  <button key={l} className="chip" onClick={() => setLinea(l)}
+                          style={{ cursor: 'pointer', background: linea === l ? 'var(--ink)' : undefined, color: linea === l ? 'var(--paper)' : undefined, borderColor: linea === l ? 'var(--ink)' : undefined }}>
+                    {l}
+                  </button>
+                ))}
+              </>
             )}
           </div>
         )}
 
-        <div className="eg-grid">
-          {(r.total > 1 ? todos : todos.filter(e => e.id !== r.actual?.id)).map(e => {
-            const enRonda = r.ronda.some(x => x.id === e.id)
-            const esActual = r.actual?.id === e.id
-            return (
-              <article key={e.id}
-                       className={'eg-card' + (esActual ? ' es-en-portada' : '')}
-                       style={{ '--tono': e.color || 'var(--ug-azul)' }}>
-                <div className="eg-card__cabecera">
-                  {/* La cabecera de la tarjeta no tiene portada nunca: la
-                      cuadrícula es su fondo por defecto, teñida por --tono. */}
-                  <TramaMarca escala={72} />
-                  <div className="eg-card__promo">Promoción {e.anio_grado || '—'}</div>
-                  {e.tiene_video && <div className="eg-card__video"><Icons.play /></div>}
-                  <div className="eg-card__retrato">
-                    <Retrato persona={e} size={72} />
-                  </div>
-                </div>
-                <div className="eg-card__cuerpo">
-                  <h3 className="eg-card__nombre">{e.nombre}</h3>
-                  {e.cargo && <div className="eg-card__cargo">{e.cargo}</div>}
-                  {dondeTrabaja(e) && <div className="eg-card__donde">{dondeTrabaja(e)}</div>}
-                  {e.testimonio && <p className="eg-card__cita">«{e.testimonio}»</p>}
-
-                  <div className="eg-card__pie">
-                    {e.linkedin_url && (
-                      <a className="eg-card__linkedin" href={e.linkedin_url} target="_blank" rel="noopener noreferrer">
-                        <Icons.linkedin /> LinkedIn
-                      </a>
-                    )}
-                    {/* Botón y no tarjeta entera clicable: dentro ya hay un
-                        enlace a LinkedIn y anidar interactivos rompe el tabulado. */}
-                    {enRonda && r.total > 1 && (
-                      <button className="eg-card__portada" onClick={() => r.ir(r.ronda.findIndex(x => x.id === e.id))}
-                              disabled={esActual}>
-                        {esActual ? 'En portada ahora' : 'Ver en portada'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Bolsa de empleo ──────────────────────────────────────────── */
-
-function Bolsa() {
-  const { data } = useData()
-  const ofertas = data.ofertas ?? []
-  const [verCerradas, setVerCerradas] = useState(false)
-
-  const abiertas = ofertas.filter(o => o.abierta)
-  const cerradas = ofertas.filter(o => !o.abierta)
-  const lista = verCerradas ? cerradas : abiertas
-
-  return (
-    <section className="section" style={{ background: 'var(--paper-2)' }}>
-      <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Bolsa de empleo</div>
-            <h2 style={{ marginTop: 10 }}>Ofertas exclusivas para la red.</h2>
-          </div>
-          <p className="desc">
-            Empresas aliadas que priorizan a egresados del programa. Abre cualquier vacante para ver
-            el detalle completo y postularte desde ahí.
-          </p>
-        </div>
-
-        {cerradas.length > 0 && (
-          <div className="eg-filtros" role="tablist" aria-label="Estado de las vacantes">
-            <button role="tab" aria-selected={!verCerradas} className={'btn ' + (verCerradas ? 'ghost' : 'accent')}
-                    onClick={() => setVerCerradas(false)}>
-              Abiertas <span className="eg-filtros__n">{abiertas.length}</span>
-            </button>
-            <button role="tab" aria-selected={verCerradas} className={'btn ' + (verCerradas ? 'accent' : 'ghost')}
-                    onClick={() => setVerCerradas(true)}>
-              Cerradas <span className="eg-filtros__n">{cerradas.length}</span>
-            </button>
-          </div>
-        )}
-
-        {lista.length === 0 && (
-          <div className="eg-vacio">
-            <Icons.maletin />
-            <span>{verCerradas ? 'No hay vacantes cerradas.' : 'Ahora mismo no hay vacantes abiertas. Vuelve pronto.'}</span>
-          </div>
-        )}
-
-        <div className="eg-ofertas">
-          {lista.map(o => (
-            /* Pestaña nueva a propósito: quien mira la bolsa suele abrir varias
-               vacantes antes de decidir a cuál aplicar.
-               El '#/' no es decorativo: el sitio monta un HashRouter, así que
-               una ruta sin almohadilla la resuelve el servidor, que devuelve
-               index.html, y el router acaba en la portada. */
-            <a key={o.id} className="oferta-fila" href={'#/egresados/vacante/' + o.id}
-               target="_blank" rel="noopener noreferrer">
-              <div className="oferta-fila__empresa">
-                <div className="oferta-fila__emp">{o.empresa}</div>
-                {o.ubicacion && (
-                  <div className="oferta-fila__loc"><Icons.ubicacion /> {o.ubicacion}</div>
-                )}
-              </div>
-
-              <div className="oferta-fila__puesto">
-                <div className="oferta-fila__cargo">{o.cargo}</div>
-                {o.tags?.length > 0 && (
-                  <div className="oferta-fila__tags">
-                    {o.tags.slice(0, 5).map((t, j) => <span key={j} className="chip">{t}</span>)}
-                  </div>
-                )}
-              </div>
-
-              <div className="oferta-fila__modo">
-                <span className="chip">{o.modalidad}</span>
-                <span className="oferta-fila__contrato">{o.tipo_contrato}</span>
-              </div>
-
-              <div className="oferta-fila__salario">{o.salario || '—'}</div>
-
-              <div className="oferta-fila__accion">
-                {o.abierta
-                  ? <span className="btn ghost oferta-fila__btn">Ver y aplicar <Icons.external /></span>
-                  : <span className="oferta-fila__cerrada">{o.vencida ? 'Plazo vencido' : 'Cerrada'}</span>}
-                {o.abierta && o.dias_restantes !== null && o.dias_restantes <= 14 && (
-                  <span className="oferta-fila__urgente">
-                    {o.dias_restantes === 0 ? 'Cierra hoy' : 'Cierra en ' + o.dias_restantes + ' días'}
-                  </span>
-                )}
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── Actualización de datos ───────────────────────────────────── */
-
-const VACIO = {
-  nombre: '', documento: '', anio_grado: '', email: '', telefono: '',
-  ciudad: '', empresa: '', cargo: '', formacion_posterior: 'Ninguna',
-  resumen: '', autoriza_datos: true,
-}
-
-function Actualizar() {
-  /* Mismo motor y mismo esquema que usa el panel y que corre la API: antes
-     esta página solo validaba en el servidor, así que se podían escribir
-     números en el nombre o letras en el celular y nadie avisaba hasta enviar. */
-  const form = useFormulario('actualizaciones', VACIO)
-  const [enviando, setEnviando] = useState(false)
-  const [enviado, setEnviado] = useState(false)
-  const [error, setError] = useState('')
-  const [correoEnviado, setCorreoEnviado] = useState('')
-
-  const campo = (clave, etiqueta, extra = {}) => (
-    <Campo etiqueta={etiqueta} error={form.error(clave)} opcional={extra.opcional} style={extra.style}>
-      <input
-        type={extra.type ?? 'text'}
-        inputMode={extra.inputMode}
-        value={form.valores[clave]}
-        onChange={e => form.set(clave, e.target.value)}
-        onBlur={() => form.alSalir(clave)}
-        placeholder={extra.placeholder}
-        required={extra.required} />
-    </Campo>
-  )
-
-  const enviar = async e => {
-    e.preventDefault()
-    setError('')
-    if (!form.validarTodo()) return
-    setEnviando(true)
-    try {
-      await apiActualizarDatos(form.valores)
-      setCorreoEnviado(form.valores.email)
-      setEnviado(true)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setEnviando(false)
-    }
-  }
-
-  return (
-    <section className="section">
-      <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Actualiza tus datos</div>
-            <h2 style={{ marginTop: 10 }}>Cuéntanos dónde estás hoy.</h2>
-          </div>
-          <p className="desc">
-            Actualizar tus datos nos permite mejorar la pertinencia del programa, certificar tu
-            experiencia y conectarte con ofertas relevantes para tu perfil actual.
-          </p>
-        </div>
-
-        {enviado ? (
-          <div className="eg-gracias">
-            <div className="eg-gracias__marca"><Icons.check /></div>
-            <h3>¡Gracias por actualizarte!</h3>
-            <p>
-              Ya quedó registrado. La coordinación del programa revisa las actualizaciones y te
-              escribirá a <strong>{correoEnviado}</strong> si necesita confirmar algo.
-            </p>
-            <button className="btn ghost" onClick={() => { form.reiniciar(); setEnviado(false) }}>
-              Enviar otra actualización
-            </button>
-          </div>
+        {lista.length === 0 ? (
+          <Vacio>
+            {todas.length === 0
+              ? 'Todavía no hay ideas publicadas.'
+              : 'Ninguna idea coincide con el filtro. Prueba quitando "solo disponibles" o cambiando de línea.'}
+          </Vacio>
         ) : (
-          <form className="card eg-form" onSubmit={enviar} noValidate>
-            {error && <div role="alert" className="eg-alerta">{error}</div>}
+          <div className="grid-2">
+            {lista.map(i => (
+              <div key={i.id} className="card"
+                   style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 12, borderLeft: '3px solid ' + (TONO_ESTADO[i.estado] ?? 'var(--ug-azul)') }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  <span className="chip" style={{ fontSize: 10 }}>{i.estado}</span>
+                  <span className="chip" style={{ fontSize: 10 }}>{i.dificultad}</span>
+                  {i.linea && <span className="chip" style={{ fontSize: 10, background: 'color-mix(in oklab, var(--ug-marino) 14%, transparent)' }}>{i.linea}</span>}
+                </div>
 
-            <div className="eg-form__campos">
-              {campo('nombre', 'Nombres y apellidos', { required: true })}
-              {campo('documento', 'Documento de identidad', { opcional: true, inputMode: 'numeric', placeholder: '1098765432' })}
-              <Campo etiqueta="Año de grado" opcional error={form.error('anio_grado')}>
-                <SelectorAnio valor={form.valores.anio_grado} desde={ANIO_GRADO_MIN}
-                              onChange={v => form.set('anio_grado', v)}
-                              onBlur={() => form.alSalir('anio_grado')} />
-              </Campo>
-              {campo('email', 'Correo personal', { type: 'email', required: true })}
-              {campo('telefono', 'Celular / WhatsApp', { opcional: true, inputMode: 'tel', placeholder: '+57 300 1234567' })}
-              {campo('ciudad', 'Ciudad actual', { opcional: true })}
-              {campo('empresa', 'Empresa u organización', { opcional: true })}
-              {campo('cargo', 'Cargo actual', { opcional: true })}
+                <h3 style={{ fontSize: 18 }}>{i.titulo}</h3>
+                {i.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{i.descripcion}</p>}
 
-              <Campo etiqueta="Formación posterior" error={form.error('formacion_posterior')}
-                     style={{ gridColumn: '1 / -1' }}>
-                <select value={form.valores.formacion_posterior}
-                        onChange={e => form.set('formacion_posterior', e.target.value)}>
-                  {FORMACION_POSTERIOR.map(o => <option key={o} value={o}>{o}</option>)}
-                </select>
-              </Campo>
+                {i.palabras.length > 0 && (
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {i.palabras.map((p, j) => (
+                      <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', color: 'var(--ink-3)' }}>#{p}</span>
+                    ))}
+                  </div>
+                )}
 
-              <Campo etiqueta="Cuéntanos en una línea qué estás haciendo hoy" opcional
-                     error={form.error('resumen')} style={{ gridColumn: '1 / -1' }}>
-                <textarea rows="3" value={form.valores.resumen}
-                          onChange={e => form.set('resumen', e.target.value)}
-                          onBlur={() => form.alSalir('resumen')}
-                          placeholder="Opcional — puede ser destacado en la web" />
-              </Campo>
-            </div>
-
-            <div className="eg-form__pie">
-              <label className="eg-form__habeas">
-                <input type="checkbox" checked={form.valores.autoriza_datos}
-                       onChange={e => form.set('autoriza_datos', e.target.checked)} />
-                Autorizo el tratamiento de mis datos conforme a la política de la Universidad de La Guajira.
-              </label>
-              <button className="btn accent" type="submit"
-                      disabled={enviando || !form.valores.autoriza_datos}>
-                {enviando ? 'Enviando…' : 'Enviar actualización'} <Icons.arrow />
-              </button>
-            </div>
-          </form>
+                <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', fontSize: 13, color: 'var(--ink-2)' }}>
+                  {i.docente
+                    ? <div>Propuesta por <strong>{i.docente}</strong></div>
+                    : <div style={{ color: 'var(--ink-3)' }}>Tutor por asignar</div>}
+                  {i.modalidad && (
+                    <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 2 }}>Apunta a {i.modalidad}</div>
+                  )}
+                  {i.contacto && (
+                    <a href={i.contacto.includes('@') ? 'mailto:' + i.contacto : i.contacto}
+                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, fontSize: 12 }}>
+                      <Icons.mail /> {i.contacto}
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </section>
   )
 }
 
-/* Desplazamiento suave hasta una sección de la misma página, respetando a
-   quien pidió menos movimiento en su sistema. */
-function irA(id) {
-  const destino = document.getElementById(id)
-  if (!destino) return
-  const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  destino.scrollIntoView({ behavior: suave ? 'smooth' : 'auto', block: 'start' })
-}
+/* ─── Página ───────────────────────────────────────────────────── */
+
+const TABS = [
+  ['modalidades', 'Modalidades de grado'],
+  ['normativas', 'Normativas'],
+  ['practicas', 'Convocatorias de prácticas'],
+  ['ideas', 'Ideas de investigación'],
+]
 
 export default function Egresados() {
-  const { data } = useData()
-  const abiertas = (data.ofertas ?? []).filter(o => o.abierta).length
-  const irALaBolsa = () => irA('bolsa')
+  /* En la URL, como en el resto del sitio: recargar no devuelve a la primera
+     pestaña y se puede enlazar directo (#/egresados?seccion=ideas). */
+  const [tab, setTab] = usePestana(TABS, { clave: 'seccion' })
 
   return (
     <div className="page-in">
-      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)' }}>
+      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)', paddingBottom: 30 }}>
         <div className="inner">
           <div className="eyebrow">Comunidad · Egresados</div>
-          <h1 style={{ marginTop: 14, maxWidth: '22ch' }}>Lo que construyen nuestros egresados nos representa.</h1>
-          <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '58ch' }}>
-            Más de 860 egresados forman una red activa que hoy lidera equipos, funda empresas y
-            continúa estudiando — dentro y fuera del Caribe.
+          <h1 style={{ marginTop: 14, maxWidth: '22ch' }}>Terminaste las materias. Esto es lo que sigue.</h1>
+          <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '60ch' }}>
+            Las modalidades entre las que puedes escoger, la norma que rige cada una, las prácticas
+            abiertas y las ideas de investigación que proponen los docentes — todo en un solo sitio,
+            para que el trámite no se te alargue por no saber dónde buscar.
           </p>
-          {abiertas > 0 && (
-            /* Botón y no enlace: con HashRouter un href="#bolsa" se interpreta
-               como la ruta /bolsa, que no existe, y caía en el 404. */
-            <button className="btn accent" style={{ marginTop: 28 }} onClick={irALaBolsa}>
-              {abiertas} {abiertas === 1 ? 'vacante abierta' : 'vacantes abiertas'} <Icons.arrow />
-            </button>
-          )}
+
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 36 }}>
+            {TABS.map(([k, l]) => (
+              <button key={k} className="chip" onClick={() => setTab(k)}
+                style={{ cursor: 'pointer', background: tab === k ? 'var(--ink)' : undefined, color: tab === k ? 'var(--paper)' : undefined, borderColor: tab === k ? 'var(--ink)' : undefined }}>
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
-      <Destacados />
-      <div id="bolsa"><Bolsa /></div>
-      <Actualizar />
+
+      {tab === 'modalidades' && <Modalidades />}
+      {tab === 'normativas' && <Normativas />}
+      {tab === 'practicas' && <Practicas />}
+      {tab === 'ideas' && <Ideas />}
     </div>
   )
 }
