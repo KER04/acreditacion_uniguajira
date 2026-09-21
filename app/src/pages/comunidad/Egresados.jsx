@@ -6,32 +6,61 @@
  * por dónde graduarse, qué norma lo rige, qué prácticas hay abiertas y sobre
  * qué puede investigar.
  *
+ * El diseño es el de la propuesta de actualización curricular —migas, la
+ * hero-card con su franja tejida y sus cifras, los tokens --doc-* — porque
+ * las dos son páginas de consulta institucional y no hay razón para que se
+ * vean distintas. Lo propio de aquí son las tarjetas, con prefijo `grado-`:
+ * el prefijo `eg-` ya es de Graduados.
+ *
  * Todo sale de la base y se edita desde el panel. Dos bloques se leen de
  * tablas que ya existían —las modalidades del módulo Estudiantes y las
  * prácticas del de Convocatorias—, así que se editan en su sitio de siempre
  * y aquí solo se muestran: un único catálogo, sin copias que se contradigan.
  */
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import { useData } from '../../context/DataContext'
 import { usePestana } from '../../hooks/useParametroURL'
 import { fechaLarga } from '../../../shared/validacion'
 
-/* Encabezado de sección, repetido cuatro veces con distinto texto. */
-function Cabecera({ eyebrow, titulo, desc }) {
+/* ─── Piezas compartidas ───────────────────────────────────────── */
+
+function Pin({ tono = 'neutro', children }) {
+  return <span className={`grado-pin grado-pin--${tono}`}>{children}</span>
+}
+
+function Seccion({ titulo, desc, children }) {
   return (
-    <div className="section-head">
-      <div className="title">
-        <div className="eyebrow">{eyebrow}</div>
-        <h2 style={{ marginTop: 10 }}>{titulo}</h2>
-      </div>
-      {desc && <p className="desc">{desc}</p>}
-    </div>
+    <section className="grado-seccion">
+      <h2 className="grado-seccion__titulo">{titulo}</h2>
+      {desc && <p className="grado-seccion__desc">{desc}</p>}
+      {children}
+    </section>
   )
 }
 
 function Vacio({ children }) {
-  return <div style={{ color: 'var(--ink-3)' }}>{children}</div>
+  return <div className="grado-vacio">{children}</div>
+}
+
+function Chip({ activo, onClick, children, n }) {
+  return (
+    <button className={'grado-chip' + (activo ? ' is-activo' : '')}
+            onClick={onClick} aria-pressed={activo}>
+      {children}
+      {n !== undefined && <span className="grado-chip__n">{n}</span>}
+    </button>
+  )
+}
+
+function Requisitos({ items }) {
+  if (!items?.length) return null
+  return (
+    <ul className="grado-card__requisitos">
+      {items.map((r, j) => <li key={j}><Icons.check /> {r}</li>)}
+    </ul>
+  )
 }
 
 /* ─── Modalidades de grado ─────────────────────────────────────── */
@@ -41,55 +70,40 @@ function Modalidades() {
   const modalidades = data.modalidades_grado ?? []
 
   return (
-    <section className="section" style={{ paddingTop: 30 }}>
-      <div className="inner">
-        <Cabecera
-          eyebrow="Modalidades de grado"
-          titulo={modalidades.length > 0
-            ? modalidades.length + ' caminos válidos hacia tu título.'
-            : 'Modalidades de grado.'}
-          desc="Escoge la que mejor se ajuste a tu perfil y al tiempo del que dispones. Todas exigen paz y salvo financiero y dominio de lengua extranjera (B1)." />
+    <Seccion
+      titulo="Modalidades de grado"
+      desc="Escoge la que mejor se ajuste a tu perfil y al tiempo del que dispones. Todas exigen paz y salvo financiero y dominio de lengua extranjera en nivel B1.">
 
-        {modalidades.length === 0 ? (
-          <Vacio>Todavía no hay modalidades publicadas.</Vacio>
-        ) : (
-          <div className="grid-3">
-            {modalidades.map(m => (
-              <div key={m.id} className="card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 14, minHeight: 320 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: m.color || 'var(--ug-azul)' }} />
-                <h3 style={{ fontSize: 20 }}>{m.nombre}</h3>
-                {m.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{m.descripcion}</p>}
+      {modalidades.length === 0 ? (
+        <Vacio>Todavía no hay modalidades publicadas.</Vacio>
+      ) : (
+        <div className="grado-grid">
+          {modalidades.map(m => (
+            <article key={m.id} className="grado-card">
+              {/* El color lo pone el panel, así que va en línea y no como
+                  modificador: cada modalidad elige el suyo de la paleta. */}
+              <div className="grado-card__acento" style={{ background: m.color || 'var(--ug-azul)' }} />
+              <div className="grado-card__cuerpo">
+                <h3 className="grado-card__titulo">{m.nombre}</h3>
+                {m.descripcion && <p className="grado-card__texto">{m.descripcion}</p>}
+                <Requisitos items={m.requisitos} />
 
-                <div style={{ marginTop: 'auto', paddingTop: 14, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)' }}>
-                  {(m.requisitos ?? []).length > 0 && (
-                    <>
-                      <div className="eyebrow" style={{ marginBottom: 10 }}>Requisitos</div>
-                      <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        {m.requisitos.map((r, j) => (
-                          <li key={j} style={{ display: 'flex', alignItems: 'start', gap: 8, fontSize: 13, color: 'var(--ink-2)' }}>
-                            <Icons.check /> {r}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
+                <div className="grado-card__pie">
+                  <span className="grado-card__dato">
+                    {m.duracion ? 'Duración · ' + m.duracion : 'Duración sin definir'}
+                  </span>
+                  {m.documento_url && (
+                    <a className="grado-boton" href={m.documento_url} target="_blank" rel="noopener noreferrer">
+                      <Icons.download /> Guía
+                    </a>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 14 }}>
-                    {m.duracion
-                      ? <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Duración · {m.duracion}</span>
-                      : <span />}
-                    {m.documento_url && (
-                      <a className="btn ghost" style={{ padding: '6px 14px', fontSize: 12 }} href={m.documento_url} target="_blank" rel="noopener noreferrer">
-                        Guía <Icons.download />
-                      </a>
-                    )}
-                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+            </article>
+          ))}
+        </div>
+      )}
+    </Seccion>
   )
 }
 
@@ -105,170 +119,151 @@ function Normativas() {
   const lista = verDerogadas ? derogadas : vigentes
 
   return (
-    <section className="section" style={{ paddingTop: 30 }}>
-      <div className="inner">
-        <Cabecera
-          eyebrow="Normativa aplicable"
-          titulo="Lo que dice la norma sobre tu grado."
-          desc="Acuerdos, resoluciones y reglamentos que rigen el trámite. Descarga el texto completo antes de radicar cualquier solicitud." />
+    <Seccion
+      titulo="Normativa aplicable"
+      desc="Acuerdos, resoluciones y reglamentos que rigen el trámite. Descarga el texto completo antes de radicar cualquier solicitud: los requisitos que cuentan son los de la norma, no los del resumen.">
 
-        {/* Las derogadas no se borran: los trámites viejos las siguen citando. */}
-        {derogadas.length > 0 && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 24 }} role="tablist" aria-label="Vigencia de las normas">
-            <button role="tab" aria-selected={!verDerogadas}
-                    className={'btn ' + (verDerogadas ? 'ghost' : 'accent')}
-                    style={{ padding: '8px 18px', fontSize: 13 }}
-                    onClick={() => setVerDerogadas(false)}>
-              Vigentes ({vigentes.length})
-            </button>
-            <button role="tab" aria-selected={verDerogadas}
-                    className={'btn ' + (verDerogadas ? 'accent' : 'ghost')}
-                    style={{ padding: '8px 18px', fontSize: 13 }}
-                    onClick={() => setVerDerogadas(true)}>
-              Derogadas ({derogadas.length})
-            </button>
-          </div>
-        )}
+      {/* Las derogadas no se borran: los trámites viejos las siguen citando. */}
+      {derogadas.length > 0 && (
+        <div className="grado-filtros" role="tablist" aria-label="Vigencia de las normas">
+          <Chip activo={!verDerogadas} onClick={() => setVerDerogadas(false)} n={vigentes.length}>Vigentes</Chip>
+          <Chip activo={verDerogadas} onClick={() => setVerDerogadas(true)} n={derogadas.length}>Derogadas</Chip>
+        </div>
+      )}
 
-        {lista.length === 0 ? (
-          <Vacio>{verDerogadas ? 'No hay normas derogadas registradas.' : 'Todavía no hay normativa publicada.'}</Vacio>
-        ) : (
-          <div className="card" style={{ background: 'var(--paper-2)' }}>
-            {lista.map((n, j) => (
-              <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 0', borderBottom: j < lista.length - 1 ? '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' : 'none' }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                    <span className="chip" style={{ fontSize: 10 }}>{n.tipo}</span>
-                    {n.numero && (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)' }}>
-                        {n.numero}
-                      </span>
-                    )}
-                    {!n.vigente && (
-                      <span className="chip" style={{ fontSize: 9, background: 'color-mix(in oklab, var(--ug-flamingo) 20%, transparent)' }}>derogada</span>
-                    )}
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 500, marginTop: 6 }}>{n.titulo}</div>
-                  {n.descripcion && (
-                    <p style={{ fontSize: 13, color: 'var(--ink-2)', marginTop: 4 }}>{n.descripcion}</p>
-                  )}
-                  {(n.expedida_por || n.anio) && (
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.06em', color: 'var(--ink-3)', marginTop: 6 }}>
-                      {[n.expedida_por, n.anio].filter(Boolean).join(' · ')}
-                    </div>
-                  )}
-                </div>
-
-                {/* `descarga` apunta al PDF de la base o, si es un enlace
-                    externo, a la URL tal cual. */}
-                {n.descarga
-                  ? <a className="icon-btn" href={n.descarga} target="_blank" rel="noopener noreferrer"
-                       style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', flexShrink: 0 }}
-                       aria-label={'Abrir ' + n.titulo}><Icons.download /></a>
-                  : <button className="icon-btn" style={{ width: 36, height: 36, opacity: .35, flexShrink: 0 }} disabled title="Sin documento cargado"><Icons.download /></button>}
+      {lista.length === 0 ? (
+        <Vacio>{verDerogadas ? 'No hay normas derogadas registradas.' : 'Todavía no hay normativa publicada.'}</Vacio>
+      ) : (
+        <div className="grado-lista">
+          {lista.map(n => (
+            <div key={n.id} className={'grado-norma' + (n.vigente ? '' : ' is-apagada')}>
+              <div className="grado-norma__ref">
+                <b>{n.tipo}</b>
+                <span>{n.numero || (n.anio ?? '—')}</span>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+
+              <div className="grado-norma__cuerpo">
+                <div className="grado-norma__titulo">
+                  {n.titulo}
+                  {!n.vigente && <> <Pin tono="terracota">Derogada</Pin></>}
+                </div>
+                {n.descripcion && <p className="grado-norma__desc">{n.descripcion}</p>}
+                {(n.expedida_por || n.anio) && (
+                  <div className="grado-norma__fuente">
+                    {[n.expedida_por, n.anio].filter(Boolean).join(' · ')}
+                  </div>
+                )}
+              </div>
+
+              {/* `descarga` apunta al PDF de la base o, si es un enlace
+                  externo, a la URL tal cual. */}
+              {n.descarga
+                ? <a className="grado-boton" href={n.descarga} target="_blank" rel="noopener noreferrer">
+                    <Icons.download /> Abrir
+                  </a>
+                : <button className="grado-boton" disabled title="Sin documento cargado">
+                    <Icons.download /> Sin documento
+                  </button>}
+            </div>
+          ))}
+        </div>
+      )}
+    </Seccion>
   )
 }
 
 /* ─── Convocatorias de prácticas ───────────────────────────────── */
 
 /* Son las convocatorias de categoría "Prácticas", filtradas por el servidor.
-   No hay tabla aparte: se publican desde el módulo Convocatorias del panel. */
+   No hay tabla aparte: se publican desde el módulo Convocatorias del panel.
+
+   Una cerrada o con el plazo vencido no debe competir por la atención con
+   las que todavía se pueden aprovechar, pero tampoco se esconde: sirve de
+   referencia de lo que suele salir. */
+const practicaAbierta = p => p.estado !== 'Cerrada' && !p.vencida
+
+/* Fuera del componente a propósito: definida dentro, React la trataría como
+   un tipo nuevo en cada render y volvería a montar todas las tarjetas. */
+function TarjetaPractica({ p, apagada }) {
+  return (
+    <article className={'grado-card' + (apagada ? ' is-apagada' : '')}>
+      <div className={'grado-card__acento grado-card__acento--' + (apagada ? 'neutro' : 'azul')} />
+      <div className="grado-card__cuerpo">
+        <div className="grado-card__etiquetas">
+          <Pin tono={apagada ? 'neutro' : 'azul'}>{p.estado}</Pin>
+          {p.vencida && p.estado !== 'Cerrada' && <Pin tono="terracota">Plazo vencido</Pin>}
+          {p.dirigida_a && <Pin tono="neutro">{p.dirigida_a}</Pin>}
+        </div>
+
+        <h3 className="grado-card__titulo">{p.titulo}</h3>
+        {p.descripcion && <p className="grado-card__texto">{p.descripcion}</p>}
+        <Requisitos items={p.requisitos} />
+
+        <div className="grado-card__pie">
+          <span className="grado-card__dato">
+            {p.fecha_cierre ? 'Cierra ' + fechaLarga(p.fecha_cierre) : 'Sin fecha de cierre'}
+          </span>
+          <div className="grado-card__acciones">
+            {p.documento_url && (
+              <a className="grado-boton" href={p.documento_url} target="_blank" rel="noopener noreferrer">
+                <Icons.download /> Términos
+              </a>
+            )}
+            {p.url_postulacion && !apagada && (
+              <a className="grado-boton grado-boton--fuerte" href={p.url_postulacion} target="_blank" rel="noopener noreferrer">
+                Postularme <Icons.external />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function Practicas() {
   const { data } = useData()
   const todas = data.practicas ?? []
-
-  /* Una convocatoria cerrada o con el plazo vencido no debe competir por la
-     atención con las que todavía se pueden aprovechar. */
-  const abiertas = todas.filter(p => p.estado !== 'Cerrada' && !p.vencida)
-  const pasadas = todas.filter(p => p.estado === 'Cerrada' || p.vencida)
-
-  const Tarjeta = ({ p, apagada }) => (
-    <div className="card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 12, opacity: apagada ? .62 : 1 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-        <span className="chip" style={{ fontSize: 10 }}>{p.estado}</span>
-        {p.vencida && p.estado !== 'Cerrada' && (
-          <span className="chip" style={{ fontSize: 9, background: 'color-mix(in oklab, var(--ug-flamingo) 20%, transparent)' }}>plazo vencido</span>
-        )}
-        {p.dirigida_a && <span className="chip" style={{ fontSize: 10 }}>{p.dirigida_a}</span>}
-      </div>
-
-      <h3 style={{ fontSize: 18 }}>{p.titulo}</h3>
-      {p.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{p.descripcion}</p>}
-
-      {(p.requisitos ?? []).length > 0 && (
-        <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {p.requisitos.map((r, j) => (
-            <li key={j} style={{ display: 'flex', alignItems: 'start', gap: 8, fontSize: 13, color: 'var(--ink-2)' }}>
-              <Icons.check /> {r}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>
-          {p.fecha_cierre ? 'Cierra ' + fechaLarga(p.fecha_cierre) : 'Sin fecha de cierre'}
-        </span>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {p.documento_url && (
-            <a className="btn ghost" style={{ padding: '6px 14px', fontSize: 12 }} href={p.documento_url} target="_blank" rel="noopener noreferrer">
-              Términos <Icons.download />
-            </a>
-          )}
-          {p.url_postulacion && !apagada && (
-            <a className="btn accent" style={{ padding: '6px 14px', fontSize: 12 }} href={p.url_postulacion} target="_blank" rel="noopener noreferrer">
-              Postularme <Icons.external />
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
-  )
+  const abiertas = todas.filter(practicaAbierta)
+  const pasadas = todas.filter(p => !practicaAbierta(p))
 
   return (
-    <section className="section" style={{ paddingTop: 30 }}>
-      <div className="inner">
-        <Cabecera
-          eyebrow="Convocatorias de prácticas"
-          titulo={abiertas.length > 0
-            ? abiertas.length + (abiertas.length === 1 ? ' convocatoria abierta.' : ' convocatorias abiertas.')
-            : 'Convocatorias de prácticas.'}
-          desc="Práctica empresarial, pasantía y prácticas sociales. Revisa los requisitos antes de postularte: casi todas piden estar a paz y salvo académico." />
+    <Seccion
+      titulo="Convocatorias de prácticas"
+      desc="Práctica empresarial, pasantía y prácticas sociales. Revisa los requisitos antes de postularte: casi todas piden estar a paz y salvo académico y haber cursado un mínimo de créditos.">
 
-        {todas.length === 0 ? (
-          <Vacio>Ahora mismo no hay convocatorias de prácticas publicadas.</Vacio>
-        ) : (
-          <>
-            {abiertas.length === 0
-              ? <Vacio>No hay convocatorias abiertas en este momento. Abajo quedan las anteriores como referencia.</Vacio>
-              : <div className="grid-2">{abiertas.map(p => <Tarjeta key={p.id} p={p} />)}</div>}
+      {todas.length === 0 ? (
+        <Vacio>Ahora mismo no hay convocatorias de prácticas publicadas.</Vacio>
+      ) : (
+        <>
+          {abiertas.length === 0
+            ? <Vacio>No hay convocatorias abiertas en este momento. Abajo quedan las anteriores como referencia.</Vacio>
+            : <div className="grado-grid grado-grid--ancha">{abiertas.map(p => <TarjetaPractica key={p.id} p={p} />)}</div>}
 
-            {pasadas.length > 0 && (
-              <div style={{ marginTop: 40 }}>
-                <div className="eyebrow" style={{ marginBottom: 16 }}>Cerradas</div>
-                <div className="grid-2">{pasadas.map(p => <Tarjeta key={p.id} p={p} apagada />)}</div>
+          {pasadas.length > 0 && (
+            <div style={{ marginTop: 32 }}>
+              <h3 className="grado-seccion__titulo">Cerradas</h3>
+              <div className="grado-grid grado-grid--ancha">
+                {pasadas.map(p => <TarjetaPractica key={p.id} p={p} apagada />)}
               </div>
-            )}
-          </>
-        )}
-      </div>
-    </section>
+            </div>
+          )}
+        </>
+      )}
+    </Seccion>
   )
 }
 
 /* ─── Ideas de investigación ───────────────────────────────────── */
 
+/* Cada estado con su color, el mismo criterio que la línea de tiempo del
+   trámite: azul lo que se puede tomar, ámbar lo que está andando. El mismo
+   tono tiñe la pastilla y la franja lateral de la tarjeta. */
 const TONO_ESTADO = {
-  Disponible: 'var(--ug-azul)',
-  'En curso': 'var(--ug-amarillo)',
-  Tomada: 'var(--ink-3)',
-  Terminada: 'var(--ug-marino)',
+  Disponible: 'azul',
+  'En curso': 'ambar',
+  Tomada: 'neutro',
+  Terminada: 'marino',
 }
 
 function Ideas() {
@@ -285,90 +280,74 @@ function Ideas() {
     .filter(i => (linea ? i.linea === linea : true))
     .filter(i => (soloLibres ? i.disponible : true))
 
-  const libres = todas.filter(i => i.disponible).length
+  /* Cada chip cuenta lo que quedaría al pulsarlo, respetando el otro filtro.
+     Así "Todas las líneas" no muestra el total de la línea ya seleccionada. */
+  const visibles = todas.filter(i => (soloLibres ? i.disponible : true))
+  const cuantas = l => visibles.filter(i => i.linea === l).length
 
   return (
-    <section className="section" style={{ paddingTop: 30 }}>
-      <div className="inner">
-        <Cabecera
-          eyebrow="Ideas de investigación"
-          titulo={libres > 0
-            ? libres + (libres === 1 ? ' idea disponible para tomar.' : ' ideas disponibles para tomar.')
-            : 'Ideas de investigación.'}
-          desc="Temas que los docentes del programa proponen como punto de partida para el trabajo de grado. Escribe al tutor para conversarla antes de radicar la propuesta." />
+    <Seccion
+      titulo="Ideas de investigación"
+      desc="Temas que los docentes del programa proponen como punto de partida para el trabajo de grado. No son propuestas cerradas: escribe al tutor y conversa la idea antes de radicarla.">
 
-        {todas.length > 0 && (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24, alignItems: 'center' }}>
-            <button className="chip" onClick={() => setSoloLibres(s => !s)}
-                    aria-pressed={soloLibres}
-                    style={{ cursor: 'pointer', background: soloLibres ? 'var(--ink)' : undefined, color: soloLibres ? 'var(--paper)' : undefined, borderColor: soloLibres ? 'var(--ink)' : undefined }}>
-              Solo disponibles
-            </button>
-            {lineas.length > 0 && (
-              <>
-                <button className="chip" onClick={() => setLinea('')}
-                        style={{ cursor: 'pointer', background: linea === '' ? 'var(--ink)' : undefined, color: linea === '' ? 'var(--paper)' : undefined, borderColor: linea === '' ? 'var(--ink)' : undefined }}>
-                  Todas las líneas
-                </button>
-                {lineas.map(l => (
-                  <button key={l} className="chip" onClick={() => setLinea(l)}
-                          style={{ cursor: 'pointer', background: linea === l ? 'var(--ink)' : undefined, color: linea === l ? 'var(--paper)' : undefined, borderColor: linea === l ? 'var(--ink)' : undefined }}>
-                    {l}
-                  </button>
-                ))}
-              </>
-            )}
-          </div>
-        )}
+      {todas.length > 0 && (
+        <div className="grado-filtros">
+          <Chip activo={soloLibres} onClick={() => setSoloLibres(s => !s)}>Solo disponibles</Chip>
+          {lineas.length > 0 && (
+            <>
+              <Chip activo={linea === ''} onClick={() => setLinea('')} n={visibles.length}>Todas las líneas</Chip>
+              {lineas.map(l => (
+                <Chip key={l} activo={linea === l} onClick={() => setLinea(l)} n={cuantas(l)}>{l}</Chip>
+              ))}
+            </>
+          )}
+        </div>
+      )}
 
-        {lista.length === 0 ? (
-          <Vacio>
-            {todas.length === 0
-              ? 'Todavía no hay ideas publicadas.'
-              : 'Ninguna idea coincide con el filtro. Prueba quitando "solo disponibles" o cambiando de línea.'}
-          </Vacio>
-        ) : (
-          <div className="grid-2">
-            {lista.map(i => (
-              <div key={i.id} className="card"
-                   style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 12, borderLeft: '3px solid ' + (TONO_ESTADO[i.estado] ?? 'var(--ug-azul)') }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  <span className="chip" style={{ fontSize: 10 }}>{i.estado}</span>
-                  <span className="chip" style={{ fontSize: 10 }}>{i.dificultad}</span>
-                  {i.linea && <span className="chip" style={{ fontSize: 10, background: 'color-mix(in oklab, var(--ug-marino) 14%, transparent)' }}>{i.linea}</span>}
+      {lista.length === 0 ? (
+        <Vacio>
+          {todas.length === 0
+            ? 'Todavía no hay ideas publicadas.'
+            : 'Ninguna idea coincide con el filtro. Prueba quitando «solo disponibles» o cambiando de línea.'}
+        </Vacio>
+      ) : (
+        <div className="grado-grid grado-grid--ancha">
+          {lista.map(i => (
+            <article key={i.id} className={'grado-card' + (i.disponible ? '' : ' is-apagada')}>
+              <div className={'grado-card__acento grado-card__acento--' + (TONO_ESTADO[i.estado] ?? 'neutro')} />
+              <div className="grado-card__cuerpo">
+                <div className="grado-card__etiquetas">
+                  <Pin tono={TONO_ESTADO[i.estado] ?? 'neutro'}>{i.estado}</Pin>
+                  <Pin tono="neutro">{i.dificultad}</Pin>
+                  {i.linea && <Pin tono="neutro">{i.linea}</Pin>}
                 </div>
 
-                <h3 style={{ fontSize: 18 }}>{i.titulo}</h3>
-                {i.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)' }}>{i.descripcion}</p>}
+                <h3 className="grado-card__titulo">{i.titulo}</h3>
+                {i.descripcion && <p className="grado-card__texto">{i.descripcion}</p>}
 
-                {i.palabras.length > 0 && (
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    {i.palabras.map((p, j) => (
-                      <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.06em', color: 'var(--ink-3)' }}>#{p}</span>
-                    ))}
+                {(i.palabras ?? []).length > 0 && (
+                  <div className="grado-tags">
+                    {i.palabras.map((p, j) => <span key={j} className="grado-tag">#{p}</span>)}
                   </div>
                 )}
 
-                <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', fontSize: 13, color: 'var(--ink-2)' }}>
-                  {i.docente
-                    ? <div>Propuesta por <strong>{i.docente}</strong></div>
-                    : <div style={{ color: 'var(--ink-3)' }}>Tutor por asignar</div>}
-                  {i.modalidad && (
-                    <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 2 }}>Apunta a {i.modalidad}</div>
-                  )}
+                <div className="grado-card__pie">
+                  <div className={'grado-tutor' + (i.docente ? '' : ' grado-tutor--vacante')}>
+                    {i.docente ? <>Propuesta por <b>{i.docente}</b></> : 'Tutor por asignar'}
+                    {i.modalidad && <div className="grado-card__dato">Apunta a {i.modalidad}</div>}
+                  </div>
                   {i.contacto && (
-                    <a href={i.contacto.includes('@') ? 'mailto:' + i.contacto : i.contacto}
-                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8, fontSize: 12 }}>
-                      <Icons.mail /> {i.contacto}
+                    <a className="grado-boton" href={i.contacto.includes('@') ? 'mailto:' + i.contacto : i.contacto}>
+                      <Icons.mail /> Escribir
                     </a>
                   )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+            </article>
+          ))}
+        </div>
+      )}
+    </Seccion>
   )
 }
 
@@ -377,42 +356,106 @@ function Ideas() {
 const TABS = [
   ['modalidades', 'Modalidades de grado'],
   ['normativas', 'Normativas'],
-  ['practicas', 'Convocatorias de prácticas'],
+  ['practicas', 'Prácticas'],
   ['ideas', 'Ideas de investigación'],
 ]
+
+const SECCIONES = {
+  modalidades: Modalidades,
+  normativas: Normativas,
+  practicas: Practicas,
+  ideas: Ideas,
+}
 
 export default function Egresados() {
   /* En la URL, como en el resto del sitio: recargar no devuelve a la primera
      pestaña y se puede enlazar directo (#/egresados?seccion=ideas). */
   const [tab, setTab] = usePestana(TABS, { clave: 'seccion' })
+  const { data } = useData()
+  const Actual = SECCIONES[tab] ?? Modalidades
+
+  const modalidades = (data.modalidades_grado ?? []).length
+  const normativas = (data.normativas ?? []).filter(n => n.vigente).length
+  const practicas = (data.practicas ?? []).filter(p => p.estado !== 'Cerrada' && !p.vencida).length
+  const ideas = (data.ideas_investigacion ?? []).filter(i => i.disponible).length
+
+  const CUENTA = { modalidades, normativas, practicas, ideas }
+
+  /* Las cuatro cifras de cabecera salen de los mismos datos que pinta cada
+     sección: ninguna está escrita a mano, así que publicar algo en el panel
+     las mueve solas. */
+  const CIFRAS = [
+    { k: 'modalidades', tono: 'acento', valor: modalidades, etiqueta: 'Modalidades de grado' },
+    { k: 'normativas', valor: normativas, etiqueta: 'Normas vigentes' },
+    { k: 'practicas', tono: 'ambar', valor: practicas, etiqueta: 'Convocatorias de prácticas abiertas' },
+    { k: 'ideas', tono: 'acento', valor: ideas, etiqueta: 'Ideas de investigación libres' },
+  ]
 
   return (
     <div className="page-in">
-      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)', paddingBottom: 30 }}>
-        <div className="inner">
-          <div className="eyebrow">Comunidad · Egresados</div>
-          <h1 style={{ marginTop: 14, maxWidth: '22ch' }}>Terminaste las materias. Esto es lo que sigue.</h1>
-          <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '60ch' }}>
-            Las modalidades entre las que puedes escoger, la norma que rige cada una, las prácticas
-            abiertas y las ideas de investigación que proponen los docentes — todo en un solo sitio,
-            para que el trámite no se te alargue por no saber dónde buscar.
-          </p>
+      <div className="grado-page">
 
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 36 }}>
+        <nav className="miga" aria-label="Ruta de navegación">
+          <span>Comunidad</span>
+          <span aria-hidden="true">/</span>
+          <span className="miga__actual">Egresados · trámite de grado</span>
+        </nav>
+
+        <header className="hero-card">
+          <div className="hero-card__patron" aria-hidden="true" />
+          <div className="hero-card__contenido">
+
+            <p className="hero-card__insignia">
+              <span className="hero-card__punto" aria-hidden="true" />
+              Egresados · en trámite de grado
+            </p>
+
+            <h1 className="hero-card__titulo">
+              Terminaste las materias. <span>Esto es lo que sigue.</span>
+            </h1>
+
+            <p className="hero-card__texto">
+              Aquí está reunido el trámite completo: las modalidades entre las que puedes escoger,
+              la norma que rige cada una, las prácticas abiertas y las ideas de investigación que
+              proponen los docentes. Es la etapa entre terminar el plan de estudios y recibir el
+              título — <b>se es egresado desde que se cursa la última asignatura y graduado solo
+              después de la ceremonia</b>, y lo que necesita cada uno es distinto.
+            </p>
+
+            <dl className="hero-card__cifras">
+              {CIFRAS.map(c => (
+                <div key={c.k} className={'hero-card__cifra' + (c.tono ? ` hero-card__cifra--${c.tono}` : '')}>
+                  <dt>{c.valor}</dt>
+                  <dd>{c.etiqueta}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <Link className="hero-card__cta" to="/graduados">
+              ¿Ya recibiste el título? Pasa a Graduados
+              <span aria-hidden="true">→</span>
+            </Link>
+
+          </div>
+        </header>
+
+        {/* Panel de secciones: el equivalente de los filtros y la dona en la
+            propuesta curricular. Dice cuánto hay en cada bloque antes de
+            entrar, para no tener que abrirlos uno por uno. */}
+        <div className="grado-panel">
+          <div className="grado-chips" role="tablist" aria-label="Secciones del trámite de grado">
             {TABS.map(([k, l]) => (
-              <button key={k} className="chip" onClick={() => setTab(k)}
-                style={{ cursor: 'pointer', background: tab === k ? 'var(--ink)' : undefined, color: tab === k ? 'var(--paper)' : undefined, borderColor: tab === k ? 'var(--ink)' : undefined }}>
-                {l}
-              </button>
+              <Chip key={k} activo={tab === k} onClick={() => setTab(k)} n={CUENTA[k]}>{l}</Chip>
             ))}
           </div>
+          <p className="grado-panel__nota">
+            Las cifras cuentan lo que está disponible hoy: normas vigentes, convocatorias con el
+            plazo abierto e ideas que nadie ha tomado. Si algo cambia en el panel, cambia aquí.
+          </p>
         </div>
-      </section>
 
-      {tab === 'modalidades' && <Modalidades />}
-      {tab === 'normativas' && <Normativas />}
-      {tab === 'practicas' && <Practicas />}
-      {tab === 'ideas' && <Ideas />}
+        <Actual />
+      </div>
     </div>
   )
 }

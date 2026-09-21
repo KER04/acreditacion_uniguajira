@@ -2851,3 +2851,325 @@ video.video-eg__medio {
   overflow-wrap: anywhere;
 }
 .infra-fuentes a:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------------------
+   EGRESADOS — TRÁMITE DE GRADO
+   Mismo lenguaje que la propuesta de actualización curricular: migas,
+   .hero-card con su franja tejida y sus cifras, y los tokens --doc-* para
+   bordes y tintes. Lo propio de esta página son las tarjetas de cada bloque,
+   y por eso llevan prefijo `grado-`: el prefijo `eg-` ya es de Graduados,
+   que es otra página.
+--------------------------------------------------------------------------- */
+.grado-page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 44px) var(--gutter) 70px;
+}
+
+/* ---------- Panel de secciones ---------- */
+/* Hace en esta página lo que los filtros y la dona hacen en la propuesta:
+   decir de un vistazo cuánto hay y dejar moverse entre los bloques. */
+.grado-panel {
+  background: var(--paper-2);
+  border: 1px solid var(--doc-borde);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grado-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.grado-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--doc-borde);
+  background: var(--paper-2);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.grado-chip:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); color: var(--ink); }
+.grado-chip.is-activo {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper-2);
+  font-weight: 600;
+}
+
+/* La cuenta de cada bloque, dentro de su propia pastilla. */
+.grado-chip__n {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.grado-chip.is-activo .grado-chip__n { background: color-mix(in oklab, var(--paper) 22%, transparent); }
+
+.grado-panel__nota {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+  padding-top: 14px;
+  border-top: 1px solid var(--doc-borde-suave);
+  margin: 0;
+}
+.grado-panel__nota a { color: var(--doc-azul-texto); }
+
+/* ---------- Encabezado de sección ---------- */
+.grado-seccion { margin-bottom: 44px; }
+.grado-seccion__titulo {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+.grado-seccion__desc {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  max-width: 74ch;
+  margin: 0 0 20px;
+}
+
+/* Fila de conmutadores dentro de una sección (vigentes/derogadas, filtros). */
+.grado-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+
+.grado-vacio {
+  padding: 46px 20px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 14px;
+  border: 1px dashed var(--doc-borde);
+  border-radius: var(--radius);
+}
+
+/* ---------- Rejilla y tarjetas ---------- */
+.grado-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.grado-grid--ancha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1080px) { .grado-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) {
+  .grado-grid,
+  .grado-grid--ancha { grid-template-columns: 1fr; }
+}
+
+.grado-card {
+  display: flex;
+  background: var(--paper-2);
+  border: 1px solid var(--doc-borde);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color .2s ease;
+}
+.grado-card:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); }
+
+/* Lo cerrado o ya tomado no compite por la atención con lo que sí se puede
+   aprovechar, pero tampoco desaparece: sigue sirviendo de referencia. */
+.grado-card.is-apagada { opacity: .58; }
+
+/* Franja lateral de color, como en las tarjetas de docente. */
+.grado-card__acento { width: 5px; flex-shrink: 0; background: var(--doc-neutro); }
+.grado-card__acento--azul      { background: var(--ug-azul); }
+.grado-card__acento--ambar     { background: var(--ug-amarillo); }
+.grado-card__acento--terracota { background: var(--ug-flamingo); }
+.grado-card__acento--marino    { background: var(--ug-marino); }
+.grado-card__acento--neutro    { background: var(--doc-neutro); }
+
+.grado-card__cuerpo {
+  flex: 1;
+  min-width: 0;
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grado-card__etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.grado-card__titulo {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.grado-card__texto {
+  font-size: 13.5px;
+  line-height: 1.58;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* Lista de requisitos dentro de una tarjeta. */
+.grado-card__requisitos { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.grado-card__requisitos li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.grado-card__requisitos svg { width: 12px; height: 12px; flex: none; margin-top: 3px; color: var(--ug-azul); }
+
+.grado-card__pie {
+  margin-top: auto;
+  padding-top: 13px;
+  border-top: 1px solid var(--doc-borde-suave);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.grado-card__dato {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+}
+.grado-card__acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Botón discreto de la tarjeta: el mismo trato que los enlaces de la ficha
+   del docente, para que las dos páginas se sientan del mismo sitio. */
+.grado-boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--doc-borde);
+  background: var(--paper);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.grado-boton:hover { border-color: var(--ug-azul); color: var(--doc-azul-texto); }
+.grado-boton[disabled] { opacity: .4; cursor: default; }
+.grado-boton[disabled]:hover { border-color: var(--doc-borde); color: var(--ink-2); }
+.grado-boton svg { width: 12px; height: 12px; flex: none; }
+
+.grado-boton--fuerte {
+  background: var(--doc-azul-tint);
+  border-color: color-mix(in oklab, var(--ug-azul) 32%, transparent);
+  color: var(--doc-azul-texto);
+  font-weight: 600;
+}
+.grado-boton--fuerte:hover {
+  background: color-mix(in oklab, var(--ug-azul) 18%, transparent);
+  border-color: var(--ug-azul);
+}
+
+/* ---------- Pastillas de estado ---------- */
+.grado-pin {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.grado-pin--azul {
+  background: var(--doc-azul-tint);
+  color: var(--doc-azul-texto);
+  border-color: color-mix(in oklab, var(--ug-azul) 30%, transparent);
+}
+.grado-pin--ambar {
+  background: var(--doc-ambar-tint);
+  color: var(--doc-ambar-texto);
+  border-color: color-mix(in oklab, var(--ug-amarillo) 40%, transparent);
+}
+.grado-pin--terracota {
+  background: var(--doc-terracota-tint);
+  color: var(--doc-terracota-texto);
+  border-color: color-mix(in oklab, var(--ug-flamingo) 30%, transparent);
+}
+.grado-pin--neutro {
+  background: var(--doc-neutro-tint);
+  color: var(--doc-neutro-texto);
+  border-color: var(--doc-borde);
+}
+
+/* Palabras clave de una idea: texto mono, sin caja, para que no compitan con
+   las pastillas de estado, que sí llevan color. */
+.grado-tags { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.grado-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .05em;
+  color: var(--ink-muted);
+}
+
+/* Quién propone la idea y a quién escribirle. */
+.grado-tutor { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.grado-tutor b { color: var(--ink); font-weight: 600; }
+.grado-tutor--vacante { color: var(--ink-muted); font-style: italic; }
+
+/* ---------- Normativas: lista, no rejilla ---------- */
+/* Una norma se lee en una línea —tipo, número, año— y son muchas: en tarjetas
+   ocuparían tres pantallas para decir lo mismo. */
+.grado-lista {
+  border: 1px solid var(--doc-borde);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  overflow: hidden;
+}
+.grado-norma {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 20px;
+}
+.grado-norma + .grado-norma { border-top: 1px solid var(--doc-borde-suave); }
+.grado-norma.is-apagada { opacity: .58; }
+
+.grado-norma__ref {
+  flex: none;
+  width: 112px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--doc-azul-texto);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.grado-norma__ref b { display: block; font-weight: 700; }
+.grado-norma__ref span { color: var(--ink-muted); }
+
+.grado-norma__cuerpo { flex: 1; min-width: 0; }
+.grado-norma__titulo { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.35; }
+.grado-norma__desc { font-size: 12.5px; color: var(--ink-3); margin: 4px 0 0; line-height: 1.5; }
+.grado-norma__fuente { font-size: 11.5px; color: var(--ink-muted); margin-top: 5px; }
+
+@media (max-width: 680px) {
+  .grado-norma { flex-wrap: wrap; gap: 10px; }
+  .grado-norma__ref { width: auto; }
+}
