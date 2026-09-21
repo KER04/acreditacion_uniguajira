@@ -2949,7 +2949,7 @@ video.video-eg__medio {
 /* Fila de conmutadores dentro de una sección (vigentes/derogadas, filtros). */
 .grado-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 
-.grado-vacio {
+.doc-vacio {
   padding: 46px 20px;
   text-align: center;
   color: var(--ink-3);
@@ -2959,19 +2959,21 @@ video.video-eg__medio {
 }
 
 /* ---------- Rejilla y tarjetas ---------- */
-.grado-grid {
+/* .doc-card es del sistema, no de esta página: la usan Egresados e Inicio.
+   Por eso lleva el prefijo de los tokens --doc-* y no el de la vista. */
+.doc-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
 }
-.grado-grid--ancha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (max-width: 1080px) { .grado-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.doc-grid--ancha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1080px) { .doc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 680px) {
-  .grado-grid,
-  .grado-grid--ancha { grid-template-columns: 1fr; }
+  .doc-grid,
+  .doc-grid--ancha { grid-template-columns: 1fr; }
 }
 
-.grado-card {
+.doc-card {
   display: flex;
   background: var(--paper-2);
   border: 1px solid var(--doc-borde);
@@ -2979,21 +2981,21 @@ video.video-eg__medio {
   overflow: hidden;
   transition: border-color .2s ease;
 }
-.grado-card:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); }
+.doc-card:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); }
 
 /* Lo cerrado o ya tomado no compite por la atención con lo que sí se puede
    aprovechar, pero tampoco desaparece: sigue sirviendo de referencia. */
-.grado-card.is-apagada { opacity: .58; }
+.doc-card.is-apagada { opacity: .58; }
 
 /* Franja lateral de color, como en las tarjetas de docente. */
-.grado-card__acento { width: 5px; flex-shrink: 0; background: var(--doc-neutro); }
-.grado-card__acento--azul      { background: var(--ug-azul); }
-.grado-card__acento--ambar     { background: var(--ug-amarillo); }
-.grado-card__acento--terracota { background: var(--ug-flamingo); }
-.grado-card__acento--marino    { background: var(--ug-marino); }
-.grado-card__acento--neutro    { background: var(--doc-neutro); }
+.doc-card__acento { width: 5px; flex-shrink: 0; background: var(--doc-neutro); }
+.doc-card__acento--azul      { background: var(--ug-azul); }
+.doc-card__acento--ambar     { background: var(--ug-amarillo); }
+.doc-card__acento--terracota { background: var(--ug-flamingo); }
+.doc-card__acento--marino    { background: var(--ug-marino); }
+.doc-card__acento--neutro    { background: var(--doc-neutro); }
 
-.grado-card__cuerpo {
+.doc-card__cuerpo {
   flex: 1;
   min-width: 0;
   padding: 20px 20px 18px;
@@ -3002,9 +3004,9 @@ video.video-eg__medio {
   gap: 12px;
 }
 
-.grado-card__etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+.doc-card__etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
 
-.grado-card__titulo {
+.doc-card__titulo {
   font-family: var(--font-display);
   font-size: 17px;
   font-weight: 600;
@@ -3014,7 +3016,7 @@ video.video-eg__medio {
   margin: 0;
 }
 
-.grado-card__texto {
+.doc-card__texto {
   font-size: 13.5px;
   line-height: 1.58;
   color: var(--ink-2);
@@ -3022,8 +3024,8 @@ video.video-eg__medio {
 }
 
 /* Lista de requisitos dentro de una tarjeta. */
-.grado-card__requisitos { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.grado-card__requisitos li {
+.doc-card__requisitos { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.doc-card__requisitos li {
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -3031,9 +3033,9 @@ video.video-eg__medio {
   color: var(--ink-2);
   line-height: 1.45;
 }
-.grado-card__requisitos svg { width: 12px; height: 12px; flex: none; margin-top: 3px; color: var(--ug-azul); }
+.doc-card__requisitos svg { width: 12px; height: 12px; flex: none; margin-top: 3px; color: var(--ug-azul); }
 
-.grado-card__pie {
+.doc-card__pie {
   margin-top: auto;
   padding-top: 13px;
   border-top: 1px solid var(--doc-borde-suave);
@@ -3043,17 +3045,17 @@ video.video-eg__medio {
   flex-wrap: wrap;
   gap: 10px;
 }
-.grado-card__dato {
+.doc-card__dato {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: .06em;
   color: var(--ink-3);
 }
-.grado-card__acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.doc-card__acciones { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* Botón discreto de la tarjeta: el mismo trato que los enlaces de la ficha
    del docente, para que las dos páginas se sientan del mismo sitio. */
-.grado-boton {
+.doc-boton {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -3069,24 +3071,24 @@ video.video-eg__medio {
   cursor: pointer;
   transition: border-color .15s ease, color .15s ease;
 }
-.grado-boton:hover { border-color: var(--ug-azul); color: var(--doc-azul-texto); }
-.grado-boton[disabled] { opacity: .4; cursor: default; }
-.grado-boton[disabled]:hover { border-color: var(--doc-borde); color: var(--ink-2); }
-.grado-boton svg { width: 12px; height: 12px; flex: none; }
+.doc-boton:hover { border-color: var(--ug-azul); color: var(--doc-azul-texto); }
+.doc-boton[disabled] { opacity: .4; cursor: default; }
+.doc-boton[disabled]:hover { border-color: var(--doc-borde); color: var(--ink-2); }
+.doc-boton svg { width: 12px; height: 12px; flex: none; }
 
-.grado-boton--fuerte {
+.doc-boton--fuerte {
   background: var(--doc-azul-tint);
   border-color: color-mix(in oklab, var(--ug-azul) 32%, transparent);
   color: var(--doc-azul-texto);
   font-weight: 600;
 }
-.grado-boton--fuerte:hover {
+.doc-boton--fuerte:hover {
   background: color-mix(in oklab, var(--ug-azul) 18%, transparent);
   border-color: var(--ug-azul);
 }
 
 /* ---------- Pastillas de estado ---------- */
-.grado-pin {
+.doc-pin {
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
@@ -3097,22 +3099,22 @@ video.video-eg__medio {
   letter-spacing: .04em;
   text-transform: uppercase;
 }
-.grado-pin--azul {
+.doc-pin--azul {
   background: var(--doc-azul-tint);
   color: var(--doc-azul-texto);
   border-color: color-mix(in oklab, var(--ug-azul) 30%, transparent);
 }
-.grado-pin--ambar {
+.doc-pin--ambar {
   background: var(--doc-ambar-tint);
   color: var(--doc-ambar-texto);
   border-color: color-mix(in oklab, var(--ug-amarillo) 40%, transparent);
 }
-.grado-pin--terracota {
+.doc-pin--terracota {
   background: var(--doc-terracota-tint);
   color: var(--doc-terracota-texto);
   border-color: color-mix(in oklab, var(--ug-flamingo) 30%, transparent);
 }
-.grado-pin--neutro {
+.doc-pin--neutro {
   background: var(--doc-neutro-tint);
   color: var(--doc-neutro-texto);
   border-color: var(--doc-borde);
@@ -3120,8 +3122,8 @@ video.video-eg__medio {
 
 /* Palabras clave de una idea: texto mono, sin caja, para que no compitan con
    las pastillas de estado, que sí llevan color. */
-.grado-tags { display: flex; flex-wrap: wrap; gap: 4px 10px; }
-.grado-tag {
+.doc-tags { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.doc-tag {
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: .05em;
@@ -3172,4 +3174,147 @@ video.video-eg__medio {
 @media (max-width: 680px) {
   .grado-norma { flex-wrap: wrap; gap: 10px; }
   .grado-norma__ref { width: auto; }
+}
+
+/* ---------------------------------------------------------------------------
+   INICIO
+   La portada conserva su hero a dos columnas —una landing necesita entrar
+   fuerte— pero pasa al mismo lenguaje que el resto: la franja tejida, la
+   insignia, los tokens --doc-* y la .doc-card compartida con Egresados.
+--------------------------------------------------------------------------- */
+
+/* Franja tejida al filo superior de la portada. Es el mismo remate que abre
+   las hero-card de las páginas de consulta; aquí ata la portada a la marca
+   antes de que se lea una sola palabra. */
+.inicio-remate {
+  height: 4px;
+  width: 100%;
+  background: repeating-linear-gradient(90deg,
+    var(--ug-amarillo) 0 20px,
+    var(--ug-azul) 20px 40px,
+    var(--ug-flamingo) 40px 60px);
+}
+
+/* Panel derecho del hero: el proyecto destacado. Antes era un rectángulo
+   absoluto dentro de otro; ahora es una tarjeta con las mismas reglas que
+   las demás, y se deja crecer con su contenido. */
+.inicio-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-2);
+  border: 1px solid var(--doc-borde);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.inicio-panel__cuerpo {
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+.inicio-panel__titulo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0;
+}
+.inicio-panel__resumen {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
+/* El lienzo del proyecto: mientras no haya una imagen cargada, la cuadrícula
+   de la marca hace de portada en vez de un hueco gris. */
+.inicio-panel__lienzo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--ug-amarillo-soft), var(--ug-azul-soft));
+  margin-top: auto;
+}
+.inicio-panel__marca {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ug-negro);
+  opacity: .45;
+  text-align: center;
+  padding: 0 18px;
+}
+.inicio-panel__pie {
+  padding: 13px 24px;
+  border-top: 1px solid var(--doc-borde-suave);
+  background: var(--paper-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Las cifras del hero mantienen su tamaño de portada, pero el número toma el
+   teal del sistema y el filete superior usa el borde de los tokens. */
+.hero-stats { border-top-color: var(--doc-borde); }
+.hero-stats .stat .n { color: var(--doc-hero-acento); }
+
+/* Cuando la portada no tiene cifras cargadas no se deja el filete solo. */
+.hero-stats:empty { display: none; }
+
+@media (max-width: 900px) {
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Encabezado de sección: el mismo mono espaciado que .grado-seccion__titulo,
+   para que las secciones de la portada y las de consulta rimen. */
+.inicio-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+/* Rejilla de factores del CNA en la portada. */
+.inicio-cna {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.inicio-cna__factor {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--ug-negro);
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+.inicio-cna__factor:hover { transform: translateY(-2px); }
+.inicio-cna__hueco {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--ink) 10%, transparent);
+}
+.inicio-cna__promedio {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--doc-hero-acento);
 }

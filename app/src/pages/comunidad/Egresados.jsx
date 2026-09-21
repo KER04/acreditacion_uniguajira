@@ -27,7 +27,7 @@ import { fechaLarga } from '../../../shared/validacion'
 /* ─── Piezas compartidas ───────────────────────────────────────── */
 
 function Pin({ tono = 'neutro', children }) {
-  return <span className={`grado-pin grado-pin--${tono}`}>{children}</span>
+  return <span className={`doc-pin doc-pin--${tono}`}>{children}</span>
 }
 
 function Seccion({ titulo, desc, children }) {
@@ -41,7 +41,7 @@ function Seccion({ titulo, desc, children }) {
 }
 
 function Vacio({ children }) {
-  return <div className="grado-vacio">{children}</div>
+  return <div className="doc-vacio">{children}</div>
 }
 
 function Chip({ activo, onClick, children, n }) {
@@ -57,7 +57,7 @@ function Chip({ activo, onClick, children, n }) {
 function Requisitos({ items }) {
   if (!items?.length) return null
   return (
-    <ul className="grado-card__requisitos">
+    <ul className="doc-card__requisitos">
       {items.map((r, j) => <li key={j}><Icons.check /> {r}</li>)}
     </ul>
   )
@@ -77,23 +77,23 @@ function Modalidades() {
       {modalidades.length === 0 ? (
         <Vacio>Todavía no hay modalidades publicadas.</Vacio>
       ) : (
-        <div className="grado-grid">
+        <div className="doc-grid">
           {modalidades.map(m => (
-            <article key={m.id} className="grado-card">
+            <article key={m.id} className="doc-card">
               {/* El color lo pone el panel, así que va en línea y no como
                   modificador: cada modalidad elige el suyo de la paleta. */}
-              <div className="grado-card__acento" style={{ background: m.color || 'var(--ug-azul)' }} />
-              <div className="grado-card__cuerpo">
-                <h3 className="grado-card__titulo">{m.nombre}</h3>
-                {m.descripcion && <p className="grado-card__texto">{m.descripcion}</p>}
+              <div className="doc-card__acento" style={{ background: m.color || 'var(--ug-azul)' }} />
+              <div className="doc-card__cuerpo">
+                <h3 className="doc-card__titulo">{m.nombre}</h3>
+                {m.descripcion && <p className="doc-card__texto">{m.descripcion}</p>}
                 <Requisitos items={m.requisitos} />
 
-                <div className="grado-card__pie">
-                  <span className="grado-card__dato">
+                <div className="doc-card__pie">
+                  <span className="doc-card__dato">
                     {m.duracion ? 'Duración · ' + m.duracion : 'Duración sin definir'}
                   </span>
                   {m.documento_url && (
-                    <a className="grado-boton" href={m.documento_url} target="_blank" rel="noopener noreferrer">
+                    <a className="doc-boton" href={m.documento_url} target="_blank" rel="noopener noreferrer">
                       <Icons.download /> Guía
                     </a>
                   )}
@@ -158,10 +158,10 @@ function Normativas() {
               {/* `descarga` apunta al PDF de la base o, si es un enlace
                   externo, a la URL tal cual. */}
               {n.descarga
-                ? <a className="grado-boton" href={n.descarga} target="_blank" rel="noopener noreferrer">
+                ? <a className="doc-boton" href={n.descarga} target="_blank" rel="noopener noreferrer">
                     <Icons.download /> Abrir
                   </a>
-                : <button className="grado-boton" disabled title="Sin documento cargado">
+                : <button className="doc-boton" disabled title="Sin documento cargado">
                     <Icons.download /> Sin documento
                   </button>}
             </div>
@@ -186,31 +186,31 @@ const practicaAbierta = p => p.estado !== 'Cerrada' && !p.vencida
    un tipo nuevo en cada render y volvería a montar todas las tarjetas. */
 function TarjetaPractica({ p, apagada }) {
   return (
-    <article className={'grado-card' + (apagada ? ' is-apagada' : '')}>
-      <div className={'grado-card__acento grado-card__acento--' + (apagada ? 'neutro' : 'azul')} />
-      <div className="grado-card__cuerpo">
-        <div className="grado-card__etiquetas">
+    <article className={'doc-card' + (apagada ? ' is-apagada' : '')}>
+      <div className={'doc-card__acento doc-card__acento--' + (apagada ? 'neutro' : 'azul')} />
+      <div className="doc-card__cuerpo">
+        <div className="doc-card__etiquetas">
           <Pin tono={apagada ? 'neutro' : 'azul'}>{p.estado}</Pin>
           {p.vencida && p.estado !== 'Cerrada' && <Pin tono="terracota">Plazo vencido</Pin>}
           {p.dirigida_a && <Pin tono="neutro">{p.dirigida_a}</Pin>}
         </div>
 
-        <h3 className="grado-card__titulo">{p.titulo}</h3>
-        {p.descripcion && <p className="grado-card__texto">{p.descripcion}</p>}
+        <h3 className="doc-card__titulo">{p.titulo}</h3>
+        {p.descripcion && <p className="doc-card__texto">{p.descripcion}</p>}
         <Requisitos items={p.requisitos} />
 
-        <div className="grado-card__pie">
-          <span className="grado-card__dato">
+        <div className="doc-card__pie">
+          <span className="doc-card__dato">
             {p.fecha_cierre ? 'Cierra ' + fechaLarga(p.fecha_cierre) : 'Sin fecha de cierre'}
           </span>
-          <div className="grado-card__acciones">
+          <div className="doc-card__acciones">
             {p.documento_url && (
-              <a className="grado-boton" href={p.documento_url} target="_blank" rel="noopener noreferrer">
+              <a className="doc-boton" href={p.documento_url} target="_blank" rel="noopener noreferrer">
                 <Icons.download /> Términos
               </a>
             )}
             {p.url_postulacion && !apagada && (
-              <a className="grado-boton grado-boton--fuerte" href={p.url_postulacion} target="_blank" rel="noopener noreferrer">
+              <a className="doc-boton doc-boton--fuerte" href={p.url_postulacion} target="_blank" rel="noopener noreferrer">
                 Postularme <Icons.external />
               </a>
             )}
@@ -238,12 +238,12 @@ function Practicas() {
         <>
           {abiertas.length === 0
             ? <Vacio>No hay convocatorias abiertas en este momento. Abajo quedan las anteriores como referencia.</Vacio>
-            : <div className="grado-grid grado-grid--ancha">{abiertas.map(p => <TarjetaPractica key={p.id} p={p} />)}</div>}
+            : <div className="doc-grid doc-grid--ancha">{abiertas.map(p => <TarjetaPractica key={p.id} p={p} />)}</div>}
 
           {pasadas.length > 0 && (
             <div style={{ marginTop: 32 }}>
               <h3 className="grado-seccion__titulo">Cerradas</h3>
-              <div className="grado-grid grado-grid--ancha">
+              <div className="doc-grid doc-grid--ancha">
                 {pasadas.map(p => <TarjetaPractica key={p.id} p={p} apagada />)}
               </div>
             </div>
@@ -311,33 +311,33 @@ function Ideas() {
             : 'Ninguna idea coincide con el filtro. Prueba quitando «solo disponibles» o cambiando de línea.'}
         </Vacio>
       ) : (
-        <div className="grado-grid grado-grid--ancha">
+        <div className="doc-grid doc-grid--ancha">
           {lista.map(i => (
-            <article key={i.id} className={'grado-card' + (i.disponible ? '' : ' is-apagada')}>
-              <div className={'grado-card__acento grado-card__acento--' + (TONO_ESTADO[i.estado] ?? 'neutro')} />
-              <div className="grado-card__cuerpo">
-                <div className="grado-card__etiquetas">
+            <article key={i.id} className={'doc-card' + (i.disponible ? '' : ' is-apagada')}>
+              <div className={'doc-card__acento doc-card__acento--' + (TONO_ESTADO[i.estado] ?? 'neutro')} />
+              <div className="doc-card__cuerpo">
+                <div className="doc-card__etiquetas">
                   <Pin tono={TONO_ESTADO[i.estado] ?? 'neutro'}>{i.estado}</Pin>
                   <Pin tono="neutro">{i.dificultad}</Pin>
                   {i.linea && <Pin tono="neutro">{i.linea}</Pin>}
                 </div>
 
-                <h3 className="grado-card__titulo">{i.titulo}</h3>
-                {i.descripcion && <p className="grado-card__texto">{i.descripcion}</p>}
+                <h3 className="doc-card__titulo">{i.titulo}</h3>
+                {i.descripcion && <p className="doc-card__texto">{i.descripcion}</p>}
 
                 {(i.palabras ?? []).length > 0 && (
-                  <div className="grado-tags">
-                    {i.palabras.map((p, j) => <span key={j} className="grado-tag">#{p}</span>)}
+                  <div className="doc-tags">
+                    {i.palabras.map((p, j) => <span key={j} className="doc-tag">#{p}</span>)}
                   </div>
                 )}
 
-                <div className="grado-card__pie">
+                <div className="doc-card__pie">
                   <div className={'grado-tutor' + (i.docente ? '' : ' grado-tutor--vacante')}>
                     {i.docente ? <>Propuesta por <b>{i.docente}</b></> : 'Tutor por asignar'}
-                    {i.modalidad && <div className="grado-card__dato">Apunta a {i.modalidad}</div>}
+                    {i.modalidad && <div className="doc-card__dato">Apunta a {i.modalidad}</div>}
                   </div>
                   {i.contacto && (
-                    <a className="grado-boton" href={i.contacto.includes('@') ? 'mailto:' + i.contacto : i.contacto}>
+                    <a className="doc-boton" href={i.contacto.includes('@') ? 'mailto:' + i.contacto : i.contacto}>
                       <Icons.mail /> Escribir
                     </a>
                   )}
