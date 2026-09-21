@@ -2880,9 +2880,9 @@ video.video-eg__medio {
   gap: 16px;
 }
 
-.grado-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.doc-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 
-.grado-chip {
+.doc-chip {
   appearance: none;
   display: inline-flex;
   align-items: center;
@@ -2898,8 +2898,8 @@ video.video-eg__medio {
   cursor: pointer;
   transition: border-color .15s ease, color .15s ease, background .15s ease;
 }
-.grado-chip:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); color: var(--ink); }
-.grado-chip.is-activo {
+.doc-chip:hover { border-color: color-mix(in oklab, var(--ink) 30%, transparent); color: var(--ink); }
+.doc-chip.is-activo {
   background: var(--ink);
   border-color: var(--ink);
   color: var(--paper-2);
@@ -2907,7 +2907,7 @@ video.video-eg__medio {
 }
 
 /* La cuenta de cada bloque, dentro de su propia pastilla. */
-.grado-chip__n {
+.doc-chip__n {
   font-family: var(--font-mono);
   font-size: 10.5px;
   font-weight: 700;
@@ -2915,7 +2915,7 @@ video.video-eg__medio {
   border-radius: 999px;
   background: color-mix(in oklab, var(--ink) 8%, transparent);
 }
-.grado-chip.is-activo .grado-chip__n { background: color-mix(in oklab, var(--paper) 22%, transparent); }
+.doc-chip.is-activo .doc-chip__n { background: color-mix(in oklab, var(--paper) 22%, transparent); }
 
 .grado-panel__nota {
   font-size: 12.5px;
@@ -2947,7 +2947,7 @@ video.video-eg__medio {
 }
 
 /* Fila de conmutadores dentro de una sección (vigentes/derogadas, filtros). */
-.grado-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.doc-filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 
 .doc-vacio {
   padding: 46px 20px;
@@ -3489,25 +3489,27 @@ video.video-eg__medio {
   color: var(--doc-azul-texto);
 }
 
-/* Tarjeta de contacto institucional. */
-.contacto-ficha {
+/* Ficha de datos clave: etiqueta mono a la izquierda, valor a la derecha.
+   Del sistema, no de Contacto: la usan también la ficha técnica del programa
+   y cualquier bloque de pares dato/valor. */
+.doc-ficha {
   background: var(--paper-2);
   border: 1px solid var(--doc-borde);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
-.contacto-ficha__cuerpo { padding: 22px 24px; }
+.doc-ficha__cuerpo { padding: 22px 24px; }
 
-.contacto-datos { margin: 14px 0 0; display: grid; gap: 0; }
-.contacto-datos > div {
+.doc-datos { margin: 14px 0 0; display: grid; gap: 0; }
+.doc-datos > div {
   display: grid;
   grid-template-columns: 116px 1fr;
   gap: 14px;
   padding: 11px 0;
   align-items: baseline;
 }
-.contacto-datos > div + div { border-top: 1px solid var(--doc-borde-suave); }
-.contacto-datos dt {
+.doc-datos > div + div { border-top: 1px solid var(--doc-borde-suave); }
+.doc-datos dt {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -3515,7 +3517,7 @@ video.video-eg__medio {
   text-transform: uppercase;
   color: var(--ink-muted);
 }
-.contacto-datos dd {
+.doc-datos dd {
   margin: 0;
   font-size: 13.5px;
   font-weight: 500;
@@ -3613,3 +3615,123 @@ video.video-eg__medio {
 }
 a.equipo-card__dato:hover { color: var(--doc-azul-texto); }
 a.equipo-card__dato:hover svg { color: var(--ug-azul); }
+
+/* ---------------------------------------------------------------------------
+   PRESENTACIÓN DEL PROGRAMA
+   Cabecera del sistema y, debajo, las piezas propias: la ficha técnica en dos
+   columnas, los objetivos numerados y los dos perfiles. El plan de estudios
+   embebido conserva su propia rejilla (.pensum), que es la de /pensum.
+--------------------------------------------------------------------------- */
+
+/* La ficha técnica son nueve pares y en una sola columna quedaría una tira
+   larga y estrecha; en dos se lee de un vistazo. */
+.doc-datos--dos { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; }
+.doc-datos--dos > div + div { border-top: 1px solid var(--doc-borde-suave); }
+/* En dos columnas la primera fila de la segunda columna no lleva filete: no
+   hay nada encima de ella. */
+.doc-datos--dos > div:nth-child(2) { border-top: 0; }
+@media (max-width: 720px) {
+  .doc-datos--dos { grid-template-columns: 1fr; }
+  .doc-datos--dos > div:nth-child(2) { border-top: 1px solid var(--doc-borde-suave); }
+}
+
+/* Numerito de orden: el mismo en los objetivos y en los roles del egresado. */
+.doc-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--doc-azul-tint);
+  border: 1px solid color-mix(in oklab, var(--ug-azul) 30%, transparent);
+  color: var(--doc-azul-texto);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+/* ---------- Misión y visión ---------- */
+/* Van en dos tarjetas anchas, no en la rejilla de tres: son declaraciones que
+   se leen enteras y merecen el ancho. */
+.programa-declaraciones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 52px;
+}
+@media (max-width: 860px) { .programa-declaraciones { grid-template-columns: 1fr; } }
+
+.programa-declaracion__titulo {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ---------- Objetivos ---------- */
+.programa-objetivo__cabeza {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.programa-objetivo__cabeza h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ---------- Perfiles ---------- */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 44px);
+  align-items: start;
+}
+@media (max-width: 860px) { .perfil-grid { grid-template-columns: 1fr; } }
+
+.perfil__titulo {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 8px 0 20px;
+}
+
+/* Rasgos del aspirante: frases, con la palomita del sistema. */
+.perfil-rasgos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.perfil-rasgos li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.perfil-rasgos svg { width: 13px; height: 13px; flex: none; margin-top: 4px; color: var(--ug-azul); }
+
+/* Salidas del egresado: son cargos, no frases, así que van en fila propia y
+   numerada para poder contarlos. */
+.perfil-roles { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.perfil-roles li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--doc-borde);
+  border-radius: 10px;
+  transition: border-color .15s ease;
+}
+.perfil-roles li:hover { border-color: color-mix(in oklab, var(--ink) 26%, transparent); }

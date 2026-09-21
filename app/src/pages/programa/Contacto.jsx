@@ -84,11 +84,11 @@ export default function Contacto() {
             </div>
           </div>
 
-          <div className="contacto-ficha">
+          <div className="doc-ficha">
             <div className="hero-card__patron" aria-hidden="true" />
-            <div className="contacto-ficha__cuerpo">
+            <div className="doc-ficha__cuerpo">
               <div className="doc-seccion__titulo" style={{ margin: 0 }}>Contacto institucional</div>
-              <dl className="contacto-datos">
+              <dl className="doc-datos">
                 {CONTACTO.map(([k, v]) => (
                   <div key={k}>
                     <dt>{k}</dt>

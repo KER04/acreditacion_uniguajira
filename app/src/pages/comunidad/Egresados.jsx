@@ -46,10 +46,10 @@ function Vacio({ children }) {
 
 function Chip({ activo, onClick, children, n }) {
   return (
-    <button className={'grado-chip' + (activo ? ' is-activo' : '')}
+    <button className={'doc-chip' + (activo ? ' is-activo' : '')}
             onClick={onClick} aria-pressed={activo}>
       {children}
-      {n !== undefined && <span className="grado-chip__n">{n}</span>}
+      {n !== undefined && <span className="doc-chip__n">{n}</span>}
     </button>
   )
 }
@@ -125,7 +125,7 @@ function Normativas() {
 
       {/* Las derogadas no se borran: los trámites viejos las siguen citando. */}
       {derogadas.length > 0 && (
-        <div className="grado-filtros" role="tablist" aria-label="Vigencia de las normas">
+        <div className="doc-filtros" role="tablist" aria-label="Vigencia de las normas">
           <Chip activo={!verDerogadas} onClick={() => setVerDerogadas(false)} n={vigentes.length}>Vigentes</Chip>
           <Chip activo={verDerogadas} onClick={() => setVerDerogadas(true)} n={derogadas.length}>Derogadas</Chip>
         </div>
@@ -291,7 +291,7 @@ function Ideas() {
       desc="Temas que los docentes del programa proponen como punto de partida para el trabajo de grado. No son propuestas cerradas: escribe al tutor y conversa la idea antes de radicarla.">
 
       {todas.length > 0 && (
-        <div className="grado-filtros">
+        <div className="doc-filtros">
           <Chip activo={soloLibres} onClick={() => setSoloLibres(s => !s)}>Solo disponibles</Chip>
           {lineas.length > 0 && (
             <>
@@ -443,7 +443,7 @@ export default function Egresados() {
             propuesta curricular. Dice cuánto hay en cada bloque antes de
             entrar, para no tener que abrirlos uno por uno. */}
         <div className="grado-panel">
-          <div className="grado-chips" role="tablist" aria-label="Secciones del trámite de grado">
+          <div className="doc-chips" role="tablist" aria-label="Secciones del trámite de grado">
             {TABS.map(([k, l]) => (
               <Chip key={k} activo={tab === k} onClick={() => setTab(k)} n={CUENTA[k]}>{l}</Chip>
             ))}
