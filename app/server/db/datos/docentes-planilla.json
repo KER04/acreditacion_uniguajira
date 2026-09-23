@@ -1,292 +1,643 @@
 {
- "columnas": [
-  "Nombre",
-  "Tipo de Vinculación",
-  "CVLAC",
-  "Sede",
-  "Email",
-  "Foto",
-  "Posgrado"
- ],
- "filas": [
-  {
-   "Nombre": "Andres David Solano Barliza",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001485657",
-   "Sede": "RIOHACHA",
-   "Email": "andresolano@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1gCeruSYDt6I4SvhIQXNPcFpzdxYA6A9-",
-   "Posgrado": "Especialista en Informática para el Aprendizaje en Red; Especialista en Analítica y Big Data; Magíster en Pedagogía de las TIC; Doctor en Tecnologías de la Información y Comunicación-TIC; Doctor en Ingeniería Informática y Matemáticas de la seguridad"
-  },
-  {
-   "Nombre": "Andres David Vides Prado",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000016072",
-   "Sede": "MAICAO",
-   "Email": "avides@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1i8RhadxuNpbr2tFKMsgOZiu_w4HOW4aA",
-   "Posgrado": "Magister en Energías Renovables en sistemas eléctrico. Doctorado en Ingeniería (Proceso de grado)"
-  },
-  {
-   "Nombre": "Angel Andres Fernandez Bueno",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001608191",
-   "Sede": "RIOHACHA",
-   "Email": "anfernandezb@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1cbLsu_mHTmFB_92P8BPejhUSzU2d_Uy_",
-   "Posgrado": "Especialista en administración de las TICs"
-  },
-  {
-   "Nombre": "Aslin Gonzalo Botello Plata",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001388302",
-   "Sede": "RIOHACHA",
-   "Email": "aslin.botello@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1HteymvyJKVxapVV9zzAaLca1aIp8vrhq",
-   "Posgrado": "Especialización en Educación Superior; Especialización en Bases de Datos y Seguridad; Maestría en Energías Alternativas y Eficiencia Energética; Maestría en Gerencia de Investigación y Desarrollo Tecnológico; Doctorado en Ingeniería (en curso, Universidad de Cartagena)"
-  },
-  {
-   "Nombre": "Breitner Bladimir Paez Martinez",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002069424",
-   "Sede": "MAICAO",
-   "Email": "bpaezm@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1YL0liYlUtOa38Og2bDvqAt5XqYVofj06",
-   "Posgrado": "Especialista en redes de computadores, Magister en Dirección y Gestión de Proyectos"
-  },
-  {
-   "Nombre": "Carlos Alberto Cordoba Ordoñez",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002304778",
-   "Sede": "MAICAO",
-   "Email": "ccordoba@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Y0ARPwWSWUSrK9yCAQUx90FAZt4BbLlr",
-   "Posgrado": "Magister en Telematica"
-  },
-  {
-   "Nombre": "Carlos Manuel Palacio Manjarrez",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001570344",
-   "Sede": "MAICAO",
-   "Email": "cpalaciosm@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1K4rF4cxjGj40znvNbm7Ep8-9_K2M3Vt2",
-   "Posgrado": "Espcializacion en Ingenieria de software y Magister en Gobierno de TI"
-  },
-  {
-   "Nombre": "Carmen Sofia Moreno Rivera",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002016865",
-   "Sede": "MAICAO",
-   "Email": "csmoreno@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1ZNxPfynV94fW9Vb7cdSjZCRLytf09CLm",
-   "Posgrado": "Magister en Tecnología Aplicadas a la Educación"
-  },
-  {
-   "Nombre": "Diego Mauricio Madrid Orrego",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001579167",
-   "Sede": "MAICAO",
-   "Email": "dmadrid@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Hfkk_8IsHcihmq52gI3P6QRwPd_p-hIp",
-   "Posgrado": "Magister en gestión de la tecnología y la innovación"
-  },
-  {
-   "Nombre": "Eduardo Sierra Fragozo",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002399745",
-   "Sede": "RIOHACHA",
-   "Email": "elsierra@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=15WNFzLMPsnNJovMMqXATRXncjyNR6BEL",
-   "Posgrado": "Magister en inteligencia artificial"
-  },
-  {
-   "Nombre": "FARITH PEREZ SAEZ",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000025448",
-   "Sede": "MAICAO",
-   "Email": "fperezs@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=15xc7nZ4cCovvcpI6Eqat9nWoT7Iqyr_J",
-   "Posgrado": "MAGISTER SCIENTARIUM EN TELEMATICA"
-  },
-  {
-   "Nombre": "Gustavo Javier Redondo Cujia",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001652675",
-   "Sede": "RIOHACHA",
-   "Email": "gjredondo@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=17Bln9fEd7NmpPDHRQzcpil0gh7Ml8xtw",
-   "Posgrado": "Maestría en gestión de la tecnología y la innovación"
-  },
-  {
-   "Nombre": "JHON JAIRO SUAREZ BONILLA",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001666620",
-   "Sede": "RIOHACHA",
-   "Email": "jjsuarez@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=18Yxt6iq9Ex3keBG4QcXmVyeoqTvSWXgt",
-   "Posgrado": "MAGISTER EN EDUCACIÓN - ESPECIALISTA EN APLICACIÓN DE TIC PARA LA ENSEÑANZA"
-  },
-  {
-   "Nombre": "Jaider Quintero Mendoza",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001440670",
-   "Sede": "RIOHACHA",
-   "Email": "jquintero@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1xs61uQN1mj7AUcJUR5HCX2CvpCBgwNwm",
-   "Posgrado": "Dr Gestion de la Tecnologia y la Innovacion / Magister en Telecomunicaciones / Esp. en Gerencia Financiera"
-  },
-  {
-   "Nombre": "Jair Salcedo Andrade",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001525623",
-   "Sede": "RIOHACHA",
-   "Email": "jairsalcedo@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1ddKKGrrymNHzhJNJS9bh8ZV5iWSvQGs6",
-   "Posgrado": "Msc. en Informática Educativa"
-  },
-  {
-   "Nombre": "Jose Manuel Gonzalez Perez",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "No registrado",
-   "Sede": "MAICAO",
-   "Email": "jmgonzalezp@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1_J_R3ScmwR8-5f5-RIYsyYz3ZiZ8dXtz",
-   "Posgrado": "Ingeniería del software y sistemas informáticos"
-  },
-  {
-   "Nombre": "KATTY CECILIA HERRERA ESTRADA",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001449531",
-   "Sede": "RIOHACHA",
-   "Email": "katyherrera@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1eCuhEajBrPX1tiRk9oGPWHNIweBOBUVp",
-   "Posgrado": "Magister en Pedagogia de las TIC, Candidata a Doctor del Doctorado en Innovacion"
-  },
-  {
-   "Nombre": "Karen Dayana Charris Miranda",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000216277",
-   "Sede": "MAICAO",
-   "Email": "kdayanacharris@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1oeXJoilChQ0jIWa5YqEmHzR0ZO6--dym",
-   "Posgrado": "Especialización en Visual Analytics y Big Data"
-  },
-  {
-   "Nombre": "LEANETH RAFAELINA PITRE RUIZ",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001568138",
-   "Sede": "RIOHACHA",
-   "Email": "lrpitrer@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1k2KA5h0PhtjI4sYZnBTyeuL0fPuAyR4n",
-   "Posgrado": "ESPECIALISTA EN TELECOMUNICACIONES - MAGISTER EN TELEMATICA - DOCTORANTE EN CIENCIA, TECNOLOGIA E INNOVACION"
-  },
-  {
-   "Nombre": "Margarita Hamburger Gonzalez",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "No registrado",
-   "Sede": "RIOHACHA",
-   "Email": "mhamburger@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Vis0pnlb3sS6Ayav_ZvUNAZTtHt2GGUm",
-   "Posgrado": "Especialista en Docencia Universitaria y Magíster en Administración y Planificación Educativa"
-  },
-  {
-   "Nombre": "Miguel Humberto Romero Acuña",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001524053",
-   "Sede": "RIOHACHA",
-   "Email": "mhromero@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1XLQd7H8lmBIjel4SSXZ_PcQaYiitbkFt",
-   "Posgrado": "Magister en Telemática y Telecomunicaciones"
-  },
-  {
-   "Nombre": "Nurys Correa Diaz",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001826827",
-   "Sede": "MAICAO",
-   "Email": "nacorrea@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1CgRIaG22E7sf-GSN4m1wSZFB0PwQ1JVX",
-   "Posgrado": "Especialización en aplicación de las TIC para la enseñanza; Maestría en tecnologías digitales; Doctorado en educación"
-  },
-  {
-   "Nombre": "RAFAEL ENRIQUE GRIEGO BARROS",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001556133",
-   "Sede": "RIOHACHA",
-   "Email": "regriego@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Vwz_uFYQrl4ItCo9VyP_U3cwIZ7ToWV6",
-   "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
-  },
-  {
-   "Nombre": "ROBERT DAMIAN QUINTERO LAVERDE",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002176975",
-   "Sede": "RIOHACHA",
-   "Email": "rdamianquintero@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=17vcj6R487CmDjbVe2g2XNRgDYvK9GpJj",
-   "Posgrado": "MAGISTER EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
-  },
-  {
-   "Nombre": "Remberto Paternina Barboza",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001665875",
-   "Sede": "MAICAO",
-   "Email": "rpaterninab@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1N0ZaW8qBhh0Do9SZ-UUP62bu90_G5wVP",
-   "Posgrado": "Mg. en Educación"
-  },
-  {
-   "Nombre": "Roger David Pimienta Barros",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001613235",
-   "Sede": "RIOHACHA",
-   "Email": "rdpimientab@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Mf1MG_kUaXle8wHZf5Ag4KShoQ7KZmKl",
-   "Posgrado": "MSC. En ingeniería de control y automatización"
-  },
-  {
-   "Nombre": "Ruth Paola Amaya Marmol",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001612744",
-   "Sede": "RIOHACHA",
-   "Email": "ramayam@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1PAe0KNa1ja7H_qNpIDy1owsiReyzcY05",
-   "Posgrado": "Maestrante en Diseño, gestión y dirección de proyectos"
-  },
-  {
-   "Nombre": "SERGIO ELIAS PEREZ CAMARGO",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001722704",
-   "Sede": "RIOHACHA",
-   "Email": "seperez@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1tHVXZq6IPpHwlrOzloAXXszL92MD9il3",
-   "Posgrado": "ESPECIALIZACIÓN EN INGENIERÍA DE SOFTWARE"
-  },
-  {
-   "Nombre": "Sandy Elena Romero Cuello",
-   "Tipo de Vinculación": "PLANTA",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001390249",
-   "Sede": "RIOHACHA",
-   "Email": "sromero@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Ej_rtS53WBdoENSVkfdXZDywqVac_OY5",
-   "Posgrado": "Especialización en Administración de Empresas, Maestria en Telemática y Doctorado en Gestión de la Tecnología"
-  },
-  {
-   "Nombre": "Sara Luz Villero Contreras",
-   "Tipo de Vinculación": "OCASIONAL",
-   "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000111593",
-   "Sede": "MAICAO",
-   "Email": "svillero@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=10VGDSeM1HKXuusB3SLiHqazLB7bQgbsw",
-   "Posgrado": "MSc Gerencia de Proyectos de Investigación y Desarrollo"
-  },
-  {
-   "Nombre": "Yisset Andrea Pimienta Zapata",
-   "Tipo de Vinculación": "CATEDRATICO",
-   "CVLAC": "No registrado",
-   "Sede": "RIOHACHA",
-   "Email": "ypimientaz@uniguajira.edu.co",
-   "Foto": "https://drive.google.com/open?id=1Af_0kE6AEn5Q-EZ8xlkQgovqKsmNnGPk",
-   "Posgrado": "Esp. en Gerencia en Finanzas - Esp. en Gerencia Estratégica para el Desarrollo"
-  }
- ]
+  "columnas": [
+    "Nombre",
+    "Tipo de Vinculación",
+    "CVLAC",
+    "Sede",
+    "Email",
+    "Foto",
+    "Posgrado"
+  ],
+  "filas": [
+    {
+      "Nombre": "ADANUD SEGUNDO MEZA VALLE",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "asmeza@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION EN LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "ALEXANDER DAVID MERCADO MENDOZA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "adavidmercado@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "ALFONSO RAFAEL ROCHA MARTINEZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "arocha@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN EVALUACION ESCOLAR; MAESTRIA EN INFORMATICA EDUCATIVA"
+    },
+    {
+      "Nombre": "Andres David Solano Barliza",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001485657",
+      "Sede": "RIOHACHA",
+      "Email": "andresolano@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1gCeruSYDt6I4SvhIQXNPcFpzdxYA6A9-",
+      "Posgrado": "Especialista en Informática para el Aprendizaje en Red; Especialista en Analítica y Big Data; Magíster en Pedagogía de las TIC; Doctor en Tecnologías de la Información y Comunicación-TIC; Doctor en Ingeniería Informática y Matemáticas de la seguridad"
+    },
+    {
+      "Nombre": "Andres David Vides Prado",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000016072",
+      "Sede": "MAICAO",
+      "Email": "avides@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1i8RhadxuNpbr2tFKMsgOZiu_w4HOW4aA",
+      "Posgrado": "Magister en Energías Renovables en sistemas eléctrico. Doctorado en Ingeniería (Proceso de grado)"
+    },
+    {
+      "Nombre": "Angel Andres Fernandez Bueno",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001608191",
+      "Sede": "RIOHACHA",
+      "Email": "anfernandezb@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1cbLsu_mHTmFB_92P8BPejhUSzU2d_Uy_",
+      "Posgrado": "Especialista en administración de las TICs"
+    },
+    {
+      "Nombre": "ANTONIO JOSE GONZALEZ LIÑAN",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "ajgonzalez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN INGENIERIA  INGENIERIA EN SISTEMAS Y COMPUTACION"
+    },
+    {
+      "Nombre": "ARNULFO ANTONIO MARIN ALVAREZ",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "amarina@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION GERENCIA EN GOBIERNO Y GESTION PUBLICA"
+    },
+    {
+      "Nombre": "ARTURO JAVIER ACOSTA ALFARO",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "aacostaa@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Aslin Gonzalo Botello Plata",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001388302",
+      "Sede": "RIOHACHA",
+      "Email": "aslin.botello@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1HteymvyJKVxapVV9zzAaLca1aIp8vrhq",
+      "Posgrado": "Especialización en Educación Superior; Especialización en Bases de Datos y Seguridad; Maestría en Energías Alternativas y Eficiencia Energética; Maestría en Gerencia de Investigación y Desarrollo Tecnológico; Doctorado en Ingeniería (en curso, Universidad de Cartagena)"
+    },
+    {
+      "Nombre": "Breitner Bladimir Paez Martinez",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002069424",
+      "Sede": "MAICAO",
+      "Email": "bpaezm@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1YL0liYlUtOa38Og2bDvqAt5XqYVofj06",
+      "Posgrado": "Especialista en redes de computadores, Magister en Dirección y Gestión de Proyectos"
+    },
+    {
+      "Nombre": "BRYAN JOSE OTERO ARRIETA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "botero@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Carlos Alberto Cordoba Ordoñez",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002304778",
+      "Sede": "MAICAO",
+      "Email": "ccordoba@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Y0ARPwWSWUSrK9yCAQUx90FAZt4BbLlr",
+      "Posgrado": "Magister en Telematica"
+    },
+    {
+      "Nombre": "CARLOS ANTONIO SALAS SOLANO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "csalas@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN REDES EN COMPUTADORES; SCIENTIARUM EN TELEMÁTICA"
+    },
+    {
+      "Nombre": "Carlos Manuel Palacio Manjarrez",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001570344",
+      "Sede": "MAICAO",
+      "Email": "cpalaciosm@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1K4rF4cxjGj40znvNbm7Ep8-9_K2M3Vt2",
+      "Posgrado": "Espcializacion en Ingenieria de software y Magister en Gobierno de TI"
+    },
+    {
+      "Nombre": "Carmen Sofia Moreno Rivera",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002016865",
+      "Sede": "MAICAO",
+      "Email": "csmoreno@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1ZNxPfynV94fW9Vb7cdSjZCRLytf09CLm",
+      "Posgrado": "Magister en Tecnología Aplicadas a la Educación"
+    },
+    {
+      "Nombre": "CESAR LUIS JULIO IBAÑEZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "cjulio@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN PEDAGOGIA EN LAS TECNOLOGIAS EN LA INFORMACION Y LA COMUNICACION"
+    },
+    {
+      "Nombre": "DAVID FERNANDEZ PEREZ",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://share.google/as7Fyv6h42A4v6NXw",
+      "Sede": "RIOHACHA",
+      "Email": "dfernandez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ADMINISTRACION DE EMPRESAS; ADMINISTRACION Y DIRECCION EN EMPRESAS; ESPECIALIZACION EN ADMINISTRACION EN LA INFORMATICA EDUCATIVA; ESPECIALIZACION EN PEDAGOGIA PARA EL DESARROLLO EN EL APRENDIZAJE AUTONOMO"
+    },
+    {
+      "Nombre": "DIANA MARGARITA ESCOBAR MENDEZ",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "descobarm@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Diego Mauricio Madrid Orrego",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001579167",
+      "Sede": "MAICAO",
+      "Email": "dmadrid@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Hfkk_8IsHcihmq52gI3P6QRwPd_p-hIp",
+      "Posgrado": "Magister en gestión de la tecnología y la innovación"
+    },
+    {
+      "Nombre": "EDILVER BARROS MAESTRE",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "edilverbm@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN ADMINISTRACION EN LA INFORMATICA EDUCATIVA; MAESTRÍA EN GESTIÓN DE LA TECNOLOGÍA EDUCATIVA"
+    },
+    {
+      "Nombre": "EDUARDO LUIS LARA ORTEGA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "eduardolara@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN INFORMATICA EDUCATIVA; MAESTRIA EN INFORMATICA EDUCATIVA"
+    },
+    {
+      "Nombre": "Eduardo Sierra Fragozo",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002399745",
+      "Sede": "RIOHACHA",
+      "Email": "elsierra@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=15WNFzLMPsnNJovMMqXATRXncjyNR6BEL",
+      "Posgrado": "Magister en inteligencia artificial"
+    },
+    {
+      "Nombre": "FABIO ORLANDO MOYA CAMACHO",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "fmoya@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "DOCTOR EN CIENCIAS GERENCIALES; MAGISTER EN INFORMÁTICA EDUCATIVA; POST- DOCTORADO GERENCIA DE LAS ORGANIZACIONES"
+    },
+    {
+      "Nombre": "FARITH PEREZ SAEZ",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000025448",
+      "Sede": "MAICAO",
+      "Email": "fperezs@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=15xc7nZ4cCovvcpI6Eqat9nWoT7Iqyr_J",
+      "Posgrado": "MAGISTER SCIENTARIUM EN TELEMATICA"
+    },
+    {
+      "Nombre": "GONZALO BELTRAN ALVARADO",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "gbeltrana@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "DOCTORADO EN CIENCIA APLICADA; ESPECIALIZACION EN AUDITORIA A LOS SISTEMAS EN INFORMACION; ESPECIALIZACION EN PLANEACION EDUCATIVA Y PLANES EN DESARROLLO; MAGISTER EN INFORMÁTICA EDUCATIVA"
+    },
+    {
+      "Nombre": "Gustavo Javier Redondo Cujia",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001652675",
+      "Sede": "RIOHACHA",
+      "Email": "gjredondo@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=17Bln9fEd7NmpPDHRQzcpil0gh7Ml8xtw",
+      "Posgrado": "Maestría en gestión de la tecnología y la innovación"
+    },
+    {
+      "Nombre": "HECTOR JOSE MEJIA BUENO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "hjosemejia@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN SEGURIDAD INFORMATICA"
+    },
+    {
+      "Nombre": "HENRRY DAVID RIOS MEZA",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "hrrios@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "Maestría en tecnología e innovación educativa"
+    },
+    {
+      "Nombre": "Jaider Quintero Mendoza",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001440670",
+      "Sede": "RIOHACHA",
+      "Email": "jquintero@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1xs61uQN1mj7AUcJUR5HCX2CvpCBgwNwm",
+      "Posgrado": "Dr Gestion de la Tecnologia y la Innovacion / Magister en Telecomunicaciones / Esp. en Gerencia Financiera"
+    },
+    {
+      "Nombre": "Jair Salcedo Andrade",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001525623",
+      "Sede": "RIOHACHA",
+      "Email": "jairsalcedo@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1ddKKGrrymNHzhJNJS9bh8ZV5iWSvQGs6",
+      "Posgrado": "Msc. en Informática Educativa"
+    },
+    {
+      "Nombre": "JENIER JAVIER SUAREZ MARQUEZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jjaviersuarez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION EN LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "JESUS GABRIEL AREVALO AGUILAR",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jarevalo@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "INGENIERIA EN SISTEMAS Y COMPUTACION"
+    },
+    {
+      "Nombre": "JHON JAIRO SUAREZ BONILLA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001666620",
+      "Sede": "RIOHACHA",
+      "Email": "jjsuarez@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=18Yxt6iq9Ex3keBG4QcXmVyeoqTvSWXgt",
+      "Posgrado": "MAGISTER EN EDUCACIÓN - ESPECIALISTA EN APLICACIÓN DE TIC PARA LA ENSEÑANZA"
+    },
+    {
+      "Nombre": "JORGE LUIS PERALTA MOSCOTE",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jperalta@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN FINANZAS"
+    },
+    {
+      "Nombre": "JORGE LUIS RODRIGUEZ ZUÑIGA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "jrodriguezz@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAGISTER EN TELECOMUNICACIONES"
+    },
+    {
+      "Nombre": "JOSE DE JESUS GAMEZ PIMIENTA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jgamez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ADMINISTRACION EN INFORMATICA"
+    },
+    {
+      "Nombre": "Jose Manuel Gonzalez Perez",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "No registrado",
+      "Sede": "MAICAO",
+      "Email": "jmgonzalezp@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1_J_R3ScmwR8-5f5-RIYsyYz3ZiZ8dXtz",
+      "Posgrado": "Ingeniería del software y sistemas informáticos"
+    },
+    {
+      "Nombre": "JOSE MARIA DUEÑAS MEZA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jodume@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN ADMINISTRACION EN LA INFORMATICA EDUCATIVA; MAGISTER EN INFORMÁTICA EDUCATIVA"
+    },
+    {
+      "Nombre": "JUAN CAMILO SUAREZ CANTERO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "jcamilosuarez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALISTA EN VISUAL ANALYTICS Y BIG DATA"
+    },
+    {
+      "Nombre": "JUAN CARLOS MELO GUTIERREZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "jcmelo@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": ""
+    },
+    {
+      "Nombre": "Karen Dayana Charris Miranda",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000216277",
+      "Sede": "MAICAO",
+      "Email": "kdayanacharris@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1oeXJoilChQ0jIWa5YqEmHzR0ZO6--dym",
+      "Posgrado": "Especialización en Visual Analytics y Big Data"
+    },
+    {
+      "Nombre": "KATTY CECILIA HERRERA ESTRADA",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001449531",
+      "Sede": "RIOHACHA",
+      "Email": "katyherrera@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1eCuhEajBrPX1tiRk9oGPWHNIweBOBUVp",
+      "Posgrado": "Magister en Pedagogia de las TIC, Candidata a Doctor del Doctorado en Innovacion"
+    },
+    {
+      "Nombre": "LEANETH RAFAELINA PITRE RUIZ",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001568138",
+      "Sede": "RIOHACHA",
+      "Email": "lrpitrer@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1k2KA5h0PhtjI4sYZnBTyeuL0fPuAyR4n",
+      "Posgrado": "ESPECIALISTA EN TELECOMUNICACIONES - MAGISTER EN TELEMATICA - DOCTORANTE EN CIENCIA, TECNOLOGIA E INNOVACION"
+    },
+    {
+      "Nombre": "LISSETH PAOLA CASTAÑEDA VEGA",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001511642",
+      "Sede": "RIOHACHA",
+      "Email": "lcastanedav@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "DOCTORADO EN GESTION EN LA TECNOLOGIA Y LA INNOVACION; ESPECIALISTA EN GESTIÓN DE LA INNOVACIÓN TECNOLÓGICA; Magíster en Gestión Tecnológica"
+    },
+    {
+      "Nombre": "LUIS RAFAEL VIECCO RIVADENEIRA",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "lviecco@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALISTA EN REDES DE COMPUTADORES; GOBIERNO DE TI"
+    },
+    {
+      "Nombre": "Margarita Hamburger Gonzalez",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "No registrado",
+      "Sede": "RIOHACHA",
+      "Email": "mhamburger@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Vis0pnlb3sS6Ayav_ZvUNAZTtHt2GGUm",
+      "Posgrado": "Especialista en Docencia Universitaria y Magíster en Administración y Planificación Educativa"
+    },
+    {
+      "Nombre": "MARLON RAFAEL ALARCON BONIVENTO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "mralarcon@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": ""
+    },
+    {
+      "Nombre": "MARLYN ALICIA AARON GONZALVEZ",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000229512",
+      "Sede": "RIOHACHA",
+      "Email": "maaron@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN PEDAGOGIA EN LAS TECNOLOGIAS EN LA INFORMACION Y LA COMUNICACION"
+    },
+    {
+      "Nombre": "MARTINEZ GAITAN GIOVANNI",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "gmartinezg@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRÍA EN CIENCIAS DE LA EDUCACIÓN MENCIÓN GERENCIA EDUCATIVA"
+    },
+    {
+      "Nombre": "Miguel Humberto Romero Acuña",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001524053",
+      "Sede": "RIOHACHA",
+      "Email": "mhromero@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1XLQd7H8lmBIjel4SSXZ_PcQaYiitbkFt",
+      "Posgrado": "Magister en Telemática y Telecomunicaciones"
+    },
+    {
+      "Nombre": "MIYAIL RAFAEL JIMENEZ ESCUDERO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "mjimeneze@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN INFORMATICA EDUCATIVA"
+    },
+    {
+      "Nombre": "NAYELI MEJIA RIVEIRA",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "nmejia@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "DOCTORA EN GESTIÓN DE LA TECNOLOGÍA Y LA INNOVACIÓN; MAESTRIA EN TELEMATICA; MAESTRIA EN TELEMATICA"
+    },
+    {
+      "Nombre": "Nurys Correa Diaz",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001826827",
+      "Sede": "MAICAO",
+      "Email": "nacorrea@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1CgRIaG22E7sf-GSN4m1wSZFB0PwQ1JVX",
+      "Posgrado": "Especialización en aplicación de las TIC para la enseñanza; Maestría en tecnologías digitales; Doctorado en educación"
+    },
+    {
+      "Nombre": "OROZCO CASTILLO CRISTIAN",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "cforozco@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN ADMINISTRACION EN LA INFORMATICA EDUCATIVA; MAESTRIA EN INFORMATICA EDUCATIVA"
+    },
+    {
+      "Nombre": "RAFAEL ENRIQUE GRIEGO BARROS",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001556133",
+      "Sede": "RIOHACHA",
+      "Email": "regriego@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Vwz_uFYQrl4ItCo9VyP_U3cwIZ7ToWV6",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Remberto Paternina Barboza",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001665875",
+      "Sede": "MAICAO",
+      "Email": "rpaterninab@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1N0ZaW8qBhh0Do9SZ-UUP62bu90_G5wVP",
+      "Posgrado": "Mg. en Educación"
+    },
+    {
+      "Nombre": "ROBERT DAMIAN QUINTERO LAVERDE",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0002176975",
+      "Sede": "RIOHACHA",
+      "Email": "rdamianquintero@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=17vcj6R487CmDjbVe2g2XNRgDYvK9GpJj",
+      "Posgrado": "MAGISTER EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Roger David Pimienta Barros",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001613235",
+      "Sede": "RIOHACHA",
+      "Email": "rdpimientab@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Mf1MG_kUaXle8wHZf5Ag4KShoQ7KZmKl",
+      "Posgrado": "MSC. En ingeniería de control y automatización"
+    },
+    {
+      "Nombre": "RONALD ANTONIO TORRES MENDOZA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "ratorres@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN INFORMATICA EDUCATIVA; MAESTRIA EN INFORMATICA EDUCATIVA"
+    },
+    {
+      "Nombre": "ROSA MARGARITA CUENTAS HERNANDEZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "rmcuentash@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN GERENCIA INFORMATICA; ROBOTICA, PROGRAMACION Y DISEÑO E IMPRESION 3D APLICADDOS A  LA EDUCACION"
+    },
+    {
+      "Nombre": "Ruth Paola Amaya Marmol",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001612744",
+      "Sede": "RIOHACHA",
+      "Email": "ramayam@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1PAe0KNa1ja7H_qNpIDy1owsiReyzcY05",
+      "Posgrado": "Maestrante en Diseño, gestión y dirección de proyectos"
+    },
+    {
+      "Nombre": "Sandy Elena Romero Cuello",
+      "Tipo de Vinculación": "PLANTA",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001390249",
+      "Sede": "RIOHACHA",
+      "Email": "sromero@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Ej_rtS53WBdoENSVkfdXZDywqVac_OY5",
+      "Posgrado": "Especialización en Administración de Empresas, Maestria en Telemática y Doctorado en Gestión de la Tecnología"
+    },
+    {
+      "Nombre": "Sara Luz Villero Contreras",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0000111593",
+      "Sede": "MAICAO",
+      "Email": "svillero@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=10VGDSeM1HKXuusB3SLiHqazLB7bQgbsw",
+      "Posgrado": "MSc Gerencia de Proyectos de Investigación y Desarrollo"
+    },
+    {
+      "Nombre": "SERGIO ELIAS PEREZ CAMARGO",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "https://scienti.minciencias.gov.co/cvlac/visualizador/generarCurriculoCv.do?cod_rh=0001722704",
+      "Sede": "RIOHACHA",
+      "Email": "seperez@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1tHVXZq6IPpHwlrOzloAXXszL92MD9il3",
+      "Posgrado": "ESPECIALIZACIÓN EN INGENIERÍA DE SOFTWARE"
+    },
+    {
+      "Nombre": "SILFRED MARTINEZ VILLANUEVA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "snmartinez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": ""
+    },
+    {
+      "Nombre": "SLAYDER DARIO GUTIERREZ VILLARREAL",
+      "Tipo de Vinculación": "OCASIONAL",
+      "CVLAC": "",
+      "Sede": "MAICAO",
+      "Email": "sdgutierrez@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN INTELIGENCIA ARTIFICIAL; MAESTRÍA EN GESTIÓN DE LA TECNOLOGÍA E INNOVACIÓN"
+    },
+    {
+      "Nombre": "WALFIN VELASCO GONZALEZ",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "wvelasco@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "ESPECIALIZACION EN ADMINISTRACION EN LA INFORMATICA EDUCATIVA; ESPECIALIZACION EN AUDITORIA EN SISTEMAS; MAESTRIA EN PEDAGOGIA EN LAS TECNOLOGIAS EN LA INFORMACION Y LA COMUNICACION"
+    },
+    {
+      "Nombre": "YAINIRIS PAOLA DEL TORO MEJIA",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "",
+      "Sede": "RIOHACHA",
+      "Email": "ydel@uniguajira.edu.co",
+      "Foto": "",
+      "Posgrado": "MAESTRIA EN GESTION DE LA TECNOLOGIA Y LA INNOVACION"
+    },
+    {
+      "Nombre": "Yisset Andrea Pimienta Zapata",
+      "Tipo de Vinculación": "CATEDRATICO",
+      "CVLAC": "No registrado",
+      "Sede": "RIOHACHA",
+      "Email": "ypimientaz@uniguajira.edu.co",
+      "Foto": "https://drive.google.com/open?id=1Af_0kE6AEn5Q-EZ8xlkQgovqKsmNnGPk",
+      "Posgrado": "Esp. en Gerencia en Finanzas - Esp. en Gerencia Estratégica para el Desarrollo"
+    }
+  ]
 }
