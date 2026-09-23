@@ -10,10 +10,16 @@ export default function Footer() {
   return (
     <footer className="app-footer">
       <div className="inner">
-        <div className="top" style={{ gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
+
+        <div className="top">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-              <WayuuGlyph size={32} color="var(--ug-amarillo)" />
+            {/* Logo institucional, misma versión blanca que la cabecera: está
+                pensada para fondo teal y el pie es marino. */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
+              <Link className="footer-marca" to="/">
+                <img className="footer-marca__logo" src="/images/marca/logo-vertical.webp"
+                  alt="Marca institucional de la Universidad de La Guajira" />
+              </Link>
               <div>
                 <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>Ingeniería de Sistemas</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.18em', color: 'rgba(255,255,255,.8)', textTransform: 'uppercase', marginTop: 4 }}>
@@ -24,7 +30,7 @@ export default function Footer() {
             <p style={{ fontSize: 14, color: 'rgba(255,255,255,.85)', maxWidth: '34ch', lineHeight: 1.55 }}>
               Formamos ingenieros de sistemas con raíces en el territorio y visión global.
             </p>
-            <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.08em', color: 'rgba(255,255,255,.85)' }}>
+            <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 7, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '.04em', color: 'rgba(255,255,255,.85)' }}>
               <div>SNIES <b style={{ color: '#fff' }}>17579</b></div>
               <div>Reg. calificado Res. <b style={{ color: '#fff' }}>02872 / 21 feb 2018</b></div>
               <div>Acreditación Res. <b style={{ color: '#fff' }}>014528 / 28 jul 2022</b></div>

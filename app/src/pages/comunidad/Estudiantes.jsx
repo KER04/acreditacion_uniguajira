@@ -8,32 +8,6 @@ import { useData, apiDocumentosHonor } from '../../context/DataContext'
 import { ordinalSemestre } from '../../../shared/validacion'
 import { usePestana } from '../../hooks/useParametroURL'
 
-function MiniMonth({ month, start, days, marks, legendLabel }) {
-  const names = ['L','M','X','J','V','S','D']
-  const cells = []
-  for (let i = 0; i < start; i++) cells.push(null)
-  for (let i = 1; i <= days; i++) cells.push(i)
-  return (
-    <div style={{ background: 'var(--paper-2)', borderRadius: 14, padding: 20 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18 }}>{month}</div>
-        {legendLabel && <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', color: 'var(--ug-flamingo-deep)', textTransform: 'uppercase' }}>● {legendLabel}</div>}
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4 }}>
-        {names.map(n => <div key={n} style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.1em', color: 'var(--ink-3)', padding: 6 }}>{n}</div>)}
-        {cells.map((d,i) => (
-          <div key={i} style={{ aspectRatio: '1/1', display: 'grid', placeItems: 'center', fontSize: 13,
-            background: d && marks[d] ? 'var(--ug-flamingo)' : 'transparent',
-            color: d && marks[d] ? 'var(--paper)' : 'var(--ink-2)',
-            borderRadius: 8, fontWeight: d && marks[d] ? 600 : 400 }}>
-            {d || ''}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const COLOR_TIPO = {
   evaluacion: 'var(--ug-flamingo)',
   grado: 'var(--ug-amarillo)',
@@ -42,90 +16,195 @@ const COLOR_TIPO = {
   otro: 'var(--ink-3)',
 }
 
-const NOMBRE_MES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+const ETIQUETA_TIPO = {
+  evaluacion: 'Evaluación',
+  grado: 'Grado',
+  academico: 'Académico',
+  administrativo: 'Administrativo',
+  otro: 'Otro',
+}
 
-/* Toma los meses con mas eventos y marca los dias ocupados, para que los
-   mini-calendarios reflejen lo que hay en la base y no fechas escritas a mano. */
-function mesesDestacados(eventos, cuantos = 2) {
+const NOMBRE_MES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
+const ABREV_MES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
+
+/* "2026-05-26" -> "26 MAY". Se parte la cadena en vez de construir un Date:
+   pasar por Date convierte a la zona local y se come un día. */
+function fechaCorta(iso) {
+  if (!iso) return ''
+  const [, m, d] = iso.split('-').map(Number)
+  return String(d).padStart(2, '0') + ' ' + ABREV_MES[m - 1]
+}
+
+/* Un mes por cada uno que tenga algo en el calendario, con los días marcados y
+   el color de lo que cae en cada uno. Antes solo salían los dos meses con más
+   actividad y el resto del semestre no se podía mirar. */
+function mesesDelCalendario(eventos) {
   const porMes = new Map()
+
   for (const ev of eventos) {
     if (!ev.fecha_inicio) continue
     const [a, m, d] = ev.fecha_inicio.split('-').map(Number)
-    const hasta = ev.fecha_fin ? Number(ev.fecha_fin.split('-')[2]) : d
-    const clave = a + '-' + m
-    if (!porMes.has(clave)) porMes.set(clave, { anio: a, mes: m, marks: {}, etiqueta: ev.titulo })
+    const clave = a + '-' + String(m).padStart(2, '0')
+    if (!porMes.has(clave)) porMes.set(clave, { anio: a, mes: m, dias: {}, destacado: null })
     const reg = porMes.get(clave)
-    // Solo marcamos dias dentro del mismo mes; un rango entre meses marca el inicio.
-    const fin = ev.fecha_fin && ev.fecha_fin.slice(0, 7) === ev.fecha_inicio.slice(0, 7) ? hasta : d
-    for (let dia = d; dia <= fin; dia++) reg.marks[dia] = true
-    if (ev.destacado) reg.etiqueta = ev.titulo
+
+    /* Un rango que cruza de mes solo marca su día de inicio en este. */
+    const mismoMes = ev.fecha_fin && ev.fecha_fin.slice(0, 7) === ev.fecha_inicio.slice(0, 7)
+    const hasta = mismoMes ? Number(ev.fecha_fin.split('-')[2]) : d
+    for (let dia = d; dia <= hasta; dia++) reg.dias[dia] = ev.tipo
+
+    if (ev.destacado || !reg.destacado) reg.destacado = ev
   }
+
   return [...porMes.values()]
-    .sort((x, y) => Object.keys(y.marks).length - Object.keys(x.marks).length)
-    .slice(0, cuantos)
     .sort((x, y) => (x.anio - y.anio) || (x.mes - y.mes))
     .map(r => ({
       ...r,
+      clave: r.anio + '-' + r.mes,
       titulo: NOMBRE_MES[r.mes - 1] + ' ' + r.anio,
-      dias: new Date(r.anio, r.mes, 0).getDate(),
-      // La rejilla empieza en lunes; getDay() cuenta desde domingo.
+      total: new Date(r.anio, r.mes, 0).getDate(),
+      /* La rejilla empieza en lunes; getDay() cuenta desde el domingo. */
       inicio: (new Date(r.anio, r.mes - 1, 1).getDay() + 6) % 7,
     }))
+}
+
+const DIAS_SEMANA = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+
+function RejillaMes({ mes }) {
+  const celdas = []
+  for (let i = 0; i < mes.inicio; i++) celdas.push(null)
+  for (let d = 1; d <= mes.total; d++) celdas.push(d)
+
+  return (
+    <>
+      <div className="cal-semana">
+        {DIAS_SEMANA.map((d, i) => <div key={i}>{d}</div>)}
+      </div>
+      <div className="cal-dias">
+        {celdas.map((d, i) => {
+          const tipo = d && mes.dias[d]
+          return (
+            <div key={i}
+                 className={'cal-dia' + (d ? '' : ' is-vacio') + (tipo ? ' is-marcado' : '')}
+                 style={tipo ? { '--tono': COLOR_TIPO[tipo] ?? 'var(--ink-3)' } : undefined}>
+              {d ?? ''}
+            </div>
+          )
+        })}
+      </div>
+    </>
+  )
 }
 
 function Calendario() {
   const { data } = useData()
   const eventos = data.calendario ?? []
   const periodo = eventos.find(e => e.periodo)?.periodo ?? ''
-  const meses = mesesDestacados(eventos)
+  const meses = mesesDelCalendario(eventos)
+  const [mesActivo, setMesActivo] = useState(0)
 
   if (eventos.length === 0) {
     return (
       <section className="section" style={{ paddingTop: 30 }}>
-        <div className="inner" style={{ color: 'var(--ink-3)' }}>Todavia no hay fechas publicadas.</div>
+        <div className="inner" style={{ color: 'var(--ink-3)' }}>Todavía no hay fechas publicadas.</div>
       </section>
     )
   }
 
+  /* El índice puede quedar fuera de rango si los datos llegan después. */
+  const i = Math.min(mesActivo, meses.length - 1)
+  const mes = meses[i]
+
+  /* La leyenda sale de lo que hay publicado, no de una lista fija: si no hay
+     ninguna evaluación, no se anuncia el color de las evaluaciones. */
+  const tipos = [...new Set(eventos.map(e => e.tipo))]
+
   return (
     <section className="section" style={{ paddingTop: 30 }}>
       <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Calendario academico {periodo}</div>
-            <h2 style={{ marginTop: 10 }}>Las fechas que no puedes perder.</h2>
-          </div>
-          <p className="desc">Descarga el calendario completo o sincronizalo con Google Calendar.</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }} className="cal-grid">
+
+        <div className="cal-cabecera">
           <div>
-            <div className="eyebrow" style={{ marginBottom: 20 }}>Cronograma semestral</div>
-            <div style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: 10, top: 10, bottom: 10, width: 2, background: 'color-mix(in oklab, var(--ink) 12%, transparent)' }} />
-              {eventos.map(e => {
-                const color = COLOR_TIPO[e.tipo] ?? 'var(--ink-3)'
-                return (
-                  <div key={e.id} style={{ display: 'grid', gridTemplateColumns: '24px 1fr', gap: 16, padding: '10px 0', position: 'relative', alignItems: 'start' }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 999, background: color, border: '3px solid var(--paper)', zIndex: 1, marginTop: 2 }} />
-                    <div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>{e.etiqueta_fecha}</div>
-                      <div style={{ fontSize: 16, marginTop: 4, fontWeight: e.destacado ? 600 : 400 }}>{e.titulo}</div>
-                    </div>
-                  </div>
-                )
-              })}
+            <div className="doc-seccion__titulo" style={{ margin: 0 }}>
+              Calendario académico {periodo}
             </div>
+            <h2 className="cal-cabecera__titulo">Las fechas que no puedes perder.</h2>
           </div>
-          <div>
-            <div className="eyebrow" style={{ marginBottom: 20 }}>Vista de calendario</div>
-            {meses.map((m, i) => (
-              <div key={m.titulo} style={{ marginTop: i === 0 ? 0 : 24 }}>
-                <MiniMonth month={m.titulo} start={m.inicio} days={m.dias} marks={m.marks} legendLabel={m.etiqueta} />
-              </div>
-            ))}
-            <div style={{ marginTop: 32, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+
+          <div className="cal-cabecera__lado">
+            <p className="cal-cabecera__desc">
+              Descarga el calendario completo o sincronízalo con Google Calendar.
+            </p>
+            <div className="cal-acciones">
               <button className="btn"><Icons.download /> Calendario PDF</button>
               <button className="btn ghost">+ Google Calendar</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="cal-columnas">
+
+          {/* ── Cronograma ── */}
+          <div>
+            <div className="cal-rotulo">
+              <span className="cal-rotulo__texto">Cronograma semestral</span>
+              <span className="doc-pin doc-pin--azul">
+                {eventos.length} {eventos.length === 1 ? 'hito' : 'hitos'}
+              </span>
+            </div>
+
+            <div className="cal-hitos">
+              {eventos.map(e => (
+                <div key={e.id} className="cal-hito" style={{ '--tono': COLOR_TIPO[e.tipo] ?? 'var(--ink-3)' }}>
+                  <span className="cal-hito__punto" aria-hidden="true" />
+                  <div>
+                    <div className="cal-hito__fecha">{e.etiqueta_fecha || fechaCorta(e.fecha_inicio)}</div>
+                    <div className="cal-hito__titulo">{e.titulo}</div>
+                    {e.descripcion && <div className="cal-hito__desc">{e.descripcion}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Rejilla del mes ── */}
+          <div>
+            <div className="cal-rotulo">
+              <span className="cal-rotulo__texto">Vista de calendario</span>
+            </div>
+
+            <div className="cal-mes">
+              <div className="cal-mes__cabeza">
+                <span className="cal-mes__nombre">{mes.titulo}</span>
+                {mes.destacado && (
+                  <span className="doc-pin doc-pin--terracota">{mes.destacado.titulo}</span>
+                )}
+                {/* Las flechas son ahora la unica forma de cambiar de mes. */}
+                <div className="cal-mes__flechas">
+                  <button className="cal-mes__flecha" onClick={() => setMesActivo(i - 1)}
+                          disabled={i === 0} aria-label="Mes anterior">‹</button>
+                  <button className="cal-mes__flecha" onClick={() => setMesActivo(i + 1)}
+                          disabled={i === meses.length - 1} aria-label="Mes siguiente">›</button>
+                </div>
+              </div>
+
+              <RejillaMes mes={mes} />
+
+              <div className="cal-pie">
+                <div className="cal-leyenda">
+                  {tipos.map(t => (
+                    <span key={t} className="cal-leyenda__item" style={{ '--tono': COLOR_TIPO[t] ?? 'var(--ink-3)' }}>
+                      <span className="cal-leyenda__punto" aria-hidden="true" />
+                      {ETIQUETA_TIPO[t] ?? t}
+                    </span>
+                  ))}
+                </div>
+                <Link className="cal-pie__enlace" to="/resoluciones">
+                  Consultar resoluciones →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -492,41 +571,86 @@ function Docs() {
   )
 }
 
-/* Las modalidades de grado se fueron a la vista Egresados: son del trámite
-   de grado y quien las consulta ya terminó materias. */
-const tabs = [{id:'calendario',l:'Calendario'},{id:'honor',l:'Cuadro de Honor'},{id:'reglamento',l:'Reglamento'},{id:'docs',l:'Documentos'}]
+/* Las cuatro secciones. Cada una lleva su propio icono y una línea que dice
+   qué hay dentro: cuatro chips con solo el nombre no distinguían "Reglamento"
+   de "Documentos" hasta entrar en cada uno. */
+const SECCIONES = [
+  { id: 'calendario', l: 'Calendario',     sub: 'Fechas del periodo',    icono: 'reloj',    tono: 'var(--ug-azul)',     tinte: 'var(--doc-azul-tint)' },
+  { id: 'honor',      l: 'Cuadro de Honor', sub: 'Excelencia académica', icono: 'sparkle',  tono: 'var(--ug-amarillo)', tinte: 'var(--doc-ambar-tint)' },
+  { id: 'reglamento', l: 'Reglamento',     sub: 'Normas y deberes',      icono: 'archivo',  tono: 'var(--ug-marino)',   tinte: 'var(--doc-neutro-tint)' },
+  { id: 'docs',       l: 'Documentos',     sub: 'Formatos y guías',      icono: 'download', tono: 'var(--ug-flamingo)', tinte: 'var(--doc-terracota-tint)' },
+]
 
 export default function Estudiantes() {
   /* En la URL: recargar deja de mandar al calendario, y se puede enlazar
      directo a una sección (#/estudiantes?seccion=honor). */
-  const [tab, setTab] = usePestana(tabs.map(t => t.id), { clave: 'seccion' })
+  const [tab, setTab] = usePestana(SECCIONES.map(s => s.id), { clave: 'seccion' })
 
   return (
-    <div className="page-in">
-      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)', paddingBottom: 30 }}>
-        <div className="inner">
-          <div className="eyebrow">Comunidad · Estudiantes</div>
-          <h1 style={{ marginTop: 14, maxWidth: '20ch' }}>Todo lo que necesitas, en un solo lugar.</h1>
-          <p style={{ fontSize: 18, color: 'var(--ink-2)', marginTop: 24, maxWidth: '58ch' }}>
-            Calendario, fechas clave, cuadro de honor, reglamento y documentos — organizado para que no pierdas tiempo buscando.
-          </p>
-          {/* Las modalidades de grado se fueron a Egresados. Este enlace evita
-              que quien venga buscándolas aquí crea que desaparecieron. */}
-          <p style={{ fontSize: 14, color: 'var(--ink-3)', marginTop: 12, maxWidth: '58ch' }}>
-            ¿Buscas las modalidades de grado? Están en{' '}
-            <Link to="/egresados" style={{ color: 'var(--ug-azul-deep)' }}>Egresados</Link>, junto con
-            la normativa del trámite, las convocatorias de prácticas y las ideas de investigación.
-          </p>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 36 }}>
-            {tabs.map(t => (
-              <button key={t.id} className="chip" onClick={() => setTab(t.id)}
-                style={{ cursor: 'pointer', background: tab===t.id ? 'var(--ink)' : undefined, color: tab===t.id ? 'var(--paper)' : undefined, borderColor: tab===t.id ? 'var(--ink)' : undefined }}>
-                {t.l}
-              </button>
-            ))}
+    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+      <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
+
+        <nav className="miga" aria-label="Ruta de navegación">
+          <span>Comunidad</span>
+          <span aria-hidden="true">/</span>
+          <span className="miga__actual">Estudiantes</span>
+        </nav>
+
+        <header className="hero-card">
+          <div className="hero-card__patron" aria-hidden="true" />
+          <div className="hero-card__contenido">
+            <p className="hero-card__insignia">
+              <span className="hero-card__punto" aria-hidden="true" />
+              Comunidad · Estudiantes
+            </p>
+
+            <h1 className="hero-card__titulo">
+              Todo lo que necesitas, <span>en un solo lugar.</span>
+            </h1>
+
+            <p className="hero-card__texto">
+              Calendario, fechas clave, cuadro de honor, reglamento y documentos — organizado para
+              que no pierdas tiempo buscando.
+            </p>
+
+            {/* Las modalidades de grado se fueron a Egresados. Este aviso evita
+                que quien venga buscándolas aquí crea que desaparecieron. */}
+            <div className="est-aviso">
+              <Icons.sparkle />
+              <span>
+                ¿Buscas las modalidades de grado? Están en{' '}
+                <Link to="/egresados">Egresados</Link>, junto con la normativa del trámite, las
+                convocatorias de prácticas y las ideas de investigación.
+              </span>
+            </div>
+
+            <div className="est-nav">
+              <div className="est-nav__label">Explorar secciones de estudiantes</div>
+              <div className="est-nav__grid" role="tablist" aria-label="Secciones de estudiantes">
+                {SECCIONES.map(s => {
+                  const Icono = Icons[s.icono]
+                  const activa = tab === s.id
+                  return (
+                    <button key={s.id} role="tab" aria-selected={activa}
+                            className={'est-nav-card' + (activa ? ' is-activa' : '')}
+                            style={{ '--tono': s.tono, '--tinte': s.tinte }}
+                            onClick={() => setTab(s.id)}>
+                      <span className="est-nav-card__icono"><Icono /></span>
+                      <span className="est-nav-card__textos">
+                        <span className="est-nav-card__titulo">{s.l}</span>
+                        <span className="est-nav-card__sub">{s.sub}</span>
+                      </span>
+                      <span className="est-nav-card__marca" aria-hidden="true">
+                        {activa ? null : <Icons.arrow />}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </header>
+      </div>
 
       {tab === 'calendario' && <Calendario />}
       {tab === 'honor' && <Honor />}

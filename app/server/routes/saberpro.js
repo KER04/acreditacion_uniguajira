@@ -137,8 +137,12 @@ async function mediasPorAnio() {
  * `campo` sale de una lista blanca (CLAVES_MODULOS más 'puntaje_global'), así
  * que nunca entra texto del cliente en el SQL como identificador. */
 async function mejoresPor(campo, { anio, cuantos = 3 }) {
+  /* Viajan también los cinco módulos y el período: la tarjeta del destacado
+     enseña el desglose de su desempeño, y pedirlo aparte por cada uno serían
+     cinco consultas más para datos que ya están en la misma fila. */
   const { rows } = await query(
-    `SELECT id, estudiante, anio, sede, ${campo} AS puntaje, puntaje_global
+    `SELECT id, estudiante, anio, periodo, sede, ${campo} AS puntaje, puntaje_global,
+            ${CLAVES_MODULOS.join(', ')}
        FROM saberpro_resultado
       WHERE ($1::smallint IS NULL OR anio = $1)
       ORDER BY ${campo} DESC, estudiante ASC

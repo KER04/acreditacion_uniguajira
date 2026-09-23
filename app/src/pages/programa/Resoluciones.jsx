@@ -45,6 +45,27 @@ const OTROS = [
   { t: 'Resolución MEN 02872/2018',          a: 'Registro calificado del programa',                      f: 'Feb 2018' },
 ]
 
+/* "Acuerdo Consejo Académico 045/2024" -> órgano y número, que es como se cita
+   un acto. No se reescribe nada: se parte por el número y las dos mitades se
+   pintan una encima de la otra. Si el título no trae número, se muestra entero
+   y el antetítulo queda vacío. */
+function partirActo(titulo) {
+  const m = /^(.*?)\s*(\d[\d/.\-]*)\s*$/.exec(titulo)
+  if (!m) return { organo: '', numero: titulo }
+  return { organo: m[1], numero: m[2] }
+}
+
+/* El color de la franja dice qué órgano lo expidió, sin gastar una línea en
+   repetirlo. Los cuatro tonos son los de la marca, como en el resto del sitio. */
+function tonoDe(organo) {
+  const o = organo.toLowerCase()
+  if (o.includes('men')) return 'terracota'
+  if (o.includes('superior')) return 'marino'
+  if (o.includes('rectoral')) return 'ambar'
+  if (o.includes('académico') || o.includes('academico')) return 'azul'
+  return 'neutro'
+}
+
 export default function Resoluciones() {
   return (
     <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
@@ -124,23 +145,27 @@ export default function Resoluciones() {
           <h2 className="doc-seccion__titulo">Otros actos administrativos</h2>
           <p className="doc-seccion__desc">Resoluciones rectorales y del consejo académico.</p>
 
-          <div className="doc-lista">
-            {OTROS.map(o => (
-              <div key={o.t} className="doc-norma">
-                <span className="resolucion__sello" aria-hidden="true">PDF</span>
+          <div className="actos-grid">
+            {OTROS.map(o => {
+              const { organo, numero } = partirActo(o.t)
+              return (
+                <article key={o.t} className="acto">
+                  <div className={'acto__acento acto__acento--' + tonoDe(organo)} />
+                  <div className="acto__cuerpo">
+                    <div className="acto__organo">{organo}</div>
+                    <div className="acto__numero">{numero}</div>
+                    <p className="acto__asunto">{o.a}</p>
 
-                <div className="doc-norma__cuerpo">
-                  <div className="doc-norma__titulo">{o.t}</div>
-                  <p className="doc-norma__desc">{o.a}</p>
-                </div>
-
-                <span className="doc-card__dato">{o.f}</span>
-
-                <button className="doc-boton" aria-label={'Descargar ' + o.t}>
-                  <Icons.download />
-                </button>
-              </div>
-            ))}
+                    <div className="acto__pie">
+                      <span className="acto__fecha">{o.f}</span>
+                      <button className="doc-boton" aria-label={'Descargar ' + o.t}>
+                        <Icons.download /> PDF
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </section>
 

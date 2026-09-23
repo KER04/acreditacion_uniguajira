@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Icons } from '../../components/Icons'
-import TramaMarca from '../../components/TramaMarca'
 import { apiSaberPro } from '../../context/DataContext'
 import { useParametroURL } from '../../hooks/useParametroURL'
 import {
@@ -42,107 +41,173 @@ function Barra({ valor, color, titulo }) {
   )
 }
 
-function Medias({ medias }) {
-  if (medias.length === 0) return null
+/* Tono de cada puesto del podio. Del cuarto en adelante no hay tono y la
+   ficha queda en gris: es lo que marca dónde acaban los tres primeros. */
+const TONO_PUESTO = ['var(--ug-amarillo)', 'var(--ug-azul)', 'var(--ug-flamingo)']
+
+const ETIQUETA_SEDE = { riohacha: 'Riohacha', maicao: 'Maicao' }
+
+/* Iniciales del nombre, como en el organigrama: hacen de retrato mientras no
+   haya fotos de los estudiantes. */
+const iniciales = nombre =>
+  String(nombre ?? '').split(' ').map(p => p[0])
+    .filter(c => /[A-ZÁÉÍÓÚÑ]/.test(c ?? '')).slice(0, 2).join('')
+
+function FichaDestacado({ e, puesto }) {
+  const tono = TONO_PUESTO[puesto - 1]
+  const esPodio = Boolean(tono)
+
+  /* Las cinco competencias de este estudiante, de la más alta a la más baja:
+     así la ficha cuenta en qué destaca, no repite siempre el mismo orden. */
+  const competencias = CLAVES_MODULOS
+    .map(k => ({ k, valor: Number(e[k]) }))
+    .filter(c => Number.isFinite(c.valor))
+    .sort((a, b) => b.valor - a.valor)
 
   return (
-    <section className="section" style={{ paddingTop: 20 }}>
-      <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Media por año</div>
-            <h2 style={{ marginTop: 10 }}>Cómo se mueve el programa.</h2>
+    <article className={'sp-ficha' + (esPodio ? ' sp-ficha--podio' : '')}
+             style={tono ? { '--tono': tono } : undefined}>
+
+      <div className="sp-ficha__cabeza">
+        <div className="sp-ficha__avatar">
+          {iniciales(e.estudiante)}
+          {puesto === 1 && <span className="sp-ficha__estrella" aria-hidden="true">★</span>}
+        </div>
+
+        <div className="sp-ficha__ident">
+          <h3 className="sp-ficha__nombre">{e.estudiante}</h3>
+          <div className="sp-ficha__donde">
+            <Icons.ubicacion />
+            Sede {ETIQUETA_SEDE[e.sede] ?? e.sede} · Cohorte {e.anio}
           </div>
-          <p className="desc">
-            Promedio del programa en cada competencia, año por año. La escala del examen va de 0 a
-            300 y el puntaje global es el promedio simple de las cinco competencias.
-          </p>
         </div>
 
-        <div className="sp-tabla-marco">
-          <table className="sp-tabla">
-            <thead>
-              <tr>
-                <th scope="col">Año</th>
-                <th scope="col" className="sp-num">Evaluados</th>
-                <th scope="col">Global</th>
-                {MODULOS_SABERPRO.map(([k, etiqueta, sigla]) => (
-                  <th key={k} scope="col" className="sp-num" title={etiqueta}>{sigla}</th>
-                ))}
-                <th scope="col" className="sp-num">Mín · Máx</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medias.map(m => (
-                <tr key={m.anio}>
-                  <th scope="row" className="sp-anio">{m.anio}</th>
-                  <td className="sp-num">{m.evaluados}</td>
-                  <td className="sp-global">
-                    <span className="sp-global__n">{num(m.puntaje_global)}</span>
-                    <Barra valor={m.puntaje_global} color="var(--ug-marino)"
-                           titulo={'Global ' + m.anio + ': ' + m.puntaje_global + ' de 300'} />
-                  </td>
-                  {CLAVES_MODULOS.map(k => (
-                    <td key={k} className="sp-num">
-                      <span className="sp-celda__n">{num(m[k])}</span>
-                      <Barra valor={m[k]} color={COLOR_MODULO[k]}
-                             titulo={ETIQUETA_MODULO[k] + ' ' + m.anio + ': ' + m[k] + ' de 300'} />
-                    </td>
-                  ))}
-                  <td className="sp-num sp-extremos">{num(m.minimo)} · {num(m.maximo)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <span className="sp-puesto">
+          {puesto === 1 && <span aria-hidden="true">🏆</span>}
+          {puesto}.º lugar
+        </span>
+      </div>
 
-        <div className="sp-leyenda">
-          {MODULOS_SABERPRO.map(([k, etiqueta, sigla]) => (
-            <span key={k} className="sp-leyenda__item">
-              <i style={{ background: COLOR_MODULO[k] }} /> <b>{sigla}</b> {etiqueta}
-            </span>
-          ))}
+      <div className="sp-global">
+        <div>
+          <div className="sp-global__label">Puntaje global Saber Pro</div>
+          {/* La única frase que se puede sostener con lo que hay guardado: su
+              posición dentro del programa. Nada de calificativos. */}
+          <div className="sp-global__nota">
+            {puesto === 1 ? 'El más alto del programa' : `${puesto}.º del programa`}
+          </div>
+        </div>
+        <div className="sp-global__cifra">
+          <div className="sp-global__valor">{e.puntaje_global}</div>
+          <div className="sp-global__escala">de {PUNTAJE_SABERPRO_MAX} puntos</div>
         </div>
       </div>
-    </section>
+
+      <div>
+        <div className="sp-desglose__titulo">
+          <span>Desempeño por competencia</span>
+          <span>Puntaje / {PUNTAJE_SABERPRO_MAX}</span>
+        </div>
+
+        {competencias.map(c => (
+          <div key={c.k} className="sp-comp-fila" style={{ '--tono': COLOR_MODULO[c.k] }}>
+            <div className="sp-comp-fila__alto">
+              <span className="sp-comp-fila__punto" aria-hidden="true" />
+              <span className="sp-comp-fila__nombre">{ETIQUETA_MODULO[c.k]}</span>
+              <span className="sp-comp-fila__valor">{c.valor}</span>
+            </div>
+            <div className="sp-comp-fila__barra">
+              <i style={{ width: Math.max(0, Math.min(100, (c.valor / PUNTAJE_SABERPRO_MAX) * 100)) + '%' }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="sp-ficha__pie">
+        <span>Saber Pro {e.periodo || e.anio}</span>
+        <span>Reporte ICFES</span>
+      </div>
+    </article>
   )
 }
 
-function Destacados({ destacados }) {
+function Destacados({ destacados, anio, sede, setSede, busqueda, setBusqueda, anios, setAnio }) {
   const general = destacados.general ?? []
-  if (general.length === 0) return null
+
+  /* El filtro de sede y la búsqueda se aplican aquí y no en el servidor: son
+     cinco tarjetas, y una llamada por cada tecla sería mucho ruido para nada. */
+  const lista = general
+    .filter(e => (sede === 'todas' ? true : e.sede === sede))
+    .filter(e => e.estudiante.toLowerCase().includes(busqueda.trim().toLowerCase()))
 
   return (
-    <section className="section" style={{ background: 'var(--paper-2)' }}>
+    <section className="section" style={{ paddingTop: 34 }}>
       <div className="inner">
-        <div className="section-head">
-          <div className="title">
-            <div className="eyebrow">Estudiantes destacados</div>
-            <h2 style={{ marginTop: 10 }}>Los mejores puntajes.</h2>
+
+        <h2 className="doc-seccion__titulo">Estudiantes destacados</h2>
+
+        <div className="sp-filtros">
+          {/* Siempre visible, aunque de momento solo haya un año cargado:
+              es el filtro por el que se pregunta al llegar. */}
+          <div className="sp-seg" role="tablist" aria-label="Año">
+            <button role="tab" aria-selected={anio === 'todos'}
+                    className={anio === 'todos' ? 'is-activo' : ''}
+                    onClick={() => setAnio('todos')}>Histórico</button>
+            {anios.map(a => (
+              <button key={a} role="tab" aria-selected={String(a) === String(anio)}
+                      className={String(a) === String(anio) ? 'is-activo' : ''}
+                      onClick={() => setAnio(String(a))}>Saber Pro {a}</button>
+            ))}
           </div>
-          <p className="desc">
-            Por media general y por cada competencia evaluada. Un estudiante puede destacar en una
-            competencia sin liderar el global, y al revés.
-          </p>
+
+          <div className="sp-seg" role="tablist" aria-label="Sede">
+            {[['todas', 'Ambas sedes'], ['riohacha', 'Riohacha'], ['maicao', 'Maicao']].map(([k, l]) => (
+              <button key={k} role="tab" aria-selected={sede === k}
+                      className={sede === k ? 'is-activo' : ''}
+                      onClick={() => setSede(k)}>{l}</button>
+            ))}
+          </div>
+
+          <div className="sp-buscador">
+            <Icons.search />
+            <input type="search" value={busqueda} onChange={ev => setBusqueda(ev.target.value)}
+                   placeholder="Buscar estudiante por nombre…"
+                   aria-label="Buscar estudiante por nombre" />
+          </div>
         </div>
 
-        <div className="eyebrow" style={{ marginBottom: 16 }}>Por media general</div>
-        <div className="sp-podio">
-          {general.map((e, i) => (
-            <article key={e.id} className="sp-podio__tarjeta" style={{ '--puesto': i === 0 ? 'var(--ug-amarillo)' : i === 1 ? 'var(--ug-azul)' : 'var(--ug-flamingo)' }}>
-              <TramaMarca escala={74} opacidad={0.07}
-                          tono={i === 0 ? 'var(--ug-amarillo)' : i === 1 ? 'var(--ug-azul)' : 'var(--ug-flamingo)'} />
-              <div className="sp-podio__cuerpo">
-                <div className="sp-podio__puesto">{i + 1}°</div>
-                <div className="sp-podio__nombre">{e.estudiante}</div>
-                <div className="sp-podio__puntaje">{e.puntaje}</div>
-                <div className="sp-podio__escala">de {PUNTAJE_SABERPRO_MAX} · {e.anio}</div>
-              </div>
-            </article>
-          ))}
+        <div className="sp-leyenda">
+          <span className="sp-leyenda__label">
+            {MODULOS_SABERPRO.length} competencias oficiales evaluadas:
+          </span>
+          <span className="sp-leyenda__items">
+            {MODULOS_SABERPRO.map(([k, etiqueta]) => (
+              <span key={k} className="sp-leyenda__item" style={{ '--tono': COLOR_MODULO[k] }}>
+                <span className="sp-leyenda__punto" aria-hidden="true" />
+                {etiqueta}
+              </span>
+            ))}
+          </span>
         </div>
 
-        <div className="eyebrow" style={{ margin: '44px 0 16px' }}>Por competencia</div>
+        {lista.length === 0 ? (
+          <div className="sp-dest__vacio">
+            {general.length === 0
+              ? 'Todavía no hay resultados para destacar.'
+              : 'Ningún destacado coincide con el filtro.'}
+          </div>
+        ) : (
+          <div className="sp-fichas">
+            {lista.map(e => (
+              <FichaDestacado key={e.id} e={e} puesto={general.indexOf(e) + 1} />
+            ))}
+          </div>
+        )}
+
+        {/* Los podios por competencia siguen aquí: quien lidera Lectura
+            Crítica puede no estar entre los cinco mejores globales, y si solo
+            se pintaran las fichas de arriba ese reconocimiento se perdería. */}
+        <div className="doc-seccion__titulo" style={{ margin: '44px 0 16px' }}>Por competencia</div>
         <div className="sp-competencias">
           {MODULOS_SABERPRO.map(([k, etiqueta]) => {
             const lista = destacados.competencias?.[k] ?? []
@@ -250,6 +315,10 @@ export default function SaberPro() {
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState('')
   const [anio, setAnio] = useParametroURL('anio', 'todos')
+  /* Sede y búsqueda no van a la URL: filtran cinco tarjetas ya cargadas y no
+     merecen ensuciar la dirección ni recargar del servidor. */
+  const [sede, setSede] = useState('todas')
+  const [busqueda, setBusqueda] = useState('')
 
   useEffect(() => {
     let vivo = true
@@ -281,27 +350,59 @@ export default function SaberPro() {
 
   const hayDatos = datos.total > 0
 
-  return (
-    <div className="page-in">
-      <header className="sp-cabecera">
-        <TramaMarca blanco escala={118} opacidad={0.12} />
-        <div className="inner">
-          <div className="eyebrow sp-cabecera__eyebrow">Comunidad · Saber Pro</div>
-          <h1 className="sp-cabecera__titulo">Resultados Saber Pro del programa.</h1>
-          <p className="sp-cabecera__texto">
-            Las pruebas Saber Pro evalúan cinco competencias genéricas en una escala de 0 a 300. El
-            puntaje global es el promedio simple de las cinco.
-          </p>
+  /* Las tres cifras de cabecera salen de lo cargado: ninguna está escrita a
+     mano, así que registrar un resultado en el panel las mueve solas. */
+  const CIFRAS = [
+    { k: 'total', tono: 'acento', valor: datos.total, etiqueta: datos.total === 1 ? 'Resultado cargado' : 'Resultados cargados' },
+    { k: 'anios', valor: datos.desde === datos.hasta ? datos.desde : datos.desde + '–' + datos.hasta, etiqueta: 'Años con registro' },
+    { k: 'grado', tono: 'ambar', valor: datos.elegibles.length, etiqueta: 'Alcanzan el grado por puntaje' },
+  ]
 
-          {hayDatos && (
-            <div className="sp-cifras">
-              <div><b>{datos.total}</b><span>resultados cargados</span></div>
-              <div><b>{datos.desde}–{datos.hasta}</b><span>años con registro</span></div>
-              <div><b>{datos.elegibles.length}</b><span>alcanzan el grado por puntaje</span></div>
-            </div>
-          )}
-        </div>
-      </header>
+  return (
+    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+      <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
+
+        <nav className="miga" aria-label="Ruta de navegación">
+          <span>Comunidad</span>
+          <span aria-hidden="true">/</span>
+          <span className="miga__actual">Saber Pro</span>
+        </nav>
+
+        <header className="hero-card">
+          <div className="hero-card__patron" aria-hidden="true" />
+          <div className="hero-card__contenido">
+            <p className="hero-card__insignia">
+              <span className="hero-card__punto" aria-hidden="true" />
+              Pruebas de Estado ICFES
+            </p>
+
+            <h1 className="hero-card__titulo">
+              Resultados Saber Pro <span>del programa.</span>
+            </h1>
+
+            <p className="hero-card__texto">
+              Las pruebas Saber Pro evalúan cinco competencias genéricas en una escala de 0 a 300.
+              El puntaje global es el promedio simple de las cinco.
+            </p>
+            <p className="hero-card__texto" style={{ marginTop: 12 }}>
+              Reconocimiento a la excelencia académica. Conoce a los estudiantes con mejores
+              resultados globales y el desglose de su desempeño en cada una de las cinco
+              competencias evaluadas.
+            </p>
+
+            {hayDatos && (
+              <dl className="hero-card__cifras">
+                {CIFRAS.map(c => (
+                  <div key={c.k} className={'hero-card__cifra' + (c.tono ? ' hero-card__cifra--' + c.tono : '')}>
+                    <dt>{c.valor}</dt>
+                    <dd>{c.etiqueta}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        </header>
+      </div>
 
       {!hayDatos ? (
         <section className="section">
@@ -317,28 +418,10 @@ export default function SaberPro() {
         </section>
       ) : (
         <>
-          {datos.anios.length > 1 && (
-            <section className="section" style={{ paddingTop: 40, paddingBottom: 0 }}>
-              <div className="inner">
-                <div className="eyebrow" style={{ marginBottom: 12 }}>Filtrar por año</div>
-                <div className="sp-anios">
-                  <button className={'btn ' + (anio === 'todos' ? 'accent' : 'ghost')}
-                          onClick={() => setAnio('todos')} aria-pressed={anio === 'todos'}>
-                    Todos los años
-                  </button>
-                  {datos.anios.map(a => (
-                    <button key={a} className={'btn ' + (String(a) === String(anio) ? 'accent' : 'ghost')}
-                            onClick={() => setAnio(String(a))} aria-pressed={String(a) === String(anio)}>
-                      {a}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
-          <Medias medias={datos.medias} />
-          <Destacados destacados={datos.destacados} />
+          <Destacados destacados={datos.destacados}
+                      anio={anio} setAnio={setAnio} anios={datos.anios}
+                      sede={sede} setSede={setSede}
+                      busqueda={busqueda} setBusqueda={setBusqueda} />
           <Elegibles elegibles={datos.elegibles} parametros={datos.parametros} />
         </>
       )}
