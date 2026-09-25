@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Documento radicado">
+  <rect x="292" y="120" width="216" height="270" rx="10" fill="#8b949c" fill-opacity=".16"/>
+  <rect x="330" y="168" width="140" height="10" rx="5" fill="#1f6f83" fill-opacity=".85"/>
+  <rect x="330" y="200" width="104" height="8" rx="4" fill="#1f6f83" fill-opacity=".28"/>
+  <rect x="330" y="226" width="140" height="8" rx="4" fill="#1f6f83" fill-opacity=".28"/>
+  <rect x="330" y="252" width="118" height="8" rx="4" fill="#1f6f83" fill-opacity=".28"/>
+  <circle cx="470" cy="330" r="30" fill="#1f6f83" fill-opacity=".14"/>
+  <path d="M456 330l11 11 22-24" fill="none" stroke="#1f6f83" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="56" y="456" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="15" letter-spacing="2.5" fill="#8b949c">IMAGEN DE PRUEBA</text>
+</svg>

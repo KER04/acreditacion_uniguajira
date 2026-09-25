@@ -31,8 +31,11 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--paper-2)' }}>
-      <div style={{ width: '100%', maxWidth: 400 }}>
+    /* `adm` envuelve también la entrada: así los campos y el botón usan el
+       mismo sistema que el panel al que se entra, en vez de heredar el del
+       sitio público. */
+    <div className="adm adm-login">
+      <div style={{ width: '100%', maxWidth: 380 }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--ug-marino)', margin: '0 auto 16px', display: 'grid', placeItems: 'center' }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -40,7 +43,7 @@ export default function Login({ onLogin }) {
           <h2 style={{ fontSize: 22 }}>Panel de administración</h2>
           <p style={{ fontSize: 14, color: 'var(--ink-3)', marginTop: 6 }}>Ingeniería de Sistemas · UniGuajira</p>
         </div>
-        <form className="card" style={{ background: 'var(--paper)', padding: 32 }} onSubmit={submit}>
+        <form className="card" style={{ padding: 30 }} onSubmit={submit}>
           <div className="field">
             <label>Correo institucional</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" required autoFocus />

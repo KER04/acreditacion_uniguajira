@@ -8,6 +8,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
+import CarruselTarjetas from '../../components/CarruselTarjetas'
 import { useData } from '../../context/DataContext'
 import {
   Donut, FiltrosMalla, MallaGrid, MateriaDrawer, creditosPorArea,
@@ -123,6 +124,21 @@ export default function PensumPropuesto() {
 
   const etapa = tramite[ETAPA_ACTUAL] ?? { etapa: 'Sin etapa registrada' }
 
+  /* Las tarjetas del carrusel ya no cuelgan del plan: son de esta página, y
+     llegan por /api/all agrupadas por sección. Solo vienen las visibles. */
+  const tarjetas = data.tarjetas?.['pensum-propuesto'] ?? []
+
+  /* El encabezado es editable desde el panel. Los textos de respaldo son los
+     que tuvo la página desde el principio: si alguien vacía un campo, la
+     cabecera no se queda muda. */
+  const hero = {
+    insignia: propuesta.plan.hero_insignia
+      || 'Propuesta de actualización curricular · En trámite, no vigente',
+    titulo: propuesta.plan.hero_titulo || propuesta.plan.titulo || propuesta.plan.nombre,
+    acento: propuesta.plan.hero_titulo_acento,
+    texto: propuesta.plan.hero_texto,
+  }
+
   /* Las cuatro cifras de cabecera. Todas se derivan de los dos JSON: ninguna
      está escrita a mano, así que mover un dato del plan las mueve todas. */
   const CIFRAS = [
@@ -160,27 +176,23 @@ export default function PensumPropuesto() {
           <span className="miga__actual">Propuesta de actualización curricular</span>
         </nav>
 
-        <header className="hero-card">
+        <header className={'hero-card' + (tarjetas.length > 0 ? ' hero-card--split' : '')}>
           <div className="hero-card__patron" aria-hidden="true" />
+          <div className="hero-card__columnas">
           <div className="hero-card__contenido">
 
             {/* La insignia va en ámbar y no en el azul de las demás páginas:
                 lo que anuncia es que este plan todavía no rige. */}
             <p className="hero-card__insignia hero-card__insignia--aviso">
               <span className="hero-card__punto" aria-hidden="true" />
-              Propuesta de actualización curricular · En trámite, no vigente
+              {hero.insignia}
             </p>
 
             <h1 className="hero-card__titulo">
-              Ocho semestres, <span>un plan más corto y más denso.</span>
+              {hero.titulo}{hero.acento && <> <span>{hero.acento}</span></>}
             </h1>
 
-            <p className="hero-card__texto">
-              Esta es la malla que el programa propone para reemplazar la actual. Todavía
-              está en trámite: <b>no rige y ninguna cohorte cursa por ella</b>. Se publica
-              de manera abierta para que estudiantes, docentes, egresados y aspirantes
-              puedan leerla y compararla con el plan vigente mientras avanza su aprobación.
-            </p>
+            {hero.texto && <p className="hero-card__texto">{hero.texto}</p>}
 
             <dl className="hero-card__cifras">
               {CIFRAS.map(c => (
@@ -196,6 +208,18 @@ export default function PensumPropuesto() {
               <span aria-hidden="true">→</span>
             </Link>
 
+          </div>
+
+          {/* El costado del hero cuenta en tarjetas lo que el texto resume en un
+              párrafo: en qué va el trámite y qué significa para quien lee. Sin
+              tarjetas publicadas no se pinta la columna: un hueco vacío al lado
+              del titular se lee como un fallo de carga. */}
+          {tarjetas.length > 0 && (
+            <aside className="hero-card__lateral">
+              <CarruselTarjetas tarjetas={tarjetas}
+                etiqueta="Tarjetas sobre el estado de la propuesta" />
+            </aside>
+          )}
           </div>
         </header>
       </div>

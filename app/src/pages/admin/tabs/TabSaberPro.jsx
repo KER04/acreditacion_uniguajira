@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { usePestana } from '../../../hooks/useParametroURL'
 import {
   apiSaberProResultados, apiSaberProCrear, apiSaberProEditar, apiSaberProBorrar,
-  apiSaberProParametros, apiSaberProGuardarParametros,
+  apiSaberProParametros, apiSaberProGuardarParametros, apiSaberProImportar,
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
+import EditorTarjetas from '../EditorTarjetas'
 import SelectorAnio from '../../../components/SelectorAnio'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
@@ -13,7 +15,12 @@ import {
   PUNTAJE_SABERPRO_MAX, globalSaberPro, fechaLarga,
 } from '../../../../shared/validacion'
 
-const SUBPESTANAS = [['resultados', 'Resultados'], ['parametros', 'Opción de grado']]
+const SUBPESTANAS = [
+  ['resultados', 'Resultados'],
+  ['cargar', 'Cargar reporte'],
+  ['parametros', 'Opción de grado'],
+  ['carrusel', 'Carrusel del encabezado'],
+]
 const SEDE_LARGA = { riohacha: 'Riohacha', maicao: 'Maicao' }
 const ANIO_SABERPRO_MIN = 2010
 
@@ -215,10 +222,204 @@ function PanelResultados({ setAviso }) {
   )
 }
 
+/* ─── Carga del reporte del ICFES ──────────────────────────────── */
+
+/* Sube la hoja que entrega la facultad y la vuelca a la base.
+ *
+ * Dos pasos y no uno: primero se revisa —el servidor lee el archivo y cuenta
+ * lo que traería, sin escribir— y solo después se carga. Reemplazar borra los
+ * resultados que ya están publicados, y eso no debería pasar por accidente al
+ * pulsar un botón que dice "subir".
+ *
+ * Las bases de cada competencia salen de la fórmula de la última columna de la
+ * hoja, así que llegan solas con el archivo: nadie tiene que teclearlas ni
+ * saber que están ahí. */
+function PanelCargar({ setAviso, alCargar }) {
+  const [archivo, setArchivo] = useState(null)
+  const [reemplazar, setReemplazar] = useState(false)
+  const [trabajando, setTrabajando] = useState(false)
+  const [revision, setRevision] = useState(null)
+  const [parte, setParte] = useState(null)
+
+  const elegir = e => {
+    setArchivo(e.target.files?.[0] ?? null)
+    setRevision(null)
+    setParte(null)
+    setAviso(null)
+  }
+
+  const enviar = async simular => {
+    if (!archivo) return
+    setTrabajando(true)
+    setAviso(null)
+    try {
+      const r = await apiSaberProImportar(archivo, { simular, reemplazar })
+      if (simular) { setRevision(r); setParte(null) } else { setParte(r); setRevision(null); alCargar?.() }
+    } catch (err) { setAviso(err.message) } finally { setTrabajando(false) }
+  }
+
+  const bases = revision?.bases ?? parte?.bases ?? null
+  const completas = bases && CLAVES_MODULOS.every(k => Number.isInteger(bases[k]))
+  const promedio = completas
+    ? (CLAVES_MODULOS.reduce((a, k) => a + bases[k], 0) / CLAVES_MODULOS.length).toFixed(1)
+    : null
+
+  return (
+    <div style={{ maxWidth: 820 }}>
+      <div className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }}>
+        <div style={{ fontWeight: 600, marginBottom: 8 }}>Cargar el reporte de la facultad</div>
+        <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '0 0 18px', lineHeight: 1.55 }}>
+          La hoja de cálculo (.xlsx) tal como llega, sin prepararla. Se leen los resultados de
+          cada estudiante y, de la fórmula de la última columna, el puntaje aprobatorio de cada
+          competencia. Cada examen se reconoce por su número de registro del ICFES: volver a
+          subir el mismo archivo actualiza, no duplica.
+        </p>
+
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <label className="chip" style={{ cursor: 'pointer', padding: '8px 16px' }}>
+            {archivo ? 'Cambiar archivo' : 'Elegir archivo'}
+            <input type="file" accept=".xlsx,.xlsm" onChange={elegir} style={{ display: 'none' }} />
+          </label>
+          <span style={{ fontSize: 13, color: archivo ? 'var(--ink)' : 'var(--ink-3)' }}>
+            {archivo ? archivo.name : 'ningún archivo elegido'}
+          </span>
+        </div>
+
+        <label style={{ display: 'flex', gap: 9, alignItems: 'flex-start', marginTop: 16, fontSize: 13, cursor: 'pointer' }}>
+          <input type="checkbox" checked={reemplazar} onChange={e => setReemplazar(e.target.checked)}
+                 style={{ marginTop: 3 }} />
+          <span>
+            <b>Reemplazar todo lo que hay</b>
+            <span style={{ display: 'block', color: 'var(--ink-3)', fontSize: 12.5, marginTop: 2 }}>
+              Borra los resultados cargados antes de escribir los del archivo. Úsalo cuando la
+              hoja es el listado completo; si es un añadido, déjalo sin marcar.
+            </span>
+          </span>
+        </label>
+
+        <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
+          <button type="button" className="btn ghost" disabled={!archivo || trabajando}
+                  style={{ padding: '8px 18px' }} onClick={() => enviar(true)}>
+            {trabajando ? 'Leyendo…' : 'Revisar sin cargar'}
+          </button>
+          <button type="button" className="btn accent" disabled={!archivo || trabajando}
+                  style={{ padding: '8px 18px' }} onClick={() => enviar(false)}>
+            {trabajando ? 'Cargando…' : reemplazar ? 'Reemplazar y cargar' : 'Cargar'} <Icons.check />
+          </button>
+        </div>
+      </div>
+
+      {bases && (
+        <div className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }}>
+          <div style={{ fontWeight: 600, marginBottom: 6 }}>Puntaje aprobatorio que trae el archivo</div>
+          <p style={{ fontSize: 12.5, color: 'var(--ink-3)', margin: '0 0 14px' }}>
+            Leído de la fórmula de la columna del veredicto. Se aprueba igualando o superando
+            la base de cada competencia.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12 }}>
+            {MODULOS_SABERPRO.map(([k, etiqueta]) => (
+              <div key={k} style={{ border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>{etiqueta}</div>
+                <div style={{ fontSize: 20, fontWeight: 700 }}>{bases[k] ?? '—'}</div>
+              </div>
+            ))}
+            {promedio && (
+              <div style={{ border: '1px solid var(--ug-azul)', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>General (promedio)</div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--ug-azul-deep, var(--ug-azul))' }}>{promedio}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {revision && (
+        <div className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }}>
+          <div style={{ fontWeight: 600, marginBottom: 10 }}>
+            Revisión · no se ha escrito nada
+          </div>
+          <p style={{ fontSize: 13, margin: '0 0 12px' }}>
+            El archivo <b>{revision.archivo}</b> (hoja «{revision.hoja}») trae{' '}
+            <b>{revision.leidas}</b> resultados.
+            {reemplazar && ' Al cargar se borrarán antes los que ya están publicados.'}
+          </p>
+          <table className="sp-tabla" style={{ fontSize: 12.5 }}>
+            <thead>
+              <tr>
+                <th>Estudiante</th><th>Período</th><th>Sede</th>
+                {MODULOS_SABERPRO.map(([k, l]) => <th key={k} className="sp-num">{l}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {revision.muestra.map((m, i) => (
+                <tr key={i}>
+                  <td>{m.estudiante}</td><td>{m.periodo}</td><td>{SEDE_LARGA[m.sede] ?? m.sede}</td>
+                  {CLAVES_MODULOS.map(k => <td key={k} className="sp-num">{m[k]}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 10 }}>
+            Se muestran las primeras {revision.muestra.length} filas.
+          </p>
+          <Avisos lista={revision.avisos} />
+        </div>
+      )}
+
+      {parte && (
+        <div className="card" style={{ background: 'var(--paper-2)' }}>
+          <div style={{ fontWeight: 600, marginBottom: 10 }}>Carga terminada</div>
+          <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', fontSize: 13, marginBottom: 12 }}>
+            {parte.borrados > 0 && <span><b style={{ fontSize: 18 }}>{parte.borrados}</b> borrados</span>}
+            <span><b style={{ fontSize: 18 }}>{parte.nuevos}</b> nuevos</span>
+            <span><b style={{ fontSize: 18 }}>{parte.actualizados}</b> actualizados</span>
+            {parte.rechazados > 0 && <span style={{ color: 'var(--ug-flamingo-deep, var(--ug-flamingo))' }}>
+              <b style={{ fontSize: 18 }}>{parte.rechazados}</b> rechazados
+            </span>}
+            <span style={{ color: 'var(--ink-3)' }}>
+              en la base: <b>{parte.total}</b> resultados · media {parte.media}
+            </span>
+          </div>
+          {parte.basesGuardadas && (
+            <p style={{ fontSize: 12.5, color: 'var(--ink-3)', margin: '0 0 10px' }}>
+              Las bases del archivo quedaron guardadas como puntaje aprobatorio; se ven y se
+              corrigen en «Opción de grado».
+            </p>
+          )}
+          {parte.rechazos?.length > 0 && (
+            <ul style={{ margin: '0 0 10px', paddingLeft: 18, fontSize: 12.5, color: 'var(--ink-3)' }}>
+              {parte.rechazos.map((r, i) => <li key={i}>{r.estudiante}: {r.motivo}</li>)}
+            </ul>
+          )}
+          <Avisos lista={parte.avisos} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* Lo que conviene mirar aunque no impida cargar: un global que no cuadra con
+   sus módulos, un registro repetido. Callarlos dejaría pasar un dato torcido
+   con el mismo aspecto que uno bueno. */
+function Avisos({ lista }) {
+  if (!lista?.length) return null
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--doc-ambar-texto, var(--ink-3))' }}>
+        Para revisar ({lista.length})
+      </div>
+      <ul style={{ margin: '6px 0 0', paddingLeft: 18, fontSize: 12.5, color: 'var(--ink-3)' }}>
+        {lista.map((a, i) => <li key={i}>{a}</li>)}
+      </ul>
+    </div>
+  )
+}
+
 /* ─── Parámetros de la opción de grado ─────────────────────────── */
 
 const VACIO_PARAMETROS = {
   puntaje_minimo: '', percentil_minimo: '', minimo_por_modulo: '', norma: '', vigente_desde: '',
+  ...Object.fromEntries(CLAVES_MODULOS.map(k => ['base_' + k, ''])),
 }
 
 function PanelParametros({ setAviso }) {
@@ -237,6 +438,16 @@ function PanelParametros({ setAviso }) {
       .catch(e => setAviso(e.message))
   }, [])   // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* El aprobatorio general no se teclea: es el promedio de las bases, y se
+     recalcula mientras se escriben para que quien las corrija vea al momento
+     adónde mueve el umbral general. */
+  const bases = CLAVES_MODULOS.map(k => {
+    const crudo = form.valores['base_' + k]
+    return crudo === '' || crudo === null || crudo === undefined ? null : Number(crudo)
+  })
+  const completas = bases.every(n => Number.isFinite(n))
+  const general = completas ? (bases.reduce((a, b) => a + b, 0) / bases.length).toFixed(1) : null
+
   const guardar = async e => {
     e.preventDefault()
     if (!form.validarTodo()) return
@@ -251,62 +462,101 @@ function PanelParametros({ setAviso }) {
   if (!cargado) return <p style={{ color: 'var(--ink-3)' }}>Cargando parámetros…</p>
 
   return (
-    <form className="card" style={{ background: 'var(--paper-2)', maxWidth: 720 }} onSubmit={guardar}>
-      <div style={{ fontWeight: 600, marginBottom: 8 }}>Requisitos para graduarse por puntaje</div>
-      <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '0 0 20px', lineHeight: 1.55 }}>
-        Estos números deciden quién aparece en la lista pública de la opción de grado. No están
-        escritos en el código a propósito: los fija un acuerdo del Consejo Académico y cambian sin
-        que haya que tocar el sitio. Deja en blanco los que tu acuerdo no exija.
-      </p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
-        <Campo etiqueta="Puntaje global mínimo" error={form.error('puntaje_minimo')}>
-          <input type="number" min="0" max={PUNTAJE_SABERPRO_MAX} value={form.valores.puntaje_minimo}
-                 onChange={e => form.set('puntaje_minimo', e.target.value)}
-                 onBlur={() => form.alSalir('puntaje_minimo')} required />
-        </Campo>
-        <Campo etiqueta="Percentil nacional mínimo" error={form.error('percentil_minimo')} opcional>
-          <input type="number" min="0" max="100" value={form.valores.percentil_minimo}
-                 onChange={e => form.set('percentil_minimo', e.target.value)}
-                 onBlur={() => form.alSalir('percentil_minimo')} placeholder="no aplica" />
-        </Campo>
-        <Campo etiqueta="Mínimo en cada competencia" error={form.error('minimo_por_modulo')} opcional>
-          <input type="number" min="0" max={PUNTAJE_SABERPRO_MAX} value={form.valores.minimo_por_modulo}
-                 onChange={e => form.set('minimo_por_modulo', e.target.value)}
-                 onBlur={() => form.alSalir('minimo_por_modulo')} placeholder="no aplica" />
-        </Campo>
-        <Campo etiqueta="Vigente desde" error={form.error('vigente_desde')} opcional>
-          <input type="date" value={form.valores.vigente_desde}
-                 onChange={e => form.set('vigente_desde', e.target.value)}
-                 onBlur={() => form.alSalir('vigente_desde')} />
-        </Campo>
-        <Campo etiqueta="Norma que lo respalda" error={form.error('norma')} opcional style={{ gridColumn: '1 / -1' }}>
-          <input value={form.valores.norma} onChange={e => form.set('norma', e.target.value)}
-                 onBlur={() => form.alSalir('norma')}
-                 placeholder="Acuerdo 000 de 2026 · Consejo Académico" />
-        </Campo>
-      </div>
-
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 18 }}>
-        <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-          Guardar requisitos <Icons.check />
-        </button>
-        {guardado && <span style={{ fontSize: 13, color: 'var(--ug-azul-deep)' }}>Guardado.</span>}
-        {form.invalido && <span style={{ fontSize: 12, color: 'var(--ug-flamingo-deep)' }}>Corrige los campos marcados</span>}
-      </div>
-
-      {form.valores.vigente_desde && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 14 }}>
-          La página citará: {form.valores.norma || 'norma sin registrar'} · vigente desde {fechaLarga(form.valores.vigente_desde)}
+    <Plegable id="tabsaberpro-0" titulo="Puntaje aprobatorio por competencia">
+      <form className="card" style={{ background: 'var(--paper-2)', maxWidth: 720 }} onSubmit={guardar}>
+        <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '0 0 16px', lineHeight: 1.55 }}>
+          Se gradúa por Saber Pro quien iguala o supera la base de <b>cada</b> competencia. Estas
+          cifras llegan solas al cargar el reporte —están en la fórmula de su última columna— y se
+          pueden corregir aquí si el Consejo fija otras.
         </p>
-      )}
-    </form>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 14 }}>
+          {MODULOS_SABERPRO.map(([k, etiqueta]) => (
+            <Campo key={k} etiqueta={etiqueta} error={form.error('base_' + k)} opcional>
+              <input type="number" min="0" max={PUNTAJE_SABERPRO_MAX} value={form.valores['base_' + k]}
+                     onChange={e => form.set('base_' + k, e.target.value)}
+                     onBlur={() => form.alSalir('base_' + k)} placeholder="sin base" />
+            </Campo>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 14, padding: '12px 14px', borderRadius: 8, background: 'var(--paper)', border: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' }}>
+          {general ? (
+            <>
+              <span style={{ fontSize: 13 }}>Puntaje general aprobatorio</span>{' '}
+              <b style={{ fontSize: 20, marginLeft: 6 }}>{general}</b>
+              <span style={{ fontSize: 12, color: 'var(--ink-3)', marginLeft: 8 }}>
+                promedio de las cinco bases · se calcula, no se escribe
+              </span>
+            </>
+          ) : (
+            <span style={{ fontSize: 12.5, color: 'var(--ink-3)' }}>
+              Faltan bases por completar: sin las cinco no hay promedio, y la página usa entonces
+              los requisitos de abajo.
+            </span>
+          )}
+        </div>
+
+        <div style={{ fontWeight: 600, margin: '24px 0 8px', paddingTop: 20, borderTop: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' }}>
+          Requisitos alternativos
+        </div>
+        <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '0 0 20px', lineHeight: 1.55 }}>
+          Solo se aplican <b>cuando no hay bases por competencia</b>: son el criterio anterior, un
+          global mínimo con dos exigencias opcionales. Deja en blanco lo que tu acuerdo no pida.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+          <Campo etiqueta="Puntaje global mínimo" error={form.error('puntaje_minimo')}>
+            <input type="number" min="0" max={PUNTAJE_SABERPRO_MAX} value={form.valores.puntaje_minimo}
+                   onChange={e => form.set('puntaje_minimo', e.target.value)}
+                   onBlur={() => form.alSalir('puntaje_minimo')} required />
+          </Campo>
+          <Campo etiqueta="Percentil nacional mínimo" error={form.error('percentil_minimo')} opcional>
+            <input type="number" min="0" max="100" value={form.valores.percentil_minimo}
+                   onChange={e => form.set('percentil_minimo', e.target.value)}
+                   onBlur={() => form.alSalir('percentil_minimo')} placeholder="no aplica" />
+          </Campo>
+          <Campo etiqueta="Mínimo en cada competencia" error={form.error('minimo_por_modulo')} opcional>
+            <input type="number" min="0" max={PUNTAJE_SABERPRO_MAX} value={form.valores.minimo_por_modulo}
+                   onChange={e => form.set('minimo_por_modulo', e.target.value)}
+                   onBlur={() => form.alSalir('minimo_por_modulo')} placeholder="no aplica" />
+          </Campo>
+          <Campo etiqueta="Vigente desde" error={form.error('vigente_desde')} opcional>
+            <input type="date" value={form.valores.vigente_desde}
+                   onChange={e => form.set('vigente_desde', e.target.value)}
+                   onBlur={() => form.alSalir('vigente_desde')} />
+          </Campo>
+          <Campo etiqueta="Norma que lo respalda" error={form.error('norma')} opcional style={{ gridColumn: '1 / -1' }}>
+            <input value={form.valores.norma} onChange={e => form.set('norma', e.target.value)}
+                   onBlur={() => form.alSalir('norma')}
+                   placeholder="Acuerdo 000 de 2026 · Consejo Académico" />
+          </Campo>
+        </div>
+
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 18 }}>
+          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
+            Guardar requisitos <Icons.check />
+          </button>
+          {guardado && <span style={{ fontSize: 13, color: 'var(--ug-azul-deep)' }}>Guardado.</span>}
+          {form.invalido && <span style={{ fontSize: 12, color: 'var(--ug-flamingo-deep)' }}>Corrige los campos marcados</span>}
+        </div>
+
+        {form.valores.vigente_desde && (
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', marginTop: 14 }}>
+            La página citará: {form.valores.norma || 'norma sin registrar'} · vigente desde {fechaLarga(form.valores.vigente_desde)}
+          </p>
+        )}
+      </form>
+    </Plegable>
   )
 }
 
 export default function TabSaberPro() {
   const [tab, setTab] = usePestana(SUBPESTANAS, { clave: 'sub' })
   const [aviso, setAviso] = useState(null)
+  /* Tras una carga, la lista y los parámetros que ya estaban montados muestran
+     lo de antes. Cambiar esta cuenta los vuelve a montar con lo que hay. */
+  const [recarga, setRecarga] = useState(0)
 
   return (
     <div>
@@ -324,8 +574,21 @@ export default function TabSaberPro() {
 
       {aviso && <div role="alert" className="eg-alerta">{aviso}</div>}
 
-      {tab === 'resultados' && <PanelResultados setAviso={setAviso} />}
-      {tab === 'parametros' && <PanelParametros setAviso={setAviso} />}
+      {tab === 'resultados' && <PanelResultados key={recarga} setAviso={setAviso} />}
+      {tab === 'cargar' && (
+        <PanelCargar setAviso={setAviso} alCargar={() => setRecarga(n => n + 1)} />
+      )}
+      {tab === 'parametros' && <PanelParametros key={recarga} setAviso={setAviso} />}
+      {tab === 'carrusel' && (
+        <EditorTarjetas
+          seccion="saber-pro"
+          setError={setAviso}
+          ejemploPie="Reporte ICFES · 2025"
+          descripcion="Las tarjetas que acompañan al titular de la página pública. Sirven para
+            explicar el puntaje aprobatorio, cómo se lee el examen o publicar una infografía del
+            período: se pueden cargar como imagen sola o como imagen con texto."
+        />
+      )}
     </div>
   )
 }

@@ -213,6 +213,51 @@ export const apiAgregarPrerrequisito = (planId, datos) =>
 export const apiQuitarPrerrequisito = (planId, datos) =>
   apiJSON(`pensum/plan/${planId}/prerrequisitos`, { method: 'DELETE', body: datos })
 
+/* Etapas del trámite. Como los prerrequisitos, devuelven la malla entera:
+   mover una etapa cambia también cuál es la actual, y con una sola respuesta
+   el panel no tiene que adivinar el estado resultante. */
+export const apiCrearEtapa = (planId, datos) =>
+  apiJSON(`pensum/plan/${planId}/tramite`, { method: 'POST', body: datos })
+
+export const apiEditarEtapa = (id, datos) =>
+  apiJSON(`pensum/tramite/${id}`, { method: 'PATCH', body: datos })
+
+export const apiBorrarEtapa = id =>
+  apiJSON(`pensum/tramite/${id}`, { method: 'DELETE' })
+
+export const apiOrdenarEtapas = (planId, ids) =>
+  apiJSON(`pensum/plan/${planId}/tramite/orden`, { method: 'PUT', body: { ids } })
+
+/* Tarjetas del carrusel informativo. Cuelgan de la SECCIÓN que las muestra
+   —'pensum-propuesto', 'saber-pro'—, no del contenido de esa página: son
+   material editorial que acompaña al encabezado.
+
+   `todas` incluye las ocultas, que es lo que necesita el panel para poder
+   devolverlas al carrusel; la vista pública recibe solo las visibles. */
+export const apiTarjetas = (seccion, { todas = false } = {}) =>
+  apiJSON(`tarjetas/${seccion}` + (todas ? '?todas=1' : ''))
+
+export const apiCrearTarjeta = (seccion, datos) =>
+  apiJSON(`tarjetas/${seccion}`, { method: 'POST', body: datos })
+
+export const apiEditarTarjeta = (id, datos) =>
+  apiJSON(`tarjetas/tarjeta/${id}`, { method: 'PATCH', body: datos })
+
+export const apiBorrarTarjeta = id =>
+  apiJSON(`tarjetas/tarjeta/${id}`, { method: 'DELETE' })
+
+export const apiOrdenarTarjetas = (seccion, ids) =>
+  apiJSON(`tarjetas/${seccion}/orden`, { method: 'PUT', body: { ids } })
+
+export function apiSubirImagenTarjeta(id, file) {
+  const fd = new FormData()
+  fd.append('imagen', file)
+  return enviarArchivo(`tarjetas/tarjeta/${id}/imagen`, fd)
+}
+
+export const apiBorrarImagenTarjeta = id =>
+  apiJSON(`tarjetas/tarjeta/${id}/imagen`, { method: 'DELETE' })
+
 /* ─── Egresados ────────────────────────────────────────────────── */
 
 /* Foto redonda del egresado y fotograma del vídeo. Son la misma operación
@@ -289,6 +334,17 @@ export const apiSaberProEditar = (id, datos) => apiJSON(`saberpro/resultados/${i
 export const apiSaberProBorrar = id => apiJSON(`saberpro/resultados/${id}`, { method: 'DELETE' })
 
 export const apiSaberProParametros = () => apiJSON('saberpro/parametros')
+
+/* Sube el reporte .xlsx de la facultad. `simular` lee y cuenta sin escribir:
+   sirve para ver qué traería el archivo antes de sustituir lo publicado. */
+export function apiSaberProImportar(file, { simular = false, reemplazar = false, aplicarBases = true } = {}) {
+  const fd = new FormData()
+  fd.append('archivo', file)
+  fd.append('simular', String(simular))
+  fd.append('reemplazar', String(reemplazar))
+  fd.append('aplicar_bases', String(aplicarBases))
+  return enviarArchivo('saberpro/importar', fd)
+}
 export const apiSaberProGuardarParametros = datos =>
   apiJSON('saberpro/parametros', { method: 'PATCH', body: datos })
 
@@ -543,13 +599,19 @@ export function DataProvider({ children }) {
   const limpiarError = useCallback(() => setError(null), [])
 
   /* Guarda la malla que devuelven las operaciones del pensum. Evita una
-     segunda petición: el servidor ya la mandó recalculada. */
+     segunda petición: el servidor ya la mandó recalculada.
+
+     Un plan no vigente es la propuesta, y esa se guarda entera bajo
+     `pensum_propuesto`: su página pinta el encabezado, el trámite y las
+     tarjetas, no solo los semestres. */
   const aplicarPensum = useCallback(malla => {
-    setData(d => ({
-      ...d,
-      pensum: malla.semestres ?? [],
-      pensum_info: { plan: malla.plan, total_creditos: malla.total_creditos, total_materias: malla.total_materias },
-    }))
+    setData(d => (malla?.plan && !malla.plan.vigente
+      ? { ...d, pensum_propuesto: malla }
+      : {
+          ...d,
+          pensum: malla.semestres ?? [],
+          pensum_info: { plan: malla.plan, total_creditos: malla.total_creditos, total_materias: malla.total_materias },
+        }))
   }, [])
 
   return (

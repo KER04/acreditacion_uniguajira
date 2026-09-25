@@ -64,7 +64,32 @@
 .mobile-menu a:hover { color: #fff; }
 
 /* FOOTER */
-.app-footer { background: var(--ug-marino); color: #fff; padding: 80px var(--gutter) 40px; margin-top: 120px; position: relative; overflow: hidden; }
+/* El pie institucional es una pieza oscura tejida: cenefa arriba, cenefa
+   abajo y el tejido de fondo. Aquí se hace igual, con el teal de la marca en
+   vez del negro. */
+.app-footer {
+  background: var(--ug-marino);
+  color: #fff;
+  padding: 80px var(--gutter) 64px;
+  margin-top: 120px;
+  position: relative;
+  overflow: hidden;
+}
+/* La cenefa que cierra el pie, como en el sitio institucional. Va muy
+   atenuada y por debajo del contenido: a plena opacidad compite con el texto
+   legal que corre justo encima. */
+.app-footer::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 22px;
+  background-image: var(--ug-greca-url);
+  background-size: 88px 20px;
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  opacity: .22;
+  pointer-events: none;
+}
 .app-footer::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 10px; background-image: var(--wayuu-url); background-size: 56px 10px; background-repeat: repeat-x; }
 .app-footer .inner { max-width: var(--max-w); margin: 0 auto; }
 /* Cinco columnas: marca, dos de enlaces y las dos sedes. La primera va mas
@@ -89,7 +114,19 @@
 .app-footer .bottom { padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,.7); font-family: var(--font-mono); letter-spacing: .08em; flex-wrap: wrap; gap: 16px; }
 
 /* HERO */
-.hero { position: relative; padding: clamp(60px,9vw,120px) var(--gutter) clamp(80px,10vw,140px); overflow: hidden; border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent); }
+/* El hero abre con el color de la marca y lo va soltando hacia abajo, que es
+   como entra el sitio institucional: la cabecera teal no termina en un corte
+   seco contra el blanco, sino que se disuelve en la página. */
+.hero {
+  position: relative;
+  padding: clamp(60px,9vw,120px) var(--gutter) clamp(80px,10vw,140px);
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+  background-image: linear-gradient(180deg,
+    color-mix(in oklab, var(--ug-azul) 16%, transparent) 0%,
+    color-mix(in oklab, var(--ug-azul) 5%, transparent) 42%,
+    transparent 100%);
+}
 .hero .inner { max-width: var(--max-w); margin: 0 auto; position: relative; z-index: 2; }
 .hero-eyebrow-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
 .hero h1 { max-width: 14ch; }
@@ -109,6 +146,27 @@
 
 /* SECTION */
 .section { padding: clamp(60px,8vw,120px) var(--gutter); position: relative; }
+
+/* Secciones con fondo. Alternarlas es lo que da ritmo a una página larga: sin
+   esto todo el sitio es una sola superficie y los bloques se confunden entre
+   sí. Son tres registros, no uno, para no repetir siempre el mismo azul. */
+.section--tinte  { background: var(--paper-tinte); }
+.section--calida { background: var(--paper-calido); }
+.section--papel  { background: var(--paper-2); }
+.section--tinte, .section--calida, .section--papel {
+  border-top: 1px solid color-mix(in oklab, var(--ink) 6%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--ink) 6%, transparent);
+}
+
+/* Cenefa wayuu como remate de una sección oscura o como separador. El color
+   se cambia con `--greca-color` allí donde se use. */
+.greca {
+  height: 14px;
+  background-image: var(--ug-greca-url);
+  background-size: 64px 14px;
+  background-repeat: repeat-x;
+  opacity: .5;
+}
 .section .inner { max-width: var(--max-w); margin: 0 auto; }
 .section-head { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; align-items: end; margin-bottom: 56px; }
 @media (max-width: 820px) { .section-head { grid-template-columns: 1fr; } }
@@ -116,7 +174,17 @@
 .section-head .desc { font-size: 17px; color: var(--ink-2); max-width: 56ch; }
 
 /* CARDS & GRIDS */
-.card { background: var(--paper-2); border: 1px solid color-mix(in oklab, var(--ink) 7%, transparent); border-radius: var(--radius-lg); padding: 28px; transition: border-color .2s ease; }
+/* Un lavado de marca en diagonal, casi imperceptible, para que la tarjeta se
+   despegue del fondo sin recurrir a una sombra más marcada. */
+.card {
+  background-color: var(--paper-2);
+  background-image: linear-gradient(150deg,
+    color-mix(in oklab, var(--ug-azul) 5%, transparent), transparent 55%);
+  border: 1px solid color-mix(in oklab, var(--ink) 7%, transparent);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: border-color .2s ease;
+}
 .card:hover { border-color: color-mix(in oklab, var(--ink) 15%, transparent); }
 .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
@@ -564,6 +632,204 @@
   background: color-mix(in oklab, var(--ug-azul) 18%, transparent);
   border-color: var(--ug-azul);
 }
+
+/* ---------- Hero partido: texto a la izquierda, carrusel al costado -------
+   Solo lo usa la propuesta curricular. En una columna el carrusel pasa debajo
+   del texto, que es el orden en que se lee cuando no caben lado a lado.
+
+   El costado no lleva fondo propio ni caja: la separación la hace el aire y
+   una línea fina. Un panel gris dentro de otra tarjeta convertía el hero en
+   dos recuadros pegados, que es lo que se veía raro. */
+.hero-card--split .hero-card__columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(20px, 3vw, 44px);
+}
+.hero-card--split .hero-card__contenido { min-width: 0; }
+
+.hero-card__lateral {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  /* El padding izquierdo lo pone el gap; a la derecha y abajo se alinea con
+     el resto de la card para que la imagen no toque el borde. */
+  padding: clamp(26px, 3.2vw, 38px) clamp(22px, 3.4vw, 44px) clamp(26px, 3vw, 34px) 0;
+  border-left: 1px solid var(--doc-borde-suave);
+  padding-left: clamp(20px, 2.6vw, 34px);
+}
+
+@media (max-width: 980px) {
+  .hero-card--split .hero-card__columnas { grid-template-columns: 1fr; gap: 0; }
+  .hero-card__lateral {
+    border-left: none;
+    border-top: 1px solid var(--doc-borde-suave);
+    padding: clamp(22px, 3vw, 30px) clamp(22px, 3.4vw, 44px) clamp(26px, 3vw, 34px);
+  }
+}
+
+/* ---------- Carrusel de tarjetas infográficas ----------------------------
+   Sin marco y sin relleno: la imagen y su texto se sostienen solos sobre el
+   papel de la card. Lo único que se dibuja es la propia imagen, con esquinas
+   suaves, y una fila de controles apagados debajo. */
+.infocar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* La ventana recorta; la pista se desplaza de a un ancho completo. El radio
+   va aquí para que el recorte no deje esquinas cuadradas al deslizar. */
+.infocar__ventana {
+  overflow: hidden;
+  border-radius: 14px;
+}
+.infocar__pista {
+  display: flex;
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .infocar__pista { transition: none; }
+}
+
+.infocar__tarjeta {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* Lo que sale de cuadro se atenúa en vez de cortarse en seco: al deslizar,
+     la tarjeta entrante gana presencia a la vez que se coloca. */
+  opacity: .35;
+  transition: opacity .5s ease;
+}
+.infocar__tarjeta.is-activa { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .infocar__tarjeta { transition: none; opacity: 1; }
+}
+
+.infocar__figura {
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--ink) 4%, transparent);
+}
+.infocar__figura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Tarjeta que es solo la imagen: una infografía ya compuesta. No se recorta
+   —perdería justo lo que se quiere leer— sino que se muestra entera y la
+   ventana se adapta a su alto. */
+.infocar__tarjeta--imagen .infocar__figura {
+  aspect-ratio: auto;
+  background: none;
+}
+.infocar__tarjeta--imagen .infocar__figura img {
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+}
+
+/* El texto arranca alineado con el borde de la imagen: sin caja, la sangría
+   la marca la propia columna. */
+.infocar__cuerpo { padding: 16px 2px 0; }
+
+.infocar__titulo {
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0 0 7px;
+  text-wrap: balance;
+}
+.infocar__texto {
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* El pie es una nota al margen, no un titulillo: minúsculas, gris y un punto
+   del color de la marca que lo ancla sin gritar. */
+.infocar__pie {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+.infocar__pie::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ug-azul);
+  flex-shrink: 0;
+}
+
+/* ---------- Controles ---------- */
+.infocar__controles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Barras en vez de puntos: dicen cuántas tarjetas hay y en cuál se está sin
+   necesidad de un contador al lado. */
+.infocar__puntos { display: flex; gap: 6px; }
+.infocar__punto {
+  width: 18px;
+  height: 3px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 18%, transparent);
+  cursor: pointer;
+  transition: background .25s ease, width .25s ease;
+}
+.infocar__punto:hover { background: color-mix(in oklab, var(--ink) 34%, transparent); }
+.infocar__punto.is-activo {
+  width: 30px;
+  background: var(--ug-azul);
+}
+/* El área pulsable es mayor que la barra: 3 px de alto no se aciertan con el
+   dedo. El relleno va en una sombra transparente para no mover el trazo. */
+.infocar__punto::after {
+  content: "";
+  display: block;
+  height: 18px;
+  margin-top: -7.5px;
+}
+
+.infocar__flechas { display: flex; align-items: center; gap: 2px; }
+.infocar__flecha {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+}
+.infocar__flecha:hover {
+  background: color-mix(in oklab, var(--ink) 7%, transparent);
+  color: var(--ink);
+}
+.infocar__flecha svg { display: block; }
+.infocar__flecha--atras svg { transform: rotate(180deg); }
 
 /* ---------- Panel de contadores y filtros ---------- */
 .docentes-panel {
@@ -2623,6 +2889,83 @@ video.video-eg__medio {
 }
 
 /* --- Regla de grado ------------------------------------------------------- */
+/* Puntaje aprobatorio por competencia.
+   Cada competencia enseña su base y, debajo, qué parte de la promoción la
+   alcanza: el número solo dice el listón, la barra dice si el listón está
+   quedando alto para el grupo. */
+.sp-bases {
+  border: 1px solid var(--doc-borde);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+.sp-bases__cabeza {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--doc-borde-suave);
+}
+.sp-bases__titulo { font-weight: 600; font-size: 15px; }
+.sp-bases__nota {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  max-width: 62ch;
+}
+.sp-bases__general { text-align: right; line-height: 1.1; }
+.sp-bases__general b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--doc-azul-texto);
+}
+.sp-bases__general span {
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.sp-bases__lista {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px 26px;
+}
+.sp-bases__fila {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sp-bases__nombre { font-size: 12.5px; color: var(--ink-3); }
+.sp-bases__cifra {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+}
+.sp-bases__barra {
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 10%, transparent);
+  overflow: hidden;
+  margin: 8px 0 6px;
+}
+.sp-bases__barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ug-azul);
+}
+.sp-bases__pie { font-size: 11.5px; color: var(--ink-3); }
+
 .sp-regla {
   display: flex;
   align-items: center;

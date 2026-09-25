@@ -4,6 +4,7 @@ import { Icons } from '../../../components/Icons'
 import { statusFromScore, STATUS_LABELS, STATUS_COLOR, judgmentFromScore } from '../../../data/acreditacion'
 import FileUpload from '../FileUpload'
 import { usePestana } from '../../../hooks/useParametroURL'
+import Plegable from '../Plegable'
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 const SEDES_OPT = [['riohacha','Riohacha'],['maicao','Maicao'],['ambas','Ambas']]
@@ -205,30 +206,31 @@ function CaracteristicasTab({ factor, onSave }) {
         {items.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', fontSize: 14, textAlign: 'center' }}>Sin características. Agrega una abajo.</div>}
       </div>
 
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? `Editando característica ${editing + 1}` : 'Agregar característica'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px', gap: 12, marginBottom: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Nombre de la característica</label><input value={form.name} onChange={e => f('name', e.target.value)} required /></div>
-          <div className="field" style={{ margin: 0 }}><label>Puntaje</label><input type="number" min="1" max="5" step="0.1" value={form.score} onChange={e => f('score', e.target.value)} required /></div>
-        </div>
-        <div className="field" style={{ marginBottom: 12 }}>
-          <label>Juicio de cumplimiento (opcional — se calcula del puntaje si se deja vacío)</label>
-          <select value={form.juicio} onChange={e => f('juicio', e.target.value)}>
-            <option value="">— Automático según puntaje —</option>
-            <option>Cumple Plenamente</option>
-            <option>Cumple en Alto Grado</option>
-            <option>Cumple Aceptablemente</option>
-            <option>Cumple Insatisfactoriamente</option>
-            <option>No Cumple</option>
-          </select>
-        </div>
-        <div className="field" style={{ marginBottom: 14 }}><label>Descripción de hallazgos</label><textarea rows="3" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar cambios' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm({ name: '', score: '', desc: '', juicio: '' }) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+      <Plegable id="tabcna-0" titulo={editing !== null ? `Editando característica ${editing + 1}` : 'Agregar característica'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px', gap: 12, marginBottom: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Nombre de la característica</label><input value={form.name} onChange={e => f('name', e.target.value)} required /></div>
+            <div className="field" style={{ margin: 0 }}><label>Puntaje</label><input type="number" min="1" max="5" step="0.1" value={form.score} onChange={e => f('score', e.target.value)} required /></div>
+          </div>
+          <div className="field" style={{ marginBottom: 12 }}>
+            <label>Juicio de cumplimiento (opcional — se calcula del puntaje si se deja vacío)</label>
+            <select value={form.juicio} onChange={e => f('juicio', e.target.value)}>
+              <option value="">— Automático según puntaje —</option>
+              <option>Cumple Plenamente</option>
+              <option>Cumple en Alto Grado</option>
+              <option>Cumple Aceptablemente</option>
+              <option>Cumple Insatisfactoriamente</option>
+              <option>No Cumple</option>
+            </select>
+          </div>
+          <div className="field" style={{ marginBottom: 14 }}><label>Descripción de hallazgos</label><textarea rows="3" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar cambios' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm({ name: '', score: '', desc: '', juicio: '' }) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
+          </div>
+        </form>
+      </Plegable>
     </div>
   )
 }
@@ -289,41 +291,42 @@ function EquipoTab({ factor, onSave }) {
         {items.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', fontSize: 14, textAlign: 'center' }}>Sin integrantes. Agrega uno abajo.</div>}
       </div>
 
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar integrante' : 'Agregar integrante'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Nombre completo</label><input value={form.n} onChange={e => f('n', e.target.value)} required /></div>
-          <div className="field" style={{ margin: 0 }}><label>Cargo</label><input value={form.cargo} onChange={e => f('cargo', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}><label>Rol en este factor</label><input value={form.rol} onChange={e => f('rol', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}>
-            <label>Sede</label>
-            <select value={form.sede} onChange={e => f('sede', e.target.value)}>
-              {SEDES_OPT.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </div>
-          <div style={{ gridColumn: '1 / -1' }}>
-            <FileUpload
-              tipo="docente-foto"
-              accept="image/*"
-              previewType="image"
-              label="Foto (opcional)"
-              currentUrl={form.foto}
-              onUploaded={url => f('foto', url)}
-            />
-          </div>
-          {form.foto && (
-            <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
-              <label>URL foto (editar manualmente si es necesario)</label>
-              <input value={form.foto} onChange={e => f('foto', e.target.value)} placeholder="https://..." />
+      <Plegable id="tabcna-1" titulo={editing !== null ? 'Editar integrante' : 'Agregar integrante'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Nombre completo</label><input value={form.n} onChange={e => f('n', e.target.value)} required /></div>
+            <div className="field" style={{ margin: 0 }}><label>Cargo</label><input value={form.cargo} onChange={e => f('cargo', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}><label>Rol en este factor</label><input value={form.rol} onChange={e => f('rol', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}>
+              <label>Sede</label>
+              <select value={form.sede} onChange={e => f('sede', e.target.value)}>
+                {SEDES_OPT.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
             </div>
-          )}
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <FileUpload
+                tipo="docente-foto"
+                accept="image/*"
+                previewType="image"
+                label="Foto (opcional)"
+                currentUrl={form.foto}
+                onUploaded={url => f('foto', url)}
+              />
+            </div>
+            {form.foto && (
+              <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
+                <label>URL foto (editar manualmente si es necesario)</label>
+                <input value={form.foto} onChange={e => f('foto', e.target.value)} placeholder="https://..." />
+              </div>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
+          </div>
+        </form>
+      </Plegable>
     </div>
   )
 }
@@ -384,40 +387,41 @@ function DocumentosTab({ factor, onSave }) {
         {allItems.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', fontSize: 14, textAlign: 'center' }}>Sin documentos. Agrega uno abajo.</div>}
       </div>
 
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar documento' : 'Agregar documento'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Nombre del documento</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
-          <div className="field" style={{ margin: 0 }}>
-            <label>Categoría</label>
-            <select value={form.cat} onChange={e => f('cat', e.target.value)}>
-              {DOC_CATS.map(c => <option key={c}>{c}</option>)}
-            </select>
+      <Plegable id="tabcna-2" titulo={editing !== null ? 'Editar documento' : 'Agregar documento'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Nombre del documento</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
+            <div className="field" style={{ margin: 0 }}>
+              <label>Categoría</label>
+              <select value={form.cat} onChange={e => f('cat', e.target.value)}>
+                {DOC_CATS.map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.fecha} onChange={e => f('fecha', e.target.value)} placeholder="ej. Abr 2026" /></div>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <FileUpload
+                tipo="factor-doc"
+                extra={{ factor: String(factor.n).padStart(2, '0') }}
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip"
+                previewType="file"
+                label="Subir archivo"
+                currentUrl={form.url}
+                onUploaded={url => f('url', url)}
+              />
+            </div>
+            <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
+              <label>URL de descarga (editar manualmente si es necesario)</label>
+              <input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." />
+            </div>
           </div>
-          <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.fecha} onChange={e => f('fecha', e.target.value)} placeholder="ej. Abr 2026" /></div>
-          <div style={{ gridColumn: '1 / -1' }}>
-            <FileUpload
-              tipo="factor-doc"
-              extra={{ factor: String(factor.n).padStart(2, '0') }}
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip"
-              previewType="file"
-              label="Subir archivo"
-              currentUrl={form.url}
-              onUploaded={url => f('url', url)}
-            />
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
           </div>
-          <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}>
-            <label>URL de descarga (editar manualmente si es necesario)</label>
-            <input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." />
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+        </form>
+      </Plegable>
     </div>
   )
 }
@@ -583,26 +587,27 @@ function CronogramaView({ cronograma, update }) {
         {cronograma.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', fontSize: 14, textAlign: 'center' }}>Sin hitos. Agrega uno abajo.</div>}
       </div>
 
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar hito' : 'Agregar hito al cronograma'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr 160px', gap: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.d} onChange={e => setForm(f => ({ ...f, d: e.target.value }))} placeholder="ej. Jul 2026" required /></div>
-          <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.t} onChange={e => setForm(f => ({ ...f, t: e.target.value }))} required /></div>
-          <div className="field" style={{ margin: 0 }}>
-            <label>Estado</label>
-            <select value={form.s} onChange={e => setForm(f => ({ ...f, s: e.target.value }))}>
-              <option value="done">Completado</option>
-              <option value="current">En curso</option>
-              <option value="next">Pendiente</option>
-            </select>
+      <Plegable id="tabcna-3" titulo={editing !== null ? 'Editar hito' : 'Agregar hito al cronograma'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr 160px', gap: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.d} onChange={e => setForm(f => ({ ...f, d: e.target.value }))} placeholder="ej. Jul 2026" required /></div>
+            <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.t} onChange={e => setForm(f => ({ ...f, t: e.target.value }))} required /></div>
+            <div className="field" style={{ margin: 0 }}>
+              <label>Estado</label>
+              <select value={form.s} onChange={e => setForm(f => ({ ...f, s: e.target.value }))}>
+                <option value="done">Completado</option>
+                <option value="current">En curso</option>
+                <option value="next">Pendiente</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm({ d: '', t: '', s: 'next' }) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm({ d: '', t: '', s: 'next' }) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
+          </div>
+        </form>
+      </Plegable>
     </div>
   )
 }
@@ -643,25 +648,26 @@ function EquipoGeneralView({ equipo, update }) {
         ))}
         {equipo.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', textAlign: 'center' }}>Sin integrantes.</div>}
       </div>
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar' : 'Agregar miembro al comité general'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Nombre</label><input value={form.n} onChange={e => f('n', e.target.value)} required /></div>
-          <div className="field" style={{ margin: 0 }}><label>Cargo</label><input value={form.cargo} onChange={e => f('cargo', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}><label>Rol en el proceso</label><input value={form.rol} onChange={e => f('rol', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}>
-            <label>Color</label>
-            <select value={form.color} onChange={e => f('color', e.target.value)}>
-              {[['var(--ug-azul)','Azul'],['var(--ug-amarillo)','Amarillo'],['var(--ug-flamingo)','Flamingo']].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
+      <Plegable id="tabcna-4" titulo={editing !== null ? 'Editar' : 'Agregar miembro al comité general'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Nombre</label><input value={form.n} onChange={e => f('n', e.target.value)} required /></div>
+            <div className="field" style={{ margin: 0 }}><label>Cargo</label><input value={form.cargo} onChange={e => f('cargo', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}><label>Rol en el proceso</label><input value={form.rol} onChange={e => f('rol', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}>
+              <label>Color</label>
+              <select value={form.color} onChange={e => f('color', e.target.value)}>
+                {[['var(--ug-azul)','Azul'],['var(--ug-amarillo)','Amarillo'],['var(--ug-flamingo)','Flamingo']].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
           </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
+          </div>
+        </form>
+      </Plegable>
     </div>
   )
 }
@@ -703,21 +709,22 @@ function EvidenciasGeneralView({ evidencias, update }) {
         ))}
         {evidencias.length === 0 && <div style={{ padding: '24px 20px', color: 'var(--ink-3)', textAlign: 'center' }}>Sin evidencias generales.</div>}
       </div>
-      <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar' : 'Agregar evidencia general'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          <div className="field" style={{ margin: 0 }}><label>Título</label><input value={form.t} onChange={e => ff('t', e.target.value)} required /></div>
-          <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.d} onChange={e => ff('d', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.f} onChange={e => ff('f', e.target.value)} /></div>
-          <div className="field" style={{ margin: 0 }}><label>Tamaño</label><input value={form.size} onChange={e => ff('size', e.target.value)} placeholder="ej. 4.2 MB" /></div>
-          <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}><label>URL de descarga</label><input value={form.url} onChange={e => ff('url', e.target.value)} placeholder="https://..." /></div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
-          <SavedBadge show={saved} />
-        </div>
-      </form>
+      <Plegable id="tabcna-5" titulo={editing !== null ? 'Editar' : 'Agregar evidencia general'}>
+        <form className="card" style={{ background: 'var(--paper-2)' }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="field" style={{ margin: 0 }}><label>Título</label><input value={form.t} onChange={e => ff('t', e.target.value)} required /></div>
+            <div className="field" style={{ margin: 0 }}><label>Descripción</label><input value={form.d} onChange={e => ff('d', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}><label>Fecha</label><input value={form.f} onChange={e => ff('f', e.target.value)} /></div>
+            <div className="field" style={{ margin: 0 }}><label>Tamaño</label><input value={form.size} onChange={e => ff('size', e.target.value)} placeholder="ej. 4.2 MB" /></div>
+            <div className="field" style={{ margin: 0, gridColumn: '1 / -1' }}><label>URL de descarga</label><input value={form.url} onChange={e => ff('url', e.target.value)} placeholder="https://..." /></div>
+          </div>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, alignItems: 'center' }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setEditing(null); setForm(empty) }}>Cancelar</button>}
+            <SavedBadge show={saved} />
+          </div>
+        </form>
+      </Plegable>
     </div>
   )
 }

@@ -107,6 +107,20 @@ export function texto(v, { etiqueta, min = 0, max = 500 } = {}) {
   return null
 }
 
+/* Identificador interno, no texto para leer: minúsculas, números y guiones.
+   Lo usan las claves de etapa del trámite, que viajan en el value de un
+   <select> y se comparan por igualdad exacta con lo guardado en el plan. */
+export function clave(v, etiqueta = 'Clave') {
+  if (vacio(v)) return null
+  const s = String(v).trim()
+  if (s.length < 2) return `${etiqueta} debe tener al menos 2 caracteres`
+  if (s.length > 40) return `${etiqueta} no puede pasar de 40 caracteres`
+  if (!/^[a-z0-9][a-z0-9_-]*$/.test(s)) {
+    return `${etiqueta} solo admite minúsculas, números, guiones y guiones bajos`
+  }
+  return null
+}
+
 /* Nombres de persona: letras, espacios, tildes, apóstrofos y guiones.
    Rechaza dígitos, que es lo que se colaba antes. */
 export function nombrePersona(v, etiqueta = 'Nombre') {
@@ -588,6 +602,46 @@ export const ESQUEMAS = {
     orden:        { etiqueta: 'Orden',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 
+  /* Una etapa del trámite. La `clave` es la que guarda plan_estudio para
+     señalar en cuál va: se valida como texto corto sin espacios porque viaja
+     en el valor de un <select> y se compara por igualdad. */
+  plan_tramite: {
+    clave:   { etiqueta: 'Clave',   obligatorio: true,  validar: v => clave(v, 'Clave') },
+    etapa:   { etiqueta: 'Etapa',   obligatorio: true,  validar: v => texto(v, { etiqueta: 'Etapa', min: 3, max: 120 }) },
+    detalle: { etiqueta: 'Detalle', obligatorio: false, validar: v => texto(v, { etiqueta: 'Detalle', max: 600 }) },
+    orden:   { etiqueta: 'Orden',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  /* Una tarjeta del carrusel informativo, la tira que acompaña al encabezado
+     de una página. Los límites son los mismos que declara la tabla: el
+     formulario avisa antes y la base es la última red. */
+  tarjeta_carrusel: {
+    /* El título no es obligatorio a secas: una tarjeta que es solo la imagen
+       no lo publica, y en un PATCH puede no viajar. Quien decide si falta es
+       la API, que mira el cuerpo contra la fila guardada; aquí solo se
+       comprueba que, si viene, sea un título decente. */
+    titulo:      { etiqueta: 'Título',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 120 }) },
+    solo_imagen: { etiqueta: 'Solo imagen', obligatorio: false, validar: v => booleano(v, 'Solo imagen') },
+    texto:      { etiqueta: 'Texto',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Texto', max: 600 }) },
+    pie:        { etiqueta: 'Pie',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Pie', max: 80 }) },
+    imagen_url: { etiqueta: 'Imagen',  obligatorio: false, validar: v => rutaOUrl(v, 'Imagen') },
+    orden:      { etiqueta: 'Orden',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+    visible:    { etiqueta: 'Visible', obligatorio: false, validar: v => booleano(v, 'Visible') },
+  },
+
+  /* El encabezado de la página del plan. Solo lo usa la propuesta, pero vive
+     en plan_estudio y cualquier plan podría tenerlo. */
+  plan_datos: {
+    nombre:             { etiqueta: 'Nombre',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Nombre', min: 3, max: 120 }) },
+    titulo:             { etiqueta: 'Título',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Título', max: 160 }) },
+    num_semestres:      { etiqueta: 'Semestres', obligatorio: false, validar: v => entero(v, { etiqueta: 'Semestres', min: 1, max: 14 }) },
+    hero_insignia:      { etiqueta: 'Insignia', obligatorio: false, validar: v => texto(v, { etiqueta: 'Insignia', max: 160 }) },
+    hero_titulo:        { etiqueta: 'Titular',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Titular', max: 160 }) },
+    hero_titulo_acento: { etiqueta: 'Titular resaltado', obligatorio: false, validar: v => texto(v, { etiqueta: 'Titular resaltado', max: 160 }) },
+    hero_texto:         { etiqueta: 'Entradilla', obligatorio: false, validar: v => texto(v, { etiqueta: 'Entradilla', max: 1200 }) },
+    extracurriculares:  { etiqueta: 'Extracurriculares', obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Extracurriculares' }) },
+  },
+
   /* ─── Contenidos del portal ──────────────────────────────────── */
 
   noticias: {
@@ -772,6 +826,13 @@ export const ESQUEMAS = {
     minimo_por_modulo: { etiqueta: 'Mínimo por módulo',  obligatorio: false, validar: v => puntajeSaberPro(v, 'Mínimo por módulo') },
     norma:             { etiqueta: 'Norma',              obligatorio: false, validar: v => texto(v, { etiqueta: 'Norma', max: 200 }) },
     vigente_desde:     { etiqueta: 'Vigente desde',      obligatorio: false, validar: v => fechaISO(v, 'Vigente desde') },
+
+    /* Las bases por competencia: el puntaje aprobatorio de cada una. Salen de
+       la fórmula del reporte del ICFES y se pueden corregir a mano. */
+    ...Object.fromEntries(MODULOS_SABERPRO.map(([clave, etiqueta]) => [
+      'base_' + clave,
+      { etiqueta: 'Base de ' + etiqueta, obligatorio: false, validar: v => puntajeSaberPro(v, 'Base de ' + etiqueta) },
+    ])),
   },
 
   /* ─── Trámite de grado (vista Egresados) ─────────────────────── */
@@ -808,6 +869,7 @@ export const ESQUEMAS = {
 
 /* Comprobaciones que necesitan mirar más de un campo a la vez. */
 export const REGLAS_CRUZADAS = {
+
   calendario(datos) {
     const { fecha_inicio, fecha_fin } = datos
     if (!fecha_inicio || !fecha_fin) return null

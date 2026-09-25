@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Las cohortes siguen en el plan vigente">
+  <g fill="#1f6f83" fill-opacity=".45">
+    <circle cx="272" cy="214" r="26"/><rect x="242" y="252" width="60" height="62" rx="24"/>
+    <circle cx="400" cy="214" r="26"/><rect x="370" y="252" width="60" height="62" rx="24"/>
+    <circle cx="528" cy="214" r="26"/><rect x="498" y="252" width="60" height="62" rx="24"/>
+  </g>
+  <rect x="242" y="348" width="316" height="12" rx="6" fill="#1f6f83" fill-opacity=".2"/>
+  <text x="56" y="456" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="15" letter-spacing="2.5" fill="#8b949c">IMAGEN DE PRUEBA</text>
+</svg>

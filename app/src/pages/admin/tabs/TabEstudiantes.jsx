@@ -7,6 +7,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   validar, hayErrores, ESQUEMAS, ordinalSemestre,
@@ -99,39 +100,40 @@ function Honor({ data, addItem, removeItem, updateItem, recargar }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editando !== null ? 'Editar entrada' : 'Nueva entrada'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <Campo etiqueta="Nombre" error={form.error('nombre')}>
-            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')}
-                   placeholder="Solo letras" autoComplete="off" />
-          </Campo>
-          <Campo etiqueta="Promedio" error={form.error('promedio')}>
-            <input type="number" inputMode="decimal" step="0.01" min={PROMEDIO_MIN} max={PROMEDIO_MAX}
-                   value={v.promedio} onChange={e => form.set('promedio', e.target.value)} onBlur={() => form.alSalir('promedio')}
-                   placeholder={`${PROMEDIO_MIN.toFixed(1)} – ${PROMEDIO_MAX.toFixed(1)}`} />
-          </Campo>
-          <Campo etiqueta="Semestre" opcional error={form.error('semestre')}>
-            <select value={v.semestre} onChange={e => form.set('semestre', e.target.value)} onBlur={() => form.alSalir('semestre')}>
-              <option value="">— sin definir —</option>
-              {Array.from({ length: SEMESTRE_MAX - SEMESTRE_MIN + 1 }, (_, i) => i + SEMESTRE_MIN).map(n => (
-                <option key={n} value={n}>{ordinalSemestre(n)}</option>
-              ))}
-            </select>
-          </Campo>
-          <Campo etiqueta="Período" opcional error={form.error('periodo')}>
-            <input value={v.periodo} onChange={e => form.set('periodo', e.target.value)} onBlur={() => form.alSalir('periodo')}
-                   placeholder="2026-I" />
-          </Campo>
-          <Campo etiqueta="Sede" error={form.error('sede')}>
-            <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
-              {SEDES.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
-            </select>
-          </Campo>
-        </div>
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
+      <Plegable id="tabestudiantes-0" titulo={editando !== null ? 'Editar entrada' : 'Nueva entrada'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar} noValidate>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <Campo etiqueta="Nombre" error={form.error('nombre')}>
+              <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')}
+                     placeholder="Solo letras" autoComplete="off" />
+            </Campo>
+            <Campo etiqueta="Promedio" error={form.error('promedio')}>
+              <input type="number" inputMode="decimal" step="0.01" min={PROMEDIO_MIN} max={PROMEDIO_MAX}
+                     value={v.promedio} onChange={e => form.set('promedio', e.target.value)} onBlur={() => form.alSalir('promedio')}
+                     placeholder={`${PROMEDIO_MIN.toFixed(1)} – ${PROMEDIO_MAX.toFixed(1)}`} />
+            </Campo>
+            <Campo etiqueta="Semestre" opcional error={form.error('semestre')}>
+              <select value={v.semestre} onChange={e => form.set('semestre', e.target.value)} onBlur={() => form.alSalir('semestre')}>
+                <option value="">— sin definir —</option>
+                {Array.from({ length: SEMESTRE_MAX - SEMESTRE_MIN + 1 }, (_, i) => i + SEMESTRE_MIN).map(n => (
+                  <option key={n} value={n}>{ordinalSemestre(n)}</option>
+                ))}
+              </select>
+            </Campo>
+            <Campo etiqueta="Período" opcional error={form.error('periodo')}>
+              <input value={v.periodo} onChange={e => form.set('periodo', e.target.value)} onBlur={() => form.alSalir('periodo')}
+                     placeholder="2026-I" />
+            </Campo>
+            <Campo etiqueta="Sede" error={form.error('sede')}>
+              <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
+                {SEDES.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
+              </select>
+            </Campo>
+          </div>
+          <Acciones editando={editando !== null} bloqueado={form.invalido}
+                    onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+        </form>
+      </Plegable>
 
       {(data.honor ?? []).map(h => (
         <div key={h.id}>
@@ -375,42 +377,43 @@ function Calendario({ data, addItem, removeItem, updateItem }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editando !== null ? 'Editar evento' : 'Agregar evento'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 160px', gap: 12 }}>
-          <Campo etiqueta="Evento" error={form.error('titulo')}>
-            <input value={v.titulo} onChange={e => form.set('titulo', e.target.value)} onBlur={() => form.alSalir('titulo')} />
-          </Campo>
-          <Campo etiqueta="Desde" error={form.error('fecha_inicio')}>
-            <input type="date" value={v.fecha_inicio} onChange={e => form.set('fecha_inicio', e.target.value)} onBlur={() => form.alSalir('fecha_inicio')} />
-          </Campo>
-          <Campo etiqueta="Hasta" opcional error={form.error('fecha_fin')}>
-            <input type="date" value={v.fecha_fin ?? ''} min={v.fecha_inicio || undefined}
-                   onChange={e => form.set('fecha_fin', e.target.value)} onBlur={() => form.alSalir('fecha_fin')} />
-          </Campo>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '170px 170px 130px 1fr', gap: 12, marginTop: 12, alignItems: 'start' }}>
-          <Campo etiqueta="Tipo" error={form.error('tipo')}>
-            <select value={v.tipo} onChange={e => form.set('tipo', e.target.value)}>
-              {TIPOS_CALENDARIO.map(t => <option key={t} value={t}>{ETIQUETA_TIPO_CAL[t]}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Sede" error={form.error('sede')}>
-            <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
-              {SEDES_CON_AMBAS.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Período" opcional error={form.error('periodo')}>
-            <input value={v.periodo} onChange={e => form.set('periodo', e.target.value)} onBlur={() => form.alSalir('periodo')} placeholder="2026-II" />
-          </Campo>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, paddingTop: 28 }}>
-            <input type="checkbox" checked={v.destacado} onChange={e => form.set('destacado', e.target.checked)} style={{ width: 'auto' }} />
-            Destacar en la línea de tiempo
-          </label>
-        </div>
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
+      <Plegable id="tabestudiantes-1" titulo={editando !== null ? 'Editar evento' : 'Agregar evento'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 160px', gap: 12 }}>
+            <Campo etiqueta="Evento" error={form.error('titulo')}>
+              <input value={v.titulo} onChange={e => form.set('titulo', e.target.value)} onBlur={() => form.alSalir('titulo')} />
+            </Campo>
+            <Campo etiqueta="Desde" error={form.error('fecha_inicio')}>
+              <input type="date" value={v.fecha_inicio} onChange={e => form.set('fecha_inicio', e.target.value)} onBlur={() => form.alSalir('fecha_inicio')} />
+            </Campo>
+            <Campo etiqueta="Hasta" opcional error={form.error('fecha_fin')}>
+              <input type="date" value={v.fecha_fin ?? ''} min={v.fecha_inicio || undefined}
+                     onChange={e => form.set('fecha_fin', e.target.value)} onBlur={() => form.alSalir('fecha_fin')} />
+            </Campo>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '170px 170px 130px 1fr', gap: 12, marginTop: 12, alignItems: 'start' }}>
+            <Campo etiqueta="Tipo" error={form.error('tipo')}>
+              <select value={v.tipo} onChange={e => form.set('tipo', e.target.value)}>
+                {TIPOS_CALENDARIO.map(t => <option key={t} value={t}>{ETIQUETA_TIPO_CAL[t]}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Sede" error={form.error('sede')}>
+              <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
+                {SEDES_CON_AMBAS.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Período" opcional error={form.error('periodo')}>
+              <input value={v.periodo} onChange={e => form.set('periodo', e.target.value)} onBlur={() => form.alSalir('periodo')} placeholder="2026-II" />
+            </Campo>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, paddingTop: 28 }}>
+              <input type="checkbox" checked={v.destacado} onChange={e => form.set('destacado', e.target.checked)} style={{ width: 'auto' }} />
+              Destacar en la línea de tiempo
+            </label>
+          </div>
+          <Acciones editando={editando !== null} bloqueado={form.invalido}
+                    onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+        </form>
+      </Plegable>
 
       {(data.calendario ?? []).map(ev => (
         <div key={ev.id} style={{ ...fila, gridTemplateColumns: '150px 1fr 120px 90px auto' }}>
@@ -495,65 +498,66 @@ function Documentos({ data, addItem, removeItem, updateItem }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editando !== null ? 'Editar documento' : 'Agregar documento'}</div>
+      <Plegable id="tabestudiantes-2" titulo={editando !== null ? 'Editar documento' : 'Agregar documento'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
 
-        {/* Cargar el archivo desde el equipo rellena nombre, tipo, peso y URL. */}
-        <div style={{
-          border: '1px dashed ' + (errorSubida ? 'var(--ug-flamingo)' : 'var(--borde)'),
-          borderRadius: 'var(--radius)', padding: 18, marginBottom: 18, background: 'var(--paper)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <button type="button" className="btn ghost" style={{ padding: '10px 18px', fontSize: 14 }}
-                    disabled={subiendo} onClick={() => inputArchivo.current?.click()}>
-              <Icons.upload /> {subiendo ? 'Subiendo…' : 'Elegir archivo del equipo'}
-            </button>
-            <input ref={inputArchivo} type="file" style={{ display: 'none' }} onChange={alElegirArchivo}
-                   accept={EXTENSIONES_ACEPTADAS.map(x => '.' + x).join(',')} />
-            <div style={{ fontSize: 12, color: 'var(--ink-3)', flex: 1, minWidth: 240 }}>
-              {archivo
-                ? <>Se cargó <b>{archivo.original}</b> ({archivo.peso}). Los campos de abajo se completaron solos.</>
-                : <>Al elegir un archivo se completan el nombre, el tipo y el peso automáticamente. Admitidos: {EXTENSIONES_ACEPTADAS.join(', ').toUpperCase()} · máx. 50 MB.</>}
+          {/* Cargar el archivo desde el equipo rellena nombre, tipo, peso y URL. */}
+          <div style={{
+            border: '1px dashed ' + (errorSubida ? 'var(--ug-flamingo)' : 'var(--borde)'),
+            borderRadius: 'var(--radius)', padding: 18, marginBottom: 18, background: 'var(--paper)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+              <button type="button" className="btn ghost" style={{ padding: '10px 18px', fontSize: 14 }}
+                      disabled={subiendo} onClick={() => inputArchivo.current?.click()}>
+                <Icons.upload /> {subiendo ? 'Subiendo…' : 'Elegir archivo del equipo'}
+              </button>
+              <input ref={inputArchivo} type="file" style={{ display: 'none' }} onChange={alElegirArchivo}
+                     accept={EXTENSIONES_ACEPTADAS.map(x => '.' + x).join(',')} />
+              <div style={{ fontSize: 12, color: 'var(--ink-3)', flex: 1, minWidth: 240 }}>
+                {archivo
+                  ? <>Se cargó <b>{archivo.original}</b> ({archivo.peso}). Los campos de abajo se completaron solos.</>
+                  : <>Al elegir un archivo se completan el nombre, el tipo y el peso automáticamente. Admitidos: {EXTENSIONES_ACEPTADAS.join(', ').toUpperCase()} · máx. 50 MB.</>}
+              </div>
             </div>
+            {errorSubida && <div role="alert" className="mensaje-error" style={{ marginTop: 10 }}>{errorSubida}</div>}
+            {archivo && (
+              <a href={archivo.url} target="_blank" rel="noopener noreferrer"
+                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--accent-deep)', marginTop: 10 }}>
+                <Icons.archivo /> {archivo.url}
+              </a>
+            )}
           </div>
-          {errorSubida && <div role="alert" className="mensaje-error" style={{ marginTop: 10 }}>{errorSubida}</div>}
-          {archivo && (
-            <a href={archivo.url} target="_blank" rel="noopener noreferrer"
-               style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--accent-deep)', marginTop: 10 }}>
-              <Icons.archivo /> {archivo.url}
-            </a>
-          )}
-        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: 12 }}>
-          <Campo etiqueta="Nombre" error={form.error('nombre')}>
-            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
-          </Campo>
-          <Campo etiqueta="URL o enlace" opcional error={form.error('url')}>
-            <input value={v.url} onChange={e => form.set('url', e.target.value)} onBlur={() => form.alSalir('url')}
-                   placeholder="/docs/estudiantes/guia.pdf" />
-          </Campo>
-          <Campo etiqueta="Tipo" error={form.error('tipo')}>
-            <select value={v.tipo} onChange={e => form.set('tipo', e.target.value)}>
-              {TIPOS_DOCUMENTO.map(t => <option key={t}>{t}</option>)}
-            </select>
-          </Campo>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px 130px', gap: 12, marginTop: 12 }}>
-          <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
-            <input value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
-          </Campo>
-          <Campo etiqueta="Grupo" error={form.error('grupo')}>
-            <select value={v.grupo} onChange={e => form.set('grupo', e.target.value)}>
-              {GRUPOS_DOCUMENTO.map(g => <option key={g}>{g}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Peso" opcional error={form.error('peso')}>
-            <input value={v.peso} onChange={e => form.set('peso', e.target.value)} onBlur={() => form.alSalir('peso')} placeholder="1.8 MB" />
-          </Campo>
-        </div>
-        <Acciones editando={editando !== null} bloqueado={form.invalido} onCancelar={limpiar} />
-      </form>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: 12 }}>
+            <Campo etiqueta="Nombre" error={form.error('nombre')}>
+              <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
+            </Campo>
+            <Campo etiqueta="URL o enlace" opcional error={form.error('url')}>
+              <input value={v.url} onChange={e => form.set('url', e.target.value)} onBlur={() => form.alSalir('url')}
+                     placeholder="/docs/estudiantes/guia.pdf" />
+            </Campo>
+            <Campo etiqueta="Tipo" error={form.error('tipo')}>
+              <select value={v.tipo} onChange={e => form.set('tipo', e.target.value)}>
+                {TIPOS_DOCUMENTO.map(t => <option key={t}>{t}</option>)}
+              </select>
+            </Campo>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px 130px', gap: 12, marginTop: 12 }}>
+            <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
+              <input value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
+            </Campo>
+            <Campo etiqueta="Grupo" error={form.error('grupo')}>
+              <select value={v.grupo} onChange={e => form.set('grupo', e.target.value)}>
+                {GRUPOS_DOCUMENTO.map(g => <option key={g}>{g}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Peso" opcional error={form.error('peso')}>
+              <input value={v.peso} onChange={e => form.set('peso', e.target.value)} onBlur={() => form.alSalir('peso')} placeholder="1.8 MB" />
+            </Campo>
+          </div>
+          <Acciones editando={editando !== null} bloqueado={form.invalido} onCancelar={limpiar} />
+        </form>
+      </Plegable>
 
       {Object.entries(porGrupo).map(([grupo, docs]) => (
         <div key={grupo} style={{ marginBottom: 20 }}>

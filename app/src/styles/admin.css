@@ -1,0 +1,550 @@
+/* Panel de administración.
+ *
+ * El panel tenía su aspecto repartido en atributos `style` dentro de cada
+ * pestaña: diecisiete archivos decidiendo por su cuenta el color de una
+ * tarjeta, el alto de un input o el gris de una etiqueta. El resultado era que
+ * dos pestañas hechas con un mes de diferencia no se parecían.
+ *
+ * Aquí está el sistema, y las pestañas solo tienen que usar las clases que ya
+ * usaban —`.card`, `.field`, `.chip`, `.btn`— para heredarlo. Lo que se
+ * redefine se redefine bajo `.adm`, de modo que nada de esto toca el sitio
+ * público, que tiene otras necesidades.
+ *
+ * Tres decisiones sostienen el resto:
+ *
+ *  · La barra lateral va agrupada. Diecisiete entradas en una lista plana se
+ *    recorren leyendo una por una; en cuatro bloques con título se encuentra
+ *    la que se busca de un vistazo.
+ *  · Una sola superficie por nivel: la página es gris muy claro, las tarjetas
+ *    blancas y nada más. Sin sombras: la jerarquía la marcan el espacio y una
+ *    línea de un píxel.
+ *  · El contenido tiene ancho máximo. Un formulario de 2000 px de ancho no es
+ *    más cómodo, es imposible de leer.
+ */
+
+.adm {
+  display: grid;
+  grid-template-columns: 252px 1fr;
+  min-height: 100vh;
+  background: var(--paper);
+  /* El panel no hereda el tejido wayuu del sitio público: aquí se trabaja, y
+     una textura de fondo bajo una tabla de datos solo estorba. */
+  background-image: none;
+}
+
+/* ─── Barra lateral ────────────────────────────────────────────── */
+
+.adm-side {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-2);
+  border-right: 1px solid var(--adm-borde);
+}
+
+.adm {
+  --adm-borde: color-mix(in oklab, var(--ink) 9%, transparent);
+  --adm-borde-suave: color-mix(in oklab, var(--ink) 6%, transparent);
+}
+
+.adm-marca {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 20px 20px 18px;
+  border-bottom: 1px solid var(--adm-borde-suave);
+}
+.adm-marca__sello {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: var(--ug-marino);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.adm-marca__texto { min-width: 0; line-height: 1.25; }
+.adm-marca__titulo { display: block; font-weight: 600; font-size: 14px; }
+.adm-marca__sub {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adm-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 12px 18px;
+  /* La barra de desplazamiento aparece solo al usarla: siempre visible, parte
+     la columna en dos con una línea que no significa nada. */
+  scrollbar-width: thin;
+}
+
+.adm-grupo + .adm-grupo { margin-top: 4px; }
+
+/* El título de la categoría es el botón que la pliega. Con las cinco abiertas
+   el menú no cabe en una pantalla de portátil y aparece una barra de
+   desplazamiento dentro del propio menú, que es el peor sitio para tener que
+   buscar algo. */
+.adm-grupo__titulo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: left;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color .14s ease, background .14s ease;
+}
+.adm-grupo__titulo:hover { color: var(--ink-2); background: color-mix(in oklab, var(--ink) 4%, transparent); }
+
+.adm-grupo__flecha {
+  font-size: 11px;
+  letter-spacing: normal;
+  color: var(--ug-azul);
+  transition: transform .18s ease;
+}
+.adm-grupo:not(.is-cerrado) .adm-grupo__flecha { transform: rotate(90deg); }
+
+/* Con la categoría plegada, el punto avisa de que la sección abierta está
+   dentro. Sin él, plegarla equivale a perder de vista dónde se está. */
+.adm-grupo__marca {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ug-azul);
+  margin-left: auto;
+}
+
+.adm-grupo__items { padding-bottom: 6px; }
+/* El pliegue se hace en CSS y no dejando de renderizar: así el navegador
+   encuentra con Ctrl+F lo que hay en una categoría cerrada. */
+.adm-grupo.is-cerrado .adm-grupo__items { display: none; }
+
+.adm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .14s ease, color .14s ease;
+}
+.adm-item:hover { background: color-mix(in oklab, var(--ink) 5%, transparent); }
+.adm-item.is-activo {
+  background: color-mix(in oklab, var(--ug-azul) 15%, transparent);
+  color: var(--ug-marino);
+  font-weight: 600;
+}
+[data-theme="dark"] .adm-item.is-activo { color: var(--ink); }
+
+/* El punto de color no es decoración: da a cada sección una marca fija que se
+   reconoce antes de leer la etiqueta. */
+.adm-item__punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .35;
+  flex-shrink: 0;
+}
+.adm-item.is-activo .adm-item__punto { opacity: 1; background: var(--ug-azul); }
+
+.adm-side__pie {
+  padding: 14px;
+  border-top: 1px solid var(--adm-borde-suave);
+}
+.adm-usuario { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.adm-usuario__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in oklab, var(--ug-azul) 20%, transparent);
+  color: var(--ug-marino);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .adm-usuario__avatar { color: var(--ink); }
+.adm-usuario__datos { min-width: 0; line-height: 1.3; }
+.adm-usuario__nombre { display: block; font-size: 13px; font-weight: 500; }
+.adm-usuario__rol {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.adm-salir {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--adm-borde);
+  background: none;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.adm-salir:hover { color: var(--ink); border-color: color-mix(in oklab, var(--ink) 22%, transparent); }
+
+/* ─── Contenido ────────────────────────────────────────────────── */
+
+.adm-main { min-width: 0; display: flex; flex-direction: column; }
+
+/* La cabecera se queda arriba: en una tabla larga, saber qué sección se está
+   editando importa más abajo que arriba del todo. */
+.adm-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 18px clamp(20px, 3vw, 40px);
+  background: color-mix(in oklab, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--adm-borde-suave);
+}
+.adm-head__ruta { font-size: 11.5px; color: var(--ink-3); }
+.adm-head h1 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 3px 0 0;
+}
+.adm-head__acciones { display: flex; align-items: center; gap: 10px; }
+.adm-ver-sitio {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--adm-borde);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: border-color .15s ease, background .15s ease;
+}
+.adm-ver-sitio:hover { background: var(--paper-2); border-color: color-mix(in oklab, var(--ink) 20%, transparent); }
+
+.adm-cuerpo {
+  flex: 1;
+  padding: clamp(22px, 3vw, 36px) clamp(20px, 3vw, 40px) 80px;
+}
+.adm-cuerpo > * { max-width: 1180px; }
+
+/* ─── Piezas comunes dentro del panel ──────────────────────────── */
+
+/* El título que cada pestaña pinta con <h3>. Se uniforma aquí en vez de pedir
+   a diecisiete archivos que se pongan de acuerdo. */
+.adm-cuerpo h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Cada pestaña abre con su propio <h3> —«Saber Pro», «Plan de estudios»—, que
+   ahora repite palabra por palabra el título de la cabecera. Se oculta solo en
+   esa posición: un h3 más abajo, dentro de una tarjeta o una sub-sección, sí
+   dice algo y se queda. */
+.adm-cuerpo > div > h3:first-child { display: none; }
+
+.adm .eyebrow, .adm .inicio-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+}
+
+.adm .card {
+  background-image: none;
+  border-radius: 12px;
+  border-color: var(--adm-borde);
+  padding: 22px;
+}
+
+.adm .field { margin-bottom: 14px; }
+/* En el sitio público las etiquetas van en versalitas monoespaciadas, que ahí
+   son un gesto de estilo. En un formulario de trabajo estorban: se leen peor y
+   alargan cada línea. Aquí se quedan en texto normal. */
+.adm .field > label, .adm label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.adm input[type="text"], .adm input[type="number"], .adm input[type="date"],
+.adm input[type="email"], .adm input[type="password"], .adm input:not([type]),
+.adm select, .adm textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--adm-borde);
+  background: var(--paper-2);
+  color: inherit;
+  font: inherit;
+  font-size: 13.5px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.adm input:focus-visible, .adm select:focus-visible, .adm textarea:focus-visible {
+  outline: none;
+  border-color: var(--ug-azul);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ug-azul) 18%, transparent);
+}
+.adm input:disabled, .adm select:disabled, .adm textarea:disabled {
+  background: var(--paper);
+  color: var(--ink-3);
+  cursor: not-allowed;
+}
+
+/* Las pestañas usan `.chip` como sub-pestaña y como etiqueta. Aquí se le da
+   una forma sobria y se deja que el color activo lo ponga cada una. */
+.adm .chip {
+  border-radius: 8px;
+  border: 1px solid var(--adm-borde);
+  background: var(--paper-2);
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.adm .btn {
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+.adm table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.adm thead th {
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--adm-borde);
+  white-space: nowrap;
+}
+.adm tbody td, .adm tbody th { padding: 11px 12px; border-bottom: 1px solid var(--adm-borde-suave); }
+.adm tbody tr:hover { background: color-mix(in oklab, var(--ink) 3%, transparent); }
+
+/* Avisos: el de guardado va en el rojo de la marca y el de lectura en ámbar.
+   Los dos con la misma forma, para que se lean como la misma familia. */
+.adm-aviso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 11px 15px;
+  border-radius: 10px;
+  font-size: 13px;
+  border: 1px solid;
+}
+.adm-aviso--error {
+  background: color-mix(in oklab, var(--ug-flamingo) 12%, var(--paper-2));
+  border-color: color-mix(in oklab, var(--ug-flamingo) 45%, transparent);
+}
+.adm-aviso--carga {
+  background: color-mix(in oklab, var(--ug-amarillo) 14%, var(--paper-2));
+  border-color: color-mix(in oklab, var(--ug-amarillo) 50%, transparent);
+}
+.adm-aviso__cerrar {
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: .6;
+}
+.adm-aviso__cerrar:hover { opacity: 1; }
+
+/* ─── Bloques plegables ────────────────────────────────────────── */
+
+.adm-pleg {
+  background: var(--paper-2);
+  border: 1px solid var(--adm-borde);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.adm-pleg__cabeza {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background .14s ease;
+}
+/* El triángulo propio de <details>: se quita para poner el nuestro, que gira. */
+.adm-pleg__cabeza::-webkit-details-marker { display: none; }
+.adm-pleg__cabeza:hover { background: color-mix(in oklab, var(--ink) 3%, transparent); }
+.adm-pleg[open] .adm-pleg__cabeza { border-bottom: 1px solid var(--adm-borde-suave); }
+
+.adm-pleg__flecha {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--ug-azul);
+  transition: transform .18s ease;
+  flex-shrink: 0;
+}
+.adm-pleg[open] .adm-pleg__flecha { transform: rotate(90deg); }
+
+.adm-pleg__titulo { font-size: 13.5px; font-weight: 600; }
+
+/* Un dato del propio bloque —cuántas filas tiene, en qué etapa va— para no
+   tener que abrirlo solo para comprobarlo. */
+.adm-pleg__insignia {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ug-azul) 16%, transparent);
+  color: var(--ug-marino);
+}
+[data-theme="dark"] .adm-pleg__insignia { color: var(--ink); }
+
+.adm-pleg__resumen {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-left: auto;
+  text-align: right;
+}
+
+.adm-pleg__cuerpo { padding: 18px 16px 20px; }
+
+/* Dentro de un plegable la tarjeta ya no dibuja su propia caja: serían dos
+   marcos concéntricos separados por 16 px de nada. */
+.adm-pleg__cuerpo > .card {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+}
+
+/* ─── Resumen ──────────────────────────────────────────────────── */
+
+/* Cada cifra es un botón que lleva a su sección: el número dice cuánto hay y
+   el clic lleva a donde se cambia. */
+.adm-kpi {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--adm-borde);
+  background: var(--paper-2);
+  cursor: pointer;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.adm-kpi:hover {
+  border-color: color-mix(in oklab, var(--ug-azul) 55%, transparent);
+  transform: translateY(-1px);
+}
+.adm-kpi__n {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.adm-kpi__l { display: block; font-size: 12.5px; color: var(--ink-3); margin-top: 4px; }
+
+.adm-riesgo { border-color: color-mix(in oklab, var(--ug-flamingo) 35%, transparent); }
+.adm-btn-riesgo {
+  padding: 8px 16px;
+  color: var(--ug-flamingo-deep);
+  border-color: color-mix(in oklab, var(--ug-flamingo) 45%, transparent);
+}
+.adm-btn-riesgo:hover { background: color-mix(in oklab, var(--ug-flamingo) 10%, transparent); }
+
+/* ─── Pantallas sueltas ────────────────────────────────────────── */
+
+/* La entrada al panel: una sola tarjeta centrada sobre el gris del panel. */
+.adm-login {
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.adm-espera {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--ink-3);
+  font-size: 14px;
+}
+
+/* ─── Estrecho ─────────────────────────────────────────────────── */
+
+/* Por debajo de 1000 px la barra lateral pasa a ser una tira horizontal de
+   pestañas: una columna fija de 252 px sobre una pantalla de 800 se come la
+   mitad del sitio donde se trabaja. */
+@media (max-width: 1000px) {
+  .adm { grid-template-columns: 1fr; }
+  .adm-side {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--adm-borde);
+  }
+  .adm-nav {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 10px 12px;
+  }
+  /* En horizontal no hay nada que plegar: las categorías se convierten en
+     tramos de una sola tira y sus títulos sobran. */
+  .adm-grupo { display: flex; gap: 6px; }
+  .adm-grupo + .adm-grupo { margin-top: 0; }
+  .adm-grupo__titulo { display: none; }
+  .adm-grupo.is-cerrado .adm-grupo__items,
+  .adm-grupo__items { display: flex; gap: 6px; padding-bottom: 0; }
+  .adm-item { width: auto; white-space: nowrap; }
+  .adm-side__pie { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .adm-usuario { margin-bottom: 0; }
+  .adm-salir { width: auto; }
+}

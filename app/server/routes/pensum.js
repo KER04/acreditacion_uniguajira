@@ -27,6 +27,10 @@ const SEL_MATERIA = 'id, nombre, codigo, area, campo'
 
 const COLUMNAS_PLAN_MATERIA = ['materia_id', 'semestre', 'creditos', 'horas_semana', 'orden']
 
+const COLUMNAS_TRAMITE = ['clave', 'etapa', 'detalle', 'orden']
+const SEL_TRAMITE = 'id, plan_id, clave, etapa, detalle, orden'
+
+
 const MENSAJES = {
   materia_nombre_no_vacio:        'El nombre debe tener al menos 3 caracteres',
   materia_area_valida:            'Área no válida',
@@ -36,6 +40,8 @@ const MENSAJES = {
   plan_materia_horas_validas:     'Las horas por semana deben estar entre 0 y 40',
   plan_nombre_no_vacio:           'El nombre del plan debe tener al menos 3 caracteres',
   plan_semestres_validos:         'El número de semestres debe estar entre 1 y 14',
+  tramite_clave_no_vacia:         'La clave de la etapa no puede quedar vacía',
+  tramite_etapa_no_vacia:         'El nombre de la etapa debe tener al menos 3 caracteres',
 }
 
 /* El UNIQUE de nombre y el de código comparten el código 23505; distinguirlos
@@ -45,6 +51,7 @@ function falloMateria(res, e) {
     if (e.constraint === 'materia_codigo_idx') return res.status(409).json({ error: 'Ya hay una materia con ese código' })
     if (e.constraint === 'materia_nombre_idx') return res.status(409).json({ error: 'Ya hay una materia con ese nombre' })
     if (e.constraint === 'plan_materia_unica') return res.status(409).json({ error: 'Esa materia ya está en la malla' })
+    if (e.constraint === 'tramite_clave_unica') return res.status(409).json({ error: 'Ya hay una etapa con esa clave en este plan' })
   }
   if (e.code === '23503' && e.constraint?.includes('materia_id')) {
     return res.status(409).json({ error: 'No se puede borrar: la materia está usada en una malla' })
@@ -59,14 +66,17 @@ function falloMateria(res, e) {
    del plan se calculan aquí: guardarlos era lo que hacía que descuadraran
    en cuanto alguien agregaba una materia sin actualizar el número. */
 const SEL_PLAN = `id, nombre, titulo, vigente, num_semestres, etapa_tramite,
-                  extracurriculares, comparado_con`
+                  extracurriculares, comparado_con,
+                  hero_insignia, hero_titulo, hero_titulo_acento, hero_texto`
 
 export async function leerPensum({ planId = null } = {}) {
   const plan = planId
     ? (await query('SELECT ' + SEL_PLAN + ' FROM plan_estudio WHERE id = $1', [planId])).rows[0]
     : (await query('SELECT ' + SEL_PLAN + ' FROM plan_estudio WHERE vigente ORDER BY id LIMIT 1')).rows[0]
 
-  if (!plan) return { plan: null, total_creditos: 0, total_materias: 0, semestres: [], tramite: [] }
+  if (!plan) {
+    return { plan: null, total_creditos: 0, total_materias: 0, semestres: [], tramite: [] }
+  }
 
   const { rows } = await query(
     `SELECT pm.id AS plan_materia_id, pm.semestre, pm.creditos, pm.horas_semana, pm.orden,
@@ -127,7 +137,7 @@ export async function leerPensum({ planId = null } = {}) {
   }
 
   const { rows: tramite } = await query(
-    'SELECT clave, etapa, detalle, orden FROM plan_tramite WHERE plan_id = $1 ORDER BY orden, id',
+    'SELECT ' + SEL_TRAMITE + ' FROM plan_tramite WHERE plan_id = $1 ORDER BY orden, id',
     [plan.id],
   )
 
@@ -141,6 +151,10 @@ export async function leerPensum({ planId = null } = {}) {
       etapa_tramite: plan.etapa_tramite,
       extracurriculares: plan.extracurriculares ?? [],
       comparado_con: plan.comparado_con,
+      hero_insignia: plan.hero_insignia,
+      hero_titulo: plan.hero_titulo,
+      hero_titulo_acento: plan.hero_titulo_acento,
+      hero_texto: plan.hero_texto,
     },
     tramite,
     total_creditos: rows.reduce((a, r) => a + r.creditos, 0),
@@ -347,9 +361,15 @@ router.delete('/plan/:planId(\\d+)/prerrequisitos', requireAdmin, async (req, re
 
 /* ─── Datos del plan ───────────────────────────────────────────── */
 
-const COLUMNAS_PLAN = ['nombre', 'titulo', 'num_semestres', 'etapa_tramite', 'extracurriculares']
+const COLUMNAS_PLAN = [
+  'nombre', 'titulo', 'num_semestres', 'etapa_tramite', 'extracurriculares',
+  'hero_insignia', 'hero_titulo', 'hero_titulo_acento', 'hero_texto',
+]
 
 router.patch('/plan/:planId(\\d+)', requireAdmin, async (req, res) => {
+  /* `etapa_tramite` no está en el esquema compartido: se comprueba más abajo
+     contra las etapas reales del plan. El resto de campos sí pasa por él. */
+  if (rechazaPorValidacion('plan_datos', req, res, true)) return
   const campos = camposDe(COLUMNAS_PLAN, req.body)
   if (!campos.length) return res.status(400).json({ error: 'Nada que actualizar' })
   try {
@@ -374,6 +394,111 @@ router.patch('/plan/:planId(\\d+)', requireAdmin, async (req, res) => {
     )
     if (!rowCount) return res.status(404).json({ error: 'Plan no encontrado' })
     res.json(await leerPensum({ planId: Number(req.params.planId) }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+/* ─── Etapas del trámite ────────────────────────────── */
+
+/* Hasta ahora el panel solo podía elegir en qué etapa iba el plan: las etapas
+   en sí llegaron con el importador y no había forma de corregir una redacción
+   ni de añadir la que faltara. Esto las abre a edición completa.
+
+   Todas las operaciones devuelven la malla recalculada, como el resto del
+   módulo: el panel repinta con una sola respuesta y no queda margen para que
+   la línea de tiempo muestre algo distinto de lo que hay guardado. */
+
+router.post('/plan/:planId(\\d+)/tramite', requireAdmin, async (req, res) => {
+  if (rechazaPorValidacion('plan_tramite', req, res, false)) return
+  const planId = Number(req.params.planId)
+  try {
+    /* Sin orden explícito, la etapa nueva va al final: una etapa se agrega
+       porque el trámite avanzó, no porque falte un paso en medio. */
+    const orden = req.body.orden !== undefined ? Number(req.body.orden) : (
+      await query('SELECT coalesce(max(orden) + 1, 0) AS siguiente FROM plan_tramite WHERE plan_id = $1', [planId])
+    ).rows[0].siguiente
+
+    await query(
+      'INSERT INTO plan_tramite (plan_id, clave, etapa, detalle, orden) VALUES ($1,$2,$3,$4,$5)',
+      [planId, req.body.clave, req.body.etapa, req.body.detalle ?? '', orden],
+    )
+
+    /* Si el plan no tenía ninguna etapa marcada, la primera que se crea pasa a
+       ser la actual: dejarla en blanco haría que la vista pública cayera al
+       paso 1 por descarte, que es lo que la migración 012 quiso evitar. */
+    await query(
+      "UPDATE plan_estudio SET etapa_tramite = $2 WHERE id = $1 AND etapa_tramite = ''",
+      [planId, req.body.clave],
+    )
+    res.status(201).json(await leerPensum({ planId }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+router.patch('/tramite/:id(\\d+)', requireAdmin, async (req, res) => {
+  if (rechazaPorValidacion('plan_tramite', req, res, true)) return
+  const campos = camposDe(COLUMNAS_TRAMITE, req.body)
+  if (!campos.length) return res.status(400).json({ error: 'Nada que actualizar' })
+  try {
+    /* Cambiar la clave de la etapa en curso dejaría al plan apuntando a una
+       clave que ya no existe. Se arrastra el puntero en la misma operación. */
+    const previa = await query('SELECT plan_id, clave FROM plan_tramite WHERE id = $1', [req.params.id])
+    if (!previa.rows.length) return res.status(404).json({ error: 'Etapa no encontrada' })
+
+    const { rows } = await query(
+      sentenciaUpdate('plan_tramite', campos, 'plan_id, clave'),
+      [req.params.id, ...campos.map(c => req.body[c])],
+    )
+    const { plan_id, clave } = rows[0]
+    if (clave !== previa.rows[0].clave) {
+      await query(
+        'UPDATE plan_estudio SET etapa_tramite = $2 WHERE id = $1 AND etapa_tramite = $3',
+        [plan_id, clave, previa.rows[0].clave],
+      )
+    }
+    res.json(await leerPensum({ planId: plan_id }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+/* Borrar la etapa en curso deja el plan sin puntero. En vez de rechazar el
+   borrado, se reapunta a la primera etapa que quede: el trámite sigue
+   existiendo aunque alguien elimine el paso equivocado, y la línea de tiempo
+   nunca queda señalando una clave muerta. */
+router.delete('/tramite/:id(\\d+)', requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await query(
+      'DELETE FROM plan_tramite WHERE id = $1 RETURNING plan_id, clave', [req.params.id])
+    if (!rows.length) return res.status(404).json({ error: 'Etapa no encontrada' })
+
+    const { plan_id, clave } = rows[0]
+    await query(
+      `UPDATE plan_estudio
+          SET etapa_tramite = coalesce(
+                (SELECT t.clave FROM plan_tramite t
+                  WHERE t.plan_id = $1 ORDER BY t.orden, t.id LIMIT 1), '')
+        WHERE id = $1 AND etapa_tramite = $2`,
+      [plan_id, clave],
+    )
+    res.json(await leerPensum({ planId: plan_id }))
+  } catch (e) { falloMateria(res, e) }
+})
+
+/* Reordenar las etapas de una vez. El panel manda la lista completa tras
+   pulsar las flechas: hacerlo una por una dejaría dos etapas compartiendo
+   posición si la segunda petición fallara. */
+router.put('/plan/:planId(\\d+)/tramite/orden', requireAdmin, async (req, res) => {
+  const planId = Number(req.params.planId)
+  const ids = Array.isArray(req.body?.ids) ? req.body.ids.map(Number) : null
+  if (!ids || ids.some(n => !Number.isInteger(n) || n <= 0)) {
+    return res.status(400).json({ error: 'Se esperaba la lista de identificadores en orden' })
+  }
+  try {
+    await query(
+      `UPDATE plan_tramite AS t
+          SET orden = n.pos
+         FROM unnest($2::int[]) WITH ORDINALITY AS n(id, pos)
+        WHERE t.id = n.id AND t.plan_id = $1`,
+      [planId, ids],
+    )
+    res.json(await leerPensum({ planId }))
   } catch (e) { falloMateria(res, e) }
 })
 

@@ -217,7 +217,7 @@ function CNAPreview() {
   const dev   = factores.filter(f => statusFromScore(f.score) === 'desarrollo').length
 
   return (
-    <section className="section" style={{ background: 'var(--paper-2)', borderTop: '1px solid var(--doc-borde)', borderBottom: '1px solid var(--doc-borde)' }}>
+    <section className="section section--papel">
       <div className="inner">
         <div className="section-head">
           <div className="title">
@@ -330,7 +330,7 @@ function Convocatorias() {
   if (convos.length === 0) return null
 
   return (
-    <section className="section" style={{ background: 'var(--paper-2)' }}>
+    <section className="section section--tinte">
       <div className="inner">
         <div className="section-head">
           <div className="title">

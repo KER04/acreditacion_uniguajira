@@ -3,6 +3,7 @@ import { usePestana } from '../../../hooks/useParametroURL'
 import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 
 const SEDES = [['riohacha','Riohacha'],['maicao','Maicao']]
 const CATS_GRUPO = ['A1','A','B','C','Reconocido']
@@ -45,30 +46,31 @@ function GruposPanel({ data, addItem, removeItem, updateItem }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar grupo' : 'Nuevo grupo de investigación'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field"><label>Nombre</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
-          <div className="field"><label>Líder</label><input value={form.lider} onChange={e => f('lider', e.target.value)} /></div>
-          <div className="field">
-            <label>Categoría MinCiencias</label>
-            <select value={form.cat} onChange={e => f('cat', e.target.value)}>
-              {CATS_GRUPO.map(c => <option key={c}>{c}</option>)}
-            </select>
+      <Plegable id="tabfunciones-0" titulo={editing !== null ? 'Editar grupo' : 'Nuevo grupo de investigación'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="field"><label>Nombre</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
+            <div className="field"><label>Líder</label><input value={form.lider} onChange={e => f('lider', e.target.value)} /></div>
+            <div className="field">
+              <label>Categoría MinCiencias</label>
+              <select value={form.cat} onChange={e => f('cat', e.target.value)}>
+                {CATS_GRUPO.map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Sede</label>
+              <select value={form.sede} onChange={e => f('sede', e.target.value)}>
+                {SEDES.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}><label>Descripción</label><textarea rows="2" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
           </div>
-          <div className="field">
-            <label>Sede</label>
-            <select value={form.sede} onChange={e => f('sede', e.target.value)}>
-              {SEDES.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setForm(empty); setEditing(null) }}>Cancelar</button>}
           </div>
-          <div className="field" style={{ gridColumn: '1 / -1' }}><label>Descripción</label><textarea rows="2" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setForm(empty); setEditing(null) }}>Cancelar</button>}
-        </div>
-      </form>
+        </form>
+      </Plegable>
       {(data.grupos ?? []).map(g => (
         <div key={g.id} style={{ display: 'grid', gridTemplateColumns: '1fr 60px 80px 160px auto', gap: 14, padding: '14px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', alignItems: 'center' }}>
           <div style={{ fontWeight: 500, fontSize: 14 }}>{g.nombre}</div>
@@ -99,34 +101,35 @@ function SemillerosPanel({ data, addItem, removeItem, updateItem }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={save}>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>{editing !== null ? 'Editar semillero' : 'Nuevo semillero'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field"><label>Nombre</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
-          <div className="field"><label>Líder</label><input value={form.lider} onChange={e => f('lider', e.target.value)} /></div>
-          <div className="field">
-            <label>Grupo de investigación</label>
-            {grupos.length > 0
-              ? <select value={form.grupo} onChange={e => f('grupo', e.target.value)}>
-                  <option value="">— Sin grupo —</option>
-                  {grupos.map(g => <option key={g}>{g}</option>)}
-                </select>
-              : <input value={form.grupo} onChange={e => f('grupo', e.target.value)} placeholder="Nombre del grupo" />
-            }
+      <Plegable id="tabfunciones-1" titulo={editing !== null ? 'Editar semillero' : 'Nuevo semillero'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={save}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="field"><label>Nombre</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required /></div>
+            <div className="field"><label>Líder</label><input value={form.lider} onChange={e => f('lider', e.target.value)} /></div>
+            <div className="field">
+              <label>Grupo de investigación</label>
+              {grupos.length > 0
+                ? <select value={form.grupo} onChange={e => f('grupo', e.target.value)}>
+                    <option value="">— Sin grupo —</option>
+                    {grupos.map(g => <option key={g}>{g}</option>)}
+                  </select>
+                : <input value={form.grupo} onChange={e => f('grupo', e.target.value)} placeholder="Nombre del grupo" />
+              }
+            </div>
+            <div className="field">
+              <label>Sede</label>
+              <select value={form.sede} onChange={e => f('sede', e.target.value)}>
+                {SEDES.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}><label>Descripción</label><textarea rows="2" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
           </div>
-          <div className="field">
-            <label>Sede</label>
-            <select value={form.sede} onChange={e => f('sede', e.target.value)}>
-              {SEDES.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
+            {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setForm(empty); setEditing(null) }}>Cancelar</button>}
           </div>
-          <div className="field" style={{ gridColumn: '1 / -1' }}><label>Descripción</label><textarea rows="2" value={form.desc} onChange={e => f('desc', e.target.value)} /></div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>{editing !== null ? 'Guardar' : 'Agregar'} <Icons.check /></button>
-          {editing !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={() => { setForm(empty); setEditing(null) }}>Cancelar</button>}
-        </div>
-      </form>
+        </form>
+      </Plegable>
       {(data.semilleros ?? []).map(s => (
         <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '1fr 140px 80px 140px auto', gap: 14, padding: '14px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', alignItems: 'center' }}>
           <div style={{ fontWeight: 500, fontSize: 14 }}>{s.nombre}</div>

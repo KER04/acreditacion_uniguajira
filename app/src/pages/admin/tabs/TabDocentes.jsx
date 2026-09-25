@@ -4,6 +4,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import SelectorAnio from '../../../components/SelectorAnio'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
@@ -274,107 +275,106 @@ export default function TabDocentes() {
         }}>{aviso}</div>
       )}
 
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>
-          {editando !== null ? 'Editar docente' : 'Nuevo docente'}
-        </div>
+      <Plegable id="tabdocentes-0" titulo={editando !== null ? 'Editar docente' : 'Nuevo docente'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar} noValidate>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 14 }}>
-          <Campo etiqueta="Nombre" error={form.error('nombre')}>
-            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)}
-                   onBlur={() => form.alSalir('nombre')} placeholder="Nombres y apellidos" autoComplete="off" />
-          </Campo>
-          <Campo etiqueta="Vinculación" error={form.error('vinculacion')}>
-            <select value={v.vinculacion} onChange={e => form.set('vinculacion', e.target.value)}>
-              {VINCULACIONES.map(k => <option key={k} value={k}>{ETIQUETA_VINCULACION[k]}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Sede" error={form.error('sede')}>
-            <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
-              {SEDES.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
-            </select>
-          </Campo>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 14 }}>
-          <Campo etiqueta="Correo institucional" error={form.error('email')} opcional>
-            <input type="email" value={v.email} onChange={e => form.set('email', e.target.value)}
-                   onBlur={() => form.alSalir('email')} placeholder="nombre@uniguajira.edu.co" autoComplete="off" />
-          </Campo>
-          <Campo etiqueta="CvLAC" error={form.error('cvlac_url')} opcional>
-            <input value={v.cvlac_url} onChange={e => form.set('cvlac_url', e.target.value)}
-                   onBlur={() => form.alSalir('cvlac_url')} placeholder="https://scienti.minciencias.gov.co/cvlac/..." autoComplete="off" />
-          </Campo>
-        </div>
-
-        <Campo etiqueta="Posgrado (texto de la planilla)" error={form.error('posgrado')} opcional style={{ marginTop: 14 }}>
-          <textarea rows={2} value={v.posgrado} onChange={e => form.set('posgrado', e.target.value)}
-                    onBlur={() => form.alSalir('posgrado')}
-                    placeholder="Se muestra como resumen en la tarjeta. El desglose va abajo, en formación." />
-        </Campo>
-
-        <EditorFormacion titulos={titulos} onCambiar={setTitulos} />
-
-        <details style={{ marginTop: 20 }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
-            Contacto, investigación y perfiles
-          </summary>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginTop: 14 }}>
-            <Campo etiqueta="Dedicación" error={form.error('dedicacion')} opcional>
-              <input value={v.dedicacion} onChange={e => form.set('dedicacion', e.target.value)}
-                     onBlur={() => form.alSalir('dedicacion')} placeholder="Tiempo completo" autoComplete="off" />
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 14 }}>
+            <Campo etiqueta="Nombre" error={form.error('nombre')}>
+              <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)}
+                     onBlur={() => form.alSalir('nombre')} placeholder="Nombres y apellidos" autoComplete="off" />
             </Campo>
-            <Campo etiqueta="Oficina" error={form.error('oficina')} opcional>
-              <input value={v.oficina} onChange={e => form.set('oficina', e.target.value)}
-                     onBlur={() => form.alSalir('oficina')} placeholder="Bloque 4 — Oficina 302" autoComplete="off" />
-            </Campo>
-            <Campo etiqueta="Extensión" error={form.error('extension')} opcional>
-              <input value={v.extension} onChange={e => form.set('extension', e.target.value)}
-                     onBlur={() => form.alSalir('extension')} placeholder="Ext. 240" autoComplete="off" />
-            </Campo>
-          </div>
-
-          <Campo etiqueta="Horario de atención a estudiantes" error={form.error('horario')} opcional style={{ marginTop: 14 }}>
-            <input value={v.horario} onChange={e => form.set('horario', e.target.value)}
-                   onBlur={() => form.alSalir('horario')} placeholder="Lun y Mié · 2:00–4:00 pm" autoComplete="off" />
-          </Campo>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 2fr', gap: 14, marginTop: 14 }}>
-            <Campo etiqueta="Grupo de investigación" error={form.error('grupo')} opcional>
-              <input value={v.grupo} onChange={e => form.set('grupo', e.target.value)}
-                     onBlur={() => form.alSalir('grupo')} placeholder="GITUG" autoComplete="off" />
-            </Campo>
-            <Campo etiqueta="Categoría MinCiencias" error={form.error('grupo_categoria')} opcional>
-              <select value={v.grupo_categoria} onChange={e => form.set('grupo_categoria', e.target.value)}>
-                {CATEGORIAS_GRUPO.map(c => <option key={c} value={c}>{c === '' ? 'Sin categoría' : c}</option>)}
+            <Campo etiqueta="Vinculación" error={form.error('vinculacion')}>
+              <select value={v.vinculacion} onChange={e => form.set('vinculacion', e.target.value)}>
+                {VINCULACIONES.map(k => <option key={k} value={k}>{ETIQUETA_VINCULACION[k]}</option>)}
               </select>
             </Campo>
-            <Campo etiqueta="Semillero" error={form.error('semillero')} opcional>
-              <input value={v.semillero} onChange={e => form.set('semillero', e.target.value)}
-                     onBlur={() => form.alSalir('semillero')} placeholder="Semillero IoT Wayuu" autoComplete="off" />
+            <Campo etiqueta="Sede" error={form.error('sede')}>
+              <select value={v.sede} onChange={e => form.set('sede', e.target.value)}>
+                {SEDES.map(s => <option key={s} value={s}>{ETIQUETA_SEDE[s]}</option>)}
+              </select>
             </Campo>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 14 }}>
-            <Campo etiqueta="ORCID" error={form.error('orcid_url')} opcional>
-              <input value={v.orcid_url} onChange={e => form.set('orcid_url', e.target.value)}
-                     onBlur={() => form.alSalir('orcid_url')} placeholder="https://orcid.org/0000-..." autoComplete="off" />
+            <Campo etiqueta="Correo institucional" error={form.error('email')} opcional>
+              <input type="email" value={v.email} onChange={e => form.set('email', e.target.value)}
+                     onBlur={() => form.alSalir('email')} placeholder="nombre@uniguajira.edu.co" autoComplete="off" />
             </Campo>
-            <Campo etiqueta="Google Scholar" error={form.error('scholar_url')} opcional>
-              <input value={v.scholar_url} onChange={e => form.set('scholar_url', e.target.value)}
-                     onBlur={() => form.alSalir('scholar_url')} placeholder="https://scholar.google.com/citations?user=..." autoComplete="off" />
+            <Campo etiqueta="CvLAC" error={form.error('cvlac_url')} opcional>
+              <input value={v.cvlac_url} onChange={e => form.set('cvlac_url', e.target.value)}
+                     onBlur={() => form.alSalir('cvlac_url')} placeholder="https://scienti.minciencias.gov.co/cvlac/..." autoComplete="off" />
             </Campo>
           </div>
-        </details>
 
-        <Acciones editando={editando !== null} onCancelar={cancelar} bloqueado={form.invalido} />
-        {editando === null && (
-          <p style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 10 }}>
-            La fotografía se sube desde la lista, una vez creado el docente.
-          </p>
-        )}
-      </form>
+          <Campo etiqueta="Posgrado (texto de la planilla)" error={form.error('posgrado')} opcional style={{ marginTop: 14 }}>
+            <textarea rows={2} value={v.posgrado} onChange={e => form.set('posgrado', e.target.value)}
+                      onBlur={() => form.alSalir('posgrado')}
+                      placeholder="Se muestra como resumen en la tarjeta. El desglose va abajo, en formación." />
+          </Campo>
+
+          <EditorFormacion titulos={titulos} onCambiar={setTitulos} />
+
+          <details style={{ marginTop: 20 }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
+              Contacto, investigación y perfiles
+            </summary>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginTop: 14 }}>
+              <Campo etiqueta="Dedicación" error={form.error('dedicacion')} opcional>
+                <input value={v.dedicacion} onChange={e => form.set('dedicacion', e.target.value)}
+                       onBlur={() => form.alSalir('dedicacion')} placeholder="Tiempo completo" autoComplete="off" />
+              </Campo>
+              <Campo etiqueta="Oficina" error={form.error('oficina')} opcional>
+                <input value={v.oficina} onChange={e => form.set('oficina', e.target.value)}
+                       onBlur={() => form.alSalir('oficina')} placeholder="Bloque 4 — Oficina 302" autoComplete="off" />
+              </Campo>
+              <Campo etiqueta="Extensión" error={form.error('extension')} opcional>
+                <input value={v.extension} onChange={e => form.set('extension', e.target.value)}
+                       onBlur={() => form.alSalir('extension')} placeholder="Ext. 240" autoComplete="off" />
+              </Campo>
+            </div>
+
+            <Campo etiqueta="Horario de atención a estudiantes" error={form.error('horario')} opcional style={{ marginTop: 14 }}>
+              <input value={v.horario} onChange={e => form.set('horario', e.target.value)}
+                     onBlur={() => form.alSalir('horario')} placeholder="Lun y Mié · 2:00–4:00 pm" autoComplete="off" />
+            </Campo>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 2fr', gap: 14, marginTop: 14 }}>
+              <Campo etiqueta="Grupo de investigación" error={form.error('grupo')} opcional>
+                <input value={v.grupo} onChange={e => form.set('grupo', e.target.value)}
+                       onBlur={() => form.alSalir('grupo')} placeholder="GITUG" autoComplete="off" />
+              </Campo>
+              <Campo etiqueta="Categoría MinCiencias" error={form.error('grupo_categoria')} opcional>
+                <select value={v.grupo_categoria} onChange={e => form.set('grupo_categoria', e.target.value)}>
+                  {CATEGORIAS_GRUPO.map(c => <option key={c} value={c}>{c === '' ? 'Sin categoría' : c}</option>)}
+                </select>
+              </Campo>
+              <Campo etiqueta="Semillero" error={form.error('semillero')} opcional>
+                <input value={v.semillero} onChange={e => form.set('semillero', e.target.value)}
+                       onBlur={() => form.alSalir('semillero')} placeholder="Semillero IoT Wayuu" autoComplete="off" />
+              </Campo>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 14 }}>
+              <Campo etiqueta="ORCID" error={form.error('orcid_url')} opcional>
+                <input value={v.orcid_url} onChange={e => form.set('orcid_url', e.target.value)}
+                       onBlur={() => form.alSalir('orcid_url')} placeholder="https://orcid.org/0000-..." autoComplete="off" />
+              </Campo>
+              <Campo etiqueta="Google Scholar" error={form.error('scholar_url')} opcional>
+                <input value={v.scholar_url} onChange={e => form.set('scholar_url', e.target.value)}
+                       onBlur={() => form.alSalir('scholar_url')} placeholder="https://scholar.google.com/citations?user=..." autoComplete="off" />
+              </Campo>
+            </div>
+          </details>
+
+          <Acciones editando={editando !== null} onCancelar={cancelar} bloqueado={form.invalido} />
+          {editando === null && (
+            <p style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 10 }}>
+              La fotografía se sube desde la lista, una vez creado el docente.
+            </p>
+          )}
+        </form>
+      </Plegable>
 
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
         <input value={busqueda} onChange={e => setBusqueda(e.target.value)}

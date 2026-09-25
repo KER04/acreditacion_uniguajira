@@ -25,6 +25,7 @@ import eventos, { leerEventos } from './routes/eventos.js'
 import noticias, { leerNoticias } from './routes/noticias.js'
 import programa from './routes/programa.js'
 import pensum, { leerPensum, leerPropuesta } from './routes/pensum.js'
+import tarjetas, { leerTodasLasTarjetas } from './routes/tarjetas.js'
 import sedes from './routes/sedes.js'
 import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
@@ -69,6 +70,7 @@ app.use('/api/eventos', eventos)
 app.use('/api/noticias', noticias)
 app.use('/api/programa', programa)
 app.use('/api/pensum', pensum)
+app.use('/api/tarjetas', tarjetas)
 app.use('/api/sedes', sedes)
 
 /* Generic file upload endpoint */
@@ -113,6 +115,7 @@ app.get('/api/all', async (_req, res) => {
     programa:      () => readData('programa.json'),
     pensum:        () => leerPensum(),          // PostgreSQL
     propuesta:     () => leerPropuesta(),       // PostgreSQL
+    tarjetas:      () => leerTodasLasTarjetas(),// PostgreSQL
     sedes:         () => readData('sedes.json'),
     eventos:       () => leerEventos(),         // PostgreSQL
   }
@@ -135,6 +138,7 @@ app.get('/api/all', async (_req, res) => {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
     estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD,
     acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, sedes: sedesD, eventos: eventosD,
+    tarjetas: tarjetasD,
   } = datos
 
   res.json({
@@ -164,6 +168,9 @@ app.get('/api/all', async (_req, res) => {
     pensum:              pensumD?.semestres ?? [],
     pensum_info:         pensumD ? { plan: pensumD.plan, total_creditos: pensumD.total_creditos, total_horas: pensumD.total_horas, total_materias: pensumD.total_materias } : null,
     pensum_propuesto:    propuestaD ?? null,
+    /* Las tarjetas del carrusel, agrupadas por la página que las muestra.
+       Solo las visibles: el panel pide las suyas aparte. */
+    tarjetas:            tarjetasD ?? {},
     info_sedes:          sedesD ?? {},
     eventos:             eventosD ?? [],
   })

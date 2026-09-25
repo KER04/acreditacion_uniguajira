@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Icons } from '../../components/Icons'
-import { apiSaberPro } from '../../context/DataContext'
+import CarruselTarjetas from '../../components/CarruselTarjetas'
+import { apiSaberPro, useData } from '../../context/DataContext'
 import { useParametroURL } from '../../hooks/useParametroURL'
 import {
   MODULOS_SABERPRO, CLAVES_MODULOS, ETIQUETA_MODULO,
@@ -234,14 +235,69 @@ function Destacados({ destacados, anio, sede, setSede, busqueda, setBusqueda, an
 
 /* Explica la regla con los números que están guardados, no con un texto fijo:
    si el Consejo Académico cambia el acuerdo, la frase cambia sola. */
-function reglaEnPalabras(p) {
+function reglaEnPalabras(p, aprobatorio) {
+  if (aprobatorio?.modo === 'bases') {
+    return 'igualar o superar el puntaje aprobatorio de cada competencia'
+  }
   const partes = ['puntaje global de ' + p.puntaje_minimo + ' o más']
   if (p.percentil_minimo !== null) partes.push('percentil nacional desde ' + p.percentil_minimo)
   if (p.minimo_por_modulo !== null) partes.push('ninguna competencia por debajo de ' + p.minimo_por_modulo)
   return partes.join(', ')
 }
 
-function Elegibles({ elegibles, parametros }) {
+/* El puntaje aprobatorio, competencia por competencia, con cuántos lo alcanzan.
+ *
+ * Es lo que convierte la lista de elegibles en algo que se puede leer: sin
+ * estas cifras, quien mira la página ve nombres y no sabe contra qué se
+ * midieron. La barra no es decoración —dice de un vistazo dónde se atasca la
+ * promoción, que es la competencia con menos gente por encima de su base. */
+function Aprobatorio({ aprobatorio, cumplimiento }) {
+  if (aprobatorio?.modo !== 'bases') return null
+  const evaluados = cumplimiento?.evaluados ?? 0
+
+  return (
+    <div className="sp-bases">
+      <div className="sp-bases__cabeza">
+        <div>
+          <div className="sp-bases__titulo">Puntaje aprobatorio por competencia</div>
+          <p className="sp-bases__nota">
+            Se aprueba igualando o superando la base en <b>todas</b>. El general es el promedio
+            de las cinco.
+          </p>
+        </div>
+        <div className="sp-bases__general">
+          <b>{aprobatorio.general}</b>
+          <span>general</span>
+        </div>
+      </div>
+
+      <ul className="sp-bases__lista">
+        {MODULOS_SABERPRO.map(([k, etiqueta]) => {
+          const alcanzan = cumplimiento?.[k] ?? null
+          const parte = evaluados > 0 && alcanzan !== null ? Math.round((alcanzan / evaluados) * 100) : null
+          return (
+            <li key={k} className="sp-bases__item">
+              <div className="sp-bases__fila">
+                <span className="sp-bases__nombre">{etiqueta}</span>
+                <span className="sp-bases__cifra">{aprobatorio.competencias[k]}</span>
+              </div>
+              {parte !== null && (
+                <>
+                  <div className="sp-bases__barra">
+                    <span style={{ width: parte + '%' }} />
+                  </div>
+                  <div className="sp-bases__pie">{alcanzan} de {evaluados} la alcanzan · {parte}%</div>
+                </>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+function Elegibles({ elegibles, parametros, aprobatorio, cumplimiento }) {
   return (
     <section className="section">
       <div className="inner">
@@ -256,13 +312,20 @@ function Elegibles({ elegibles, parametros }) {
           </p>
         </div>
 
+        <Aprobatorio aprobatorio={aprobatorio} cumplimiento={cumplimiento} />
+
         <div className="sp-regla">
           <div className="sp-regla__icono"><Icons.check /></div>
           <div>
-            <div className="sp-regla__titulo">Requisito vigente: {reglaEnPalabras(parametros)}.</div>
+            <div className="sp-regla__titulo">
+              Requisito vigente: {reglaEnPalabras(parametros, aprobatorio)}.
+            </div>
             <div className="sp-regla__fuente">
-              {parametros.norma || 'Norma por registrar en el panel'}
-              {parametros.vigente_desde && ' · vigente desde ' + fechaLarga(parametros.vigente_desde)}
+              {aprobatorio?.modo === 'bases'
+                ? 'Bases tomadas del reporte' + (aprobatorio.origen ? ' · ' + aprobatorio.origen : '')
+                  + (aprobatorio.actualizado_en ? ' · leído el ' + fechaLarga(aprobatorio.actualizado_en) : '')
+                : (parametros.norma || 'Norma por registrar en el panel')
+                  + (parametros.vigente_desde ? ' · vigente desde ' + fechaLarga(parametros.vigente_desde) : '')}
             </div>
           </div>
           <div className="sp-regla__conteo">
@@ -312,6 +375,10 @@ function Elegibles({ elegibles, parametros }) {
 }
 
 export default function SaberPro() {
+  /* Dos fuentes, y cada una por su razón: los resultados se piden aparte
+     porque dependen del año elegido, y las tarjetas del carrusel vienen con el
+     resto del sitio, que ya está cargado cuando se abre la página. */
+  const { data } = useData()
   const [datos, setDatos] = useState(null)
   const [error, setError] = useState('')
   const [anio, setAnio] = useParametroURL('anio', 'todos')
@@ -350,6 +417,11 @@ export default function SaberPro() {
 
   const hayDatos = datos.total > 0
 
+  /* Las tarjetas del carrusel llegan con el resto del sitio por /api/all, no
+     con los resultados: son contenido editorial de la página, no un dato del
+     examen. Solo vienen las visibles. */
+  const tarjetas = data.tarjetas?.['saber-pro'] ?? []
+
   /* Las tres cifras de cabecera salen de lo cargado: ninguna está escrita a
      mano, así que registrar un resultado en el panel las mueve solas. */
   const CIFRAS = [
@@ -368,8 +440,9 @@ export default function SaberPro() {
           <span className="miga__actual">Saber Pro</span>
         </nav>
 
-        <header className="hero-card">
+        <header className={'hero-card' + (tarjetas.length > 0 ? ' hero-card--split' : '')}>
           <div className="hero-card__patron" aria-hidden="true" />
+          <div className="hero-card__columnas">
           <div className="hero-card__contenido">
             <p className="hero-card__insignia">
               <span className="hero-card__punto" aria-hidden="true" />
@@ -401,6 +474,18 @@ export default function SaberPro() {
               </dl>
             )}
           </div>
+
+          {/* El costado cuenta en tarjetas lo que no cabe en el titular: el
+              puntaje aprobatorio, cómo se lee el examen, lo que el programa
+              quiera destacar del período. Se carga desde el panel. Sin
+              tarjetas no se pinta la columna: un hueco al lado del titular se
+              lee como un fallo de carga. */}
+          {tarjetas.length > 0 && (
+            <aside className="hero-card__lateral">
+              <CarruselTarjetas tarjetas={tarjetas} etiqueta="Tarjetas sobre las pruebas Saber Pro" />
+            </aside>
+          )}
+          </div>
         </header>
       </div>
 
@@ -422,7 +507,8 @@ export default function SaberPro() {
                       anio={anio} setAnio={setAnio} anios={datos.anios}
                       sede={sede} setSede={setSede}
                       busqueda={busqueda} setBusqueda={setBusqueda} />
-          <Elegibles elegibles={datos.elegibles} parametros={datos.parametros} />
+          <Elegibles elegibles={datos.elegibles} parametros={datos.parametros}
+                     aprobatorio={datos.aprobatorio} cumplimiento={datos.cumplimiento} />
         </>
       )}
     </div>

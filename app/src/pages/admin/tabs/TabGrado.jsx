@@ -15,6 +15,7 @@ import { useData, apiSubirDocumento } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import { usePestana } from '../../../hooks/useParametroURL'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   TIPOS_NORMATIVA, ESTADOS_IDEA, DIFICULTADES_IDEA,
@@ -83,37 +84,36 @@ function Modalidades() {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
-        <div style={{ fontWeight: 600, marginBottom: 14 }}>
-          {editando !== null ? 'Editar modalidad' : 'Agregar modalidad de grado'}
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Campo etiqueta="Nombre" error={form.error('nombre')}>
-            <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
-          </Campo>
-          <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
-            <textarea rows="2" value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
-          </Campo>
-          <Campo etiqueta="Requisitos (uno por línea)" opcional error={form.error('requisitos')}>
-            <textarea rows="4" value={v.requisitos} onChange={e => form.set('requisitos', e.target.value)} onBlur={() => form.alSalir('requisitos')}
-                      placeholder={'Haber aprobado 140 créditos\nPropuesta avalada por comité'} />
-          </Campo>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Campo etiqueta="Duración" opcional error={form.error('duracion')}>
-              <input value={v.duracion} onChange={e => form.set('duracion', e.target.value)} onBlur={() => form.alSalir('duracion')} placeholder="2 semestres" />
+      <Plegable id="tabgrado-0" titulo={editando !== null ? 'Editar modalidad' : 'Agregar modalidad de grado'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 20 }} onSubmit={guardar} noValidate>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Campo etiqueta="Nombre" error={form.error('nombre')}>
+              <input value={v.nombre} onChange={e => form.set('nombre', e.target.value)} onBlur={() => form.alSalir('nombre')} />
             </Campo>
-            {/* El color tiñe la franja lateral de la tarjeta en la vista
-                pública, así que se escoge de la paleta y no a mano. */}
-            <Campo etiqueta="Color de la tarjeta">
-              <select value={v.color} onChange={e => form.set('color', e.target.value)}>
-                {COLORES_TARJETA.map(([val, l]) => <option key={val} value={val}>{l}</option>)}
-              </select>
+            <Campo etiqueta="Descripción" opcional error={form.error('descripcion')}>
+              <textarea rows="2" value={v.descripcion} onChange={e => form.set('descripcion', e.target.value)} onBlur={() => form.alSalir('descripcion')} />
             </Campo>
+            <Campo etiqueta="Requisitos (uno por línea)" opcional error={form.error('requisitos')}>
+              <textarea rows="4" value={v.requisitos} onChange={e => form.set('requisitos', e.target.value)} onBlur={() => form.alSalir('requisitos')}
+                        placeholder={'Haber aprobado 140 créditos\nPropuesta avalada por comité'} />
+            </Campo>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Campo etiqueta="Duración" opcional error={form.error('duracion')}>
+                <input value={v.duracion} onChange={e => form.set('duracion', e.target.value)} onBlur={() => form.alSalir('duracion')} placeholder="2 semestres" />
+              </Campo>
+              {/* El color tiñe la franja lateral de la tarjeta en la vista
+                  pública, así que se escoge de la paleta y no a mano. */}
+              <Campo etiqueta="Color de la tarjeta">
+                <select value={v.color} onChange={e => form.set('color', e.target.value)}>
+                  {COLORES_TARJETA.map(([val, l]) => <option key={val} value={val}>{l}</option>)}
+                </select>
+              </Campo>
+            </div>
           </div>
-        </div>
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
+          <Acciones editando={editando !== null} bloqueado={form.invalido}
+                    onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+        </form>
+      </Plegable>
 
       {(data.modalidades_grado ?? []).length === 0 ? (
         <div style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay modalidades registradas.</div>
@@ -200,89 +200,88 @@ function Normativas() {
 
   return (
     <div>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
-        <div style={{ fontWeight: 600, marginBottom: 16 }}>
-          {editando !== null ? 'Editar norma' : 'Nueva norma'}
-        </div>
+      <Plegable id="tabgrado-1" titulo={editando !== null ? 'Editar norma' : 'Nueva norma'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Título</label>
-            <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3}
-                   placeholder="Reglamento de trabajos de grado" />
-          </div>
-
-          <div className="field">
-            <label>Tipo</label>
-            <select value={form.tipo} onChange={e => f('tipo', e.target.value)}>
-              {TIPOS_NORMATIVA.map(t => <option key={t}>{t}</option>)}
-            </select>
-          </div>
-          <div className="field">
-            <label>Número</label>
-            <input value={form.numero} onChange={e => f('numero', e.target.value)} placeholder="015 de 2019" />
-          </div>
-
-          <div className="field">
-            <label>Año</label>
-            <input type="number" value={form.anio} onChange={e => f('anio', e.target.value)}
-                   min={ANIO_NORMATIVA_MIN} max={ANIO_NORMATIVA_MAX} placeholder="2019" />
-          </div>
-          <div className="field">
-            <label>Expedida por</label>
-            <input value={form.expedida_por} onChange={e => f('expedida_por', e.target.value)}
-                   placeholder="Consejo Académico" />
-          </div>
-
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Descripción</label>
-            <textarea rows="2" value={form.descripcion} onChange={e => f('descripcion', e.target.value)}
-                      placeholder="En una línea: qué regula y a quién aplica" />
-          </div>
-
-          <div className="field">
-            <label>Enlace externo (opcional)</label>
-            <input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." />
-          </div>
-
-          <div className="field">
-            <label>Documento PDF (opcional)</label>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <label style={{ cursor: subiendo ? 'wait' : 'pointer', padding: '7px 14px', background: 'var(--paper)', border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', borderRadius: 8, fontSize: 13 }}>
-                {subiendo ? 'Subiendo…' : '📎 Subir PDF'}
-                <input type="file" accept=".pdf,.doc,.docx" onChange={subir} disabled={subiendo} style={{ display: 'none' }} />
-              </label>
-              {form.archivo_id && (
-                <button type="button" className="btn ghost" style={{ padding: '6px 12px', fontSize: 12 }}
-                        onClick={() => { f('archivo_id', null); setAvisoArchivo('Se quitará el PDF al guardar.') }}>
-                  Quitar
-                </button>
-              )}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Título</label>
+              <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3}
+                     placeholder="Reglamento de trabajos de grado" />
             </div>
-            {avisoArchivo && <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 6 }}>{avisoArchivo}</div>}
+
+            <div className="field">
+              <label>Tipo</label>
+              <select value={form.tipo} onChange={e => f('tipo', e.target.value)}>
+                {TIPOS_NORMATIVA.map(t => <option key={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Número</label>
+              <input value={form.numero} onChange={e => f('numero', e.target.value)} placeholder="015 de 2019" />
+            </div>
+
+            <div className="field">
+              <label>Año</label>
+              <input type="number" value={form.anio} onChange={e => f('anio', e.target.value)}
+                     min={ANIO_NORMATIVA_MIN} max={ANIO_NORMATIVA_MAX} placeholder="2019" />
+            </div>
+            <div className="field">
+              <label>Expedida por</label>
+              <input value={form.expedida_por} onChange={e => f('expedida_por', e.target.value)}
+                     placeholder="Consejo Académico" />
+            </div>
+
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Descripción</label>
+              <textarea rows="2" value={form.descripcion} onChange={e => f('descripcion', e.target.value)}
+                        placeholder="En una línea: qué regula y a quién aplica" />
+            </div>
+
+            <div className="field">
+              <label>Enlace externo (opcional)</label>
+              <input value={form.url} onChange={e => f('url', e.target.value)} placeholder="https://..." />
+            </div>
+
+            <div className="field">
+              <label>Documento PDF (opcional)</label>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <label style={{ cursor: subiendo ? 'wait' : 'pointer', padding: '7px 14px', background: 'var(--paper)', border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', borderRadius: 8, fontSize: 13 }}>
+                  {subiendo ? 'Subiendo…' : '📎 Subir PDF'}
+                  <input type="file" accept=".pdf,.doc,.docx" onChange={subir} disabled={subiendo} style={{ display: 'none' }} />
+                </label>
+                {form.archivo_id && (
+                  <button type="button" className="btn ghost" style={{ padding: '6px 12px', fontSize: 12 }}
+                          onClick={() => { f('archivo_id', null); setAvisoArchivo('Se quitará el PDF al guardar.') }}>
+                    Quitar
+                  </button>
+                )}
+              </div>
+              {avisoArchivo && <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 6 }}>{avisoArchivo}</div>}
+            </div>
+
+            <div className="field">
+              <label>Orden</label>
+              <input type="number" value={form.orden} onChange={e => f('orden', Number(e.target.value))} min={0} max={999} />
+            </div>
+            <div className="field" style={{ display: 'flex', alignItems: 'end' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, textTransform: 'none', letterSpacing: 0 }}>
+                <input type="checkbox" checked={form.vigente} onChange={e => f('vigente', e.target.checked)} />
+                Vigente
+              </label>
+            </div>
           </div>
 
-          <div className="field">
-            <label>Orden</label>
-            <input type="number" value={form.orden} onChange={e => f('orden', Number(e.target.value))} min={0} max={999} />
+          <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
+              {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
+            </button>
+            {editando !== null && (
+              <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>
+            )}
           </div>
-          <div className="field" style={{ display: 'flex', alignItems: 'end' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, textTransform: 'none', letterSpacing: 0 }}>
-              <input type="checkbox" checked={form.vigente} onChange={e => f('vigente', e.target.checked)} />
-              Vigente
-            </label>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-            {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
-          </button>
-          {editando !== null && (
-            <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>
-          )}
-        </div>
-      </form>
+        </form>
+      </Plegable>
 
       {lista.length === 0 ? (
         <div style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay normativa registrada.</div>
@@ -349,84 +348,83 @@ function Ideas() {
 
   return (
     <div>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
-        <div style={{ fontWeight: 600, marginBottom: 16 }}>
-          {editando !== null ? 'Editar idea' : 'Nueva idea de investigación'}
-        </div>
+      <Plegable id="tabgrado-2" titulo={editando !== null ? 'Editar idea' : 'Nueva idea de investigación'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Título</label>
-            <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3}
-                   placeholder="Detección temprana de deserción con aprendizaje automático" />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Título</label>
+              <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3}
+                     placeholder="Detección temprana de deserción con aprendizaje automático" />
+            </div>
+
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Descripción</label>
+              <textarea rows="3" value={form.descripcion} onChange={e => f('descripcion', e.target.value)}
+                        placeholder="Qué problema resuelve, con qué datos y qué se esperaría entregar" />
+            </div>
+
+            <div className="field">
+              <label>Línea de investigación</label>
+              <input list="lineas-idea" value={form.linea} onChange={e => f('linea', e.target.value)}
+                     placeholder="Ingeniería de software" />
+              <datalist id="lineas-idea">
+                {lineasUsadas.map(l => <option key={l} value={l} />)}
+              </datalist>
+            </div>
+
+            <div className="field">
+              <label>Docente que la propone</label>
+              <SelectorOpcional valor={form.docente_id} onChange={v => f('docente_id', v)}
+                                opciones={docentes} vacio="Tutor por asignar" />
+            </div>
+
+            <div className="field">
+              <label>Modalidad a la que apunta</label>
+              <SelectorOpcional valor={form.modalidad_id} onChange={v => f('modalidad_id', v)}
+                                opciones={modalidades} vacio="Cualquiera" />
+            </div>
+
+            <div className="field">
+              <label>Contacto (opcional)</label>
+              <input value={form.contacto} onChange={e => f('contacto', e.target.value)}
+                     placeholder="correo@uniguajira.edu.co" />
+            </div>
+
+            <div className="field">
+              <label>Estado</label>
+              <select value={form.estado} onChange={e => f('estado', e.target.value)}>
+                {ESTADOS_IDEA.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Dificultad</label>
+              <select value={form.dificultad} onChange={e => f('dificultad', e.target.value)}>
+                {DIFICULTADES_IDEA.map(d => <option key={d}>{d}</option>)}
+              </select>
+            </div>
+
+            <div className="field">
+              <label>Palabras clave (una por línea)</label>
+              <textarea rows="3" value={form.palabras} onChange={e => f('palabras', e.target.value)}
+                        placeholder={'machine learning\ndeserción\nanalítica'} />
+            </div>
+            <div className="field">
+              <label>Orden</label>
+              <input type="number" value={form.orden} onChange={e => f('orden', Number(e.target.value))} min={0} max={999} />
+            </div>
           </div>
 
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Descripción</label>
-            <textarea rows="3" value={form.descripcion} onChange={e => f('descripcion', e.target.value)}
-                      placeholder="Qué problema resuelve, con qué datos y qué se esperaría entregar" />
+          <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
+              {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
+            </button>
+            {editando !== null && (
+              <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>
+            )}
           </div>
-
-          <div className="field">
-            <label>Línea de investigación</label>
-            <input list="lineas-idea" value={form.linea} onChange={e => f('linea', e.target.value)}
-                   placeholder="Ingeniería de software" />
-            <datalist id="lineas-idea">
-              {lineasUsadas.map(l => <option key={l} value={l} />)}
-            </datalist>
-          </div>
-
-          <div className="field">
-            <label>Docente que la propone</label>
-            <SelectorOpcional valor={form.docente_id} onChange={v => f('docente_id', v)}
-                              opciones={docentes} vacio="Tutor por asignar" />
-          </div>
-
-          <div className="field">
-            <label>Modalidad a la que apunta</label>
-            <SelectorOpcional valor={form.modalidad_id} onChange={v => f('modalidad_id', v)}
-                              opciones={modalidades} vacio="Cualquiera" />
-          </div>
-
-          <div className="field">
-            <label>Contacto (opcional)</label>
-            <input value={form.contacto} onChange={e => f('contacto', e.target.value)}
-                   placeholder="correo@uniguajira.edu.co" />
-          </div>
-
-          <div className="field">
-            <label>Estado</label>
-            <select value={form.estado} onChange={e => f('estado', e.target.value)}>
-              {ESTADOS_IDEA.map(s => <option key={s}>{s}</option>)}
-            </select>
-          </div>
-          <div className="field">
-            <label>Dificultad</label>
-            <select value={form.dificultad} onChange={e => f('dificultad', e.target.value)}>
-              {DIFICULTADES_IDEA.map(d => <option key={d}>{d}</option>)}
-            </select>
-          </div>
-
-          <div className="field">
-            <label>Palabras clave (una por línea)</label>
-            <textarea rows="3" value={form.palabras} onChange={e => f('palabras', e.target.value)}
-                      placeholder={'machine learning\ndeserción\nanalítica'} />
-          </div>
-          <div className="field">
-            <label>Orden</label>
-            <input type="number" value={form.orden} onChange={e => f('orden', Number(e.target.value))} min={0} max={999} />
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-            {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
-          </button>
-          {editando !== null && (
-            <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>
-          )}
-        </div>
-      </form>
+        </form>
+      </Plegable>
 
       {lista.length === 0 ? (
         <div style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay ideas publicadas.</div>

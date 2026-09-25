@@ -65,6 +65,32 @@
   --max-w: 1320px;
   --gutter: clamp(20px, 4vw, 48px);
 
+  /* ── Texturas de la marca ──────────────────────────────────────
+     El sitio institucional no es blanco liso: reposa sobre un tejido wayuu de
+     rombos y remata las piezas oscuras con cenefas. Aquí se usan las mismas
+     dos cosas.
+
+     El patrón es el archivo oficial (uniguajira.edu.co, plugin de marca): un
+     rombo concéntrico casi blanco. Se mezcla en `multiply` para que su dibujo
+     oscurezca apenas el fondo en vez de taparlo; a tamaño grande y con poco
+     contraste se lee como papel tejido, no como un mosaico. */
+  --ug-patron-url: url("/images/marca/fondo-uniguajira-pattern.webp");
+
+  /* La cenefa, redibujada como SVG en lugar de recortarla del JPG del pie:
+     así toma el color que se le pase y no pesa nada. `%23` es la almohadilla
+     del color dentro de un data URI. */
+  --ug-greca-url: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 16' width='64' height='16'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.6'%3E%3Cpath d='M0 8 L8 0 L16 8 L8 16 Z'/%3E%3Cpath d='M4 8 L8 4 L12 8 L8 12 Z'/%3E%3Cpath d='M16 8 L24 0 L32 8 L24 16 Z'/%3E%3Cpath d='M32 8 L40 0 L48 8 L40 16 Z'/%3E%3Cpath d='M36 8 L40 4 L44 8 L40 12 Z'/%3E%3Cpath d='M48 8 L56 0 L64 8 L56 16 Z'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* Superficies con algo de color. El blanco puro se reserva para las
+     tarjetas; lo que hay detrás lleva siempre un lavado de marca, que es lo
+     que impide que la página se lea como un documento en blanco. */
+  --paper-tinte: #e6f1f4;
+  --paper-calido: #fdf4e6;
+
+  /* El halo teal que cae bajo la cabecera y ata el contenido con ella. */
+  --velo-marca: radial-gradient(1200px 520px at 50% -170px,
+                  color-mix(in oklab, var(--ug-azul) 42%, transparent), transparent 70%);
+
   /* Franja tejida del pie. Antes solo la definía el prototipo HTML, así que en
      la app de React la variable no existía y la franja salía invisible. */
   --wayuu-url: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 28' width='56' height='28'%3E%3Cg fill='%23f5a539'%3E%3Cpath d='M14 0 L28 14 L14 28 L0 14 Z'/%3E%3Cpath d='M42 0 L56 14 L42 28 L28 14 Z' opacity='0.55'/%3E%3C/g%3E%3C/svg%3E");
@@ -84,6 +110,24 @@
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
   --shadow: 0 10px 30px rgba(0,0,0,0.5);
   --shadow-lg: 0 4px 10px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(0,0,0,0.7);
+
+  /* En oscuro el tejido se aclara en vez de oscurecer —de ahí `screen` más
+     abajo— y los lavados de color son fríos y muy contenidos: el mismo tinte
+     del tema claro sobre fondo oscuro se vería como una mancha. */
+  --paper-tinte: #121b22;
+  --paper-calido: #191713;
+  --velo-marca: radial-gradient(1100px 460px at 50% -220px,
+                  color-mix(in oklab, var(--ug-azul) 22%, transparent), transparent 72%);
+}
+
+/* El tejido oficial es casi blanco: en `multiply` sobre un fondo oscuro no se
+   ve, y en `screen` lo blanquea entero. En oscuro se retira y queda solo el
+   halo de marca, que ahí ya basta para que el fondo no sea plano. */
+[data-theme="dark"] body {
+  background-image: var(--velo-marca);
+  background-repeat: no-repeat;
+  background-size: 100% 620px;
+  background-blend-mode: normal;
 }
 
 /* Acentos seleccionables. Todos salen de la paleta institucional. */
@@ -96,7 +140,15 @@
 html, body { margin: 0; padding: 0; }
 body {
   font-family: var(--font-body);
-  background: var(--paper);
+  /* Tres capas: el color base, el halo de marca bajo la cabecera y el tejido
+     wayuu repetido. El tejido va fijo para que al bajar no «viaje» con el
+     contenido, que es lo que delata una textura de fondo. */
+  background-color: var(--paper);
+  background-image: var(--velo-marca), var(--ug-patron-url);
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 620px, 760px auto;
+  background-attachment: scroll, fixed;
+  background-blend-mode: normal, multiply;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;

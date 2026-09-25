@@ -7,6 +7,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import SelectorAnio from '../../../components/SelectorAnio'
 import VisorDocumento from '../../../components/VisorDocumento'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
@@ -141,103 +142,102 @@ function PanelEgresados({ aviso, setAviso }) {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
-        <div style={{ fontWeight: 600, marginBottom: 16 }}>
-          {editando !== null ? 'Editar egresado' : 'Agregar egresado destacado'}
-        </div>
+      <Plegable id="tabegresados-0" titulo={editando !== null ? 'Editar egresado' : 'Agregar egresado destacado'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
-          <Campo etiqueta="Nombre completo" error={form.error('nombre')}>
-            <input value={form.valores.nombre} onChange={e => form.set('nombre', e.target.value)}
-                   onBlur={() => form.alSalir('nombre')} required />
-          </Campo>
-          <Campo etiqueta="Año de grado" error={form.error('anio_grado')} opcional>
-            <SelectorAnio valor={form.valores.anio_grado} desde={ANIO_GRADO_MIN}
-                          onChange={v => form.set('anio_grado', v)}
-                          onBlur={() => form.alSalir('anio_grado')} />
-          </Campo>
-          <Campo etiqueta="Cargo" error={form.error('cargo')} opcional>
-            <input value={form.valores.cargo} onChange={e => form.set('cargo', e.target.value)}
-                   onBlur={() => form.alSalir('cargo')} placeholder="Head of Data" />
-          </Campo>
-          <Campo etiqueta="Empresa" error={form.error('empresa')} opcional>
-            <input value={form.valores.empresa} onChange={e => form.set('empresa', e.target.value)}
-                   onBlur={() => form.alSalir('empresa')} />
-          </Campo>
-          <Campo etiqueta="Ciudad" error={form.error('ciudad')} opcional>
-            <input value={form.valores.ciudad} onChange={e => form.set('ciudad', e.target.value)}
-                   onBlur={() => form.alSalir('ciudad')} />
-          </Campo>
-          <Campo etiqueta="País" error={form.error('pais')} opcional>
-            <input value={form.valores.pais} onChange={e => form.set('pais', e.target.value)}
-                   onBlur={() => form.alSalir('pais')} placeholder="Colombia" />
-          </Campo>
-          <Campo etiqueta="Sede" error={form.error('sede')}>
-            <select value={form.valores.sede} onChange={e => form.set('sede', e.target.value)}>
-              {SEDES_CON_AMBAS.map(s => <option key={s} value={s}>{SEDE_LARGA[s]}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Color de tarjeta" error={form.error('color')}>
-            <select value={form.valores.color} onChange={e => form.set('color', e.target.value)}>
-              {COLORES_TARJETA.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="LinkedIn" error={form.error('linkedin_url')} opcional>
-            <input value={form.valores.linkedin_url} onChange={e => form.set('linkedin_url', e.target.value)}
-                   onBlur={() => form.alSalir('linkedin_url')} placeholder="https://linkedin.com/in/…" />
-          </Campo>
-          <Campo etiqueta="Orden" error={form.error('orden')} opcional>
-            <input type="number" min="0" max="999" value={form.valores.orden}
-                   onChange={e => form.set('orden', e.target.value)} onBlur={() => form.alSalir('orden')} />
-          </Campo>
-
-          <Campo etiqueta="Testimonio" error={form.error('testimonio')} opcional style={{ gridColumn: '1 / -1' }}>
-            <textarea rows="2" value={form.valores.testimonio}
-                      onChange={e => form.set('testimonio', e.target.value)}
-                      onBlur={() => form.alSalir('testimonio')} />
-          </Campo>
-        </div>
-
-        {/* El vídeo no se sube: se enlaza. La nota lo explica donde se decide. */}
-        <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid var(--borde)' }}>
-          <div className="eyebrow" style={{ marginBottom: 6 }}>Vídeo del testimonio</div>
-          <p style={{ fontSize: 12.5, color: 'var(--ink-3)', margin: '0 0 14px', maxWidth: '72ch', lineHeight: 1.5 }}>
-            Sube el vídeo a YouTube y pega aquí el enlace: guardamos solo el identificador, la
-            miniatura la pone YouTube y el reproductor se carga únicamente cuando la tarjeta
-            aparece en pantalla. Guardar el archivo en la base lo haría pesar decenas de MB por
-            egresado. El campo MP4 es para un vídeo alojado fuera (un CDN propio).
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
-            <Campo etiqueta="Enlace o ID de YouTube" error={form.error('video_youtube')} opcional>
-              <input value={form.valores.video_youtube}
-                     onChange={e => form.set('video_youtube', e.target.value)}
-                     onBlur={() => form.alSalir('video_youtube')}
-                     placeholder="https://youtu.be/…" />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+            <Campo etiqueta="Nombre completo" error={form.error('nombre')}>
+              <input value={form.valores.nombre} onChange={e => form.set('nombre', e.target.value)}
+                     onBlur={() => form.alSalir('nombre')} required />
             </Campo>
-            <Campo etiqueta="URL de un MP4 externo" error={form.error('video_url')} opcional>
-              <input value={form.valores.video_url} onChange={e => form.set('video_url', e.target.value)}
-                     onBlur={() => form.alSalir('video_url')} placeholder="https://…/testimonio.mp4" />
+            <Campo etiqueta="Año de grado" error={form.error('anio_grado')} opcional>
+              <SelectorAnio valor={form.valores.anio_grado} desde={ANIO_GRADO_MIN}
+                            onChange={v => form.set('anio_grado', v)}
+                            onBlur={() => form.alSalir('anio_grado')} />
+            </Campo>
+            <Campo etiqueta="Cargo" error={form.error('cargo')} opcional>
+              <input value={form.valores.cargo} onChange={e => form.set('cargo', e.target.value)}
+                     onBlur={() => form.alSalir('cargo')} placeholder="Head of Data" />
+            </Campo>
+            <Campo etiqueta="Empresa" error={form.error('empresa')} opcional>
+              <input value={form.valores.empresa} onChange={e => form.set('empresa', e.target.value)}
+                     onBlur={() => form.alSalir('empresa')} />
+            </Campo>
+            <Campo etiqueta="Ciudad" error={form.error('ciudad')} opcional>
+              <input value={form.valores.ciudad} onChange={e => form.set('ciudad', e.target.value)}
+                     onBlur={() => form.alSalir('ciudad')} />
+            </Campo>
+            <Campo etiqueta="País" error={form.error('pais')} opcional>
+              <input value={form.valores.pais} onChange={e => form.set('pais', e.target.value)}
+                     onBlur={() => form.alSalir('pais')} placeholder="Colombia" />
+            </Campo>
+            <Campo etiqueta="Sede" error={form.error('sede')}>
+              <select value={form.valores.sede} onChange={e => form.set('sede', e.target.value)}>
+                {SEDES_CON_AMBAS.map(s => <option key={s} value={s}>{SEDE_LARGA[s]}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Color de tarjeta" error={form.error('color')}>
+              <select value={form.valores.color} onChange={e => form.set('color', e.target.value)}>
+                {COLORES_TARJETA.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="LinkedIn" error={form.error('linkedin_url')} opcional>
+              <input value={form.valores.linkedin_url} onChange={e => form.set('linkedin_url', e.target.value)}
+                     onBlur={() => form.alSalir('linkedin_url')} placeholder="https://linkedin.com/in/…" />
+            </Campo>
+            <Campo etiqueta="Orden" error={form.error('orden')} opcional>
+              <input type="number" min="0" max="999" value={form.valores.orden}
+                     onChange={e => form.set('orden', e.target.value)} onBlur={() => form.alSalir('orden')} />
+            </Campo>
+
+            <Campo etiqueta="Testimonio" error={form.error('testimonio')} opcional style={{ gridColumn: '1 / -1' }}>
+              <textarea rows="2" value={form.valores.testimonio}
+                        onChange={e => form.set('testimonio', e.target.value)}
+                        onBlur={() => form.alSalir('testimonio')} />
             </Campo>
           </div>
-        </div>
 
-        <div style={{ display: 'flex', gap: 22, marginTop: 16, flexWrap: 'wrap' }}>
-          <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13 }}
-                 title="La portada rota entre todos los que tengan vídeo. Marcar a varios ya no compite: solo adelanta su turno.">
-            <input type="checkbox" checked={form.valores.destacado}
-                   onChange={e => form.set('destacado', e.target.checked)} />
-            Abre la portada (sale primero en la ronda)
-          </label>
-          <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13 }}>
-            <input type="checkbox" checked={form.valores.activo}
-                   onChange={e => form.set('activo', e.target.checked)} />
-            Visible en el sitio
-          </label>
-        </div>
+          {/* El vídeo no se sube: se enlaza. La nota lo explica donde se decide. */}
+          <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid var(--borde)' }}>
+            <div className="eyebrow" style={{ marginBottom: 6 }}>Vídeo del testimonio</div>
+            <p style={{ fontSize: 12.5, color: 'var(--ink-3)', margin: '0 0 14px', maxWidth: '72ch', lineHeight: 1.5 }}>
+              Sube el vídeo a YouTube y pega aquí el enlace: guardamos solo el identificador, la
+              miniatura la pone YouTube y el reproductor se carga únicamente cuando la tarjeta
+              aparece en pantalla. Guardar el archivo en la base lo haría pesar decenas de MB por
+              egresado. El campo MP4 es para un vídeo alojado fuera (un CDN propio).
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14 }}>
+              <Campo etiqueta="Enlace o ID de YouTube" error={form.error('video_youtube')} opcional>
+                <input value={form.valores.video_youtube}
+                       onChange={e => form.set('video_youtube', e.target.value)}
+                       onBlur={() => form.alSalir('video_youtube')}
+                       placeholder="https://youtu.be/…" />
+              </Campo>
+              <Campo etiqueta="URL de un MP4 externo" error={form.error('video_url')} opcional>
+                <input value={form.valores.video_url} onChange={e => form.set('video_url', e.target.value)}
+                       onBlur={() => form.alSalir('video_url')} placeholder="https://…/testimonio.mp4" />
+              </Campo>
+            </div>
+          </div>
 
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
+          <div style={{ display: 'flex', gap: 22, marginTop: 16, flexWrap: 'wrap' }}>
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13 }}
+                   title="La portada rota entre todos los que tengan vídeo. Marcar a varios ya no compite: solo adelanta su turno.">
+              <input type="checkbox" checked={form.valores.destacado}
+                     onChange={e => form.set('destacado', e.target.checked)} />
+              Abre la portada (sale primero en la ronda)
+            </label>
+            <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13 }}>
+              <input type="checkbox" checked={form.valores.activo}
+                     onChange={e => form.set('activo', e.target.checked)} />
+              Visible en el sitio
+            </label>
+          </div>
+
+          <Acciones editando={editando !== null} bloqueado={form.invalido}
+                    onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+        </form>
+      </Plegable>
 
       {lista.length === 0 && <p style={{ color: 'var(--ink-3)' }}>Todavía no hay egresados cargados.</p>}
 
@@ -311,81 +311,80 @@ function PanelBolsa() {
 
   return (
     <>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
-        <div style={{ fontWeight: 600, marginBottom: 16 }}>
-          {editando !== null ? 'Editar vacante' : 'Publicar una vacante'}
-        </div>
+      <Plegable id="tabegresados-1" titulo={editando !== null ? 'Editar vacante' : 'Publicar una vacante'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
-          <Campo etiqueta="Cargo" error={form.error('cargo')} style={{ gridColumn: '1 / -1' }}>
-            <input value={form.valores.cargo} onChange={e => form.set('cargo', e.target.value)}
-                   onBlur={() => form.alSalir('cargo')} required />
-          </Campo>
-          <Campo etiqueta="Empresa" error={form.error('empresa')}>
-            <input value={form.valores.empresa} onChange={e => form.set('empresa', e.target.value)}
-                   onBlur={() => form.alSalir('empresa')} required />
-          </Campo>
-          <Campo etiqueta="Ubicación" error={form.error('ubicacion')} opcional>
-            <input value={form.valores.ubicacion} onChange={e => form.set('ubicacion', e.target.value)}
-                   onBlur={() => form.alSalir('ubicacion')} placeholder="Riohacha, La Guajira" />
-          </Campo>
-          <Campo etiqueta="Modalidad" error={form.error('modalidad')}>
-            <select value={form.valores.modalidad} onChange={e => form.set('modalidad', e.target.value)}>
-              {MODALIDADES_OFERTA.map(m => <option key={m}>{m}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Tipo de contrato" error={form.error('tipo_contrato')}>
-            <select value={form.valores.tipo_contrato} onChange={e => form.set('tipo_contrato', e.target.value)}>
-              {CONTRATOS_OFERTA.map(c => <option key={c}>{c}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Salario" error={form.error('salario')} opcional>
-            <input value={form.valores.salario} onChange={e => form.set('salario', e.target.value)}
-                   onBlur={() => form.alSalir('salario')} placeholder="$3.2M – $4.5M" />
-          </Campo>
-          <Campo etiqueta="Vacantes" error={form.error('vacantes')}>
-            <input type="number" min="1" max="999" value={form.valores.vacantes}
-                   onChange={e => form.set('vacantes', e.target.value)} onBlur={() => form.alSalir('vacantes')} />
-          </Campo>
-          <Campo etiqueta="Publicación" error={form.error('fecha_publicacion')}>
-            <input type="date" value={form.valores.fecha_publicacion}
-                   onChange={e => form.set('fecha_publicacion', e.target.value)}
-                   onBlur={() => form.alSalir('fecha_publicacion')} />
-          </Campo>
-          <Campo etiqueta="Cierre" error={form.error('fecha_cierre')} opcional>
-            <input type="date" value={form.valores.fecha_cierre}
-                   onChange={e => form.set('fecha_cierre', e.target.value)}
-                   onBlur={() => form.alSalir('fecha_cierre')} />
-          </Campo>
-          <Campo etiqueta="Estado" error={form.error('estado')}>
-            <select value={form.valores.estado} onChange={e => form.set('estado', e.target.value)}>
-              {ESTADOS_OFERTA.map(s => <option key={s} value={s}>{s[0].toUpperCase() + s.slice(1)}</option>)}
-            </select>
-          </Campo>
-          <Campo etiqueta="Correo de contacto" error={form.error('contacto_email')} opcional>
-            <input type="email" value={form.valores.contacto_email}
-                   onChange={e => form.set('contacto_email', e.target.value)}
-                   onBlur={() => form.alSalir('contacto_email')} />
-          </Campo>
-          <Campo etiqueta="Portal externo" error={form.error('url_externa')} opcional>
-            <input value={form.valores.url_externa} onChange={e => form.set('url_externa', e.target.value)}
-                   onBlur={() => form.alSalir('url_externa')} placeholder="Si la empresa recibe en su web" />
-          </Campo>
-          <Campo etiqueta="Tecnologías (separadas por coma)" error={form.error('tags')} opcional
-                 style={{ gridColumn: '1 / -1' }}>
-            <input value={form.valores.tags} onChange={e => form.set('tags', e.target.value)}
-                   onBlur={() => form.alSalir('tags')} placeholder="React, Node, PostgreSQL" />
-          </Campo>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+            <Campo etiqueta="Cargo" error={form.error('cargo')} style={{ gridColumn: '1 / -1' }}>
+              <input value={form.valores.cargo} onChange={e => form.set('cargo', e.target.value)}
+                     onBlur={() => form.alSalir('cargo')} required />
+            </Campo>
+            <Campo etiqueta="Empresa" error={form.error('empresa')}>
+              <input value={form.valores.empresa} onChange={e => form.set('empresa', e.target.value)}
+                     onBlur={() => form.alSalir('empresa')} required />
+            </Campo>
+            <Campo etiqueta="Ubicación" error={form.error('ubicacion')} opcional>
+              <input value={form.valores.ubicacion} onChange={e => form.set('ubicacion', e.target.value)}
+                     onBlur={() => form.alSalir('ubicacion')} placeholder="Riohacha, La Guajira" />
+            </Campo>
+            <Campo etiqueta="Modalidad" error={form.error('modalidad')}>
+              <select value={form.valores.modalidad} onChange={e => form.set('modalidad', e.target.value)}>
+                {MODALIDADES_OFERTA.map(m => <option key={m}>{m}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Tipo de contrato" error={form.error('tipo_contrato')}>
+              <select value={form.valores.tipo_contrato} onChange={e => form.set('tipo_contrato', e.target.value)}>
+                {CONTRATOS_OFERTA.map(c => <option key={c}>{c}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Salario" error={form.error('salario')} opcional>
+              <input value={form.valores.salario} onChange={e => form.set('salario', e.target.value)}
+                     onBlur={() => form.alSalir('salario')} placeholder="$3.2M – $4.5M" />
+            </Campo>
+            <Campo etiqueta="Vacantes" error={form.error('vacantes')}>
+              <input type="number" min="1" max="999" value={form.valores.vacantes}
+                     onChange={e => form.set('vacantes', e.target.value)} onBlur={() => form.alSalir('vacantes')} />
+            </Campo>
+            <Campo etiqueta="Publicación" error={form.error('fecha_publicacion')}>
+              <input type="date" value={form.valores.fecha_publicacion}
+                     onChange={e => form.set('fecha_publicacion', e.target.value)}
+                     onBlur={() => form.alSalir('fecha_publicacion')} />
+            </Campo>
+            <Campo etiqueta="Cierre" error={form.error('fecha_cierre')} opcional>
+              <input type="date" value={form.valores.fecha_cierre}
+                     onChange={e => form.set('fecha_cierre', e.target.value)}
+                     onBlur={() => form.alSalir('fecha_cierre')} />
+            </Campo>
+            <Campo etiqueta="Estado" error={form.error('estado')}>
+              <select value={form.valores.estado} onChange={e => form.set('estado', e.target.value)}>
+                {ESTADOS_OFERTA.map(s => <option key={s} value={s}>{s[0].toUpperCase() + s.slice(1)}</option>)}
+              </select>
+            </Campo>
+            <Campo etiqueta="Correo de contacto" error={form.error('contacto_email')} opcional>
+              <input type="email" value={form.valores.contacto_email}
+                     onChange={e => form.set('contacto_email', e.target.value)}
+                     onBlur={() => form.alSalir('contacto_email')} />
+            </Campo>
+            <Campo etiqueta="Portal externo" error={form.error('url_externa')} opcional>
+              <input value={form.valores.url_externa} onChange={e => form.set('url_externa', e.target.value)}
+                     onBlur={() => form.alSalir('url_externa')} placeholder="Si la empresa recibe en su web" />
+            </Campo>
+            <Campo etiqueta="Tecnologías (separadas por coma)" error={form.error('tags')} opcional
+                   style={{ gridColumn: '1 / -1' }}>
+              <input value={form.valores.tags} onChange={e => form.set('tags', e.target.value)}
+                     onBlur={() => form.alSalir('tags')} placeholder="React, Node, PostgreSQL" />
+            </Campo>
 
-          {campoLargo('descripcion', 'Sobre la vacante', 'Qué hace el equipo y qué se espera del cargo.')}
-          {campoLargo('responsabilidades', 'Responsabilidades', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
-          {campoLargo('requisitos', 'Requisitos', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
-          {campoLargo('beneficios', 'Beneficios', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
-        </div>
+            {campoLargo('descripcion', 'Sobre la vacante', 'Qué hace el equipo y qué se espera del cargo.')}
+            {campoLargo('responsabilidades', 'Responsabilidades', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
+            {campoLargo('requisitos', 'Requisitos', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
+            {campoLargo('beneficios', 'Beneficios', 'Una línea por punto. Empieza con - para que salga como viñeta.')}
+          </div>
 
-        <Acciones editando={editando !== null} bloqueado={form.invalido}
-                  onCancelar={() => { form.reiniciar(); setEditando(null) }} />
-      </form>
+          <Acciones editando={editando !== null} bloqueado={form.invalido}
+                    onCancelar={() => { form.reiniciar(); setEditando(null) }} />
+        </form>
+      </Plegable>
 
       {lista.length === 0 && <p style={{ color: 'var(--ink-3)' }}>Todavía no hay vacantes publicadas.</p>}
 

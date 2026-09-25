@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import {
   CATEGORIAS_CONVOCATORIA, ESTADOS_CONVOCATORIA, SEDES_CON_AMBAS, fechaLarga,
 } from '../../../../shared/validacion'
@@ -45,67 +46,68 @@ export default function TabConvocatorias() {
   return (
     <div>
       <h3 style={{ marginBottom: 20 }}>Convocatorias</h3>
-      <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
-        <div style={{ fontWeight: 600, marginBottom: 16 }}>{editando !== null ? 'Editar convocatoria' : 'Nueva convocatoria'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Título</label>
-            <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3} />
+      <Plegable id="tabconvocatorias-0" titulo={editando !== null ? 'Editar convocatoria' : 'Nueva convocatoria'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Título</label>
+              <input value={form.titulo} onChange={e => f('titulo', e.target.value)} required minLength={3} />
+            </div>
+            <div className="field">
+              <label>Categoría</label>
+              <select value={form.categoria} onChange={e => f('categoria', e.target.value)}>
+                {CATEGORIAS_CONVOCATORIA.map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Estado</label>
+              <select value={form.estado} onChange={e => f('estado', e.target.value)}>
+                {ESTADOS_CONVOCATORIA.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Apertura</label>
+              <input type="date" value={form.fecha_apertura} onChange={e => f('fecha_apertura', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Cierre</label>
+              <input type="date" value={form.fecha_cierre} onChange={e => f('fecha_cierre', e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Sede</label>
+              <select value={form.sede} onChange={e => f('sede', e.target.value)}>
+                {SEDES_CON_AMBAS.map(v => <option key={v} value={v}>{ETIQUETA_SEDE[v]}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label>Dirigida a</label>
+              <input value={form.dirigida_a} onChange={e => f('dirigida_a', e.target.value)} placeholder="Estudiantes" />
+            </div>
+            <div className="field">
+              <label>Enlace de postulación (opcional)</label>
+              <input value={form.url_postulacion} onChange={e => f('url_postulacion', e.target.value)} placeholder="https://..." />
+            </div>
+            <div className="field">
+              <label>Documento (opcional)</label>
+              <input value={form.documento_url} onChange={e => f('documento_url', e.target.value)} placeholder="https://... o /docs/..." />
+            </div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Descripción</label>
+              <textarea rows="3" value={form.descripcion} onChange={e => f('descripcion', e.target.value)} />
+            </div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Requisitos (uno por línea)</label>
+              <textarea rows="3" value={form.requisitos} onChange={e => f('requisitos', e.target.value)} />
+            </div>
           </div>
-          <div className="field">
-            <label>Categoría</label>
-            <select value={form.categoria} onChange={e => f('categoria', e.target.value)}>
-              {CATEGORIAS_CONVOCATORIA.map(c => <option key={c}>{c}</option>)}
-            </select>
+          <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
+              {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
+            </button>
+            {editando !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>}
           </div>
-          <div className="field">
-            <label>Estado</label>
-            <select value={form.estado} onChange={e => f('estado', e.target.value)}>
-              {ESTADOS_CONVOCATORIA.map(s => <option key={s}>{s}</option>)}
-            </select>
-          </div>
-          <div className="field">
-            <label>Apertura</label>
-            <input type="date" value={form.fecha_apertura} onChange={e => f('fecha_apertura', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>Cierre</label>
-            <input type="date" value={form.fecha_cierre} onChange={e => f('fecha_cierre', e.target.value)} />
-          </div>
-          <div className="field">
-            <label>Sede</label>
-            <select value={form.sede} onChange={e => f('sede', e.target.value)}>
-              {SEDES_CON_AMBAS.map(v => <option key={v} value={v}>{ETIQUETA_SEDE[v]}</option>)}
-            </select>
-          </div>
-          <div className="field">
-            <label>Dirigida a</label>
-            <input value={form.dirigida_a} onChange={e => f('dirigida_a', e.target.value)} placeholder="Estudiantes" />
-          </div>
-          <div className="field">
-            <label>Enlace de postulación (opcional)</label>
-            <input value={form.url_postulacion} onChange={e => f('url_postulacion', e.target.value)} placeholder="https://..." />
-          </div>
-          <div className="field">
-            <label>Documento (opcional)</label>
-            <input value={form.documento_url} onChange={e => f('documento_url', e.target.value)} placeholder="https://... o /docs/..." />
-          </div>
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Descripción</label>
-            <textarea rows="3" value={form.descripcion} onChange={e => f('descripcion', e.target.value)} />
-          </div>
-          <div className="field" style={{ gridColumn: '1 / -1' }}>
-            <label>Requisitos (uno por línea)</label>
-            <textarea rows="3" value={form.requisitos} onChange={e => f('requisitos', e.target.value)} />
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-          <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-            {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
-          </button>
-          {editando !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>}
-        </div>
-      </form>
+        </form>
+      </Plegable>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {(data.convocatorias ?? []).map(c => (
           <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '1fr 140px 80px 90px 130px auto', gap: 16, padding: '14px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', alignItems: 'center' }}>

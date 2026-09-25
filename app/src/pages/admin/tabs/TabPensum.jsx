@@ -21,6 +21,7 @@ import {
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
+import Plegable from '../Plegable'
 import { AREAS_MATERIA, CAMPOS_MATERIA } from '../../../../shared/validacion'
 import { usePestana } from '../../../hooks/useParametroURL'
 
@@ -240,35 +241,36 @@ export default function TabPensum() {
             ))}
           </div>
 
-          <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 18 }} onSubmit={agregarAMalla}>
-            <div style={{ fontWeight: 600, marginBottom: 12 }}>Agregar materia al {semestre}.º semestre</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 90px 90px auto', gap: 12, alignItems: 'end' }}>
-              <div className="field" style={{ margin: 0 }}>
-                <label>Materia del catálogo</label>
-                <select value={formMalla.materia_id} required
-                  onChange={e => setFormMalla(f => ({ ...f, materia_id: e.target.value }))}>
-                  <option value="">Elegir…</option>
-                  {libres.map(m => <option key={m.id} value={m.id}>{m.nombre}{m.codigo ? ` (${m.codigo})` : ''}</option>)}
-                </select>
+          <Plegable id="tabpensum-0" titulo="Agregar materia al {semestre}.º semestre">
+            <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 18 }} onSubmit={agregarAMalla}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 90px 90px auto', gap: 12, alignItems: 'end' }}>
+                <div className="field" style={{ margin: 0 }}>
+                  <label>Materia del catálogo</label>
+                  <select value={formMalla.materia_id} required
+                    onChange={e => setFormMalla(f => ({ ...f, materia_id: e.target.value }))}>
+                    <option value="">Elegir…</option>
+                    {libres.map(m => <option key={m.id} value={m.id}>{m.nombre}{m.codigo ? ` (${m.codigo})` : ''}</option>)}
+                  </select>
+                </div>
+                <div className="field" style={{ margin: 0 }}>
+                  <label>Créditos</label>
+                  <input type="number" min="0" max="12" value={formMalla.creditos}
+                    onChange={e => setFormMalla(f => ({ ...f, creditos: e.target.value }))} />
+                </div>
+                <div className="field" style={{ margin: 0 }}>
+                  <label>Horas</label>
+                  <input type="number" min="0" max="40" value={formMalla.horas_semana}
+                    onChange={e => setFormMalla(f => ({ ...f, horas_semana: e.target.value }))} />
+                </div>
+                <button className="btn accent" type="submit" style={{ padding: '8px 18px' }}>Agregar <Icons.check /></button>
               </div>
-              <div className="field" style={{ margin: 0 }}>
-                <label>Créditos</label>
-                <input type="number" min="0" max="12" value={formMalla.creditos}
-                  onChange={e => setFormMalla(f => ({ ...f, creditos: e.target.value }))} />
-              </div>
-              <div className="field" style={{ margin: 0 }}>
-                <label>Horas</label>
-                <input type="number" min="0" max="40" value={formMalla.horas_semana}
-                  onChange={e => setFormMalla(f => ({ ...f, horas_semana: e.target.value }))} />
-              </div>
-              <button className="btn accent" type="submit" style={{ padding: '8px 18px' }}>Agregar <Icons.check /></button>
-            </div>
-            {libres.length === 0 && (
-              <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-3)' }}>
-                Todas las materias del catálogo ya están en esta malla. Crea una nueva en «Catálogo».
-              </div>
-            )}
-          </form>
+              {libres.length === 0 && (
+                <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-3)' }}>
+                  Todas las materias del catálogo ya están en esta malla. Crea una nueva en «Catálogo».
+                </div>
+              )}
+            </form>
+          </Plegable>
 
           {materias.map(m => {
             const expandida = abierta === m.plan_materia_id

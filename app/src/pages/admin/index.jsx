@@ -6,6 +6,7 @@ import Dashboard from './Dashboard'
 import TabInicio from './tabs/TabInicio'
 import TabPrograma from './tabs/TabPrograma'
 import TabPensum from './tabs/TabPensum'
+import TabPropuesta from './tabs/TabPropuesta'
 import TabNoticias from './tabs/TabNoticias'
 import TabConvocatorias from './tabs/TabConvocatorias'
 import TabDocentes from './tabs/TabDocentes'
@@ -18,26 +19,70 @@ import TabCNA from './tabs/TabCNA'
 import TabEventos from './tabs/TabEventos'
 import TabGrado from './tabs/TabGrado'
 
-const TABS = [
-  ['dashboard', 'Dashboard', '■'],
-  ['inicio', 'Inicio', '◈'],
-  ['programa', 'Programa', '◉'],
-  ['pensum', 'Plan de estudios', '◧'],
-  ['infraestructura', 'Infraestructura', '◨'],
-  ['noticias', 'Noticias', '◎'],
-  ['eventos', 'Eventos', '◷'],
-  ['convocatorias', 'Convocatorias', '◷'],
-  ['docentes', 'Docentes', '◈'],
-  ['estudiantes', 'Estudiantes', '◉'],
-  /* La clave sigue siendo 'egresados' para no romper los enlaces guardados,
-     pero esta pestaña es la de los graduados: bolsa de empleo y testimonios.
-     El trámite de grado vive en 'grado'. */
-  ['egresados', 'Graduados', '◎'],
-  ['grado', 'Egresados · grado', '◷'],
-  ['saberpro', 'Saber Pro', '◷'],
-  ['funciones', 'Funciones misionales', '◧'],
-  ['cna', 'Acreditación CNA', '◈'],
+/* Las secciones, agrupadas por la parte del sitio que tocan.
+ *
+ * El agrupamiento no es cosmético: son diecisiete entradas, y en una lista
+ * plana encontrar «Saber Pro» exige leerlas todas. Repartidas en cuatro
+ * bloques —lo que se publica, el programa, la gente y la calidad— se llega por
+ * descarte antes de leer.
+ *
+ * La tercera columna es la ruta pública que edita cada sección, para poder ir
+ * a ver el resultado sin buscarla en el menú del sitio. Vacía cuando la
+ * sección no tiene una página propia.
+ */
+const GRUPOS = [
+  ['General', [
+    ['dashboard', 'Resumen', ''],
+    ['inicio', 'Portada', '#/'],
+  ]],
+  ['Programa', [
+    ['programa', 'Ficha del programa', '#/programa'],
+    ['pensum', 'Plan de estudios', '#/pensum'],
+    ['propuesta', 'Propuesta curricular', '#/pensum-propuesto'],
+    ['infraestructura', 'Infraestructura', '#/infraestructura'],
+  ]],
+  ['Publicaciones', [
+    ['noticias', 'Noticias', '#/noticias'],
+    ['eventos', 'Eventos', '#/noticias'],
+    ['convocatorias', 'Convocatorias', '#/convocatorias'],
+  ]],
+  ['Comunidad', [
+    ['docentes', 'Docentes', '#/docentes'],
+    ['estudiantes', 'Estudiantes', '#/estudiantes'],
+    /* La clave sigue siendo 'egresados' para no romper los enlaces guardados,
+       pero esta pestaña es la de los graduados: bolsa de empleo y testimonios.
+       El trámite de grado vive en 'grado'. */
+    ['egresados', 'Graduados', '#/graduados'],
+    ['grado', 'Egresados · grado', '#/egresados'],
+    ['saberpro', 'Saber Pro', '#/saber-pro'],
+  ]],
+  ['Calidad', [
+    ['funciones', 'Funciones misionales', '#/investigacion'],
+    ['cna', 'Acreditación CNA', '#/acreditacion'],
+  ]],
 ]
+
+const TABS = GRUPOS.flatMap(([, items]) => items)
+const POR_CLAVE = Object.fromEntries(TABS.map(([k, etiqueta, ruta]) => [k, { etiqueta, ruta }]))
+
+const PANELES = {
+  dashboard: Dashboard,
+  inicio: TabInicio,
+  programa: TabPrograma,
+  pensum: TabPensum,
+  propuesta: TabPropuesta,
+  infraestructura: TabInfraestructura,
+  noticias: TabNoticias,
+  eventos: TabEventos,
+  convocatorias: TabConvocatorias,
+  docentes: TabDocentes,
+  estudiantes: TabEstudiantes,
+  egresados: TabEgresados,
+  grado: TabGrado,
+  saberpro: TabSaberPro,
+  funciones: TabFunciones,
+  cna: TabCNA,
+}
 
 /* Los fallos de guardado (sesión caducada, validación rechazada, backend caído)
    se muestran aquí en vez de morir en un catch vacío. */
@@ -45,9 +90,9 @@ function AvisoError() {
   const { error, limpiarError } = useData()
   if (!error) return null
   return (
-    <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: '12px 16px', borderRadius: 10, background: 'color-mix(in oklab, var(--ug-flamingo) 16%, transparent)', border: '1px solid var(--ug-flamingo)', fontSize: 13 }}>
+    <div role="alert" className="adm-aviso adm-aviso--error">
       <span style={{ flex: 1 }}>No se pudo guardar: {error}</span>
-      <button className="icon-btn" style={{ width: 26, height: 26 }} onClick={limpiarError} aria-label="Cerrar aviso">×</button>
+      <button className="adm-aviso__cerrar" onClick={limpiarError} aria-label="Cerrar aviso">×</button>
     </div>
   )
 }
@@ -59,19 +104,33 @@ function AvisoCarga() {
   const { avisoCarga } = useData()
   if (!avisoCarga) return null
   return (
-    <div role="status" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: '12px 16px', borderRadius: 10, background: 'color-mix(in oklab, var(--ug-amarillo) 18%, transparent)', border: '1px solid var(--ug-amarillo)', fontSize: 13 }}>
+    <div role="status" className="adm-aviso adm-aviso--carga">
       <span style={{ flex: 1 }}>{avisoCarga}</span>
     </div>
   )
 }
 
 function Verificando() {
-  return (
-    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--paper-2)', color: 'var(--ink-3)', fontSize: 14 }}>
-      Verificando sesión…
-    </div>
-  )
+  return <div className="adm-espera">Verificando sesión…</div>
 }
+
+const CLAVE_GRUPOS = 'ug_admin_grupos_abiertos'
+
+/* Qué categorías dejó abiertas quien edita. Si no hay nada guardado, se abre
+   solo la que contiene la sección en pantalla: con las cinco desplegadas la
+   columna no cabe y aparece una barra de desplazamiento que obliga a buscar
+   dentro del propio menú. */
+function leerGrupos(activa) {
+  try {
+    const guardado = JSON.parse(localStorage.getItem(CLAVE_GRUPOS) ?? 'null')
+    if (guardado && typeof guardado === 'object') return guardado
+  } catch { /* almacenamiento bloqueado: se usa el criterio de partida */ }
+  return Object.fromEntries(GRUPOS.map(([g, items]) => [g, items.some(([k]) => k === activa)]))
+}
+
+/* Iniciales para el avatar: «Jesús Monsalvo» -> «JM». */
+const iniciales = nombre => String(nombre ?? '')
+  .trim().split(/\s+/).slice(0, 2).map(p => p[0] ?? '').join('').toUpperCase() || '·'
 
 export default function Admin() {
   const [usuario, setUsuario] = useState(null)
@@ -90,6 +149,24 @@ export default function Admin() {
       .finally(() => setVerificando(false))
   }, [])
 
+  /* La categoría de la sección activa se abre sola al navegar: llegar a una
+     sección por un enlace guardado y no ver dónde está en el menú desorienta
+     más de lo que ahorra el pliegue. Las demás se quedan como estuvieran. */
+  const [grupos, setGrupos] = useState(() => leerGrupos(activeTab))
+  useEffect(() => {
+    setGrupos(previos => {
+      const suyo = GRUPOS.find(([, items]) => items.some(([k]) => k === activeTab))?.[0]
+      if (!suyo || previos[suyo]) return previos
+      return { ...previos, [suyo]: true }
+    })
+  }, [activeTab])
+
+  const alternarGrupo = grupo => setGrupos(previos => {
+    const siguiente = { ...previos, [grupo]: !previos[grupo] }
+    try { localStorage.setItem(CLAVE_GRUPOS, JSON.stringify(siguiente)) } catch { /* da igual */ }
+    return siguiente
+  })
+
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {})
     setUsuario(null)
@@ -98,50 +175,88 @@ export default function Admin() {
   if (verificando) return <Verificando />
   if (!usuario) return <Login onLogin={setUsuario} />
 
+  const actual = POR_CLAVE[activeTab] ?? POR_CLAVE.dashboard
+  const Panel = PANELES[activeTab] ?? Dashboard
+
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '240px 1fr', background: 'var(--paper-2)' }}>
-      {/* Sidebar */}
-      <aside style={{ background: 'var(--ug-marino)', color: 'var(--paper)', display: 'flex', flexDirection: 'column', padding: '0 0 24px', overflowY: 'auto', maxHeight: '100vh', position: 'sticky', top: 0 }}>
-        <div style={{ padding: '28px 24px 20px', borderBottom: '1px solid rgba(255,255,255,.12)' }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, letterSpacing: '-0.01em' }}>Admin Panel</div>
-          <div style={{ fontSize: 11, opacity: .6, marginTop: 4 }}>Ingeniería de Sistemas · UniGuajira</div>
+    <div className="adm">
+      <aside className="adm-side">
+        <div className="adm-marca">
+          <span className="adm-marca__sello" aria-hidden="true">IS</span>
+          <span className="adm-marca__texto">
+            <span className="adm-marca__titulo">Panel del programa</span>
+            <span className="adm-marca__sub">Ingeniería de Sistemas</span>
+          </span>
         </div>
-        <nav style={{ flex: 1, padding: '8px 0' }}>
-          {TABS.map(([k, l]) => (
-            <button key={k} onClick={() => setActiveTab(k)}
-              style={{ width: '100%', textAlign: 'left', padding: '10px 24px', background: activeTab === k ? 'rgba(255,255,255,.12)' : 'none', border: 'none', color: activeTab === k ? 'var(--paper)' : 'rgba(255,255,255,.65)', fontSize: 13.5, cursor: 'pointer', borderLeft: activeTab === k ? '3px solid var(--ug-azul-soft)' : '3px solid transparent', transition: 'all .15s' }}>
-              {l}
-            </button>
-          ))}
+
+        <nav className="adm-nav" aria-label="Secciones del panel">
+          {GRUPOS.map(([grupo, items]) => {
+            const abierto = Boolean(grupos[grupo])
+            const contieneActiva = items.some(([k]) => k === activeTab)
+            return (
+              <div className={'adm-grupo' + (abierto ? '' : ' is-cerrado')} key={grupo}>
+                <button
+                  type="button"
+                  className="adm-grupo__titulo"
+                  aria-expanded={abierto}
+                  onClick={() => alternarGrupo(grupo)}
+                >
+                  <span className="adm-grupo__flecha" aria-hidden="true">▸</span>
+                  {grupo}
+                  {/* Con la categoría plegada, este punto dice que la sección
+                      en pantalla está ahí dentro. */}
+                  {!abierto && contieneActiva && <span className="adm-grupo__marca" aria-hidden="true" />}
+                </button>
+                <div className="adm-grupo__items">
+                  {items.map(([k, etiqueta]) => (
+                    <button
+                      key={k}
+                      className={'adm-item' + (activeTab === k ? ' is-activo' : '')}
+                      aria-current={activeTab === k ? 'page' : undefined}
+                      onClick={() => setActiveTab(k)}
+                    >
+                      <span className="adm-item__punto" aria-hidden="true" />
+                      {etiqueta}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </nav>
-        <div style={{ padding: '12px 24px', borderTop: '1px solid rgba(255,255,255,.12)', marginBottom: 12 }}>
-          <div style={{ fontSize: 13, fontWeight: 500 }}>{usuario.nombre}</div>
-          <div style={{ fontSize: 11, opacity: .55, marginTop: 2 }}>{usuario.email} · {usuario.rol}</div>
+
+        <div className="adm-side__pie">
+          <div className="adm-usuario">
+            <span className="adm-usuario__avatar" aria-hidden="true">{iniciales(usuario.nombre)}</span>
+            <span className="adm-usuario__datos">
+              <span className="adm-usuario__nombre">{usuario.nombre}</span>
+              <span className="adm-usuario__rol" title={usuario.email}>{usuario.email} · {usuario.rol}</span>
+            </span>
+          </div>
+          <button className="adm-salir" onClick={logout}>Cerrar sesión</button>
         </div>
-        <button onClick={logout} style={{ margin: '0 16px', padding: '10px 16px', background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.15)', color: 'rgba(255,255,255,.7)', borderRadius: 8, cursor: 'pointer', fontSize: 13 }}>
-          Cerrar sesión
-        </button>
       </aside>
 
-      {/* Content */}
-      <main style={{ padding: 'clamp(24px,4vw,48px)', overflowY: 'auto', maxHeight: '100vh' }}>
-        <AvisoCarga />
-        <AvisoError />
-        {activeTab === 'dashboard'      && <Dashboard />}
-        {activeTab === 'inicio'         && <TabInicio />}
-        {activeTab === 'programa'       && <TabPrograma />}
-        {activeTab === 'pensum'         && <TabPensum />}
-        {activeTab === 'noticias'       && <TabNoticias />}
-        {activeTab === 'convocatorias'  && <TabConvocatorias />}
-        {activeTab === 'docentes'       && <TabDocentes />}
-        {activeTab === 'estudiantes'    && <TabEstudiantes />}
-        {activeTab === 'egresados'      && <TabEgresados />}
-        {activeTab === 'grado'          && <TabGrado />}
-        {activeTab === 'saberpro'       && <TabSaberPro />}
-        {activeTab === 'infraestructura' && <TabInfraestructura />}
-        {activeTab === 'funciones'      && <TabFunciones />}
-        {activeTab === 'eventos'        && <TabEventos />}
-        {activeTab === 'cna'            && <TabCNA />}
+      <main className="adm-main">
+        <header className="adm-head">
+          <div>
+            <div className="adm-head__ruta">Panel · {GRUPOS.find(([, i]) => i.some(([k]) => k === activeTab))?.[0]}</div>
+            <h1>{actual.etiqueta}</h1>
+          </div>
+          <div className="adm-head__acciones">
+            {actual.ruta && (
+              <a className="adm-ver-sitio" href={actual.ruta} target="_blank" rel="noreferrer">
+                Ver en el sitio <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        </header>
+
+        <div className="adm-cuerpo">
+          <AvisoCarga />
+          <AvisoError />
+          <Panel onIr={setActiveTab} />
+        </div>
       </main>
     </div>
   )
