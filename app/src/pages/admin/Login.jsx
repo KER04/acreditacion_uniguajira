@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-export default function Login({ onLogin }) {
+/* `aviso`: por qué se volvió aquí sin pedirlo (sesión caducada o revocada). */
+export default function Login({ onLogin, aviso = null }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [err, setErr] = useState('')
@@ -44,6 +45,11 @@ export default function Login({ onLogin }) {
           <p style={{ fontSize: 14, color: 'var(--ink-3)', marginTop: 6 }}>Ingeniería de Sistemas · UniGuajira</p>
         </div>
         <form className="card" style={{ padding: 30 }} onSubmit={submit}>
+          {aviso && !err && (
+            <div role="status" style={{ fontSize: 13, marginBottom: 16, padding: '10px 12px', borderRadius: 8, background: 'color-mix(in oklab, var(--ug-amarillo) 18%, transparent)' }}>
+              {aviso}
+            </div>
+          )}
           <div className="field">
             <label>Correo institucional</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" required autoFocus />

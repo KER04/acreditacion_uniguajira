@@ -144,11 +144,18 @@ body {
      wayuu repetido. El tejido va fijo para que al bajar no «viaje» con el
      contenido, que es lo que delata una textura de fondo. */
   background-color: var(--paper);
-  background-image: var(--velo-marca), var(--ug-patron-url);
-  background-repeat: no-repeat, repeat;
-  background-size: 100% 620px, 760px auto;
-  background-attachment: scroll, fixed;
-  background-blend-mode: normal, multiply;
+  /* El velo del medio (papel al 40 %) baja el contraste del tejido: a la
+     escala de la universidad y sin él, los rombos competían con el texto. */
+  background-image: var(--velo-marca),
+                    linear-gradient(color-mix(in oklab, var(--paper) 40%, transparent), color-mix(in oklab, var(--paper) 40%, transparent)),
+                    var(--ug-patron-url);
+  background-repeat: no-repeat, no-repeat, repeat;
+  /* 1920×1080 es la baldosa con la que lo aplica uniguajira.edu.co
+     (.ug-neu-surface-texture). A 760 px los rombos salían pequeños y juntos,
+     y a esa escala el dibujo se perdía como un gris uniforme. */
+  background-size: 100% 620px, 100% 100%, 1920px 1080px;
+  background-attachment: scroll, fixed, fixed;
+  background-blend-mode: normal, normal, multiply;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;

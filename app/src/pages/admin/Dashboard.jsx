@@ -20,6 +20,10 @@ const CIFRAS = [
   ['ofertas', 'Ofertas laborales', 'egresados'],
   ['grupos', 'Grupos de investigación', 'funciones'],
   ['semilleros', 'Semilleros', 'funciones'],
+  ['produccion', 'Producción de investigación', 'funciones'],
+  ['proyectos_extension', 'Proyectos de extensión', 'extension'],
+  ['convenios', 'Convenios', 'extension'],
+  ['convenios_int', 'Convenios internacionales', 'internacionalizacion'],
 ]
 
 export default function Dashboard({ onIr }) {

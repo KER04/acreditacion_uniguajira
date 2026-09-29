@@ -61,9 +61,10 @@ export default function Footer() {
           <div>
             <h4 style={{ marginBottom: 10 }}>Sede Riohacha</h4>
             <ul>
-              <li>{sr.direccion ?? 'Bloque 1 — 2.° piso, Km 3+354 Vía Maicao'}</li>
-              <li>{sr.tel ?? '+57 (605) 7282729 Ext. 240, 241'}</li>
-              <li>{sr.email ?? 'ingsistemas@uniguajira.edu.co'}</li>
+              {/* Sin respaldo escrito aquí: los que había eran datos viejos. */}
+              {sr.direccion && <li>{sr.direccion}</li>}
+              {sr.tel && <li>{sr.tel}</li>}
+              {sr.email && <li>{sr.email}</li>}
               {sr.director && <li style={{ marginTop: 8 }}><b>Dir.:</b> {sr.director}</li>}
             </ul>
           </div>
@@ -71,9 +72,10 @@ export default function Footer() {
           <div>
             <h4 style={{ marginBottom: 10 }}>Sede Maicao</h4>
             <ul>
-              <li>{sm.direccion ?? 'Calle 15 No. 14-37, Centro'}</li>
-              <li>{sm.tel ?? '+57 (605) 7271500 Ext. 110'}</li>
-              <li>{sm.email ?? 'sistemas.maicao@uniguajira.edu.co'}</li>
+              {sm.direccion && <li>{sm.direccion}</li>}
+              {sm.tel && <li>{sm.tel}</li>}
+              {sm.email && <li>{sm.email}</li>}
+              {sm.director && <li style={{ marginTop: 8 }}><b>Coord.:</b> {sm.director}</li>}
             </ul>
           </div>
         </div>

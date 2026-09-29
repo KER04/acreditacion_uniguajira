@@ -6,7 +6,7 @@ export default function EvidenciasSection() {
   const evidencias = data.evidencias_cna ?? []
 
   return (
-    <section className="section" style={{ background: 'var(--paper-2)' }}>
+    <section className="section section--papel">
       <div className="inner">
         <div className="section-head">
           <div className="title">
@@ -15,8 +15,8 @@ export default function EvidenciasSection() {
           </div>
           <p className="desc">Documentación oficial disponible para pares evaluadores y comunidad académica.</p>
         </div>
-        <div style={{ background: 'var(--paper)', borderRadius: 14, overflow: 'hidden' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 2fr 1fr 0.8fr auto', padding: '14px 24px', background: 'var(--paper-2)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+        <div className="superficie">
+          <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 2fr 1fr 0.8fr auto', padding: '14px 24px', background: 'var(--paper)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
             <div>Documento</div><div>Descripción</div><div>Fecha</div><div>Tamaño</div><div></div>
           </div>
           {evidencias.map((e, i) => (

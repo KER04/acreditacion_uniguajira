@@ -1,6 +1,6 @@
 export default function MetodologiaSection() {
   return (
-    <section className="section" style={{ background: 'var(--paper-2)' }}>
+    <section className="section section--papel">
       <div className="inner">
         <div className="section-head">
           <div className="title">

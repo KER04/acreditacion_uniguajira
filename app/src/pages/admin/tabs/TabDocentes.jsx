@@ -3,6 +3,7 @@ import {
   useData, apiSubirFotoDocente, apiBorrarFotoDocente, apiGuardarFormacion,
 } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
+import { fetchApi } from '../../../context/sesion'
 import RowActions from '../RowActions'
 import Plegable from '../Plegable'
 import SelectorAnio from '../../../components/SelectorAnio'
@@ -217,7 +218,7 @@ export default function TabDocentes() {
 
   const recargarYDevolver = async () => {
     await recargar('docentes')
-    const res = await fetch('/api/docentes?todos=1', { credentials: 'include' })
+    const res = await fetchApi('/api/docentes?todos=1')
     return res.ok ? res.json() : []
   }
 

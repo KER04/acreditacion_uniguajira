@@ -283,6 +283,47 @@ export const DIFICULTADES_IDEA = ['Inicial', 'Intermedia', 'Avanzada']
 export const ANIO_NORMATIVA_MIN = 1976
 export const ANIO_NORMATIVA_MAX = 2100
 
+/* ─── Investigación ────────────────────────────────────────────── */
+
+/* Coinciden con los CHECK de la migración 019. */
+export const TIPOS_PRODUCCION = [
+  'Artículo', 'Ponencia', 'Libro', 'Capítulo de libro', 'Software', 'Patente', 'Otro',
+]
+
+/* ─── Extensión ────────────────────────────────────────────────── */
+
+/* Coinciden con los CHECK de la migración 022. */
+export const SECTORES_CONVENIO = ['Empresarial', 'Público', 'Tercer sector', 'Académico']
+export const ESTADOS_PROYECTO_EXT = ['Formulación', 'En ejecución', 'Finalizado']
+export const TIPOS_CURSO = ['Diplomado', 'Curso', 'Taller', 'Seminario']
+export const MODALIDADES_CURSO = ['Presencial', 'Virtual', 'Híbrido']
+
+/* ─── Internacionalización ─────────────────────────────────────── */
+
+/* Coinciden con los CHECK de la migración 024. */
+export const TIPOS_CONVENIO_INT = ['Marco', 'Específico']
+export const DIRIGIDO_CONVOCATORIA = ['Estudiantes', 'Docentes', 'Estudiantes y docentes', 'Graduados']
+export const ALCANCES_RED = ['Nacional', 'Internacional']
+
+/* ─── Marco legal (Resoluciones) ───────────────────────────────── */
+
+/* Coinciden con los CHECK de la migración 025. */
+export const CATEGORIAS_ACTO = [
+  ['registro', 'Registro calificado'],
+  ['acreditacion', 'Acreditación en alta calidad'],
+  ['otro', 'Otro acto'],
+]
+export const TIPOS_ACTO = ['Resolución', 'Acuerdo', 'Decreto', 'Circular', 'Ley']
+
+/* ─── Contacto ─────────────────────────────────────────────────── */
+
+/* Coinciden con los CHECK de la migración 026. */
+export const NIVELES_CARGO = [
+  ['direccion', 'Dirección / coordinación de sede'],
+  ['coordinacion', 'Coordinación misional'],
+  ['apoyo', 'Apoyo administrativo'],
+]
+
 /* --- Egresados y bolsa de empleo ------------------------------- */
 
 export const MODALIDADES_OFERTA = ['Presencial', 'Remoto', 'Híbrido']
@@ -865,10 +906,187 @@ export const ESQUEMAS = {
     contacto:     { etiqueta: 'Contacto',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Contacto', max: 160 }) },
     orden:        { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
+
+  grupos_investigacion: {
+    nombre:          { etiqueta: 'Sigla',           obligatorio: true,  validar: v => texto(v, { etiqueta: 'Sigla', min: 2, max: 60 }) },
+    nombre_completo: { etiqueta: 'Nombre completo', obligatorio: false, validar: v => texto(v, { etiqueta: 'Nombre completo', max: 200 }) },
+    categoria:       { etiqueta: 'Categoría',       obligatorio: false, validar: v => enumerado(v, CATEGORIAS_GRUPO, 'Categoría') },
+    lineas:          { etiqueta: 'Líneas',          obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Líneas', maximo: 10, largo: 80 }) },
+    lider:           { etiqueta: 'Líder',           obligatorio: false, validar: v => texto(v, { etiqueta: 'Líder', max: 120 }) },
+    sede:            { etiqueta: 'Sede',            obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    descripcion:     { etiqueta: 'Descripción',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    color:           { etiqueta: 'Color',           obligatorio: false, validar: v => enumerado(v, COLORES_TARJETA.map(c => c[0]), 'Color') },
+    gruplac_url:     { etiqueta: 'GrupLAC',         obligatorio: false, validar: v => rutaOUrl(v, 'GrupLAC') },
+    orden:           { etiqueta: 'Orden',           obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  semilleros: {
+    nombre:      { etiqueta: 'Nombre',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 2, max: 120 }) },
+    grupo_id:    { etiqueta: 'Grupo',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Grupo', min: 1 }) },
+    lider:       { etiqueta: 'Líder',       obligatorio: false, validar: v => texto(v, { etiqueta: 'Líder', max: 120 }) },
+    sede:        { etiqueta: 'Sede',        obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    descripcion: { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    integrantes: { etiqueta: 'Integrantes', obligatorio: false, validar: v => entero(v, { etiqueta: 'Integrantes', min: 0, max: 500 }) },
+    orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  produccion: {
+    titulo:   { etiqueta: 'Título',  obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 300 }) },
+    tipo:     { etiqueta: 'Tipo',    obligatorio: false, validar: v => enumerado(v, TIPOS_PRODUCCION, 'Tipo') },
+    anio:     { etiqueta: 'Año',     obligatorio: true,  validar: v => entero(v, { etiqueta: 'Año', min: 1976, max: 2100 }) },
+    medio:    { etiqueta: 'Medio',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Medio', max: 200 }) },
+    autores:  { etiqueta: 'Autores', obligatorio: false, validar: v => texto(v, { etiqueta: 'Autores', max: 400 }) },
+    resumen:  { etiqueta: 'Resumen', obligatorio: false, validar: v => texto(v, { etiqueta: 'Resumen', max: 6000 }) },
+    grupo_id: { etiqueta: 'Grupo',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Grupo', min: 1 }) },
+    url:      { etiqueta: 'Enlace',  obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    orden:    { etiqueta: 'Orden',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  convenios: {
+    organizacion: { etiqueta: 'Organización', obligatorio: true,  validar: v => texto(v, { etiqueta: 'Organización', min: 2, max: 160 }) },
+    sector:       { etiqueta: 'Sector',       obligatorio: false, validar: v => enumerado(v, SECTORES_CONVENIO, 'Sector') },
+    tipo:         { etiqueta: 'Tipo',         obligatorio: false, validar: v => texto(v, { etiqueta: 'Tipo', max: 120 }) },
+    descripcion:  { etiqueta: 'Descripción',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    anio_inicio:  { etiqueta: 'Año',          obligatorio: false, validar: v => entero(v, { etiqueta: 'Año', min: 1976, max: 2100 }) },
+    fecha_fin:    { etiqueta: 'Vigente hasta', obligatorio: false, validar: v => fechaISO(v, 'Vigente hasta') },
+    url:          { etiqueta: 'Enlace',       obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    color:        { etiqueta: 'Color',        obligatorio: false, validar: v => enumerado(v, COLORES_TARJETA.map(c => c[0]), 'Color') },
+    orden:        { etiqueta: 'Orden',        obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  proyectos_extension: {
+    titulo:       { etiqueta: 'Título',       obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    descripcion:  { etiqueta: 'Descripción',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 3000 }) },
+    comunidad:    { etiqueta: 'Comunidad',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Comunidad', max: 160 }) },
+    municipio:    { etiqueta: 'Municipio',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Municipio', max: 80 }) },
+    sede:         { etiqueta: 'Sede',         obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    estado:       { etiqueta: 'Estado',       obligatorio: false, validar: v => enumerado(v, ESTADOS_PROYECTO_EXT, 'Estado') },
+    fecha_inicio: { etiqueta: 'Inicio',       obligatorio: false, validar: v => fechaISO(v, 'Inicio') },
+    fecha_fin:    { etiqueta: 'Fin',          obligatorio: false, validar: v => fechaISO(v, 'Fin') },
+    integrantes:  { etiqueta: 'Integrantes',  obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Integrantes', maximo: 30, largo: 120 }) },
+    fuente_url:   { etiqueta: 'Fuente',       obligatorio: false, validar: v => rutaOUrl(v, 'Fuente') },
+    orden:        { etiqueta: 'Orden',        obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  cursos_extension: {
+    titulo:          { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    tipo:            { etiqueta: 'Tipo',        obligatorio: false, validar: v => enumerado(v, TIPOS_CURSO, 'Tipo') },
+    descripcion:     { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    horas:           { etiqueta: 'Horas',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Horas', min: 1, max: 2000 }) },
+    modalidad:       { etiqueta: 'Modalidad',   obligatorio: false, validar: v => enumerado(v, MODALIDADES_CURSO, 'Modalidad') },
+    fecha_inicio:    { etiqueta: 'Inicio',      obligatorio: false, validar: v => fechaISO(v, 'Inicio') },
+    fecha_fin:       { etiqueta: 'Fin',         obligatorio: false, validar: v => fechaISO(v, 'Fin') },
+    url_inscripcion: { etiqueta: 'Enlace de inscripción', obligatorio: false, validar: v => rutaOUrl(v, 'Enlace de inscripción') },
+    activo:          { etiqueta: 'Visible',     obligatorio: false, validar: v => booleano(v, 'Visible') },
+    orden:           { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  contacto_sede: {
+    nombre:    { etiqueta: 'Nombre',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Nombre', max: 80 }) },
+    ubicacion: { etiqueta: 'Ubicación', obligatorio: false, validar: v => texto(v, { etiqueta: 'Ubicación', max: 160 }) },
+    direccion: { etiqueta: 'Dirección', obligatorio: false, validar: v => texto(v, { etiqueta: 'Dirección', max: 160 }) },
+    ciudad:    { etiqueta: 'Ciudad',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Ciudad', max: 80 }) },
+    correo:    { etiqueta: 'Correo',    obligatorio: false, validar: v => correo(v, 'Correo') },
+    telefono:  { etiqueta: 'Teléfono',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Teléfono', max: 60 }) },
+    extension: { etiqueta: 'Extensión', obligatorio: false, validar: v => texto(v, { etiqueta: 'Extensión', max: 40 }) },
+    horario:   { etiqueta: 'Horario',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Horario', max: 200 }) },
+    url:       { etiqueta: 'Página',    obligatorio: false, validar: v => rutaOUrl(v, 'Página') },
+  },
+
+  cargos_programa: {
+    nombre:      { etiqueta: 'Nombre',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 3, max: 120 }) },
+    cargo:       { etiqueta: 'Cargo',       obligatorio: true,  validar: v => texto(v, { etiqueta: 'Cargo', min: 3, max: 120 }) },
+    nivel:       { etiqueta: 'Nivel',       obligatorio: false, validar: v => enumerado(v, NIVELES_CARGO.map(n => n[0]), 'Nivel') },
+    sede:        { etiqueta: 'Sede',        obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
+    area:        { etiqueta: 'Área',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Área', max: 80 }) },
+    descripcion: { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 600 }) },
+    correo:      { etiqueta: 'Correo',      obligatorio: false, validar: v => correo(v, 'Correo') },
+    extension:   { etiqueta: 'Extensión',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Extensión', max: 20 }) },
+    ubicacion:   { etiqueta: 'Ubicación',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Ubicación', max: 120 }) },
+    docente_id:  { etiqueta: 'Docente',     obligatorio: false, validar: v => entero(v, { etiqueta: 'Docente', min: 1 }) },
+    orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  contacto_programa: {
+    presentacion: { etiqueta: 'Presentación', obligatorio: false, validar: v => texto(v, { etiqueta: 'Presentación', max: 3000 }) },
+    ejes:         { etiqueta: 'Ejes',         obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Ejes', maximo: 8, largo: 60 }) },
+    horario:      { etiqueta: 'Horario',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Horario', max: 200 }) },
+    nota_cita:    { etiqueta: 'Nota de cita', obligatorio: false, validar: v => texto(v, { etiqueta: 'Nota de cita', max: 200 }) },
+  },
+
+  actos_programa: {
+    categoria:    { etiqueta: 'Categoría',   obligatorio: false, validar: v => enumerado(v, CATEGORIAS_ACTO.map(c => c[0]), 'Categoría') },
+    tipo:         { etiqueta: 'Tipo',        obligatorio: false, validar: v => enumerado(v, TIPOS_ACTO, 'Tipo') },
+    numero:       { etiqueta: 'Número',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Número', max: 40 }) },
+    fecha:        { etiqueta: 'Fecha',       obligatorio: false, validar: v => fechaISO(v, 'Fecha') },
+    expedido_por: { etiqueta: 'Expedido por', obligatorio: false, validar: v => texto(v, { etiqueta: 'Expedido por', max: 160 }) },
+    asunto:       { etiqueta: 'Asunto',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Asunto', min: 3, max: 200 }) },
+    descripcion:  { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    vigencia:     { etiqueta: 'Vigencia',    obligatorio: false, validar: v => texto(v, { etiqueta: 'Vigencia', max: 60 }) },
+    fecha_fin:    { etiqueta: 'Vence',       obligatorio: false, validar: v => fechaISO(v, 'Vence') },
+    archivo_id:   { etiqueta: 'Documento',   obligatorio: false, validar: v => entero(v, { etiqueta: 'Documento', min: 1 }) },
+    url:          { etiqueta: 'Enlace',      obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    orden:        { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  convenios_internacionales: {
+    institucion: { etiqueta: 'Institución', obligatorio: true,  validar: v => texto(v, { etiqueta: 'Institución', min: 2, max: 200 }) },
+    pais:        { etiqueta: 'País',        obligatorio: true,  validar: v => texto(v, { etiqueta: 'País', min: 2, max: 80 }) },
+    tipo:        { etiqueta: 'Tipo',        obligatorio: false, validar: v => enumerado(v, TIPOS_CONVENIO_INT, 'Tipo') },
+    tema:        { etiqueta: 'Tema',        obligatorio: false, validar: v => texto(v, { etiqueta: 'Tema', max: 200 }) },
+    objeto:      { etiqueta: 'Objeto',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Objeto', max: 3000 }) },
+    intercambio: { etiqueta: 'Intercambio', obligatorio: false, validar: v => booleano(v, 'Intercambio') },
+    fecha_fin:   { etiqueta: 'Vigente hasta', obligatorio: false, validar: v => fechaISO(v, 'Vigente hasta') },
+    url:         { etiqueta: 'Enlace',      obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  convocatorias_movilidad: {
+    titulo:         { etiqueta: 'Título',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    dirigido:       { etiqueta: 'Dirigida a',  obligatorio: false, validar: v => enumerado(v, DIRIGIDO_CONVOCATORIA, 'Dirigida a') },
+    destino:        { etiqueta: 'Destino',     obligatorio: false, validar: v => texto(v, { etiqueta: 'Destino', max: 160 }) },
+    descripcion:    { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 3000 }) },
+    beneficios:     { etiqueta: 'Beneficios',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Beneficios', max: 1500 }) },
+    fecha_apertura: { etiqueta: 'Apertura',    obligatorio: false, validar: v => fechaISO(v, 'Apertura') },
+    fecha_cierre:   { etiqueta: 'Cierre',      obligatorio: false, validar: v => fechaISO(v, 'Cierre') },
+    url:            { etiqueta: 'Enlace',      obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    orden:          { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  redes_academicas: {
+    sigla:       { etiqueta: 'Sigla',       obligatorio: true,  validar: v => texto(v, { etiqueta: 'Sigla', min: 2, max: 40 }) },
+    nombre:      { etiqueta: 'Nombre',      obligatorio: false, validar: v => texto(v, { etiqueta: 'Nombre', max: 200 }) },
+    alcance:     { etiqueta: 'Alcance',     obligatorio: false, validar: v => enumerado(v, ALCANCES_RED, 'Alcance') },
+    descripcion: { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 1000 }) },
+    url:         { etiqueta: 'Enlace',      obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
+  ori_contacto: {
+    ubicacion:  { etiqueta: 'Ubicación',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Ubicación', max: 300 }) },
+    correos:    { etiqueta: 'Correos',    obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Correos', maximo: 6, largo: 120 }) },
+    telefono:   { etiqueta: 'Teléfono',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Teléfono', max: 120 }) },
+    url:        { etiqueta: 'Página',     obligatorio: false, validar: v => rutaOUrl(v, 'Página') },
+    requisitos: { etiqueta: 'Requisitos', obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Requisitos', maximo: 15, largo: 400 }) },
+    pasos:      { etiqueta: 'Pasos',      obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Pasos', maximo: 15, largo: 400 }) },
+  },
+}
+
+/* Fin no anterior al inicio, para los recursos con fecha_inicio/fecha_fin. */
+function fechasOrdenadas({ fecha_inicio, fecha_fin }) {
+  if (!fecha_inicio || !fecha_fin || fecha_fin >= fecha_inicio) return null
+  return { campo: 'fecha_fin', mensaje: 'La fecha final no puede ser anterior a la inicial' }
 }
 
 /* Comprobaciones que necesitan mirar más de un campo a la vez. */
 export const REGLAS_CRUZADAS = {
+
+  proyectos_extension: datos => fechasOrdenadas(datos),
+  convocatorias_movilidad({ fecha_apertura, fecha_cierre }) {
+    if (!fecha_apertura || !fecha_cierre || fecha_cierre >= fecha_apertura) return null
+    return { campo: 'fecha_cierre', mensaje: 'El cierre no puede ser anterior a la apertura' }
+  },
+  cursos_extension: datos => fechasOrdenadas(datos),
 
   calendario(datos) {
     const { fecha_inicio, fecha_fin } = datos

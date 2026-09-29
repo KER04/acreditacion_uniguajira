@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { FACTORES, EQUIPO_GENERAL, EVIDENCIAS_GENERALES } from '../data/acreditacion'
+import { fetchApi } from './sesion'
 
 /* ─── API helpers ──────────────────────────────────────────────── */
 /* Ruta relativa: Vite hace de proxy hacia :3001 (ver vite.config.js), así que
@@ -24,10 +25,21 @@ const EN_BASE = {
   convocatorias:          'convocatorias',
   normativas:             'grado/normativas',
   ideas_investigacion:    'grado/ideas',
+  grupos:                 'investigacion/grupos',
+  semilleros:             'investigacion/semilleros',
+  produccion:             'investigacion/produccion',
+  convenios:              'extension/convenios',
+  proyectos_extension:    'extension/proyectos',
+  cursos_extension:       'extension/cursos',
+  convenios_int:          'internacionalizacion/convenios',
+  convocatorias_mov:      'internacionalizacion/convocatorias',
+  redes:                  'internacionalizacion/redes',
+  actos:                  'resoluciones',
+  cargos:                 'contacto/cargos',
 }
 
 async function apiJSON(endpoint, { method = 'GET', body } = {}) {
-  const res = await fetch(`${API}/${endpoint}`, {
+  const res = await fetchApi(`${API}/${endpoint}`, {
     method,
     headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -44,13 +56,10 @@ async function apiJSON(endpoint, { method = 'GET', body } = {}) {
    completo contra un archivo JSON. Las claves de EN_BASE NO van aquí: esas
    viajan por REST elemento a elemento y listarlas otra vez solo confundiría. */
 const KEY_ENDPOINT = {
-  grupos:                'investigacion/grupos',
-  semilleros:            'investigacion/semilleros',
   factores:              'acreditacion/factores',
   cronograma_cna:        'acreditacion/cronograma',
   equipo_cna:            'acreditacion/equipo',
   evidencias_cna:        'acreditacion/evidencias',
-  info_sedes:            'sedes',
   inicio:                'programa/inicio',
   programa:              'programa/info',
 }
@@ -67,7 +76,7 @@ async function syncToAPI(key, value) {
     return `"${key}" no está conectado con el servidor: el cambio solo quedó en este navegador y se perderá al recargar`
   }
   try {
-    const res = await fetch(`${API}/${endpoint}`, {
+    const res = await fetchApi(`${API}/${endpoint}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -83,7 +92,7 @@ async function syncToAPI(key, value) {
 
 /* Envía un formulario multipart y devuelve el JSON de respuesta. */
 async function enviarArchivo(ruta, formData, metodo = 'POST') {
-  const res = await fetch(`${API}/${ruta}`, {
+  const res = await fetchApi(`${API}/${ruta}`, {
     method: metodo,
     credentials: 'include',
     body: formData,
@@ -110,7 +119,7 @@ export function apiSubirFotoHonor(honorId, file) {
 }
 
 export async function apiBorrarFotoHonor(honorId) {
-  const res = await fetch(`${API}/estudiantes/honor/${honorId}/foto`, {
+  const res = await fetchApi(`${API}/estudiantes/honor/${honorId}/foto`, {
     method: 'DELETE',
     credentials: 'include',
   })
@@ -132,7 +141,7 @@ export function apiSubirDocumentoHonor(honorId, file, { nombre = '', descripcion
 }
 
 export async function apiBorrarDocumentoHonor(docId) {
-  const res = await fetch(`${API}/estudiantes/honor/documentos/${docId}`, {
+  const res = await fetchApi(`${API}/estudiantes/honor/documentos/${docId}`, {
     method: 'DELETE',
     credentials: 'include',
   })
@@ -150,7 +159,7 @@ export function apiSubirFotoDocente(docenteId, file) {
 }
 
 export async function apiBorrarFotoDocente(docenteId) {
-  const res = await fetch(`${API}/docentes/${docenteId}/foto`, {
+  const res = await fetchApi(`${API}/docentes/${docenteId}/foto`, {
     method: 'DELETE',
     credentials: 'include',
   })
@@ -269,7 +278,7 @@ export function apiSubirFotoEgresado(egresadoId, file, campo = 'foto') {
 }
 
 export async function apiBorrarFotoEgresado(egresadoId, campo = 'foto') {
-  const res = await fetch(`${API}/egresados/destacados/${egresadoId}/${campo}`, {
+  const res = await fetchApi(`${API}/egresados/destacados/${egresadoId}/${campo}`, {
     method: 'DELETE',
     credentials: 'include',
   })
@@ -321,6 +330,44 @@ export const apiInfraCrear = datos => apiJSON('infraestructura/recursos', { meth
 export const apiInfraEditar = (id, datos) => apiJSON(`infraestructura/recursos/${id}`, { method: 'PATCH', body: datos })
 export const apiInfraBorrar = id => apiJSON(`infraestructura/recursos/${id}`, { method: 'DELETE' })
 
+/* ─── Investigación ────────────────────────────────────────────── */
+
+/* Ficha de una publicación. La pide su página propia, que puede abrirse
+   directamente desde un enlace sin pasar antes por /investigacion. */
+export const apiProduccion = id => apiJSON(`investigacion/produccion/${id}`)
+
+export function apiSubirPortadaProduccion(id, file) {
+  const fd = new FormData()
+  fd.append('portada', file)
+  return enviarArchivo(`investigacion/produccion/${id}/portada`, fd)
+}
+
+export const apiBorrarPortadaProduccion = id =>
+  apiJSON(`investigacion/produccion/${id}/portada`, { method: 'DELETE' })
+
+/* ─── Internacionalización ────────────────────────────────────── */
+
+/* La ficha de la ORI es una fila única: se guarda entera y vuelve normalizada. */
+export const apiGuardarOri = datos =>
+  apiJSON('internacionalizacion/ori', { method: 'PATCH', body: datos })
+
+/* ─── Contacto ─────────────────────────────────────────────────── */
+
+export const apiContacto = () => apiJSON('contacto')
+export const apiGuardarSede = (sede, datos) =>
+  apiJSON(`contacto/sedes/${sede}`, { method: 'PATCH', body: datos })
+export const apiGuardarContactoPrograma = datos =>
+  apiJSON('contacto/programa', { method: 'PATCH', body: datos })
+
+/* Foto propia de una persona del organigrama. */
+export function apiSubirFotoCargo(id, file) {
+  const fd = new FormData()
+  fd.append('foto', file)
+  return enviarArchivo(`contacto/cargos/${id}/foto`, fd)
+}
+export const apiBorrarFotoCargo = id =>
+  apiJSON(`contacto/cargos/${id}/foto`, { method: 'DELETE' })
+
 /* ─── Saber Pro ────────────────────────────────────────────────── */
 
 /* La página pide sus propios datos: el módulo no entra en /api/all para no
@@ -352,7 +399,7 @@ export async function apiUpload(tipo, file, extra = {}) {
   const fd = new FormData()
   fd.append('archivo', file)
   const qs = new URLSearchParams(extra).toString()
-  const res = await fetch(`${API}/upload/${tipo}${qs ? '?' + qs : ''}`, {
+  const res = await fetchApi(`${API}/upload/${tipo}${qs ? '?' + qs : ''}`, {
     method: 'POST',
     credentials: 'include',
     body: fd,
@@ -380,18 +427,27 @@ const INITIAL = {
      con el caché vacío y el backend caído los veía como contenido real. */
   ofertas: [],
   destacados: [],
-  grupos: [
-    { id: 1, nombre: 'GITUG', cat: 'A1', lider: 'Dr. Héctor Brito Mendoza', sede: 'riohacha', desc: 'Grupo de Investigación en TIC de La Guajira. Énfasis en ciberseguridad, redes y sistemas embebidos.', foto_url: '' },
-    { id: 2, nombre: 'WayuuLab', cat: 'B', lider: 'Dra. Luz Marina Ipuana', sede: 'riohacha', desc: 'Laboratorio de innovación social y cultural digital. Diseño de tecnologías situadas culturalmente.', foto_url: '' },
-    { id: 3, nombre: 'Caribe.AI', cat: 'B', lider: 'Dr. Samuel Cotes Ramírez', sede: 'maicao', desc: 'Investigación en inteligencia artificial aplicada al contexto caribeño colombiano.', foto_url: '' },
-  ],
-  semilleros: [
-    { id: 1, nombre: 'IoT Wayuu', grupo: 'GITUG', lider: 'MSc. Andrea Bolaños', sede: 'riohacha', desc: 'Internet de las cosas para comunidades indígenas y rurales.', integrantes: 8 },
-    { id: 2, nombre: 'CiberSeg', grupo: 'GITUG', lider: 'Dr. Héctor Brito', sede: 'riohacha', desc: 'Ciberseguridad, hacking ético y forensia digital.', integrantes: 6 },
-    { id: 3, nombre: 'DataCaribe', grupo: 'Caribe.AI', lider: 'Dr. Samuel Cotes', sede: 'maicao', desc: 'Ciencia de datos aplicada al contexto caribeño.', integrantes: 5 },
-    { id: 4, nombre: 'WebDev IS', grupo: 'GITUG', lider: 'MSc. Catalina Uriana', sede: 'riohacha', desc: 'Desarrollo web moderno y aplicaciones móviles.', integrantes: 7 },
-    { id: 5, nombre: 'AlgoLab', grupo: 'WayuuLab', lider: 'Dr. Pablo Mengual', sede: 'maicao', desc: 'Algoritmos, complejidad computacional y optimización.', integrantes: 4 },
-  ],
+  /* Viven en PostgreSQL (migración 019): se llenan al hidratar desde /api/all.
+     Antes había aquí los mismos grupos y semilleros de ejemplo del JSON, y un
+     visitante con el caché vacío y el backend caído los veía como reales. */
+  grupos: [],
+  semilleros: [],
+  produccion: [],
+  /* Viven en PostgreSQL (migración 022). */
+  convenios: [],
+  proyectos_extension: [],
+  cursos_extension: [],
+  /* Viven en PostgreSQL (migración 024). `ori` es la ficha única de la oficina. */
+  convenios_int: [],
+  convocatorias_mov: [],
+  redes: [],
+  ori: null,
+  /* Marco legal del programa (migración 025). */
+  actos: [],
+  /* Contacto (migración 026): sedes, organigrama y presentación. `cargos`
+     se edita por REST; `contacto` trae los tres bloques para la página. */
+  cargos: [],
+  contacto: null,
   factores: FACTORES.map(f => ({
     ...f,
     caracteristicas: f.caracteristicas.map(c => ({ ...c })),
@@ -460,20 +516,23 @@ const INITIAL = {
   normativas: [],
   ideas_investigacion: [],
   practicas: [],
-  info_sedes: {
-    riohacha: { nombre: 'Sede Riohacha', direccion: 'Bloque 1 — 2.° piso, Km 3+354 Vía Maicao', tel: '+57 (605) 7282729 Ext. 240, 241', email: 'ingsistemas@uniguajira.edu.co', director: 'Adanud S. Meza Valle' },
-    maicao: { nombre: 'Sede Maicao', direccion: 'Calle 15 No. 14-37, Centro, Maicao', tel: '+57 (605) 7271500 Ext. 110', email: 'sistemas.maicao@uniguajira.edu.co', director: 'Coordinador por designar' },
-  },
+  /* Vive en PostgreSQL (migración 026) y llega armado desde /api/all. Antes
+     había aquí direcciones que no eran las de la universidad (Bloque 1, Calle
+     15) y el pie las mostraba cada vez que el backend no respondía. */
+  info_sedes: { riohacha: {}, maicao: {} },
 }
 
 /* ─── localStorage fallback ──────────────────────────────────────
    La clave lleva versión y sube cuando cambia la FORMA de los datos, no su
    contenido: al migrar egresados (009) las claves de una letra —n, y, r, c—
    pasaron a nombre, anio_grado, cargo y empresa, y un visitante con el caché
-   viejo habría visto la red de egresados con todos los nombres en blanco. */
+   viejo habría visto la red de egresados con todos los nombres en blanco.
+   v10: investigación (019) cambió cat/desc por categoria/descripcion. */
+const CLAVE_CACHE = 'uniguajira_data_v10'
+
 function loadState() {
   try {
-    const s = localStorage.getItem('uniguajira_data_v9')
+    const s = localStorage.getItem(CLAVE_CACHE)
     if (!s) return INITIAL
     const saved = JSON.parse(s)
     return {
@@ -528,7 +587,7 @@ export function DataProvider({ children }) {
 
   /* Persist to localStorage on every change */
   useEffect(() => {
-    try { localStorage.setItem('uniguajira_data_v9', JSON.stringify(data)) } catch {}
+    try { localStorage.setItem(CLAVE_CACHE, JSON.stringify(data)) } catch {}
   }, [data])
 
   /* Espejo del estado para poder calcular el "siguiente" arreglo sin meter
@@ -592,11 +651,15 @@ export function DataProvider({ children }) {
   }, [recargar])
 
   const reset = () => {
-    localStorage.removeItem('uniguajira_data_v8')
+    localStorage.removeItem(CLAVE_CACHE)
     setData(INITIAL)
   }
 
   const limpiarError = useCallback(() => setError(null), [])
+
+  /* Pone una clave tal cual la devolvió el servidor, para los recursos que no
+     son listas (la ficha de la ORI) y no pasan por recargar(). */
+  const fijar = useCallback((key, value) => setData(d => ({ ...d, [key]: value })), [])
 
   /* Guarda la malla que devuelven las operaciones del pensum. Evita una
      segunda petición: el servidor ya la mandó recalculada.
@@ -615,7 +678,7 @@ export function DataProvider({ children }) {
   }, [])
 
   return (
-    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError, avisoCarga, aplicarPensum, setError }}>
+    <DataContext.Provider value={{ data, update, addItem, removeItem, updateItem, recargar, reset, apiReady, error, limpiarError, avisoCarga, aplicarPensum, setError, fijar }}>
       {children}
     </DataContext.Provider>
   )

@@ -126,7 +126,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
 
       {/* Fortalezas / Oportunidades */}
       {(factor.fortalezas?.length > 0 || factor.oportunidades?.length > 0) && (
-        <section className="section" style={{ background: 'var(--paper-2)' }}>
+        <section className="section section--papel">
           <div className="inner">
             <div className="section-head">
               <div className="title">
@@ -187,7 +187,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
 
       {/* Evidencias documentales — nuevo formato unificado */}
       {hasDocs && (
-        <section className="section" style={{ background: 'var(--paper-2)' }}>
+        <section className="section section--papel">
           <div className="inner">
             <div className="section-head">
               <div className="title">
@@ -204,7 +204,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
                     <span style={{ width: 8, height: 8, borderRadius: 999, background: catColor, display: 'inline-block' }} />
                     {cat} ({docs.length})
                   </div>
-                  <div style={{ background: 'var(--paper)', borderRadius: 14, overflow: 'hidden' }}>
+                  <div className="superficie">
                     <div style={{ display: 'grid', gridTemplateColumns: '2fr 2fr 1fr auto', padding: '14px 24px', background: 'var(--paper-3)', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
                       <div>Documento</div><div>Descripción</div><div>Fecha</div><div></div>
                     </div>
@@ -249,7 +249,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
 
       {/* Anexos legacy */}
       {!hasDocs && legacyAnexos.length > 0 && (
-        <section className="section" style={{ background: 'var(--paper-2)' }}>
+        <section className="section section--papel">
           <div className="inner">
             <div className="section-head">
               <div className="title">
@@ -309,7 +309,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
 
       {/* Equipo responsable */}
       {factor.equipo?.length > 0 && (
-        <section className="section" style={{ background: 'var(--paper-2)' }}>
+        <section className="section section--papel">
           <div className="inner">
             <div className="section-head">
               <div className="title">

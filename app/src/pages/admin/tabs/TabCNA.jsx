@@ -729,50 +729,12 @@ function EvidenciasGeneralView({ evidencias, update }) {
   )
 }
 
-/* ─── Info sedes ──────────────────────────────────────────────── */
-function SedesView({ data, update }) {
-  const sr = data.info_sedes?.riohacha ?? {}
-  const sm = data.info_sedes?.maicao ?? {}
-  const [rh, setRh] = useState({ ...sr })
-  const [mc, setMc] = useState({ ...sm })
-  const [saved, flash] = useSave()
-
-  const save = e => {
-    e.preventDefault()
-    update('info_sedes', { riohacha: rh, maicao: mc })
-    flash()
-  }
-
-  return (
-    <form onSubmit={save}>
-      <div className="grid-2" style={{ marginBottom: 20 }}>
-        {[[rh, setRh, 'Sede Riohacha'],[mc, setMc, 'Sede Maicao']].map(([val, setVal, title]) => (
-          <div key={title} className="card" style={{ background: 'var(--paper-2)' }}>
-            <div style={{ fontWeight: 600, marginBottom: 14 }}>{title}</div>
-            {[['nombre','Nombre oficial'],['direccion','Dirección'],['tel','Teléfono / Extensión'],['email','Correo electrónico'],['director','Director / Coordinador']].map(([k,l]) => (
-              <div key={k} className="field" style={{ marginBottom: 12 }}>
-                <label>{l}</label>
-                <input value={val[k] ?? ''} onChange={e => setVal(v => ({ ...v, [k]: e.target.value }))} />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <button className="btn accent" type="submit" style={{ padding: '10px 28px' }}>Guardar sedes <Icons.check /></button>
-        <SavedBadge show={saved} />
-      </div>
-    </form>
-  )
-}
-
 /* ─── Main TabCNA ─────────────────────────────────────────────── */
 const VIEWS = [
   ['factores',   'Los 12 factores'],
   ['cronograma', 'Cronograma'],
   ['equipo',     'Equipo CNA general'],
   ['evidencias', 'Evidencias generales'],
-  ['sedes',      'Info de sedes'],
 ]
 
 export default function TabCNA() {
@@ -801,7 +763,6 @@ export default function TabCNA() {
       {view === 'cronograma' && <CronogramaView cronograma={data.cronograma_cna ?? []} update={update} />}
       {view === 'equipo'     && <EquipoGeneralView equipo={data.equipo_cna ?? []} update={update} />}
       {view === 'evidencias' && <EvidenciasGeneralView evidencias={data.evidencias_cna ?? []} update={update} />}
-      {view === 'sedes'      && <SedesView data={data} update={update} />}
     </div>
   )
 }

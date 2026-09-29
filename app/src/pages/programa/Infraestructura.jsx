@@ -154,8 +154,8 @@ export default function Infraestructura() {
       ) : (
         <>
           {conContenido.map(([clave], i) => (
-            <section key={clave} className="section"
-                     style={{ background: i % 2 ? 'var(--paper-2)' : undefined, paddingTop: i === 0 ? 60 : undefined }}>
+            <section key={clave} className={'section' + (i % 2 ? ' section--papel' : '')}
+                     style={{ paddingTop: i === 0 ? 60 : undefined }}>
               <div className="inner">
                 <div className="section-head">
                   <div className="title">

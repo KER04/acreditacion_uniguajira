@@ -21,6 +21,8 @@ import SaberPro from './pages/comunidad/SaberPro'
 import Infraestructura from './pages/programa/Infraestructura'
 
 import Investigacion from './pages/misionales/Investigacion'
+import ProduccionDetalle from './pages/misionales/ProduccionDetalle'
+import PaisConvenios from './pages/misionales/PaisConvenios'
 import Extension from './pages/misionales/Extension'
 import Internacionalizacion from './pages/misionales/Internacionalizacion'
 import Convocatorias from './pages/misionales/Convocatorias'
@@ -94,8 +96,10 @@ export default function App() {
         <Route path="/egresados/vacante/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Vacante /></Shell>} />
 
         <Route path="/investigacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Investigacion /></Shell>} />
+        <Route path="/investigacion/publicacion/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><ProduccionDetalle /></Shell>} />
         <Route path="/extension" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Extension /></Shell>} />
         <Route path="/internacionalizacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Internacionalizacion /></Shell>} />
+        <Route path="/internacionalizacion/pais/:slug" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PaisConvenios /></Shell>} />
         <Route path="/convocatorias" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Convocatorias /></Shell>} />
 
         {/* 404 fallback */}

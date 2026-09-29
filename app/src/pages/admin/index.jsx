@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePestana } from '../../hooks/useParametroURL'
 import Login from './Login'
 import { useData } from '../../context/DataContext'
+import { fetchApi, EVENTO_CADUCADA } from '../../context/sesion'
 import Dashboard from './Dashboard'
 import TabInicio from './tabs/TabInicio'
 import TabPrograma from './tabs/TabPrograma'
@@ -15,6 +16,10 @@ import TabEgresados from './tabs/TabEgresados'
 import TabSaberPro from './tabs/TabSaberPro'
 import TabInfraestructura from './tabs/TabInfraestructura'
 import TabFunciones from './tabs/TabFunciones'
+import TabExtension from './tabs/TabExtension'
+import TabResoluciones from './tabs/TabResoluciones'
+import TabContacto from './tabs/TabContacto'
+import TabInternacionalizacion from './tabs/TabInternacionalizacion'
 import TabCNA from './tabs/TabCNA'
 import TabEventos from './tabs/TabEventos'
 import TabGrado from './tabs/TabGrado'
@@ -40,6 +45,8 @@ const GRUPOS = [
     ['pensum', 'Plan de estudios', '#/pensum'],
     ['propuesta', 'Propuesta curricular', '#/pensum-propuesto'],
     ['infraestructura', 'Infraestructura', '#/infraestructura'],
+    ['resoluciones', 'Resoluciones', '#/resoluciones'],
+    ['contacto', 'Contacto', '#/contacto'],
   ]],
   ['Publicaciones', [
     ['noticias', 'Noticias', '#/noticias'],
@@ -57,7 +64,12 @@ const GRUPOS = [
     ['saberpro', 'Saber Pro', '#/saber-pro'],
   ]],
   ['Calidad', [
-    ['funciones', 'Funciones misionales', '#/investigacion'],
+    /* La clave sigue siendo 'funciones' para no romper enlaces guardados; la
+       etiqueta dice lo que edita, porque «Funciones misionales» no se
+       reconocía como la página de Investigación. */
+    ['funciones', 'Investigación', '#/investigacion'],
+    ['extension', 'Extensión', '#/extension'],
+    ['internacionalizacion', 'Internacionalización', '#/internacionalizacion'],
     ['cna', 'Acreditación CNA', '#/acreditacion'],
   ]],
 ]
@@ -81,6 +93,10 @@ const PANELES = {
   grado: TabGrado,
   saberpro: TabSaberPro,
   funciones: TabFunciones,
+  extension: TabExtension,
+  resoluciones: TabResoluciones,
+  contacto: TabContacto,
+  internacionalizacion: TabInternacionalizacion,
   cna: TabCNA,
 }
 
@@ -135,6 +151,10 @@ const iniciales = nombre => String(nombre ?? '')
 export default function Admin() {
   const [usuario, setUsuario] = useState(null)
   const [verificando, setVerificando] = useState(true)
+  /* Por qué se volvió al login sin pedirlo: la sesión caducó o se revocó. */
+  const [avisoSesion, setAvisoSesion] = useState(null)
+  const usuarioRef = useRef(null)
+  useEffect(() => { usuarioRef.current = usuario }, [usuario])
   /* En la URL: recargar el panel ya no devuelve al dashboard, y una
      sección concreta se puede dejar en un marcador. */
   const [activeTab, setActiveTab] = usePestana(TABS, { clave: 'seccion' })
@@ -142,11 +162,27 @@ export default function Admin() {
   /* La sesión vive en una cookie httpOnly, invisible para JavaScript: la única
      forma de saber si sigue abierta es preguntárselo al servidor al montar. */
   useEffect(() => {
-    fetch('/api/auth/me', { credentials: 'include' })
+    /* fetchApi y no fetch: /me es la primera petición al volver al panel, y si
+       el acceso caducó mientras estaba cerrado tiene que renovarse aquí. Sin
+       sesión que renovar es lo normal —se muestra el login—, no un aviso. */
+    fetchApi('/api/auth/me')
       .then(r => (r.ok ? r.json() : null))
       .then(d => setUsuario(d?.usuario ?? null))
       .catch(() => setUsuario(null))
       .finally(() => setVerificando(false))
+  }, [])
+
+  /* La renovación falló a mitad de trabajo: de vuelta al login diciendo por
+     qué, en vez de dejar formularios que ya no pueden guardar. */
+  useEffect(() => {
+    const alCaducar = e => {
+      // Solo si había alguien dentro: llegar sin sesión al panel no es un aviso.
+      if (!usuarioRef.current) return
+      setAvisoSesion(e.detail ?? 'Tu sesión caducó. Vuelve a iniciar sesión.')
+      setUsuario(null)
+    }
+    window.addEventListener(EVENTO_CADUCADA, alCaducar)
+    return () => window.removeEventListener(EVENTO_CADUCADA, alCaducar)
   }, [])
 
   /* La categoría de la sección activa se abre sola al navegar: llegar a una
@@ -173,7 +209,7 @@ export default function Admin() {
   }
 
   if (verificando) return <Verificando />
-  if (!usuario) return <Login onLogin={setUsuario} />
+  if (!usuario) return <Login aviso={avisoSesion} onLogin={u => { setAvisoSesion(null); setUsuario(u) }} />
 
   const actual = POR_CLAVE[activeTab] ?? POR_CLAVE.dashboard
   const Panel = PANELES[activeTab] ?? Dashboard

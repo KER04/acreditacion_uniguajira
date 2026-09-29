@@ -269,6 +269,34 @@ const INFRAESTRUCTURA = [
   },
 ]
 
+/* Grupos y semilleros. Vienen del src/data/investigacion.json que existía
+   antes de la migración 019, que era lo que editaba el panel; el nombre
+   completo, las líneas y el color salen de la copia que estaba escrita a mano
+   en Investigacion.jsx, que tenía esos datos y el JSON no.
+
+   OJO: son datos de ejemplo. Ninguno de los líderes aparece en el directorio
+   real de docentes (migración 014), así que hay que sustituirlos desde el
+   panel por los grupos reales con su enlace a GrupLAC.
+
+   La producción NO se siembra: la página traía cinco artículos con revista,
+   cuartil y congreso reales que no se pueden verificar, y publicar una
+   bibliografía inventada a nombre del programa es justo lo que un par del CNA
+   pediría demostrar. La sección se oculta hasta que se cargue la real. */
+const GRUPOS = [
+  { nombre: 'GITUG', nombre_completo: 'Grupo de Investigación en Tecnologías UniGuajira', categoria: 'A1', lider: 'Dr. Héctor Brito Mendoza', sede: 'riohacha', color: 'var(--ug-azul)', lineas: ['Ciberseguridad', 'Redes y sistemas', 'Infraestructura TIC'], descripcion: 'Grupo de Investigación en TIC de La Guajira. Énfasis en ciberseguridad, redes y sistemas embebidos.' },
+  { nombre: 'WayuuLab', nombre_completo: 'Computación, cultura y territorio', categoria: 'B', lider: 'Dra. Luz Marina Ipuana', sede: 'riohacha', color: 'var(--ug-amarillo)', lineas: ['IoT aplicado', 'Etnoinformática', 'Conservación y datos'], descripcion: 'Laboratorio de innovación social y cultural digital. Diseño de tecnologías situadas culturalmente.' },
+  { nombre: 'Caribe.AI', nombre_completo: 'Inteligencia artificial para el Caribe', categoria: 'B', lider: 'Dr. Samuel Cotes Ramírez', sede: 'maicao', color: 'var(--ug-flamingo)', lineas: ['Machine learning', 'Visión computacional', 'IA ética'], descripcion: 'Investigación en inteligencia artificial aplicada al contexto caribeño colombiano.' },
+]
+
+/* `grupo` es la sigla; al sembrar se traduce a grupo_id. */
+const SEMILLEROS = [
+  { nombre: 'IoT Wayuu', grupo: 'GITUG', lider: 'MSc. Andrea Bolaños', sede: 'riohacha', descripcion: 'Internet de las cosas para comunidades indígenas y rurales.', integrantes: 8 },
+  { nombre: 'CiberSeg', grupo: 'GITUG', lider: 'Dr. Héctor Brito', sede: 'riohacha', descripcion: 'Ciberseguridad, hacking ético y forensia digital.', integrantes: 6 },
+  { nombre: 'DataCaribe', grupo: 'Caribe.AI', lider: 'Dr. Samuel Cotes', sede: 'maicao', descripcion: 'Ciencia de datos aplicada al contexto caribeño.', integrantes: 5 },
+  { nombre: 'WebDev IS', grupo: 'GITUG', lider: 'MSc. Catalina Uriana', sede: 'riohacha', descripcion: 'Desarrollo web moderno y aplicaciones móviles.', integrantes: 7 },
+  { nombre: 'AlgoLab', grupo: 'WayuuLab', lider: 'Dr. Pablo Mengual', sede: 'maicao', descripcion: 'Algoritmos, complejidad computacional y optimización.', integrantes: 4 },
+]
+
 async function estaVacia(tabla) {
   const { rows } = await query('SELECT COUNT(*)::int AS n FROM ' + tabla)
   return rows[0].n === 0
@@ -404,12 +432,38 @@ async function sembrarInfraestructura() {
   console.log('  infraestructura ' + INFRAESTRUCTURA.length + ' registros')
 }
 
+async function sembrarInvestigacion() {
+  if (await estaVacia('grupo_investigacion')) {
+    for (const [i, g] of GRUPOS.entries()) {
+      await query(
+        `INSERT INTO grupo_investigacion
+           (nombre, nombre_completo, categoria, lineas, lider, sede, descripcion, color, orden)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [g.nombre, g.nombre_completo, g.categoria, g.lineas, g.lider, g.sede, g.descripcion, g.color, i],
+      )
+    }
+    console.log('  grupos     ' + GRUPOS.length + ' registros')
+  } else console.log('  grupos     ya tiene datos, se omite')
+
+  if (await estaVacia('semillero')) {
+    for (const [i, s] of SEMILLEROS.entries()) {
+      await query(
+        `INSERT INTO semillero (nombre, grupo_id, lider, sede, descripcion, integrantes, orden)
+         VALUES ($1, (SELECT id FROM grupo_investigacion WHERE lower(nombre) = lower($2)), $3, $4, $5, $6, $7)`,
+        [s.nombre, s.grupo, s.lider, s.sede, s.descripcion, s.integrantes, i],
+      )
+    }
+    console.log('  semilleros ' + SEMILLEROS.length + ' registros')
+  } else console.log('  semilleros ya tiene datos, se omite')
+}
+
 async function main() {
   console.log('Sembrando datos iniciales...')
   await sembrarAdmin()
   await sembrarEstudiantes()
   await sembrarEgresados()
   await sembrarInfraestructura()
+  await sembrarInvestigacion()
   console.log('Listo.')
 }
 

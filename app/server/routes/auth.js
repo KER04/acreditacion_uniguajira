@@ -1,7 +1,11 @@
 import { Router } from 'express'
 import { query } from '../db/pool.js'
 import { verifyPassword, hashPassword } from '../utils/password.js'
-import { COOKIE, opcionesCookie, crearSesion, cerrarSesion } from '../utils/sesiones.js'
+import {
+  COOKIE, COOKIE_REFRESCO, opcionesCookie, opcionesCookieRefresco,
+  opcionesBorrado, opcionesBorradoRefresco,
+  abrirSesion, renovarSesion, cerrarSesion, cerrarTodas,
+} from '../utils/sesiones.js'
 import { requireAuth } from '../middleware/auth.js'
 
 const router = Router()
@@ -34,6 +38,18 @@ const HASH_SEÑUELO = await hashPassword('contraseña-que-nadie-usa-jamas')
 
 const publico = u => ({ id: u.id, email: u.email, nombre: u.nombre, rol: u.rol })
 
+const meta = req => ({ userAgent: req.get('user-agent'), ip: req.ip })
+
+function ponerCookies(res, { acceso, refresco, refrescoExpira }) {
+  res.cookie(COOKIE, acceso, opcionesCookie())
+  res.cookie(COOKIE_REFRESCO, refresco, opcionesCookieRefresco(refrescoExpira))
+}
+
+function quitarCookies(res) {
+  res.clearCookie(COOKIE, opcionesBorrado())
+  res.clearCookie(COOKIE_REFRESCO, opcionesBorradoRefresco())
+}
+
 /* POST /api/auth/login */
 router.post('/login', async (req, res) => {
   const email = String(req.body?.email ?? '').trim().toLowerCase()
@@ -65,20 +81,47 @@ router.post('/login', async (req, res) => {
   }
 
   intentos.delete(clave)
-  const token = await crearSesion(usuario.id, {
-    userAgent: req.get('user-agent'),
-    ip: req.ip,
-  })
+  const tokens = await abrirSesion(usuario.id, meta(req))
   await query('UPDATE usuarios SET ultimo_acceso = now() WHERE id = $1', [usuario.id])
 
-  res.cookie(COOKIE, token, opcionesCookie())
+  ponerCookies(res, tokens)
   res.json({ usuario: publico(usuario) })
 })
 
-/* POST /api/auth/logout */
+/* POST /api/auth/refresh — cambia el refresco por un acceso y un refresco nuevos.
+
+   El front lo llama cuando la API le responde 401: el acceso dura minutos y
+   caduca a mitad de una jornada de edición sin que nadie haya cerrado nada.
+     200 -> cookies nuevas puestas; repetir la petición que falló
+     409 -> otra pestaña acaba de renovar; repetir sin más (la cookie ya llegó)
+     401 -> hay que volver a iniciar sesión */
+router.post('/refresh', async (req, res) => {
+  /* Express 4 no captura rechazos async: sin esto una caída de la base dejaría
+     la petición colgada, y el front esperando para siempre su renovación. */
+  let r
+  try {
+    r = await renovarSesion(req.cookies?.[COOKIE_REFRESCO], meta(req))
+  } catch (e) {
+    console.error('[auth] no se pudo renovar la sesión:', e.message)
+    return res.status(503).json({ error: 'No se pudo renovar la sesión. Intenta de nuevo.' })
+  }
+  if (r.estado === 'ok') {
+    ponerCookies(res, r)
+    return res.json({ usuario: publico(r.usuario) })
+  }
+  if (r.estado === 'reintentar') return res.status(409).json({ reintentar: true })
+  quitarCookies(res)
+  res.status(401).json({
+    error: r.estado === 'robo'
+      ? 'Tu sesión se usó desde otro lugar y se cerró por seguridad. Vuelve a iniciar sesión.'
+      : 'Tu sesión caducó. Vuelve a iniciar sesión.',
+  })
+})
+
+/* POST /api/auth/logout — cierra este login en todas sus pestañas. */
 router.post('/logout', async (req, res) => {
-  await cerrarSesion(req.cookies?.[COOKIE])
-  res.clearCookie(COOKIE, { ...opcionesCookie(), maxAge: undefined })
+  await cerrarSesion(req.cookies?.[COOKIE], req.cookies?.[COOKIE_REFRESCO])
+  quitarCookies(res)
   res.json({ ok: true })
 })
 
@@ -104,8 +147,8 @@ router.post('/password', requireAuth, async (req, res) => {
     return res.status(400).json({ error: e.message })
   }
   // Cerrar el resto de sesiones obliga a volver a entrar en los demás dispositivos.
-  await query('DELETE FROM sesiones WHERE usuario_id = $1', [req.usuario.id])
-  res.clearCookie(COOKIE, { ...opcionesCookie(), maxAge: undefined })
+  await cerrarTodas(req.usuario.id)
+  quitarCookies(res)
   res.json({ ok: true, mensaje: 'Contraseña actualizada. Vuelve a iniciar sesión.' })
 })
 

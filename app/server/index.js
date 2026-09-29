@@ -17,16 +17,17 @@ import egresados, { bloquesEgresados } from './routes/egresados.js'
 import grado, { bloquesGrado } from './routes/grado.js'
 import saberpro from './routes/saberpro.js'
 import infraestructura from './routes/infraestructura.js'
-import investigacion from './routes/investigacion.js'
-import extension from './routes/extension.js'
-import internacionalizacion from './routes/internacionalizacion.js'
+import investigacion, { bloquesInvestigacion } from './routes/investigacion.js'
+import extension, { bloquesExtension } from './routes/extension.js'
+import internacionalizacion, { bloquesInternacionalizacion } from './routes/internacionalizacion.js'
 import convocatorias, { leerConvocatorias } from './routes/convocatorias.js'
 import eventos, { leerEventos } from './routes/eventos.js'
 import noticias, { leerNoticias } from './routes/noticias.js'
 import programa from './routes/programa.js'
 import pensum, { leerPensum, leerPropuesta } from './routes/pensum.js'
 import tarjetas, { leerTodasLasTarjetas } from './routes/tarjetas.js'
-import sedes from './routes/sedes.js'
+import contacto, { bloquesContacto, infoSedes } from './routes/contacto.js'
+import resoluciones, { leerActos } from './routes/resoluciones.js'
 import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
 
@@ -71,7 +72,8 @@ app.use('/api/noticias', noticias)
 app.use('/api/programa', programa)
 app.use('/api/pensum', pensum)
 app.use('/api/tarjetas', tarjetas)
-app.use('/api/sedes', sedes)
+app.use('/api/contacto', contacto)
+app.use('/api/resoluciones', resoluciones)
 
 /* Generic file upload endpoint */
 app.post('/api/upload/:tipo', requireAdmin, upload.single('archivo'), (req, res) => {
@@ -110,13 +112,16 @@ app.get('/api/all', async (_req, res) => {
     estudiantes:   () => bloquesEstudiantes(),  // PostgreSQL
     egresados:     () => bloquesEgresados(),    // PostgreSQL
     grado:         () => bloquesGrado(),        // PostgreSQL
-    investigacion: () => readData('investigacion.json'),
+    investigacion: () => bloquesInvestigacion(), // PostgreSQL
+    extension:     () => bloquesExtension(),     // PostgreSQL
+    internacional: () => bloquesInternacionalizacion(), // PostgreSQL
+    actos:         () => leerActos(),            // PostgreSQL
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
     pensum:        () => leerPensum(),          // PostgreSQL
     propuesta:     () => leerPropuesta(),       // PostgreSQL
     tarjetas:      () => leerTodasLasTarjetas(),// PostgreSQL
-    sedes:         () => readData('sedes.json'),
+    contacto:      () => bloquesContacto(),      // PostgreSQL
     eventos:       () => leerEventos(),         // PostgreSQL
   }
 
@@ -136,8 +141,8 @@ app.get('/api/all', async (_req, res) => {
 
   const {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
-    estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD,
-    acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, sedes: sedesD, eventos: eventosD,
+    estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD, extension: extensionD, internacional: internacionalD, actos: actosD,
+    acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, contacto: contactoD, eventos: eventosD,
     tarjetas: tarjetasD,
   } = datos
 
@@ -159,6 +164,15 @@ app.get('/api/all', async (_req, res) => {
     practicas:           gradoD?.practicas ?? [],
     grupos:              investigacionD?.grupos ?? [],
     semilleros:          investigacionD?.semilleros ?? [],
+    produccion:          investigacionD?.produccion ?? [],
+    convenios:           extensionD?.convenios ?? [],
+    proyectos_extension: extensionD?.proyectos ?? [],
+    cursos_extension:    extensionD?.cursos ?? [],
+    convenios_int:       internacionalD?.convenios ?? [],
+    convocatorias_mov:   internacionalD?.convocatorias ?? [],
+    redes:               internacionalD?.redes ?? [],
+    ori:                 internacionalD?.ori ?? null,
+    actos:               actosD ?? [],
     factores:            acreditacionD?.factores ?? [],
     cronograma_cna:      acreditacionD?.cronograma ?? [],
     equipo_cna:          acreditacionD?.equipo ?? [],
@@ -171,7 +185,10 @@ app.get('/api/all', async (_req, res) => {
     /* Las tarjetas del carrusel, agrupadas por la página que las muestra.
        Solo las visibles: el panel pide las suyas aparte. */
     tarjetas:            tarjetasD ?? {},
-    info_sedes:          sedesD ?? {},
+    /* El pie de página sigue leyendo `info_sedes` con la forma de siempre. */
+    info_sedes:          contactoD ? infoSedes(contactoD) : {},
+    contacto:            contactoD ?? null,
+    cargos:              contactoD?.cargos ?? [],
     eventos:             eventosD ?? [],
   })
 })

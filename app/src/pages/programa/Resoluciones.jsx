@@ -2,71 +2,84 @@
    administrativos que los rodean.
 
    Misma cabecera que /pensum y /pensum-propuesto —migas y hero-card con la
-   franja tejida— y la .doc-lista que Egresados usa para su normativa: un acto
-   administrativo se lee en un renglón y son varios.
+   franja tejida—. Los datos salen de la base (migración 025) y se editan en
+   el panel, pestaña «Resoluciones».
 
-   Las dos resoluciones que enmarcan el programa no van en esa lista. Van en
+   Las dos resoluciones que enmarcan el programa no van en la lista. Van en
    tarjeta con banda de color porque no son dos filas más: son la razón de ser
-   de la página.
+   de la página. Son el acto más reciente de cada categoría; los anteriores
+   (un registro renovado, una acreditación previa) bajan a la lista.
 
-   El contenido es el mismo de siempre y sigue escrito aquí: esta página no
-   está en la base. */
+   Los botones de descarga solo aparecen si hay documento: antes había
+   «Descargar PDF» y «Ver en SACES» que no llevaban a ninguna parte.
+
+   Pulsar una tarjeta abre la ficha flotante del acto (FichaActo): el resumen
+   de qué trata y el documento a mano. El botón de PDF de la tarjeta sigue
+   yendo directo al archivo sin pasar por la ficha. */
+import { useState } from 'react'
+import { useData } from '../../context/DataContext'
+import FichaActo from '../../components/FichaActo'
 import { Icons } from '../../components/Icons'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
+import { fechaLarga } from '../../../shared/validacion'
 
-const DOCS = [
-  {
-    eyebrow: 'Registro calificado',
-    t: 'Resolución N.º 02872',
-    d: '21 de febrero de 2018',
-    vig: '7 años',
-    body: 'Otorgamiento del registro calificado al programa de Ingeniería de Sistemas de la Universidad de La Guajira por parte del Ministerio de Educación Nacional (MEN).',
-    color: 'var(--ug-azul)',
-    autoridad: 'Ministerio de Educación Nacional',
-  },
-  {
-    eyebrow: 'Acreditación de alta calidad',
-    t: 'Resolución N.º 014528',
-    d: '28 de julio de 2022',
-    vig: '6 años',
-    body: 'Otorgamiento de la acreditación de alta calidad por el CNA. Reconocimiento a la calidad académica, investigativa y de extensión del programa.',
-    color: 'var(--ug-amarillo)',
-    autoridad: 'Consejo Nacional de Acreditación (CNA)',
-  },
+const PRINCIPALES = [
+  { categoria: 'registro', eyebrow: 'Registro calificado', color: 'var(--ug-azul)' },
+  { categoria: 'acreditacion', eyebrow: 'Acreditación de alta calidad', color: 'var(--ug-amarillo)' },
 ]
-
-const OTROS = [
-  { t: 'Acuerdo Consejo Académico 045/2024', a: 'Aprobación reforma curricular Ingeniería de Sistemas', f: 'Ago 2024' },
-  { t: 'Resolución Rectoral 0238/2024',      a: 'Adopción del PEP actualizado',                          f: 'Oct 2024' },
-  { t: 'Acuerdo Consejo Superior 018/2021',  a: 'Reglamento estudiantil vigente',                        f: 'Jun 2021' },
-  { t: 'Resolución Rectoral 0412/2023',      a: 'Designación del director del programa',                 f: 'Nov 2023' },
-  { t: 'Acuerdo Consejo Académico 012/2023', a: 'Política de opciones de grado',                         f: 'Mar 2023' },
-  { t: 'Resolución MEN 014528/2022',         a: 'Acreditación de alta calidad',                          f: 'Jul 2022' },
-  { t: 'Resolución MEN 02872/2018',          a: 'Registro calificado del programa',                      f: 'Feb 2018' },
-]
-
-/* "Acuerdo Consejo Académico 045/2024" -> órgano y número, que es como se cita
-   un acto. No se reescribe nada: se parte por el número y las dos mitades se
-   pintan una encima de la otra. Si el título no trae número, se muestra entero
-   y el antetítulo queda vacío. */
-function partirActo(titulo) {
-  const m = /^(.*?)\s*(\d[\d/.\-]*)\s*$/.exec(titulo)
-  if (!m) return { organo: '', numero: titulo }
-  return { organo: m[1], numero: m[2] }
-}
 
 /* El color de la franja dice qué órgano lo expidió, sin gastar una línea en
    repetirlo. Los cuatro tonos son los de la marca, como en el resto del sitio. */
 function tonoDe(organo) {
-  const o = organo.toLowerCase()
-  if (o.includes('men')) return 'terracota'
+  const o = String(organo).toLowerCase()
+  if (o.includes('ministerio') || o.includes('men')) return 'terracota'
   if (o.includes('superior')) return 'marino'
-  if (o.includes('rectoral')) return 'ambar'
+  if (o.includes('rector')) return 'ambar'
   if (o.includes('académico') || o.includes('academico')) return 'azul'
   return 'neutro'
 }
 
+const COLOR_TONO = {
+  azul: 'var(--ug-azul)', ambar: 'var(--ug-amarillo)', terracota: 'var(--ug-flamingo)',
+  marino: 'var(--ug-marino-soft)', neutro: 'var(--paper-3)',
+}
+
+/* Props para que una tarjeta se comporte como botón: clic, Enter y espacio. */
+const abre = fn => ({
+  role: 'button',
+  tabIndex: 0,
+  onClick: fn,
+  onKeyDown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn() } },
+})
+
+function Documento({ acto, fuerte = false, corto = false }) {
+  if (!acto.enlace) return null
+  const esArchivo = Boolean(acto.archivo_id)
+  return (
+    <a className={'doc-boton' + (fuerte ? ' doc-boton--fuerte' : '')}
+       href={esArchivo ? acto.descarga : acto.enlace} target="_blank" rel="noopener noreferrer"
+       onClick={e => e.stopPropagation()} onKeyDown={e => e.stopPropagation()}
+       aria-label={(esArchivo ? 'Descargar ' : 'Ver ') + acto.referencia}>
+      {esArchivo ? <Icons.download /> : <Icons.external />}
+      {corto ? (esArchivo ? 'PDF' : 'Ver') : (esArchivo ? 'Descargar PDF' : 'Ver documento')}
+    </a>
+  )
+}
+
 export default function Resoluciones() {
+  const { data } = useData()
+  const actos = data.actos ?? []
+  const [abierto, setAbierto] = useState(null)
+
+  const principales = PRINCIPALES
+    .map(p => ({ ...p, acto: actos.find(a => a.categoria === p.categoria) }))
+    .filter(p => p.acto)
+  const idsPrincipales = new Set(principales.map(p => p.acto.id))
+  const otros = actos.filter(a => !idsPrincipales.has(a.id))
+
+  const registro = principales.find(p => p.categoria === 'registro')?.acto
+  const acreditacion = principales.find(p => p.categoria === 'acreditacion')?.acto
+
   return (
     <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
@@ -84,93 +97,86 @@ export default function Resoluciones() {
               Marco legal <span>del programa.</span>
             </h1>
 
-            {/* Los tres rótulos de siempre, ahora como pastillas del sistema
-                en vez de chips sueltos. */}
+            {/* Los rótulos salen de los actos: si uno vence, su pastilla se va. */}
             <div className="doc-card__etiquetas" style={{ marginTop: 20 }}>
               <span className="doc-pin doc-pin--azul">SNIES 17579</span>
-              <span className="doc-pin doc-pin--azul">Registro vigente</span>
-              <span className="doc-pin doc-pin--ambar">Acreditado en alta calidad</span>
+              {registro && !registro.vencido && <span className="doc-pin doc-pin--azul">Registro calificado vigente</span>}
+              {acreditacion && !acreditacion.vencido && <span className="doc-pin doc-pin--ambar">Acreditado en alta calidad</span>}
             </div>
           </div>
         </header>
 
-        {/* ── Los dos actos principales ── */}
-        <section className="doc-seccion">
-          <div className="resolucion-grid">
-            {DOCS.map(d => (
-              <article key={d.t} className="resolucion">
-                <div className="resolucion__banda" style={{ background: d.color }}>
-                  <WayuuBackdrop variant="a" />
-                  <div className="resolucion__tipo">{d.eyebrow}</div>
-                  <div className="resolucion__numero">{d.t}</div>
-                </div>
-
-                <div className="resolucion__cuerpo">
-                  {/* Fecha, vigencia y autoridad eran tres renglones mono
-                      seguidos; como lista de definición se ve de un vistazo
-                      qué es cada dato. */}
-                  <dl className="resolucion__datos">
-                    <div>
-                      <dt>Fecha</dt>
-                      <dd>{d.d}</dd>
-                    </div>
-                    <div>
-                      <dt>Vigencia</dt>
-                      <dd>{d.vig}</dd>
-                    </div>
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <dt>Autoridad</dt>
-                      <dd>{d.autoridad}</dd>
-                    </div>
-                  </dl>
-
-                  <p className="resolucion__texto">{d.body}</p>
-
-                  <div className="resolucion__acciones">
-                    <button className="doc-boton doc-boton--fuerte">
-                      <Icons.download /> Descargar PDF
-                    </button>
-                    <button className="doc-boton">
-                      <Icons.external /> Ver en SACES
-                    </button>
+        {principales.length > 0 && (
+          <section className="doc-seccion">
+            <div className="resolucion-grid">
+              {principales.map(({ categoria, eyebrow, color, acto }) => (
+                <article key={categoria} className="resolucion resolucion--abre"
+                         aria-label={`Ver resumen de ${acto.referencia}`}
+                         {...abre(() => setAbierto({ acto, color }))}>
+                  <div className="resolucion__banda" style={{ background: color }}>
+                    <WayuuBackdrop variant="a" />
+                    <div className="resolucion__tipo">{eyebrow}</div>
+                    <div className="resolucion__numero">{acto.tipo} N.º {acto.numero}</div>
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
 
-        {/* ── Otros actos administrativos ── */}
-        <section className="doc-seccion">
-          <h2 className="doc-seccion__titulo">Otros actos administrativos</h2>
-          <p className="doc-seccion__desc">Resoluciones rectorales y del consejo académico.</p>
+                  <div className="resolucion__cuerpo">
+                    <dl className="resolucion__datos">
+                      {acto.fecha && <div><dt>Fecha</dt><dd>{fechaLarga(acto.fecha)}</dd></div>}
+                      {(acto.vigencia || acto.fecha_fin) && (
+                        <div>
+                          <dt>{acto.vencido ? 'Venció' : 'Vigencia'}</dt>
+                          <dd>{[acto.vigencia, acto.fecha_fin && `hasta ${fechaLarga(acto.fecha_fin)}`].filter(Boolean).join(', ')}</dd>
+                        </div>
+                      )}
+                      {acto.expedido_por && (
+                        <div style={{ gridColumn: '1 / -1' }}><dt>Expedida por</dt><dd>{acto.expedido_por}</dd></div>
+                      )}
+                    </dl>
 
-          <div className="actos-grid">
-            {OTROS.map(o => {
-              const { organo, numero } = partirActo(o.t)
-              return (
-                <article key={o.t} className="acto">
-                  <div className={'acto__acento acto__acento--' + tonoDe(organo)} />
-                  <div className="acto__cuerpo">
-                    <div className="acto__organo">{organo}</div>
-                    <div className="acto__numero">{numero}</div>
-                    <p className="acto__asunto">{o.a}</p>
+                    {acto.descripcion && <p className="resolucion__texto">{acto.descripcion}</p>}
 
-                    <div className="acto__pie">
-                      <span className="acto__fecha">{o.f}</span>
-                      <button className="doc-boton" aria-label={'Descargar ' + o.t}>
-                        <Icons.download /> PDF
-                      </button>
+                    <div className="resolucion__acciones">
+                      <span className="acto__mas">Ver resumen <Icons.arrow /></span>
+                      <Documento acto={acto} fuerte />
                     </div>
                   </div>
                 </article>
-              )
-            })}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {otros.length > 0 && (
+          <section className="doc-seccion">
+            <h2 className="doc-seccion__titulo">Otros actos administrativos</h2>
+            <p className="doc-seccion__desc">Resoluciones, acuerdos y demás actos que rigen el programa.</p>
+
+            <div className="actos-grid">
+              {otros.map(a => (
+                <article key={a.id} className="acto acto--abre"
+                         aria-label={`Ver resumen de ${a.referencia}`}
+                         {...abre(() => setAbierto({ acto: a, color: COLOR_TONO[tonoDe(a.expedido_por)] }))}>
+                  <div className={'acto__acento acto__acento--' + tonoDe(a.expedido_por)} />
+                  <div className="acto__cuerpo">
+                    <div className="acto__organo">{[a.tipo, a.expedido_por].filter(Boolean).join(' · ')}</div>
+                    <div className="acto__numero">{a.numero || a.tipo}</div>
+                    <p className="acto__asunto">{a.asunto}</p>
+
+                    <div className="acto__pie">
+                      <span className="acto__fecha">{a.fecha ? fechaLarga(a.fecha) : ''}{a.vencido ? ' · vencido' : ''}</span>
+                      <Documento acto={a} corto />
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div style={{ height: 70 }} />
       </div>
+
+      {abierto && <FichaActo acto={abierto.acto} color={abierto.color} onCerrar={() => setAbierto(null)} />}
     </div>
   )
 }

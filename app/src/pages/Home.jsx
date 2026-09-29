@@ -70,6 +70,20 @@ function cifrasDe(data) {
   ]
 }
 
+/* El vídeo de la cabecera institucional de uniguajira.edu.co (estudiantes en
+   el campus), guardado en public/video para no depender de sus rutas. Pesa
+   2,8 MB: con «reducir movimiento» o ahorro de datos se queda solo el póster,
+   que es un fotograma del mismo vídeo y ya lleva 54 KB. */
+const VIDEO_HERO = '/video/estudiantes.mp4'
+const POSTER_HERO = '/video/estudiantes-poster.webp'
+
+function videoPermitido() {
+  if (typeof window === 'undefined') return false
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+  if (navigator.connection?.saveData) return false
+  return true
+}
+
 const LEDE_POR_DEFECTO =
   'Ingeniería de Sistemas en UniGuajira: donde el rigor técnico se encuentra con la identidad caribeña.'
 
@@ -83,9 +97,19 @@ function Hero() {
      lo que la dirección querrá ajustar en cada temporada. */
   const lede = data.inicio?.slogan?.trim() || LEDE_POR_DEFECTO
   const proyecto = data.inicio?.proyectoDestacado
+  const conVideo = videoPermitido()
 
   return (
-    <section className="hero v2">
+    <section className="hero v2 hero--video" style={{ '--hero-poster': `url(${POSTER_HERO})` }}>
+      {/* Mismo montaje que la cabecera institucional: vídeo a sangre, mudo y
+          en bucle, con un degradado oscuro encima para que el texto se lea. */}
+      <figure className="hero__video" aria-hidden="true">
+        {conVideo && (
+          <video autoPlay loop muted playsInline preload="metadata" poster={POSTER_HERO}>
+            <source src={VIDEO_HERO} type="video/mp4" />
+          </video>
+        )}
+      </figure>
       {/* Sin proyecto destacado no hay segunda columna, y dejar la rejilla en
           dos dejaría media portada en blanco. */}
       <div className="inner" style={proyecto?.titulo ? undefined : { gridTemplateColumns: '1fr' }}>

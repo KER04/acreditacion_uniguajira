@@ -1,90 +1,165 @@
+/* Investigación: grupos, semilleros y producción destacada.
+ *
+ * Todo sale de la base (migración 019) por DataContext. Antes esta página
+ * tenía su propia copia escrita a mano —con catorce semilleros cuando el panel
+ * publicaba cinco— y lo que se editaba en la pestaña «Funciones misionales»
+ * solo llegaba a la portada, nunca aquí.
+ *
+ * Las cifras del titular se cuentan: un número escrito en el texto se queda
+ * viejo en cuanto alguien añade o quita un semillero.
+ */
+import { Link } from 'react-router-dom'
+import { useData } from '../../context/DataContext'
 import { Icons } from '../../components/Icons'
+import TramaMarca from '../../components/TramaMarca'
+
+const PALABRAS = ['cero', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve',
+  'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho',
+  'diecinueve', 'veinte']
+
+/* 3 -> 'Tres grupos'; 1 -> 'Un grupo' / 'Una forma'. Más de veinte va en cifras. */
+function cuenta(n, singular, plural, { mayuscula = false, femenino = false } = {}) {
+  const palabra = n === 1 && femenino ? 'una' : (PALABRAS[n] ?? String(n))
+  const texto = `${palabra} ${n === 1 ? singular : plural}`
+  return mayuscula ? texto.charAt(0).toUpperCase() + texto.slice(1) : texto
+}
+
+const ETIQUETA_SEDE = { riohacha: 'Riohacha', maicao: 'Maicao', ambas: 'Riohacha y Maicao' }
 
 export default function Investigacion() {
-  const grupos = [
-    {n:'GITUG',t:'Grupo de Investigación en Tecnologías UniGuajira',cat:'A1 · MinCiencias',lines:['Ciberseguridad','Redes y sistemas','Infraestructura TIC'],lead:'Dr. Héctor Brito Mendoza',color:'var(--ug-azul)'},
-    {n:'WayuuLab',t:'Computación, cultura y territorio',cat:'B · MinCiencias',lines:['IoT aplicado','Etnoinformática','Conservación y datos'],lead:'Dra. Luz Marina Ipuana',color:'var(--ug-amarillo)'},
-    {n:'Caribe.AI',t:'Inteligencia artificial para el Caribe',cat:'B · MinCiencias',lines:['Machine learning','Visión computacional','IA ética'],lead:'Dr. Samuel Cotes Ramírez',color:'var(--ug-flamingo)'},
-  ]
-  const semilleros = ['IoT Wayuu','Seguridad Mar','DataTerritorio','IA para la Salud','Robótica Educativa','DevUG','Bioinformática marina','Accesibilidad y HCI','Visualización','Blockchain Social','Fintech Guajira','EduTech','GreenCode','Mujeres en TI']
+  const { data } = useData()
+  const grupos = data.grupos ?? []
+  const semilleros = data.semilleros ?? []
+  const produccion = data.produccion ?? []
+
+  const titular = grupos.length || semilleros.length
+    ? `${cuenta(grupos.length, 'grupo', 'grupos', { mayuscula: true })}, ${cuenta(semilleros.length, 'semillero', 'semilleros')}, una región que se investiga a sí misma.`
+    : 'Una región que se investiga a sí misma.'
+
+  const anios = produccion.map(p => p.anio).filter(Boolean)
+  const periodo = anios.length
+    ? (Math.min(...anios) === Math.max(...anios) ? String(anios[0]) : `${Math.min(...anios)}–${Math.max(...anios)}`)
+    : ''
+
   return (
     <div className="page-in">
-      <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)' }}>
+      {/* Misma cabecera que Infraestructura y Saber Pro: el tejido del emblema
+          de la universidad en filigrana sobre el teal institucional. */}
+      <header className="sp-cabecera">
+        <TramaMarca blanco escala={118} opacidad={0.12} />
         <div className="inner">
-          <div className="eyebrow">Investigación e innovación</div>
-          <h1 style={{ marginTop: 14, maxWidth: '20ch' }}>Tres grupos, catorce semilleros, una región que se investiga a sí misma.</h1>
-        </div>
-      </section>
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="inner">
-          <div className="grid-3">
-            {grupos.map((g,i) => (
-              <div key={i} className="card" style={{ background: 'var(--paper-2)', padding: 0, overflow: 'hidden' }}>
-                <div style={{ height: 120, background: g.color, padding: 20, color: 'var(--ug-negro)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase' }}>{g.cat}</div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 600, letterSpacing: '-0.02em' }}>{g.n}</div>
-                </div>
-                <div style={{ padding: 24 }}>
-                  <h3 style={{ fontSize: 18 }}>{g.t}</h3>
-                  <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {g.lines.map((l,j) => <span key={j} className="chip" style={{ fontSize: 11 }}>{l}</span>)}
-                  </div>
-                  <hr className="rule" style={{ margin: '18px 0 14px' }} />
-                  <div style={{ fontSize: 12, color: 'var(--ink-3)' }}>Director · {g.lead}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" style={{ background: 'var(--paper-2)' }}>
-        <div className="inner">
-          <div className="section-head">
-            <div className="title">
-              <div className="eyebrow">Semilleros activos</div>
-              <h2>Catorce formas de aprender investigando.</h2>
+          <div className="eyebrow sp-cabecera__eyebrow">Investigación e innovación</div>
+          <h1 className="sp-cabecera__titulo">{titular}</h1>
+          {(grupos.length > 0 || produccion.length > 0) && (
+            <div className="sp-cifras">
+              <div><b>{grupos.length}</b><span>{grupos.length === 1 ? 'grupo' : 'grupos'} de investigación</span></div>
+              <div><b>{semilleros.length}</b><span>{semilleros.length === 1 ? 'semillero' : 'semilleros'}</span></div>
+              {produccion.length > 0 && <div><b>{produccion.length}</b><span>productos destacados</span></div>}
             </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px,1fr))', gap: 12 }}>
-            {semilleros.map((s,i) => (
-              <div key={i} style={{ padding: '16px 18px', background: 'var(--paper)', borderRadius: 10, border: '1px solid color-mix(in oklab, var(--ink) 7%, transparent)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', color: 'var(--ink-3)' }}>{String(i+1).padStart(2,'0')}</div>
-                  <div style={{ fontWeight: 500, marginTop: 4 }}>{s}</div>
-                </div>
-                <Icons.arrow />
-              </div>
-            ))}
-          </div>
+          )}
         </div>
-      </section>
+      </header>
 
       <section className="section">
         <div className="inner">
-          <div className="section-head">
-            <div className="title">
-              <div className="eyebrow">Producción destacada 2024–2025</div>
-              <h2>Lo que publicamos.</h2>
+          {grupos.length === 0 ? (
+            <p style={{ color: 'var(--ink-3)' }}>Los grupos de investigación del programa se publicarán pronto.</p>
+          ) : (
+            <div className="grid-3">
+              {grupos.map(g => (
+                <div key={g.id} className="card" style={{ background: 'var(--paper-2)', padding: 0, overflow: 'hidden' }}>
+                  <div style={{ height: 120, background: g.color || 'var(--ug-azul)', padding: 20, color: 'var(--ug-negro)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase' }}>
+                      {g.categoria ? `${g.categoria} · MinCiencias` : 'Sin categoría MinCiencias'}
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, fontWeight: 600, letterSpacing: '-0.02em' }}>{g.nombre}</div>
+                  </div>
+                  <div style={{ padding: 24 }}>
+                    {g.nombre_completo && <h3 style={{ fontSize: 18 }}>{g.nombre_completo}</h3>}
+                    {g.descripcion && <p style={{ fontSize: 14, color: 'var(--ink-2)', marginTop: 8 }}>{g.descripcion}</p>}
+                    {g.lineas?.length > 0 && (
+                      <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {g.lineas.map(l => <span key={l} className="chip" style={{ fontSize: 11 }}>{l}</span>)}
+                      </div>
+                    )}
+                    <hr className="rule" style={{ margin: '18px 0 14px' }} />
+                    <div style={{ fontSize: 12, color: 'var(--ink-3)', display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                      <span>{g.lider ? `Líder · ${g.lider}` : ETIQUETA_SEDE[g.sede]}</span>
+                      {g.gruplac_url && (
+                        <a href={g.gruplac_url} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          GrupLAC <Icons.arrow />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {[
-              {y:'2025',t:'Anomaly detection in salinas: a case study in Manaure',v:'IEEE Latin America · Q2'},
-              {y:'2025',t:'Ethno-informatics: designing with Wayuu communities',v:'CHI 2025 · Yokohama'},
-              {y:'2024',t:'Low-power IoT for artisanal fishermen in La Guajira',v:'Sensors · Q1'},
-              {y:'2024',t:'Un modelo de madurez en ciberseguridad para universidades del Caribe',v:'Computación y Sistemas · Q3'},
-              {y:'2024',t:'Redes neuronales gráficas para rutas turísticas en el cabo',v:'Journal of Tourism Futures · Q2'},
-            ].map((p,i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '80px 1fr auto', gap: 24, padding: '22px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)', alignItems: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)', letterSpacing: '.1em' }}>{p.y}</div>
-                <div style={{ fontSize: 17, letterSpacing: '-0.01em' }}>{p.t}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', letterSpacing: '.1em' }}>{p.v}</div>
-              </div>
-            ))}
-          </div>
+          )}
         </div>
       </section>
+
+      {semilleros.length > 0 && (
+        <section className="section section--papel">
+          <div className="inner">
+            <div className="section-head">
+              <div className="title">
+                <div className="eyebrow">Semilleros activos</div>
+                <h2>{cuenta(semilleros.length, 'forma', 'formas', { mayuscula: true, femenino: true })} de aprender investigando.</h2>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px,1fr))', gap: 12 }}>
+              {semilleros.map((s, i) => (
+                <div key={s.id} title={s.descripcion || undefined} style={{ padding: '16px 18px', background: 'var(--paper-2)', borderRadius: 10, border: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', boxShadow: 'var(--shadow-sm)' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', color: 'var(--ink-3)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                    <span>{String(i + 1).padStart(2, '0')}</span>
+                    {s.grupo && <span>{s.grupo}</span>}
+                  </div>
+                  <div style={{ fontWeight: 500, marginTop: 4 }}>{s.nombre}</div>
+                  {s.lider && <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 6 }}>{s.lider}</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Sin producción cargada la sección no se pinta: un bloque «Lo que
+          publicamos» vacío dice peor cosa que no tenerlo. */}
+      {produccion.length > 0 && (
+        <section className="section">
+          <div className="inner">
+            <div className="section-head">
+              <div className="title">
+                <div className="eyebrow">Producción destacada{periodo && ` ${periodo}`}</div>
+                <h2>Lo que publicamos.</h2>
+              </div>
+            </div>
+            <div className="superficie">
+              {/* Cada fila abre la página de la publicación, que tiene el
+                  resumen y el enlace al texto. Sin portada, la miniatura
+                  muestra el año sobre el teal de la marca. */}
+              {produccion.map(p => (
+                <Link key={p.id} to={`/investigacion/publicacion/${p.id}`} className="pub-fila">
+                  <div className="pub-fila__miniatura">
+                    {p.portada_url ? <img src={p.portada_url} alt="" loading="lazy" /> : p.anio}
+                  </div>
+                  <div>
+                    <div className="pub-fila__titulo">{p.titulo}</div>
+                    {p.resumen
+                      ? <div className="pub-fila__resumen">{p.resumen}</div>
+                      : p.autores && <div className="pub-fila__resumen">{p.autores}</div>}
+                  </div>
+                  <div className="pub-fila__medio">
+                    <span>{p.medio || p.tipo} · {p.anio}</span>
+                    <Icons.arrow />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
