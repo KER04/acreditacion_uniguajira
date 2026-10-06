@@ -52,7 +52,7 @@ export default function MetodologiaSection() {
             <p style={{ fontSize: 15, color: 'var(--ink-2)', marginTop: 14, marginBottom: 20 }}>
               Cada característica se evalúa en escala de <b>1.0 a 5.0</b>. El puntaje global del factor es el promedio ponderado de sus características.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
+            <div className="cna-escala">
               {[
                 { r: '4.5 – 5.0', j: 'Cumple Plenamente', c: 'var(--ug-azul)' },
                 { r: '4.0 – 4.49', j: 'Cumple en Alto Grado', c: 'var(--ug-amarillo)' },

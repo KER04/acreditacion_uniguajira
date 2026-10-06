@@ -359,7 +359,7 @@ function Honor() {
           <div style={{ color: 'var(--ink-3)' }}>No hay estudiantes publicados en este período.</div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, marginBottom: 40 }} className="podium">
+        <div className="podium">
           {podium.map((e, i) => (
             /* Las medidas pasan a .honor-podio porque la tarjeta necesita
                position/overflow propios: sin ellos la cuadrícula del emblema se
@@ -371,20 +371,20 @@ function Honor() {
                   defecto y toma el color del puesto. */}
               <TramaMarca escala={82} opacidad={0.09} tono={colors[i]} />
               <div className="honor-podio__cuerpo">
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 72, fontWeight: 500, lineHeight: 1, color: colors[i], letterSpacing: '-0.04em' }}>
+                <div className="honor-podio__puesto">
                   {i === 0 ? '1°' : i === 1 ? '2°' : '3°'}
                 </div>
-                <div style={{ margin: '20px auto', display: 'grid', placeItems: 'center' }}>
+                <div className="honor-podio__foto">
                   <Retrato persona={e} size={80} borde={colors[i]} />
                 </div>
-                <div style={{ fontWeight: 600, fontSize: 17 }}>{e.nombre}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--ink-3)', textTransform: 'uppercase', marginTop: 6 }}>
+                <div className="honor-podio__nombre">{e.nombre}</div>
+                <div className="honor-podio__sem">
                   Semestre {ordinalSemestre(e.semestre)}
                 </div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 32, marginTop: 14, color: colors[i] }}>
+                <div className="honor-podio__promedio">
                   {Number(e.promedio).toFixed(2)}
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--accent-deep)', marginTop: 10 }}>Ver ficha</div>
+                <div className="honor-podio__ver">Ver ficha</div>
               </div>
             </div>
           ))}
@@ -392,21 +392,20 @@ function Honor() {
 
         {rest.length > 0 && (
           <div className="card" style={{ background: 'var(--paper-2)', padding: 0, overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 100px', padding: '14px 24px', background: 'var(--paper)', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+            <div className="honor-fila honor-fila--cab">
               <div>Puesto</div><div>Estudiante</div><div>Semestre</div><div style={{ textAlign: 'right' }}>Promedio</div>
             </div>
             {rest.map((e, i) => (
               <div key={e.id ?? i} role="button" tabIndex={0}
                    onClick={() => abrir(e, i + 4)} onKeyDown={ev => teclaAbre(ev, e, i + 4)}
-                   style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 100px', padding: '16px 24px',
-                            borderTop: '1px solid var(--borde)', alignItems: 'center', cursor: 'pointer' }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--ink-3)' }}>{i + 4}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontWeight: 500 }}>
+                   className="honor-fila">
+                <div className="honor-fila__puesto">{i + 4}</div>
+                <div className="honor-fila__est">
                   <Retrato persona={e} size={34} />
-                  {e.nombre}
+                  <span>{e.nombre}</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--ink-2)' }}>Sem {ordinalSemestre(e.semestre)}</div>
-                <div style={{ textAlign: 'right', fontFamily: 'var(--font-display)', fontSize: 18 }}>{Number(e.promedio).toFixed(2)}</div>
+                <div className="honor-fila__sem">Sem {ordinalSemestre(e.semestre)}</div>
+                <div className="honor-fila__prom">{Number(e.promedio).toFixed(2)}</div>
               </div>
             ))}
           </div>
@@ -475,7 +474,7 @@ function Reglamento() {
           </div>
           <p className="desc">Navega por capítulo, descarga el texto completo o consulta un artículo específico.</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 40 }} className="reg-grid">
+        <div className="reg-grid">
           <div>
             {REGLAMENTO.map((c,i) => (
               <div key={i} style={{ borderTop: i===0 ? '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' : 'none', borderBottom: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' }}>
@@ -587,7 +586,7 @@ export default function Estudiantes() {
   const [tab, setTab] = usePestana(SECCIONES.map(s => s.id), { clave: 'seccion' })
 
   return (
-    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+    <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
         <nav className="miga" aria-label="Ruta de navegación">

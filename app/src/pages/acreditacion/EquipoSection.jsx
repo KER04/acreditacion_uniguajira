@@ -15,7 +15,7 @@ export default function EquipoSection() {
           </div>
           <p className="desc">Comité de autoevaluación conformado por la dirección, representantes docentes por factor, estudiantes, egresados y personal administrativo de apoyo.</p>
         </div>
-        <div className="grid-4">
+        <div className="grid-4 cna-equipo">
           {equipo.map((p, i) => (
             <div key={i} className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper)' }}>
               <div style={{ aspectRatio: '1/1', background: p.color ?? 'var(--ug-azul)', position: 'relative', display: 'grid', placeItems: 'center' }}>

@@ -251,7 +251,7 @@ function CNAPreview() {
           <p className="desc">Tablero interactivo con las 12 dimensiones del CNA, evidencias documentales, plan de mejoramiento y cronograma del proceso.</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 40, alignItems: 'center' }} className="cna-preview-grid">
+        <div className="inicio-cna-preview">
           <div className="inicio-cna">
             {factores.length > 0
               ? factores.map(f => (
@@ -320,16 +320,12 @@ function Missions() {
         </div>
         <div className="grid-4">
           {items.map((it, i) => (
-            <button key={it.t} onClick={() => nav(it.l)}
-                    style={{ textAlign: 'left', padding: 28, border: 0, cursor: 'pointer', background: it.c, color: it.c === '#1a2744' ? '#fff' : 'var(--ug-negro)', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: 18, minHeight: 280, position: 'relative', overflow: 'hidden', transition: 'transform .2s ease' }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-                    onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', opacity: .7 }}>0{i + 1} · {it.label}</div>
-              <h3 style={{ fontSize: 26, color: it.c === '#1a2744' ? '#fff' : 'var(--ug-negro)' }}>{it.t}</h3>
-              <p style={{ fontSize: 14, opacity: .85, lineHeight: 1.5 }}>{it.d}</p>
-              <div style={{ marginTop: 'auto', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
-                Ver más <Icons.arrow />
-              </div>
+            <button key={it.t} onClick={() => nav(it.l)} className="inicio-mision"
+                    style={{ '--mision-fondo': it.c, '--mision-tinta': it.c === '#1a2744' ? '#fff' : 'var(--ug-negro)' }}>
+              <div className="inicio-mision__etiqueta">0{i + 1} · {it.label}</div>
+              <h3 className="inicio-mision__titulo">{it.t}</h3>
+              <p className="inicio-mision__texto">{it.d}</p>
+              <div className="inicio-mision__mas">Ver más <Icons.arrow /></div>
             </button>
           ))}
         </div>

@@ -146,7 +146,7 @@ export function Donut({ datos, filter, campoFilter }) {
   })
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0 }}>
+    <div className="malla-dona">
       <svg width={120} height={120} viewBox="0 0 120 120">
         {segs.map(s => (
           <path key={s.area} d={donutArc(60, 60, 52, 34, s.a0, s.a1)}
@@ -168,7 +168,7 @@ export function Donut({ datos, filter, campoFilter }) {
             transition: 'opacity 0.3s ease',
           }}>
             <span style={{ width: 8, height: 8, borderRadius: 2, background: s.color, flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: '#03090f', whiteSpace: 'nowrap' }}>
+            <span className="malla-dona__dato">
               {s.label}{' '}
               <span style={{ color: 'rgba(3,9,15,.45)' }}>
                 · {Math.round(s.credits / totalCr * 100)}% · {s.credits}cr
@@ -240,13 +240,18 @@ export function FiltrosMalla({ filter, setFilter, campoFilter, setCampoFilter })
 
 /* ─── Grilla de semestres ──────────────────────────────────────── */
 
+/* En pantallas estrechas la grilla no se parte: se ve completa y se desliza
+   de lado dentro de su caja, columna a columna. El aviso «Desliza» solo
+   aparece mientras no caben los diez semestres. */
 export function MallaGrid({ semestres, filter, campoFilter, selected, onSelect }) {
   const isFiltering = filter !== 'all' || campoFilter !== 'all'
 
   return (
+    <>
+    <p className="malla-desliza" aria-hidden="true">Desliza para ver los {semestres.length} semestres →</p>
     <div
       className="pensum"
-      style={{ gridTemplateColumns: `repeat(${semestres.length}, minmax(115px,1fr))` }}
+      style={{ gridTemplateColumns: `repeat(${semestres.length}, minmax(115px,1fr))`, '--semestres': semestres.length }}
     >
       {semestres.map((sem, si) => (
         <div key={si} className="sem-col">
@@ -302,6 +307,7 @@ export function MallaGrid({ semestres, filter, campoFilter, selected, onSelect }
         </div>
       ))}
     </div>
+    </>
   )
 }
 

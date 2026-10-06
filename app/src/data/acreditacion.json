@@ -1753,12 +1753,6 @@
           "desc": "Política salarial que reconoce formación, categoría y productividad académica.",
           "bloques": [
             {
-              "tipo": "nota",
-              "k": "La única en alto grado",
-              "tono": "terracota",
-              "v": "Con 87 puntos es la única característica del factor que no alcanza el cumplimiento pleno. La escala del Acuerdo 02 de 2020 sitúa el tramo de 80 a 89 en «se cumple en alto grado»."
-            },
-            {
               "tipo": "barras",
               "titulo": "Acceso a los estímulos y valoración de su impacto",
               "unidad": "%",
@@ -1896,12 +1890,6 @@
                   "Insuficiente"
                 ]
               ]
-            },
-            {
-              "tipo": "nota",
-              "k": "Cuando la nota baja de 60",
-              "tono": "terracota",
-              "v": "Se activa un plan de mejora concertado con el director del programa y un docente del mismo campo disciplinar, con seguimiento durante el semestre siguiente. El informe destaca que el programa no ha registrado docentes con calificaciones inferiores."
             },
             {
               "tipo": "tabla",

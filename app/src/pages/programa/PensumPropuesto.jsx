@@ -91,7 +91,7 @@ export default function PensumPropuesto() {
 
   if (!propuesta?.plan) {
     return (
-      <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter)' }}>
+      <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter)' }}>
         <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto', color: 'var(--ink-3)' }}>
           Todavía no hay una propuesta de actualización curricular cargada.
         </div>
@@ -165,7 +165,7 @@ export default function PensumPropuesto() {
   ]
 
   return (
-    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+    <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
         <nav className="miga" aria-label="Ruta de navegación">
@@ -235,7 +235,7 @@ export default function PensumPropuesto() {
       {/* ── Filtros y dona ── */}
       <section className="section" style={{ paddingTop: 36, paddingBottom: 0 }}>
         <div className="inner">
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 24 }}>
+          <div className="malla-controles">
             <FiltrosMalla
               filter={filter} setFilter={setFilter}
               campoFilter={campoFilter} setCampoFilter={setCampoFilter}

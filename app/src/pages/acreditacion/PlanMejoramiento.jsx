@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 export default function PlanMejoramiento() {
   return (
-    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+    <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
         <nav className="miga" aria-label="Ruta de navegación">

@@ -62,13 +62,13 @@ export default function Noticias() {
       <div className="page-in">
         <section className="section" style={{ paddingTop: 'clamp(60px,8vw,110px)' }}>
           <div className="inner" style={{ maxWidth: 780 }}>
-            <button className="btn ghost" style={{ marginBottom: 28, padding: '8px 16px', fontSize: 13 }} onClick={() => setActive(null)}>
+            <button className="btn ghost" style={{ display: 'flex', width: 'fit-content', marginBottom: 28, padding: '8px 16px', fontSize: 13 }} onClick={() => setActive(null)}>
               ← Volver a noticias
             </button>
             <span className="chip" style={{ fontSize: 11, background: colorCat[n.categoria], color: 'var(--ug-negro)', border: 'none' }}>{n.categoria}</span>
             <h1 style={{ marginTop: 16, maxWidth: '32ch' }}>{n.titulo}</h1>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)', marginTop: 12, letterSpacing: '.1em' }}>{fechaLarga(n.fecha)}</div>
-            <Portada noticia={n} variante="a" estilo={{ height: 320, borderRadius: 14, marginTop: 32 }} />
+            <Portada noticia={n} variante="a" estilo={{ height: 'clamp(200px, 45vw, 320px)', borderRadius: 14, marginTop: 32 }} />
             <div style={{ marginTop: 32, fontSize: 17, lineHeight: 1.75, color: 'var(--ink-2)', whiteSpace: 'pre-line' }}>
               {n.cuerpo ?? n.resumen}
             </div>
@@ -84,17 +84,17 @@ export default function Noticias() {
         <div className="inner">
           <div className="eyebrow">Noticias</div>
           <h1 style={{ marginTop: 14, maxWidth: '22ch' }}>Lo que pasa en Ingeniería de Sistemas.</h1>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginTop: 32 }}>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div className="filtros-barra">
+            <div className="filtros-barra__chips">
               {CATS.map(([k, l]) => (
                 <button key={k} className="chip" onClick={() => setCat(k)}
                   style={{ cursor: 'pointer', background: cat === k ? 'var(--ink)' : undefined, color: cat === k ? 'var(--paper)' : undefined, borderColor: cat === k ? 'var(--ink)' : undefined }}>{l}</button>
               ))}
             </div>
-            <div style={{ flex: 1 }} />
+            <div className="filtros-barra__hueco" />
             <SedeFilter value={sede} onChange={setSede} />
             <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar noticias..."
-              style={{ padding: '10px 14px', borderRadius: 999, border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', background: 'var(--paper-2)', minWidth: 240, font: 'inherit', color: 'inherit' }} />
+              aria-label="Buscar noticias" className="filtros-barra__buscar" />
           </div>
         </div>
       </section>
@@ -110,15 +110,14 @@ export default function Noticias() {
           {featured && (
             <section className="section" style={{ paddingTop: 0 }}>
               <div className="inner">
-                <div className="card featured-news" style={{ padding: 0, overflow: 'hidden', background: 'var(--paper-2)', cursor: 'pointer', display: 'grid', gridTemplateColumns: '1fr 1fr' }}
-                  onClick={() => setActive(featured.id)}>
-                  <Portada noticia={featured} variante="a" estilo={{ aspectRatio: '4/3' }} />
-                  <div style={{ padding: 36, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <div className="card noticia-destacada" onClick={() => setActive(featured.id)}>
+                  <Portada noticia={featured} variante="a" estilo={{ aspectRatio: 'var(--portada-proporcion, 4/3)' }} />
+                  <div className="noticia-destacada__cuerpo">
                     <span className="chip" style={{ fontSize: 11, background: colorCat[featured.categoria], color: 'var(--ug-negro)', border: 'none', alignSelf: 'start' }}>{featured.categoria}</span>
                     <h2 style={{ marginTop: 16, fontSize: 'clamp(20px,2.2vw,28px)', letterSpacing: '-0.02em' }}>{featured.titulo}</h2>
                     <p style={{ marginTop: 14, fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6 }}>{featured.resumen}</p>
-                    <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginTop: 24 }}>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>{fechaLarga(featured.fecha)}</div>
+                    <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap', marginTop: 24 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', whiteSpace: 'nowrap' }}>{fechaLarga(featured.fecha)}</div>
                       <button className="btn accent" style={{ padding: '8px 20px', fontSize: 13 }}>Leer más <Icons.arrow /></button>
                     </div>
                   </div>

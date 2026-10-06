@@ -99,7 +99,8 @@ function PensumEmbed() {
         ))}
       </div>
 
-      <div className="pensum">
+      <p className="malla-desliza" aria-hidden="true">Desliza para ver los {semestres.length} semestres →</p>
+      <div className="pensum" style={{ '--semestres': semestres.length || 10 }}>
         {semestres.map(sem => (
           <div key={sem.numero} className="sem-col">
             <div className="sem-head">Sem · {dosDigitos(sem.numero)} · {sem.total_creditos} cr</div>
@@ -156,7 +157,7 @@ function PensumEmbed() {
 
 export default function Programa() {
   return (
-    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+    <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
         <nav className="miga" aria-label="Ruta de navegación">

@@ -51,19 +51,19 @@ export default function Convocatorias() {
 
       <section className="section" style={{ paddingTop: 16 }}>
         <div className="inner">
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 16 }}>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div className="filtros-barra" style={{ marginTop: 0, marginBottom: 16 }}>
+            <div className="filtros-barra__chips">
               {CATS.map(([k, l]) => (
                 <button key={k} className="chip" onClick={() => setCat(k)}
                   style={{ cursor: 'pointer', background: cat === k ? 'var(--ink)' : undefined, color: cat === k ? 'var(--paper)' : undefined, borderColor: cat === k ? 'var(--ink)' : undefined }}>{l}</button>
               ))}
             </div>
-            <div style={{ flex: 1 }} />
+            <div className="filtros-barra__hueco" />
             <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar convocatorias..."
-              style={{ padding: '10px 14px', borderRadius: 999, border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', background: 'var(--paper-2)', minWidth: 240, font: 'inherit', color: 'inherit' }} />
+              aria-label="Buscar convocatorias" className="filtros-barra__buscar" />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>Sede:</span>
             <SedeFilter value={sede} onChange={setSede} />
           </div>

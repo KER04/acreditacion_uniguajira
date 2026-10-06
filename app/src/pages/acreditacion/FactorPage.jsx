@@ -45,7 +45,7 @@ function DocRow({ doc }) {
   const ext = doc.url ? doc.url.split('.').pop().toUpperCase().slice(0, 4) : 'DOC'
   const catColor = CAT_COLOR[doc.cat] ?? 'var(--ug-azul)'
   return (
-    <div className="doc-norma">
+    <div className="doc-norma doc-norma--evidencia">
       <span className="doc-norma__ref" style={{ width: 54 }}>
         <b style={{ display: 'grid', placeItems: 'center', width: 34, height: 34, borderRadius: 6, background: `color-mix(in oklab, ${catColor} 18%, var(--paper))`, fontSize: 9 }}>{ext}</b>
       </span>
@@ -110,6 +110,9 @@ function BloqueTabla({ b }) {
   return (
     <div className="fac-bloque">
       {b.titulo && <div className="fac-bloque__titulo">{b.titulo}</div>}
+      {/* En el teléfono la tabla se desliza dentro de su marco en vez de
+          empujar la página: las cifras no se parten y no caben todas. */}
+      <div className="tabla-desliza fac-tabla-marco">
       <table className="fac-tabla">
         <thead>
           <tr>{b.cols.map((c, i) => <th key={c} className={esTexto(i) ? 'es-txt' : undefined}>{c}</th>)}</tr>
@@ -122,6 +125,7 @@ function BloqueTabla({ b }) {
           ))}
         </tbody>
       </table>
+      </div>
       {b.nota && <p className="fac-bloque__nota">{b.nota}</p>}
     </div>
   )
@@ -436,7 +440,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
   ]
 
   return (
-    <div className="page-in" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
+    <div className="page-in pagina-con-margen" style={{ padding: 'clamp(28px,4vw,44px) var(--gutter) 0' }}>
       <div style={{ maxWidth: 'var(--max-w)', margin: '0 auto' }}>
 
         <nav className="miga" aria-label="Ruta de navegación">

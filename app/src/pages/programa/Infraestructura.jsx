@@ -54,18 +54,18 @@ function Tarjeta({ recurso }) {
           </div>
         </header>
 
-        {(recurso.cantidad > 1 || puestos || recurso.area_m2) && (
+        {(recurso.cantidad > 1 || puestos > 0 || recurso.area_m2 > 0) && (
           <div className="infra-card__cifras">
             {recurso.cantidad > 1 && (
               <div><b>{recurso.cantidad}</b><span>espacios</span></div>
             )}
-            {puestos && (
+            {puestos > 0 && (
               <div>
                 <b>{puestos.toLocaleString('es-CO')}</b>
                 <span>{recurso.cantidad > 1 ? 'puestos en total' : 'puestos'}</span>
               </div>
             )}
-            {recurso.area_m2 && (
+            {recurso.area_m2 > 0 && (
               <div><b>{recurso.area_m2.toLocaleString('es-CO')}</b><span>m² construidos</span></div>
             )}
           </div>

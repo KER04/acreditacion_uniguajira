@@ -172,7 +172,7 @@ export default function Acreditacion() {
               <div className="eyebrow">Los doce factores · Acuerdo 02 de 2020</div>
               <h2 style={{ marginTop: 10 }}>Abre un factor para ver el detalle completo.</h2>
             </div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div className="filtros-barra__chips">
               {[{ k: 'all', l: 'Todos' }, ...grados.map(e => ({ k: e.k, l: e.label }))].map(f => (
                 <button key={f.k} className="chip" onClick={() => setFilter(f.k)}
                   style={{ cursor: 'pointer', background: filter === f.k ? 'var(--ink)' : undefined, color: filter === f.k ? 'var(--paper)' : undefined, borderColor: filter === f.k ? 'var(--ink)' : undefined }}>{f.l}</button>
@@ -212,12 +212,12 @@ export default function Acreditacion() {
           </div>
           <div>
             {cronograma.map((step, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '40px 180px 1fr', gap: 20, alignItems: 'center', padding: '16px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' }}>
-                <div style={{ width: 34, height: 34, borderRadius: 999, background: step.s === 'done' ? 'var(--ug-azul)' : step.s === 'current' ? 'var(--ug-amarillo)' : 'var(--paper)', border: '2px solid ' + (step.s === 'next' ? 'color-mix(in oklab, var(--ink) 20%, transparent)' : 'transparent'), display: 'grid', placeItems: 'center', color: 'var(--ug-negro)', fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700 }}>
+              <div key={i} className="cna-crono__paso">
+                <div className="cna-crono__marca" style={{ background: step.s === 'done' ? 'var(--ug-azul)' : step.s === 'current' ? 'var(--ug-amarillo)' : 'var(--paper)', border: '2px solid ' + (step.s === 'next' ? 'color-mix(in oklab, var(--ink) 20%, transparent)' : 'transparent') }}>
                   {step.s === 'done' ? '✓' : step.s === 'current' ? '●' : i + 1}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '.1em', color: 'var(--ink-3)', textTransform: 'uppercase' }}>{step.d}</div>
-                <div style={{ fontSize: 18, fontWeight: step.s === 'current' ? 600 : 500 }}>{step.t}</div>
+                <div className="cna-crono__fecha">{step.d}</div>
+                <div className="cna-crono__titulo" style={{ fontWeight: step.s === 'current' ? 600 : 500 }}>{step.t}</div>
               </div>
             ))}
           </div>

@@ -6,10 +6,10 @@ const SEDES = [
 
 export default function SedeFilter({ value, onChange, style }) {
   return (
-    <div style={{ display: 'flex', gap: 0, border: '1px solid color-mix(in oklab, var(--ink) 15%, transparent)', borderRadius: 999, overflow: 'hidden', ...style }}>
+    <div className="sede-filtro" style={style}>
       {SEDES.map(s => (
-        <button key={s.k} onClick={() => onChange(s.k)}
-          style={{ padding: '8px 16px', fontSize: 13, fontFamily: 'var(--font-mono)', letterSpacing: '.06em', border: 'none', background: value === s.k ? 'var(--ug-marino)' : 'transparent', color: value === s.k ? 'var(--paper)' : 'var(--ink-2)', cursor: 'pointer', transition: 'background .15s, color .15s', whiteSpace: 'nowrap' }}>
+        <button key={s.k} onClick={() => onChange(s.k)} aria-pressed={value === s.k}
+          className={'sede-filtro__opcion' + (value === s.k ? ' sede-filtro__opcion--activa' : '')}>
           {s.l}
         </button>
       ))}
