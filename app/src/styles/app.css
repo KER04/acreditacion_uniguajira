@@ -6664,10 +6664,70 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
   .linea-inv__cuerpo { padding: 0 16px 18px; }
 }
 
-/* Semillero con la propuesta en evaluación por pares. */
-.semillero-eval {
-  margin-top: 10px; font-size: 10px;
-  background: color-mix(in oklab, var(--ug-amarillo) 18%, var(--paper-2));
-  border-color: color-mix(in oklab, var(--ug-amarillo) 50%, transparent);
+/* ---------------------------------------------------------------------------
+   Semilleros (/investigacion)
+   Franja propia en el teal de la marca, con la trama del emblema, para que la
+   sección se distinga del resto de la página. Cada tarjeta lleva el color de
+   su grupo en el filete superior.
+--------------------------------------------------------------------------- */
+.semilleros {
+  position: relative; overflow: hidden; scroll-margin-top: var(--alto-cabecera);
+  padding: clamp(56px, 7vw, 96px) var(--gutter);
+  background: linear-gradient(155deg, var(--ug-marino-soft) 0%, var(--ug-marino) 50%, var(--ug-marino-2) 100%);
+  color: #fff;
+}
+.semilleros .inner { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; }
+.semilleros__cab { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 28px; }
+.semilleros__eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ug-amarillo); }
+.semilleros__titulo { color: #fff; margin-top: 12px; max-width: 18ch; }
+.semilleros__texto { margin-top: 14px; max-width: 58ch; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,.85); }
+.semilleros__cifras { display: flex; gap: 28px; margin: 0; }
+.semilleros__cifras dt { font-family: var(--font-display); font-size: clamp(36px, 4vw, 52px); font-weight: 700; line-height: 1; color: var(--ug-amarillo); }
+.semilleros__cifras dd { margin: 6px 0 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+
+.semilleros__filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.semilleros__filtro {
+  padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; white-space: nowrap;
+  border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.06); color: #fff; cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.semilleros__filtro:hover { background: rgba(255,255,255,.14); }
+.semilleros__filtro.is-activo { background: #fff; border-color: #fff; color: var(--ug-marino); font-weight: 600; }
+
+.semilleros__rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 14px; }
+.semillero {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 20px 20px 18px; border-radius: var(--radius);
+  background: var(--paper-2); color: var(--ink);
+  border-top: 5px solid var(--tono);
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.semillero:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.24); }
+.semillero__etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+.semillero__grupo, .semillero__sede {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px;
+}
+.semillero__grupo { background: color-mix(in oklab, var(--tono) 22%, var(--paper-2)); color: var(--ink); }
+.semillero__sede { border: 1px solid var(--borde); color: var(--ink-3); }
+.semillero__nombre { font-family: var(--font-display); font-size: 19px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+.semillero__lider { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--borde); font-size: 13.5px; color: var(--ink-2); }
+.semillero__rotulo { display: block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px; }
+.semillero__eval {
+  align-self: flex-start; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+  padding: 3px 9px; border-radius: 999px;
+  background: color-mix(in oklab, var(--ug-amarillo) 20%, var(--paper-2));
+  border: 1px solid color-mix(in oklab, var(--ug-amarillo) 55%, transparent);
   color: var(--doc-ambar-texto, var(--ug-amarillo-deep));
 }
+@media (max-width: 640px) {
+  .semilleros__cab { gap: 20px; }
+  .semilleros__filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--gutter)) 18px; padding: 2px var(--gutter); }
+  .semilleros__filtros::-webkit-scrollbar { display: none; }
+}
+
+/* Cifra del encabezado que lleva a la sección de semilleros. */
+.sp-cifras__enlace { color: inherit; text-decoration: none; }
+.sp-cifras__enlace span { display: inline-flex; align-items: center; gap: 6px; }
+.sp-cifras__enlace:hover span { color: #fff; text-decoration: underline; }
