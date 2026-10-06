@@ -4333,12 +4333,12 @@ a.int-red:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 }
 
 /* Bloque del CNA en la portada: la rejilla de factores y, al lado, el
-   promedio. En móvil se apilan y la rejilla pasa a seis por fila, que a
-   cuatro cada casilla medía casi un tercio de la pantalla. */
+   promedio. En móvil se apilan; la rejilla queda a cuatro por fila, porque
+   ahora cada casilla lleva la ilustración del factor y a seis no se veía. */
 .inicio-cna-preview { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
 @media (max-width: 760px) {
   .inicio-cna-preview { grid-template-columns: 1fr; gap: 32px; }
-  .inicio-cna-preview .inicio-cna { grid-template-columns: repeat(6, 1fr); max-width: 520px; gap: 8px; }
+  .inicio-cna-preview .inicio-cna { grid-template-columns: repeat(4, 1fr); max-width: 520px; gap: 8px; }
   .inicio-cna-preview .inicio-cna__n { font-size: 13px; min-width: 22px; height: 22px; left: 4px; bottom: 4px; }
 }
 
