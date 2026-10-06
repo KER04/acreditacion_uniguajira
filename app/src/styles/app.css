@@ -172,6 +172,9 @@
 /* Marca institucional del pie. Va arriba del todo y separada por un filete:
    es la firma de la universidad, no una pieza más de la columna. */
 .footer-marca { display: inline-block; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.14); }
+/* El logo esconde el acceso al panel con pulsación larga (Footer.jsx): sin
+   esto, en iPhone sostenerlo abre el menú de la imagen o selecciona texto. */
+.footer-marca { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
 .footer-marca__logo { height: auto; width: auto; display: block; }
 
 .app-footer .bottom { padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,.7); font-family: var(--font-mono); letter-spacing: .08em; flex-wrap: wrap; gap: 16px; }
@@ -675,6 +678,22 @@ a.cna-informe:hover { transform: translateY(-2px); border-color: var(--ug-marino
 /* El número del factor y su juicio comparten renglón cuando caben; si no, el
    juicio baja debajo. Antes iba flotando en la esquina y pisaba el número. */
 .factor-card__cab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; }
+/* Ilustración del factor a sangre en la parte superior de la tarjeta: se
+   compensa el padding de la tarjeta para que llegue a los bordes. */
+.factor-card__img {
+  display: block; width: calc(100% + 40px); max-width: none; margin: -22px -20px 2px;
+  aspect-ratio: 4 / 3; object-fit: cover; object-position: center 40%;
+  background: var(--paper-3); transition: transform .35s ease;
+}
+.factor-card { overflow: hidden; }
+.factor-card:hover .factor-card__img { transform: scale(1.03); }
+
+/* Franja ilustrada en el encabezado de la página de cada factor. */
+.fac-hero__img {
+  display: block; width: 100%; aspect-ratio: 16 / 5; object-fit: cover; object-position: center 45%;
+  background: var(--paper-3);
+}
+@media (max-width: 640px) { .fac-hero__img { aspect-ratio: 16 / 9; } }
 .factor-card .n { white-space: nowrap; }
 .factor-pill { white-space: nowrap; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px; }
 .factor-card[data-status="pleno"] .factor-pill { background: color-mix(in oklab, var(--ug-azul) 30%, transparent); color: var(--ug-azul-deep); }
@@ -4222,6 +4241,62 @@ a.int-red:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
   color: var(--ink-3);
 }
 
+/* Carrusel de noticias y extensión (components/CarruselPortada.jsx). Mismo
+   panel que el proyecto destacado; las diapositivas se apilan en una sola
+   celda para que la tarjeta tome la altura de la más larga y no salte. */
+.carrusel-portada__pista { display: grid; flex: 1; touch-action: pan-y; }
+.carrusel-portada__diapo {
+  grid-area: 1 / 1;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(12px);
+  transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+}
+.carrusel-portada__diapo.is-activa {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .45s ease, transform .45s ease, visibility 0s;
+}
+.carrusel-portada__diapo:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: var(--radius-lg); }
+.carrusel-portada__diapo:hover .inicio-panel__titulo { color: var(--doc-azul-texto); }
+@media (prefers-reduced-motion: reduce) {
+  .carrusel-portada__diapo, .carrusel-portada__diapo.is-activa { transition: none; transform: none; }
+}
+.carrusel-portada__tipo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.carrusel-portada__etiqueta {
+  font-family: var(--font-body); font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  padding: 3px 9px; border-radius: 999px; text-transform: uppercase;
+  background: var(--doc-azul-tint); color: var(--doc-azul-texto);
+}
+/* El resumen de un proyecto puede ser un párrafo largo: tres líneas bastan
+   en la portada; el resto está en su página. */
+.carrusel-portada__resumen {
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.carrusel-portada__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.carrusel-portada__meta { font-size: 12.5px; color: var(--ink-3); line-height: 1.4; }
+
+.carrusel-portada__pie { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px; }
+.carrusel-portada__contador { white-space: nowrap; }
+.carrusel-portada__puntos { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.carrusel-portada__punto {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; cursor: pointer;
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  transition: width .25s ease, background .25s ease;
+}
+.carrusel-portada__punto.is-activo { width: 22px; background: var(--ug-azul); }
+.carrusel-portada__flechas { display: flex; gap: 6px; }
+.carrusel-portada__flechas button {
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--doc-borde); background: var(--paper-2); color: var(--ink);
+  font-size: 18px; line-height: 1; display: grid; place-items: center; padding: 0 0 2px;
+}
+.carrusel-portada__flechas button:hover { border-color: var(--accent); color: var(--doc-azul-texto); }
+@media (max-width: 420px) { .carrusel-portada__contador { display: none; } }
+
 /* Las cifras del hero mantienen su tamaño de portada, pero el número toma el
    teal del sistema y el filete superior usa el borde de los tokens. */
 .hero-stats { border-top-color: var(--doc-borde); }
@@ -4264,7 +4339,7 @@ a.int-red:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 @media (max-width: 760px) {
   .inicio-cna-preview { grid-template-columns: 1fr; gap: 32px; }
   .inicio-cna-preview .inicio-cna { grid-template-columns: repeat(6, 1fr); max-width: 520px; gap: 8px; }
-  .inicio-cna-preview .inicio-cna__factor { font-size: 18px; }
+  .inicio-cna-preview .inicio-cna__n { font-size: 13px; min-width: 22px; height: 22px; left: 4px; bottom: 4px; }
 }
 
 /* Funciones misionales: cuatro bloques de color entero. El color de fondo y
@@ -4308,6 +4383,22 @@ a.int-red:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
   transition: transform .15s ease;
 }
 .inicio-cna__factor:hover { transform: translateY(-2px); }
+/* Cada cuadro lleva la ilustración del factor; el número va en una ficha del
+   color de su grado (--tono), que es lo que antes pintaba todo el cuadro. */
+.inicio-cna__factor {
+  position: relative; overflow: hidden; padding: 0;
+  background: var(--paper-3);
+  box-shadow: inset 0 0 0 2px var(--tono, transparent);
+}
+.inicio-cna__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.inicio-cna__factor:hover .inicio-cna__img { transform: scale(1.06); }
+.inicio-cna__n {
+  position: absolute; left: 6px; bottom: 6px; min-width: 28px; height: 28px; padding: 0 6px;
+  display: grid; place-items: center; border-radius: 8px;
+  background: var(--tono, var(--ug-azul)); color: var(--ug-negro);
+  font-size: 15px; line-height: 1; box-shadow: 0 1px 4px rgba(3, 9, 15, .25);
+}
+.inicio-cna__factor:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .inicio-cna__hueco {
   aspect-ratio: 1 / 1;
   border-radius: 10px;

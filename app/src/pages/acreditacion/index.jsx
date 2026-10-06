@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
-import { ESCALA, STATUS_LABELS, STATUS_COLOR, statusFromScore, judgmentFromScore, globalPonderado } from '../../data/acreditacion'
+import { ESCALA, STATUS_LABELS, STATUS_COLOR, statusFromScore, judgmentFromScore, globalPonderado, imagenFactor } from '../../data/acreditacion'
 import { useData } from '../../context/DataContext'
 import CircularProgress from './CircularProgress'
 import MetodologiaSection from './MetodologiaSection'
@@ -13,6 +13,12 @@ import FactorPage from './FactorPage'
 /* Dónde estaba el tablero cuando se abrió un factor, para devolver al
    visitante a la misma tarjeta y no al principio de la página. */
 let scrollTablero = 0
+
+/* Informe de autoevaluación con fines de acreditación: solo descarga. */
+const INFORME_PDF = {
+  url: '/descargas/informe-autoevaluacion-2025.pdf',
+  nombre: 'INFORME DE AUTOEVALUACIÓN CON FINES DE ACREDITACIÓN ING DE SISTEMAS.pdf',
+}
 
 function InformeCuerpo({ informe, accion }) {
   return (
@@ -74,8 +80,11 @@ export default function Acreditacion() {
   const cronograma = data.cronograma_cna ?? []
   /* El informe vigente es la última evidencia general que se llame así; su
      archivo se carga en el panel, en «Evidencias generales». */
-  const informe = [...(data.evidencias_cna ?? [])].reverse()
+  const hallado = [...(data.evidencias_cna ?? [])].reverse()
     .find(e => /informe de autoevaluaci[oó]n/i.test(e.t ?? ''))
+  /* Si la evidencia aún no tiene archivo (o la API no respondió), se usa el
+     PDF publicado en public/descargas/. */
+  const informe = { ...hallado, url: hallado?.url || INFORME_PDF.url }
 
   if (factorN !== null) {
     const f = factores.find(x => x.n === factorN)
@@ -118,7 +127,7 @@ export default function Acreditacion() {
                 una franja propia, no en un botón que se pierde bajo el texto.
                 Solo es enlace cuando hay archivo cargado. */}
             {informe?.url ? (
-              <a className="cna-informe" href={informe.url} target="_blank" rel="noopener noreferrer">
+              <a className="cna-informe" href={informe.url} download={INFORME_PDF.nombre}>
                 <InformeCuerpo informe={informe} accion="Descargar" />
               </a>
             ) : (
@@ -184,6 +193,7 @@ export default function Acreditacion() {
               <button key={f.n} className="factor-card" data-status={f.status}
                 style={{ opacity: filter !== 'all' && f.status !== filter ? 0.28 : 1 }}
                 onClick={() => abrir(f.n)}>
+                <img className="factor-card__img" src={imagenFactor(f.n)} alt="" loading="lazy" />
                 <div className="factor-card__cab">
                   <div className="n">Factor {String(f.n).padStart(2,'0')}{f.ponderacion ? ' · ' + f.ponderacion.toFixed(2).replace('.', ',') + ' %' : ''}</div>
                   <div className="factor-pill">{STATUS_LABELS[f.status]}</div>
