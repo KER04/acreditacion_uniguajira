@@ -1,9 +1,40 @@
-import { Link } from 'react-router-dom'
+import { useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { WayuuGlyph } from './WayuuPatterns'
 import { useData } from '../context/DataContext'
 
+/* Cuánto hay que mantener pulsado el logo del pie para entrar al panel. */
+const PULSACION_ADMIN_MS = 1000
+
+/* Pulsación larga sobre un enlace: si se sostiene el tiempo indicado navega a
+   `destino` y anula el clic que llega al soltar; si se suelta antes, el
+   enlace se comporta normal. Usa eventos de puntero, así vale para ratón y
+   para pantallas táctiles. Esconder el acceso NO es seguridad: /admin sigue
+   protegido por el inicio de sesión. */
+function usePulsacionLarga(destino, ms) {
+  const navigate = useNavigate()
+  const timer = useRef(null)
+  const disparada = useRef(false)
+  const cancelar = () => { clearTimeout(timer.current); timer.current = null }
+  return {
+    onPointerDown: e => {
+      if (e.button !== 0) return
+      disparada.current = false
+      cancelar()
+      timer.current = setTimeout(() => { disparada.current = true; navigate(destino) }, ms)
+    },
+    onPointerUp: cancelar,
+    onPointerLeave: cancelar,
+    onPointerCancel: cancelar,
+    onClick: e => { if (disparada.current) { e.preventDefault(); disparada.current = false } },
+    // En móvil, sostener una imagen abre el menú de «guardar imagen».
+    onContextMenu: e => e.preventDefault(),
+  }
+}
+
 export default function Footer() {
   const { data } = useData()
+  const accesoAdmin = usePulsacionLarga('/admin', PULSACION_ADMIN_MS)
   const sr = data.info_sedes?.riohacha ?? {}
   const sm = data.info_sedes?.maicao ?? {}
 
@@ -16,9 +47,11 @@ export default function Footer() {
             {/* Logo institucional, misma versión blanca que la cabecera: está
                 pensada para fondo teal y el pie es marino. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
-              <Link className="footer-marca" to="/">
+              {/* Acceso escondido al panel: un clic lleva al inicio como
+                  siempre; mantenerlo pulsado ~1 s abre /admin. */}
+              <Link className="footer-marca" to="/" {...accesoAdmin}>
                 <img className="footer-marca__logo" src="/images/marca/logo-vertical.webp"
-                  alt="Marca institucional de la Universidad de La Guajira" />
+                  alt="Marca institucional de la Universidad de La Guajira" draggable={false} />
               </Link>
               <div>
                 <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>Ingeniería de Sistemas</div>

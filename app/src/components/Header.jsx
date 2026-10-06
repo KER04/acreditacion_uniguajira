@@ -50,7 +50,9 @@ function NavDrop({ item, isOpen, onOpen, onClose }) {
     closeTimer.current = setTimeout(onClose, 150)
   }
 
-  const active = item.children.some(c => location.pathname === c.path)
+  /* También cuenta una subpágina (la ficha de una acción del plan, por
+     ejemplo): sigue estando dentro de esa sección del menú. */
+  const active = item.children.some(c => location.pathname === c.path || location.pathname.startsWith(c.path + '/'))
 
   return (
     <div
@@ -167,7 +169,6 @@ export default function Header({ theme, setTheme }) {
           <button className="icon-btn" aria-label="Tema" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             {theme === 'dark' ? <Icons.sun /> : <Icons.moon />}
           </button>
-          <Link to="/admin" className="btn ghost" style={{ padding: '8px 16px', fontSize: 13 }}>Admin</Link>
           <button className="icon-btn mobile-toggle" onClick={() => setOpen(!open)}
                   aria-label="Menú" aria-expanded={open} aria-controls="menu-movil">
             {open ? <Icons.close /> : <Icons.menu />}
@@ -196,7 +197,7 @@ export default function Header({ theme, setTheme }) {
             <span className="icon-btn" aria-hidden>{theme === 'dark' ? <Icons.sun /> : <Icons.moon />}</span>
             {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
           </button>
-          <Link to="/admin" className="btn ghost">Panel Admin</Link>
+          {/* Sin botón de panel: el acceso está escondido en el logo del pie. */}
         </div>
       </div>
     </header>

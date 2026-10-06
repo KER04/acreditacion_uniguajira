@@ -11,6 +11,7 @@ import Resoluciones from './pages/programa/Resoluciones'
 import Contacto from './pages/programa/Contacto'
 import Acreditacion from './pages/acreditacion'
 import PlanMejoramiento from './pages/acreditacion/PlanMejoramiento'
+import PlanAccion from './pages/acreditacion/PlanAccion'
 import Noticias from './pages/Noticias'
 
 import Estudiantes from './pages/comunidad/Estudiantes'
@@ -82,6 +83,7 @@ export default function App() {
         <Route path="/contacto" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Contacto /></Shell>} />
         <Route path="/acreditacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Acreditacion /></Shell>} />
         <Route path="/acreditacion/plan-de-mejoramiento" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PlanMejoramiento /></Shell>} />
+        <Route path="/acreditacion/plan-de-mejoramiento/:slug" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PlanAccion /></Shell>} />
         <Route path="/noticias" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Noticias /></Shell>} />
 
         <Route path="/estudiantes" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Estudiantes /></Shell>} />

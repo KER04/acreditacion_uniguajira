@@ -14,6 +14,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '../components/Icons'
 import { WayuuBackdrop, WayuuGlyph } from '../components/WayuuPatterns'
+import CarruselPortada, { hayDiapositivas } from '../components/CarruselPortada'
 import { useData } from '../context/DataContext'
 import { statusFromScore, STATUS_COLOR } from '../data/acreditacion'
 import { fechaLarga } from '../../shared/validacion'
@@ -97,6 +98,10 @@ function Hero() {
      lo que la dirección querrá ajustar en cada temporada. */
   const lede = data.inicio?.slogan?.trim() || LEDE_POR_DEFECTO
   const proyecto = data.inicio?.proyectoDestacado
+  /* La columna derecha es el carrusel de noticias y extensión; el proyecto
+     destacado del panel solo aparece si no hay nada que rotar. */
+  const conCarrusel = hayDiapositivas(data)
+  const conPanel = conCarrusel || !!proyecto?.titulo
   const conVideo = videoPermitido()
 
   return (
@@ -112,7 +117,7 @@ function Hero() {
       </figure>
       {/* Sin proyecto destacado no hay segunda columna, y dejar la rejilla en
           dos dejaría media portada en blanco. */}
-      <div className="inner" style={proyecto?.titulo ? undefined : { gridTemplateColumns: '1fr' }}>
+      <div className="inner" style={conPanel ? undefined : { gridTemplateColumns: '1fr' }}>
         <div>
           <p className="hero-card__insignia">
             <span className="hero-card__punto" aria-hidden="true" />
@@ -141,7 +146,8 @@ function Hero() {
 
         {/* Proyecto destacado. Sale de Admin → Inicio; sin él, el hueco no
             tendría nada que decir, así que la columna no se dibuja. */}
-        {proyecto?.titulo && (
+        {conCarrusel && <CarruselPortada data={data} />}
+        {!conCarrusel && proyecto?.titulo && (
           <div className="inicio-panel">
             <div className="hero-card__patron" aria-hidden="true" />
             <div className="inicio-panel__cuerpo">
