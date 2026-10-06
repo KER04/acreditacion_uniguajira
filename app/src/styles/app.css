@@ -3127,6 +3127,10 @@ video.video-eg__medio {
   .honor-fila__prom { grid-area: prom; }
 }
 
+/* Selector de sede del cuadro de honor. */
+.honor-sedes { width: fit-content; margin: -24px 0 28px; }
+@media (max-width: 560px) { .honor-sedes { width: 100%; margin-top: -12px; } }
+
 /* Reglamento: capítulos y columna lateral; se apilan en tableta. */
 .reg-grid { display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
 @media (max-width: 900px) { .reg-grid { grid-template-columns: 1fr; } }
@@ -6513,4 +6517,66 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
 @media (max-width: 760px) {
   .noticia-destacada { grid-template-columns: 1fr; --portada-proporcion: 16 / 9; }
   .noticia-destacada__cuerpo { padding: 24px; }
+}
+
+/* ---------------------------------------------------------------------------
+   Líneas de investigación (/investigacion)
+   Acordeón de una columna. A dos columnas, abrir una línea dejaba un hueco
+   enorme junto a la vecina cerrada; aquí lo abierto empuja hacia abajo y el
+   resto conserva su orden.
+--------------------------------------------------------------------------- */
+.lineas-inv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.linea-inv {
+  background: var(--paper-2);
+  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  border-left: 4px solid var(--ug-azul);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color .15s ease;
+}
+.linea-inv:nth-child(4n+2) { border-left-color: var(--ug-amarillo); }
+.linea-inv:nth-child(4n+3) { border-left-color: var(--ug-flamingo); }
+.linea-inv:nth-child(4n+4) { border-left-color: var(--ug-marino); }
+.linea-inv__cab {
+  width: 100%; display: flex; align-items: center; gap: 14px; text-align: left;
+  padding: 18px 20px; background: transparent; border: 0; color: inherit; cursor: pointer;
+}
+.linea-inv__cab:hover { background: color-mix(in oklab, var(--ink) 3%, transparent); }
+.linea-inv__num { flex: none; font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--ink-3); letter-spacing: .08em; }
+.linea-inv__textos { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.linea-inv__nombre { font-family: var(--font-display); font-size: 17px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+.linea-inv__cuenta { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.linea-inv__signo {
+  flex: none; width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center;
+  border: 1px solid color-mix(in oklab, var(--ink) 20%, transparent); font-size: 16px; line-height: 1;
+}
+.linea-inv.is-abierta .linea-inv__signo { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.linea-inv__cuerpo { padding: 0 20px 20px 46px; }
+.linea-inv__rotulo { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); margin: 6px 0 8px; }
+.linea-inv__objetivo { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin: 0 0 18px; max-width: 80ch; }
+/* Los ejes en columnas con viñeta: como pastillas, los largos («Redes
+   inteligentes (arquitectura, servicios…)») se partían en dos renglones
+   dentro de la pastilla y la lista se veía desordenada. */
+.linea-inv__ejes {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 8px 24px;
+}
+.linea-inv__ejes li { position: relative; padding-left: 16px; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.linea-inv__ejes li::before {
+  content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 2px;
+  transform: rotate(45deg); background: var(--ug-azul);
+}
+@media (max-width: 560px) {
+  .linea-inv__cab { padding: 16px; gap: 12px; }
+  .linea-inv__nombre { font-size: 16px; }
+  .linea-inv__cuerpo { padding: 0 16px 18px; }
+}
+
+/* Semillero con la propuesta en evaluación por pares. */
+.semillero-eval {
+  margin-top: 10px; font-size: 10px;
+  background: color-mix(in oklab, var(--ug-amarillo) 18%, var(--paper-2));
+  border-color: color-mix(in oklab, var(--ug-amarillo) 50%, transparent);
+  color: var(--doc-ambar-texto, var(--ug-amarillo-deep));
 }

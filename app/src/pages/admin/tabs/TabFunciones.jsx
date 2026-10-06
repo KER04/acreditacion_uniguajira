@@ -1,7 +1,7 @@
 /* Panel — Funciones misionales: investigación.
  *
- * Edita los tres bloques de /investigacion —grupos, semilleros y producción—,
- * que viven en PostgreSQL desde la migración 019. Antes esta pestaña guardaba
+ * Edita los bloques de /investigacion —grupos, líneas, semilleros y
+ * producción—, que viven en PostgreSQL desde las migraciones 019 y 028. Antes esta pestaña guardaba
  * en un JSON que la página pública ni siquiera leía: lo editado aquí solo se
  * veía en la portada.
  */
@@ -19,6 +19,7 @@ const ETIQUETA_SEDE = { ambas: 'Ambas sedes', riohacha: 'Riohacha', maicao: 'Mai
 
 const SUBPESTANAS = [
   ['grupos', 'Grupos de investigación'],
+  ['lineas', 'Líneas de investigación'],
   ['semilleros', 'Semilleros'],
   ['produccion', 'Producción'],
 ]
@@ -77,6 +78,7 @@ export default function TabFunciones() {
       </div>
 
       {tab === 'grupos' && <GruposPanel />}
+      {tab === 'lineas' && <LineasPanel />}
       {tab === 'semilleros' && <SemillerosPanel />}
       {tab === 'produccion' && <ProduccionPanel />}
     </div>
@@ -173,10 +175,68 @@ function GruposPanel() {
   )
 }
 
+/* ─── Líneas de investigación ──────────────────────────────────── */
+
+/* Los ejes se escriben uno por renglón y se guardan como TEXT[], igual que
+   las líneas de un grupo. */
+const LINEA_VACIA = { nombre: '', objetivo: '', ejes: '', orden: 0 }
+
+function LineasPanel() {
+  const { data, addItem, removeItem, updateItem } = useData()
+  const [form, setForm] = useState(LINEA_VACIA)
+  const [editando, setEditando] = useState(null)
+  const f = (k, v) => setForm(x => ({ ...x, [k]: v }))
+
+  const guardar = e => {
+    e.preventDefault()
+    const item = { ...form, ejes: aLista(form.ejes) }
+    if (editando !== null) { updateItem('lineas_investigacion', editando, item); setEditando(null) }
+    else addItem('lineas_investigacion', item)
+    setForm(LINEA_VACIA)
+  }
+  const editar = l => {
+    setForm({ nombre: l.nombre, objetivo: l.objetivo ?? '', ejes: (l.ejes ?? []).join('\n'), orden: l.orden ?? 0 })
+    setEditando(l.id)
+  }
+  const cancelar = () => { setForm(LINEA_VACIA); setEditando(null) }
+
+  const lista = data.lineas_investigacion ?? []
+
+  return (
+    <>
+      <Plegable id="tabfunciones-lineas" titulo={editando !== null ? 'Editar línea' : 'Nueva línea de investigación'}>
+        <form className="card" style={{ background: 'var(--paper-2)', marginBottom: 24 }} onSubmit={guardar}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: 14 }}>
+            <div className="field"><label>Nombre</label><input value={form.nombre} onChange={e => f('nombre', e.target.value)} required minLength={3} maxLength={160} /></div>
+            <div className="field"><label>Orden</label><input type="number" min="0" max="999" value={form.orden} onChange={e => f('orden', e.target.value)} /></div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}><label>Objetivo</label><textarea rows="4" value={form.objetivo} onChange={e => f('objetivo', e.target.value)} maxLength={2000} /></div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}><label>Ejes temáticos (uno por renglón)</label><textarea rows="8" value={form.ejes} onChange={e => f('ejes', e.target.value)} /></div>
+          </div>
+          <Botones editando={editando !== null} cancelar={cancelar} />
+        </form>
+      </Plegable>
+
+      {lista.length === 0 && <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay líneas publicadas.</p>}
+      {lista.map(l => (
+        <div key={l.id} style={{ ...fila, gridTemplateColumns: '50px 1fr auto' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-3)' }}>{l.orden}</span>
+          <div>
+            <div style={{ fontWeight: 500, fontSize: 14 }}>{l.nombre}</div>
+            <div style={{ fontSize: 12, color: 'var(--ink-3)' }}>
+              {(l.ejes ?? []).length} ejes temáticos{l.objetivo ? '' : ' · sin objetivo'}
+            </div>
+          </div>
+          <RowActions onEdit={() => editar(l)} onDelete={() => removeItem('lineas_investigacion', l.id)} />
+        </div>
+      ))}
+    </>
+  )
+}
+
 /* ─── Semilleros ───────────────────────────────────────────────── */
 
 const SEMILLERO_VACIO = {
-  nombre: '', grupo_id: null, lider: '', sede: 'riohacha', descripcion: '', integrantes: '', orden: 0,
+  nombre: '', grupo_id: null, lider: '', sede: 'riohacha', descripcion: '', integrantes: '', en_evaluacion: false, orden: 0,
 }
 
 function SemillerosPanel() {
@@ -194,7 +254,7 @@ function SemillerosPanel() {
   const editar = s => {
     setForm({
       nombre: s.nombre, grupo_id: s.grupo_id ?? null, lider: s.lider ?? '', sede: s.sede ?? 'riohacha',
-      descripcion: s.descripcion ?? '', integrantes: s.integrantes ?? '', orden: s.orden ?? 0,
+      descripcion: s.descripcion ?? '', integrantes: s.integrantes ?? '', en_evaluacion: !!s.en_evaluacion, orden: s.orden ?? 0,
     })
     setEditando(s.id)
   }
@@ -217,6 +277,10 @@ function SemillerosPanel() {
             <div className="field"><label>Sede</label><SelectorSede valor={form.sede} onChange={v => f('sede', v)} /></div>
             <div className="field"><label>Integrantes</label><input type="number" min="0" max="500" value={form.integrantes} onChange={e => f('integrantes', e.target.value)} /></div>
             <div className="field"><label>Orden</label><input type="number" min="0" max="999" value={form.orden} onChange={e => f('orden', e.target.value)} /></div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, gridColumn: '1 / -1' }}>
+              <input type="checkbox" checked={form.en_evaluacion} onChange={e => f('en_evaluacion', e.target.checked)} />
+              Propuesta en evaluación (aún no oficializado)
+            </label>
             <div className="field" style={{ gridColumn: '1 / -1' }}><label>Descripción</label><textarea rows="2" value={form.descripcion} onChange={e => f('descripcion', e.target.value)} maxLength={2000} /></div>
           </div>
           <Botones editando={editando !== null} cancelar={cancelar} />
@@ -226,7 +290,7 @@ function SemillerosPanel() {
       {lista.length === 0 && <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>Todavía no hay semilleros publicados.</p>}
       {lista.map(s => (
         <div key={s.id} style={{ ...fila, gridTemplateColumns: '1fr 140px 110px 140px auto' }}>
-          <div style={{ fontWeight: 500, fontSize: 14 }}>{s.nombre}</div>
+          <div style={{ fontWeight: 500, fontSize: 14 }}>{s.nombre}{s.en_evaluacion && <span style={{ fontSize: 11, color: 'var(--ink-3)', fontWeight: 400 }}> · en evaluación</span>}</div>
           <span style={{ fontSize: 12, color: 'var(--ink-3)' }}>{s.grupo || 'Sin grupo'}</span>
           <span className="chip" style={{ fontSize: 10, background: 'color-mix(in oklab, var(--ug-marino) 15%, transparent)' }}>{ETIQUETA_SEDE[s.sede]}</span>
           <span style={{ fontSize: 12, color: 'var(--ink-3)' }}>{s.lider}</span>

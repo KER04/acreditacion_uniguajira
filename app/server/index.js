@@ -176,6 +176,7 @@ app.get('/api/all', async (_req, res) => {
     grupos:              investigacionD?.grupos ?? [],
     semilleros:          investigacionD?.semilleros ?? [],
     produccion:          investigacionD?.produccion ?? [],
+    lineas_investigacion: investigacionD?.lineas ?? [],
     convenios:           extensionD?.convenios ?? [],
     proyectos_extension: extensionD?.proyectos ?? [],
     cursos_extension:    extensionD?.cursos ?? [],

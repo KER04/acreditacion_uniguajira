@@ -148,7 +148,9 @@ function recurso({ ruta, tabla, columnas, seleccion, orden, mapear }) {
 /* ─── Los cuatro bloques ───────────────────────────────────────── */
 
 const SEL_HONOR = 'id, nombre, promedio, semestre, periodo, sede, foto_id'
-const ORD_HONOR = 'promedio DESC, nombre ASC'
+/* A igual promedio manda el orden de carga, que es el del reporte académico
+   (migración 029); por nombre se habría reordenado a los empatados. */
+const ORD_HONOR = 'promedio DESC, id ASC'
 
 /* La foto se sirve desde la base; el front solo necesita la ruta. */
 const conFoto = f => ({ ...f, foto_url: f.foto_id ? enlaceArchivo(f.foto_id) : '' })

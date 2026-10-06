@@ -28,6 +28,7 @@ const EN_BASE = {
   grupos:                 'investigacion/grupos',
   semilleros:             'investigacion/semilleros',
   produccion:             'investigacion/produccion',
+  lineas_investigacion:   'investigacion/lineas',
   convenios:              'extension/convenios',
   proyectos_extension:    'extension/proyectos',
   cursos_extension:       'extension/cursos',
@@ -433,6 +434,7 @@ const INITIAL = {
   grupos: [],
   semilleros: [],
   produccion: [],
+  lineas_investigacion: [],
   /* Viven en PostgreSQL (migración 022). */
   convenios: [],
   proyectos_extension: [],
