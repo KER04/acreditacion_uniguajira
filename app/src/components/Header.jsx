@@ -12,7 +12,10 @@ const NAV = [
     { path: '/resoluciones', label: 'Resoluciones', desc: 'Registro calificado y acreditación' },
     { path: '/contacto', label: 'Dirección y contacto', desc: 'Adanud Segundo Meza Valle' },
   ]},
-  { path: '/acreditacion', label: 'Acreditación', badge: true },
+  { label: 'Acreditación', badge: true, children: [
+    { path: '/acreditacion', label: 'Autoevaluación', desc: 'Los doce factores y su calificación' },
+    { path: '/acreditacion/plan-de-mejoramiento', label: 'Plan de mejoramiento', desc: 'Acciones derivadas de la autoevaluación' },
+  ]},
   { label: 'Comunidad', children: [
     { path: '/estudiantes', label: 'Estudiantes', desc: 'Calendario, cuadro de honor, reglamento, documentos' },
     { path: '/saber-pro', label: 'Saber Pro', desc: 'Medias por año, destacados y grado por puntaje' },
@@ -56,7 +59,9 @@ function NavDrop({ item, isOpen, onOpen, onClose }) {
       onMouseLeave={handleMouseLeave}
     >
       <button className={active ? 'active' : ''} onClick={() => isOpen ? onClose() : onOpen()}>
-        {item.label} <span style={{ fontSize: 9, marginLeft: 4, opacity: .6 }}>▼</span>
+        {item.label}
+        {item.badge && <span style={{ marginLeft: 6, color: 'var(--ug-flamingo)' }}>●</span>}
+        {' '}<span style={{ fontSize: 9, marginLeft: 4, opacity: .6 }}>▼</span>
       </button>
 
       {/* Always rendered — visibility controlled via CSS transitions so mouse events keep working */}

@@ -238,7 +238,7 @@ function CNAPreview() {
   const prom = factores.length ? factores.reduce((a, f) => a + f.score, 0) / factores.length : 0
   const pleno = factores.filter(f => statusFromScore(f.score) === 'pleno').length
   const alto  = factores.filter(f => statusFromScore(f.score) === 'alto').length
-  const dev   = factores.filter(f => statusFromScore(f.score) === 'desarrollo').length
+  const dev   = factores.filter(f => statusFromScore(f.score) === 'aceptable').length
 
   return (
     <section className="section section--papel">
@@ -273,7 +273,7 @@ function CNAPreview() {
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
               {pleno > 0 && <span className="doc-pin doc-pin--azul">Se cumple plenamente · {pleno}</span>}
               {alto  > 0 && <span className="doc-pin doc-pin--ambar">Se cumple en alto grado · {alto}</span>}
-              {dev   > 0 && <span className="doc-pin doc-pin--terracota">En desarrollo · {dev}</span>}
+              {dev   > 0 && <span className="doc-pin doc-pin--terracota">Se cumple aceptablemente · {dev}</span>}
             </div>
             <button className="btn" onClick={() => nav('/acreditacion')}>Ir al tablero CNA <Icons.arrow /></button>
           </div>

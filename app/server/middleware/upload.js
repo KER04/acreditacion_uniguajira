@@ -1,10 +1,10 @@
 import multer from 'multer'
-import { join, extname, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join, extname } from 'path'
 import { mkdirSync } from 'fs'
+import { PUBLIC_DIR } from '../utils/data.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const PUBLIC = join(__dirname, '../../public')
+/* public/ del repo, o el volumen persistente si hay STORAGE_DIR. */
+const PUBLIC = PUBLIC_DIR
 
 const DEST_MAP = {
   'docente-foto':       join(PUBLIC, 'images/docentes'),

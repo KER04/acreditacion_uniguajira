@@ -3,12 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
     "dev:server": "node --watch server/index.js",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "NODE_ENV=production node server/index.js",
     "db:create": "node server/db/create.js",
     "db:migrate": "node server/db/migrate.js",
     "db:seed": "node server/db/seed.js",

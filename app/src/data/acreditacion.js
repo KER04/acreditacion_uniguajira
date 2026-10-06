@@ -1,16 +1,31 @@
-export const STATUS_LABELS = { pleno: 'Se cumple plenamente', alto: 'Se cumple en alto grado', desarrollo: 'En desarrollo' }
-export const STATUS_COLOR = { pleno: '#62a9b6', alto: '#e2a542', desarrollo: '#cc5e50' }
+/* Escala de gradación institucional, tal como la fija el informe de
+   autoevaluación: cinco grados con su rango. Antes había tres y el más bajo
+   se llamaba "En desarrollo", que no es ninguno de los juicios oficiales. */
+export const ESCALA = [
+  { k: 'pleno',           letra: 'A', label: 'Se cumple plenamente',        desde: 90, hasta: 100, color: '#62a9b6' },
+  { k: 'alto',            letra: 'B', label: 'Se cumple en alto grado',     desde: 80, hasta: 89,  color: '#e2a542' },
+  { k: 'aceptable',       letra: 'C', label: 'Se cumple aceptablemente',    desde: 60, hasta: 79,  color: '#cc5e50' },
+  { k: 'insatisfactorio', letra: 'D', label: 'Se cumple insatisfactoriamente', desde: 31, hasta: 59, color: '#8a3d33' },
+  { k: 'nocumple',        letra: 'E', label: 'No se cumple',                desde: 0,  hasta: 30,  color: '#5a5f63' },
+]
 
-export function judgmentFromScore(s) {
-  if (s >= 90) return 'Se cumple plenamente'
-  if (s >= 80) return 'Se cumple en alto grado'
-  if (s >= 60) return 'Se cumple aceptablemente'
-  return 'No cumple'
-}
+export const STATUS_LABELS = Object.fromEntries(ESCALA.map(e => [e.k, e.label]))
+export const STATUS_COLOR  = Object.fromEntries(ESCALA.map(e => [e.k, e.color]))
+export const STATUS_LETRA  = Object.fromEntries(ESCALA.map(e => [e.k, e.letra]))
+
 export function statusFromScore(s) {
-  if (s >= 90) return 'pleno'
-  if (s >= 80) return 'alto'
-  return 'desarrollo'
+  return (ESCALA.find(e => s >= e.desde) ?? ESCALA[ESCALA.length - 1]).k
+}
+export function judgmentFromScore(s) {
+  return STATUS_LABELS[statusFromScore(s)]
+}
+
+/* Juicio global: media PONDERADA por el peso de cada factor, no media simple.
+   Con pesos iguales daba 93,46 y el informe dice 93,26. */
+export function globalPonderado(factores) {
+  const peso = factores.reduce((a, f) => a + (Number(f.ponderacion) || 0), 0)
+  if (!peso) return factores.length ? factores.reduce((a, f) => a + f.score, 0) / factores.length : 0
+  return factores.reduce((a, f) => a + f.score * (Number(f.ponderacion) || 0), 0) / peso
 }
 
 export const FACTORES = [

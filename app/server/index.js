@@ -3,7 +3,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { readData } from './utils/data.js'
+import { existsSync } from 'fs'
+import { readData, PUBLIC_DIR, PUBLIC_REPO_DIR } from './utils/data.js'
 import { checkConnection } from './db/pool.js'
 import { limpiarExpiradas } from './utils/sesiones.js'
 import { borrarHuerfanosAntiguos } from './utils/archivos.js'
@@ -32,9 +33,16 @@ import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const PORT = 3001
+/* Railway (y casi cualquier hosting) asigna el puerto con la variable PORT. */
+const PORT = Number(process.env.PORT ?? 3001)
+const PRODUCCION = process.env.NODE_ENV === 'production'
+const DIST = join(__dirname, '../dist')
 
 const app = express()
+
+/* Detrás del proxy de Railway, req.ip sería siempre la IP del proxy y el
+   límite de intentos de login (routes/auth.js) castigaría a todos a la vez. */
+if (PRODUCCION) app.set('trust proxy', 1)
 
 /* credentials: true es lo que permite que el navegador mande la cookie de
    sesión cuando el front se sirve directamente desde :5173. Con el proxy de
@@ -47,8 +55,11 @@ app.use(cookieParser())
 /* Resuelve req.usuario a partir de la cookie antes de cualquier ruta. */
 app.use(cargarUsuario)
 
-/* Serve public folder as static files */
-app.use(express.static(join(__dirname, '../public')))
+/* Serve public folder as static files. Con STORAGE_DIR (volumen de Railway)
+   lo subido desde el panel vive fuera del repo; se mira primero ahí y luego
+   en public/ del repo, que trae logos, videos y lo que sí va en git. */
+if (PUBLIC_DIR !== PUBLIC_REPO_DIR) app.use(express.static(PUBLIC_DIR))
+app.use(express.static(PUBLIC_REPO_DIR))
 
 /* API routes */
 app.use('/api/auth', auth)
@@ -193,6 +204,14 @@ app.get('/api/all', async (_req, res) => {
   })
 })
 
+/* En producción Express sirve también el front compilado (npm run build).
+   Cualquier ruta que no sea /api devuelve index.html y React Router decide;
+   así /admin o /acreditacion funcionan al recargar o al entrar por enlace. */
+if (PRODUCCION && existsSync(DIST)) {
+  app.use(express.static(DIST))
+  app.get(/^(?!\/api(\/|$)).*/, (_req, res) => res.sendFile(join(DIST, 'index.html')))
+}
+
 /* Devuelve 500 con JSON en vez de un stack HTML cuando un handler async falla.
    Express 4 no captura rechazos de promesas por su cuenta. */
 app.use((err, _req, res, _next) => {
@@ -208,7 +227,7 @@ app.use((err, _req, res, _next) => {
 })
 
 const server = app.listen(PORT, async () => {
-  console.log(`✓ Backend corriendo en http://localhost:${PORT}`)
+  console.log(`✓ Backend corriendo en el puerto ${PORT}`)
   try {
     const info = await checkConnection()
     console.log(`✓ PostgreSQL conectado → base "${info.db}"`)

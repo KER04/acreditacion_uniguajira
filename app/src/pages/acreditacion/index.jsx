@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
-import { STATUS_LABELS, STATUS_COLOR, statusFromScore } from '../../data/acreditacion'
+import { ESCALA, STATUS_LABELS, STATUS_COLOR, statusFromScore, judgmentFromScore, globalPonderado } from '../../data/acreditacion'
 import { useData } from '../../context/DataContext'
 import CircularProgress from './CircularProgress'
 import MetodologiaSection from './MetodologiaSection'
@@ -9,9 +10,59 @@ import EquipoSection from './EquipoSection'
 import EvidenciasSection from './EvidenciasSection'
 import FactorPage from './FactorPage'
 
+/* Dónde estaba el tablero cuando se abrió un factor, para devolver al
+   visitante a la misma tarjeta y no al principio de la página. */
+let scrollTablero = 0
+
+function InformeCuerpo({ informe, accion }) {
+  return (
+    <>
+      <span className="cna-informe__icono" aria-hidden="true"><Icons.archivo /></span>
+      <span className="cna-informe__textos">
+        <span className="cna-informe__sobre">Documento oficial</span>
+        <span className="cna-informe__titulo">Informe de autoevaluación</span>
+        {informe?.d && <span className="cna-informe__desc">{informe.d}</span>}
+      </span>
+      <span className="cna-informe__accion"><Icons.download /> {accion}</span>
+    </>
+  )
+}
+
 export default function Acreditacion() {
   const { data } = useData()
-  const [factorN, setFactorN] = useState(null)
+  /* El factor abierto vive en la URL (?factor=4), no en memoria: así el botón
+     de atrás del navegador vuelve al tablero en vez de sacar al visitante de
+     Acreditación, y la dirección de un factor se puede compartir. */
+  const [params, setParams] = useSearchParams()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const crudo = Number(params.get('factor'))
+  const factorN = Number.isInteger(crudo) && crudo > 0 ? crudo : null
+
+  const conFactor = n => previos => {
+    const p = new URLSearchParams(previos)
+    if (n === null) p.delete('factor'); else p.set('factor', n)
+    return p
+  }
+  /* Abrir desde el tablero apila una entrada: atrás regresa al tablero. */
+  const abrir = n => {
+    scrollTablero = window.scrollY
+    setParams(conFactor(n), { state: { desdeTablero: true } })
+  }
+  /* Pasar al factor anterior o siguiente reemplaza la entrada, para que atrás
+     siga llevando al tablero de un solo paso. */
+  const irA = n => setParams(conFactor(n), { replace: true, state: location.state })
+  /* Si se llegó desde el tablero, volver es deshacer ese paso; si se entró
+     directo por un enlace, no hay a dónde retroceder y se limpia la URL. */
+  const volver = () => {
+    if (location.state?.desdeTablero) navigate(-1)
+    else setParams(conFactor(null), { replace: true })
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, factorN === null ? scrollTablero : 0)
+  }, [factorN])
+
   const [filter, setFilter] = useState('all')
 
   const factores = (data.factores ?? []).map(f => ({
@@ -21,6 +72,10 @@ export default function Acreditacion() {
   }))
 
   const cronograma = data.cronograma_cna ?? []
+  /* El informe vigente es la última evidencia general que se llame así; su
+     archivo se carga en el panel, en «Evidencias generales». */
+  const informe = [...(data.evidencias_cna ?? [])].reverse()
+    .find(e => /informe de autoevaluaci[oó]n/i.test(e.t ?? ''))
 
   if (factorN !== null) {
     const f = factores.find(x => x.n === factorN)
@@ -28,14 +83,20 @@ export default function Acreditacion() {
       <FactorPage
         factor={f}
         allFactores={factores}
-        onBack={() => { setFactorN(null); window.scrollTo(0, 0) }}
-        onNavigate={n => { setFactorN(n); window.scrollTo(0, 0) }}
+        onBack={volver}
+        onNavigate={irA}
       />
     )
   }
 
-  const prom = factores.length ? factores.reduce((a, f) => a + f.score, 0) / factores.length : 0
+  /* El juicio global es la media PONDERADA por el peso de cada factor
+     (Resolución 007 de 2022). Con media simple salía 93,46 y el informe
+     dice 93,26. */
+  const prom = globalPonderado(factores)
   const stats = factores.reduce((a, f) => { a[f.status] = (a[f.status] || 0) + 1; return a }, {})
+  /* Solo los grados que de verdad aparecen: anunciar "No se cumple: 0" no
+     informa de nada y mete ruido. */
+  const grados = ESCALA.filter(e => stats[e.k])
 
   return (
     <div className="page-in">
@@ -51,33 +112,60 @@ export default function Acreditacion() {
             </div>
             <h1 style={{ marginTop: 24 }}>Acreditación<br />de alta calidad<br /><em style={{ color: 'var(--accent-deep)', fontStyle: 'normal' }}>en 12 factores.</em></h1>
             <p className="lede" style={{ marginTop: 24 }}>
-              Tablero de autoevaluación del programa frente a los doce factores del Acuerdo 02 de 2020. Cada tarjeta abre una página dedicada con características, evidencias, fortalezas, oportunidades de mejora y equipo responsable.
+              Tablero de autoevaluación del programa frente a los doce factores del Acuerdo 02 de 2020. Cada tarjeta abre una página dedicada con características, evidencias, fortalezas y equipo responsable.
             </p>
-            <div style={{ display: 'flex', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
-              <button className="btn"><Icons.download /> Informe de autoevaluación</button>
-              <button className="btn ghost"><Icons.external /> Plan de mejoramiento</button>
-            </div>
+            {/* El informe es el documento del que sale todo el tablero: va en
+                una franja propia, no en un botón que se pierde bajo el texto.
+                Solo es enlace cuando hay archivo cargado. */}
+            {informe?.url ? (
+              <a className="cna-informe" href={informe.url} target="_blank" rel="noopener noreferrer">
+                <InformeCuerpo informe={informe} accion="Descargar" />
+              </a>
+            ) : (
+              <div className="cna-informe is-pendiente">
+                <InformeCuerpo informe={informe} accion="Disponible próximamente" />
+              </div>
+            )}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            <CircularProgress value={prom} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, width: '100%', maxWidth: 320 }}>
-              {[
-                { k: 'pleno', l: 'Pleno', c: 'var(--ug-azul)' },
-                { k: 'alto', l: 'Alto', c: 'var(--ug-amarillo)' },
-                { k: 'desarrollo', l: 'Desarrollo', c: 'var(--ug-flamingo)' },
-              ].map(({ k, l, c }) => (
-                <div key={k} style={{ textAlign: 'center', padding: '10px 4px', background: `color-mix(in oklab, ${c} 25%, transparent)`, borderRadius: 8 }}>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 26 }}>{stats[k] || 0}</div>
-                  <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{l}</div>
+          {/* Tarjeta de la calificación consolidada: el anillo con el promedio
+              ponderado y, debajo, cuántos factores caen en cada grado. */}
+          <aside className="cna-resumen" aria-label="Calificación consolidada del programa">
+            <div className="cna-resumen__cab">
+              <span className="cna-resumen__titulo"><i aria-hidden="true" /> Calificación consolidada</span>
+              <span className="cna-resumen__chip">{factores.length} factores evaluados</span>
+            </div>
+
+            <div className="cna-resumen__anillo">
+              <CircularProgress value={prom} size={210} texto={prom.toFixed(1).replace('.', ',')} />
+              <span className="cna-resumen__juicio"><span aria-hidden="true">★</span> {judgmentFromScore(prom)}</span>
+            </div>
+
+            <div className="cna-resumen__niveles">
+              {grados.map(e => (
+                <div key={e.k} className="cna-nivel" style={{ '--tono': e.color }}>
+                  <div className="cna-nivel__cab">
+                    <span className="cna-nivel__letra">Nivel {e.letra}</span>
+                    <span className="cna-nivel__rango">{e.desde}–{e.hasta}</span>
+                  </div>
+                  <div className="cna-nivel__n"><b>{stats[e.k]}</b> {stats[e.k] === 1 ? 'factor' : 'factores'}</div>
+                  <div className="cna-nivel__barra"><i style={{ width: (stats[e.k] / factores.length) * 100 + '%' }} /></div>
+                  <div className="cna-nivel__juicio">{e.label}</div>
                 </div>
               ))}
             </div>
-          </div>
+
+            <div className="cna-resumen__pie">
+              <span><span aria-hidden="true">✓</span> {stats.pleno ?? 0} de {factores.length} factores en cumplimiento pleno</span>
+              <button type="button" onClick={() => document.getElementById('tablero-factores')?.scrollIntoView({ behavior: 'smooth' })}>
+                Ver detalle <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </aside>
         </div>
       </section>
 
       {/* Tablero de factores */}
-      <section className="section" style={{ paddingTop: 60 }}>
+      <section className="section" id="tablero-factores" style={{ paddingTop: 60, scrollMarginTop: 90 }}>
         <div className="inner">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 20, marginBottom: 32, flexWrap: 'wrap' }}>
             <div>
@@ -85,7 +173,7 @@ export default function Acreditacion() {
               <h2 style={{ marginTop: 10 }}>Abre un factor para ver el detalle completo.</h2>
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {[{ k: 'all', l: 'Todos' }, { k: 'pleno', l: 'Pleno' }, { k: 'alto', l: 'Alto' }, { k: 'desarrollo', l: 'Desarrollo' }].map(f => (
+              {[{ k: 'all', l: 'Todos' }, ...grados.map(e => ({ k: e.k, l: e.label }))].map(f => (
                 <button key={f.k} className="chip" onClick={() => setFilter(f.k)}
                   style={{ cursor: 'pointer', background: filter === f.k ? 'var(--ink)' : undefined, color: filter === f.k ? 'var(--paper)' : undefined, borderColor: filter === f.k ? 'var(--ink)' : undefined }}>{f.l}</button>
               ))}
@@ -95,9 +183,11 @@ export default function Acreditacion() {
             {factores.map(f => (
               <button key={f.n} className="factor-card" data-status={f.status}
                 style={{ opacity: filter !== 'all' && f.status !== filter ? 0.28 : 1 }}
-                onClick={() => { setFactorN(f.n); window.scrollTo(0, 0) }}>
-                <div className="n">Factor {String(f.n).padStart(2,'0')}</div>
-                <div className="factor-pill">{STATUS_LABELS[f.status]}</div>
+                onClick={() => abrir(f.n)}>
+                <div className="factor-card__cab">
+                  <div className="n">Factor {String(f.n).padStart(2,'0')}{f.ponderacion ? ' · ' + f.ponderacion.toFixed(2).replace('.', ',') + ' %' : ''}</div>
+                  <div className="factor-pill">{STATUS_LABELS[f.status]}</div>
+                </div>
                 <div className="title">{f.t}</div>
                 <div className="score"><span>Calificación</span><b>{f.score.toFixed(1)}</b></div>
                 <div className="meter"><i style={{ width: `${f.score}%` }} /></div>
