@@ -105,7 +105,7 @@ export default function App() {
         <Route path="/convocatorias" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Convocatorias /></Shell>} />
 
         {/* 404 fallback */}
-        <Route path="*" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><div style={{ minHeight: '60vh', display: 'grid', placeItems: 'center', textAlign: 'center', padding: 40 }}><div><div style={{ fontFamily: 'var(--font-display)', fontSize: 80, fontWeight: 700, opacity: .12 }}>404</div><h2 style={{ marginTop: -16 }}>Página no encontrada</h2></div></div></Shell>} />
+        <Route path="*" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><div className="pagina-404"><div><div className="pagina-404__num">404</div><h2>Página no encontrada</h2></div></div></Shell>} />
       </Routes>
     </>
   )

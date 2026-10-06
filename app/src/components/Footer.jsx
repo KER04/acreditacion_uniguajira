@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="inner">
 
         <div className="top">
-          <div>
+          <div className="pie-marca">
             {/* Logo institucional, misma versión blanca que la cabecera: está
                 pensada para fondo teal y el pie es marino. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16 }}>
@@ -37,7 +37,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="pie-enlaces">
             <h4>Programa</h4>
             <ul>
               <li><Link to="/programa">Presentación</Link></li>
@@ -47,7 +47,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="pie-enlaces">
             <h4>Comunidad</h4>
             <ul>
               <li><Link to="/estudiantes">Estudiantes</Link></li>

@@ -118,6 +118,13 @@ export default function Header({ theme, setTheme }) {
 
   useEffect(() => { setOpen(false); setDropOpen(null) }, [location])
 
+  useEffect(() => {
+    if (!open) return
+    const cerrar = (e) => { if (e.key === 'Escape') setOpen(false) }
+    window.addEventListener('keydown', cerrar)
+    return () => window.removeEventListener('keydown', cerrar)
+  }, [open])
+
   const isActive = (path) => location.pathname === path
 
   return (
@@ -161,27 +168,36 @@ export default function Header({ theme, setTheme }) {
             {theme === 'dark' ? <Icons.sun /> : <Icons.moon />}
           </button>
           <Link to="/admin" className="btn ghost" style={{ padding: '8px 16px', fontSize: 13 }}>Admin</Link>
-          <button className="icon-btn mobile-toggle" onClick={() => setOpen(!open)} aria-label="Menú">
+          <button className="icon-btn mobile-toggle" onClick={() => setOpen(!open)}
+                  aria-label="Menú" aria-expanded={open} aria-controls="menu-movil">
             {open ? <Icons.close /> : <Icons.menu />}
           </button>
         </div>
       </div>
 
-      <div className={'mobile-menu ' + (open ? 'open' : '')}>
-        {NAV.map((n, i) => {
-          if (n.children) {
-            return (
-              <div key={i}>
-                <div style={{ padding: '16px 0 4px', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>{n.label}</div>
-                {n.children.map(c => (
-                  <Link key={c.path} to={c.path} style={{ paddingLeft: 12 }}>{c.label}</Link>
-                ))}
-              </div>
-            )
-          }
-          return <Link key={n.path} to={n.path}>{n.label}</Link>
-        })}
-        <Link to="/admin" style={{ marginTop: 8 }}>Panel Admin</Link>
+      {/* Primero los enlaces sueltos y después los grupos: así en tableta los
+          grupos se reparten en columnas sin que «Inicio» ocupe una sola. */}
+      <div id="menu-movil" className={'mobile-menu ' + (open ? 'open' : '')}>
+        {NAV.filter(n => !n.children).map(n => (
+          <Link key={n.path} to={n.path} className={isActive(n.path) ? 'active' : ''}>{n.label}</Link>
+        ))}
+        <div className="mobile-menu__lista">
+          {NAV.filter(n => n.children).map(n => (
+            <div key={n.label}>
+              <div className="mobile-menu__grupo">{n.label}</div>
+              {n.children.map(c => (
+                <Link key={c.path} to={c.path} className={'mobile-menu__hijo' + (isActive(c.path) ? ' active' : '')}>{c.label}</Link>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="mobile-menu__acciones">
+          <button className="mobile-menu__tema" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            <span className="icon-btn" aria-hidden>{theme === 'dark' ? <Icons.sun /> : <Icons.moon />}</span>
+            {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+          </button>
+          <Link to="/admin" className="btn ghost">Panel Admin</Link>
+        </div>
       </div>
     </header>
   )

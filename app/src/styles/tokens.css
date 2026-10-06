@@ -171,8 +171,12 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
   line-height: 1.1;
   text-wrap: balance;
+  /* Palabras largas («Internacionalización», «autoevaluación») a 38 px no
+     caben en un teléfono de 320: se parten con guion en vez de desbordar. */
+  overflow-wrap: break-word;
   margin: 0;
 }
+@media (max-width: 480px) { h1, h2, h3, h4 { hyphens: auto; } }
 h1 { font-size: clamp(38px, 5.4vw, 76px); font-weight: 700; }
 h2 { font-size: clamp(26px, 3vw, 44px); }
 h3 { font-size: clamp(19px, 1.5vw, 25px); }
