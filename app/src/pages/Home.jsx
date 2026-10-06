@@ -16,7 +16,7 @@ import { Icons } from '../components/Icons'
 import { WayuuBackdrop, WayuuGlyph } from '../components/WayuuPatterns'
 import CarruselPortada, { hayDiapositivas } from '../components/CarruselPortada'
 import { useData } from '../context/DataContext'
-import { statusFromScore, STATUS_COLOR } from '../data/acreditacion'
+import { statusFromScore, STATUS_COLOR, imagenFactor } from '../data/acreditacion'
 import { fechaLarga } from '../../shared/validacion'
 
 /* ─── Cinta de titulares ───────────────────────────────────────── */
@@ -54,23 +54,6 @@ function Ticker({ items }) {
 
 /* ─── Hero ─────────────────────────────────────────────────────── */
 
-/* Las cifras las edita el panel (Admin → Inicio). Si nadie las ha cargado se
-   cae a lo que sí se puede derivar del plan y de la autoevaluación: más vale
-   una cifra cierta de la base que un hueco o un número inventado. */
-function cifrasDe(data) {
-  const guardadas = (data.inicio?.cifras ?? []).filter(c => c?.value && c?.label)
-  if (guardadas.length) return guardadas
-
-  const info = data.pensum_info
-  const factores = data.factores ?? []
-  return [
-    { value: info?.total_creditos ?? '—', label: 'Créditos académicos' },
-    { value: info?.plan?.num_semestres ?? '—', label: 'Semestres · presencial diurno' },
-    { value: '17579', label: 'Código SNIES del programa' },
-    { value: `${factores.length}/12`, label: 'Factores CNA en autoevaluación' },
-  ]
-}
-
 /* El vídeo de la cabecera institucional de uniguajira.edu.co (estudiantes en
    el campus), guardado en public/video para no depender de sus rutas. Pesa
    2,8 MB: con «reducir movimiento» o ahorro de datos se queda solo el póster,
@@ -92,7 +75,6 @@ function Hero() {
   const nav = useNavigate()
   const { data } = useData()
 
-  const cifras = cifrasDe(data)
   const factores = data.factores ?? []
   /* El titular es identidad de marca y no se edita; el párrafo sí, porque es
      lo que la dirección querrá ajustar en cada temporada. */
@@ -133,15 +115,8 @@ function Hero() {
             </button>
             <button className="btn ghost" onClick={() => nav('/pensum')}>Plan de estudios</button>
           </div>
-
-          <div className="hero-stats">
-            {cifras.map((c, i) => (
-              <div key={i} className="stat">
-                <div className="n">{c.value}</div>
-                <div className="l">{c.label}</div>
-              </div>
-            ))}
-          </div>
+          {/* Las cifras (estudiantes, docentes, egresados…) ya no se muestran
+              en la portada; el panel (Admin → Inicio) aún las guarda. */}
         </div>
 
         {/* Proyecto destacado. Sale de Admin → Inicio; sin él, el hueco no
@@ -262,10 +237,11 @@ function CNAPreview() {
             {factores.length > 0
               ? factores.map(f => (
                   <button key={f.n} className="inicio-cna__factor"
-                          style={{ background: STATUS_COLOR[statusFromScore(f.score)] }}
-                          onClick={() => nav('/acreditacion')}
-                          aria-label={`Factor ${f.n} — ver en el tablero CNA`}>
-                    {f.n}
+                          style={{ '--tono': STATUS_COLOR[statusFromScore(f.score)] }}
+                          onClick={() => nav(`/acreditacion?factor=${f.n}`)}
+                          aria-label={`Factor ${f.n}: ${f.t}. Ver el detalle`} title={f.t}>
+                    <img className="inicio-cna__img" src={imagenFactor(f.n)} alt="" loading="lazy" />
+                    <span className="inicio-cna__n">{f.n}</span>
                   </button>
                 ))
               : Array.from({ length: 12 }).map((_, i) => <div key={i} className="inicio-cna__hueco" />)}

@@ -9,6 +9,9 @@ export const ESCALA = [
   { k: 'nocumple',        letra: 'E', label: 'No se cumple',                desde: 0,  hasta: 30,  color: '#5a5f63' },
 ]
 
+/* Ilustración de cada factor (public/images/factores/factor-N.webp). */
+export const imagenFactor = n => `/images/factores/factor-${n}.webp`
+
 export const STATUS_LABELS = Object.fromEntries(ESCALA.map(e => [e.k, e.label]))
 export const STATUS_COLOR  = Object.fromEntries(ESCALA.map(e => [e.k, e.color]))
 export const STATUS_LETRA  = Object.fromEntries(ESCALA.map(e => [e.k, e.letra]))
