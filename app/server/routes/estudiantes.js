@@ -8,7 +8,7 @@ import { query } from '../db/pool.js'
 import { requireAdmin } from '../middleware/auth.js'
 import {
   enMemoria, guardarArchivo, borrarSiHuerfano, extensionDe,
-  nombreOriginalUtf8, EXTENSIONES_IMAGEN, LIMITE_DOCUMENTO, LIMITE_FOTO,
+  nombreOriginalUtf8, EXTENSIONES_IMAGEN, LIMITE_DOCUMENTO_PANEL, LIMITE_FOTO,
 } from '../utils/archivos.js'
 import {
   validar, hayErrores,
@@ -16,7 +16,8 @@ import {
 } from '../../shared/validacion.js'
 
 /* Los adjuntos van a la base, así que multer los recibe en memoria. */
-const subidaDocumento = enMemoria(LIMITE_DOCUMENTO)
+const subidaDocumento = enMemoria(LIMITE_DOCUMENTO_PANEL)
+const MB_PANEL = LIMITE_DOCUMENTO_PANEL / 1048576
 const subidaFoto = enMemoria(LIMITE_FOTO)
 
 const enlaceArchivo = id => '/api/archivos/' + id
@@ -261,7 +262,7 @@ async function recibirDocumento(req, res) {
 
 /* Sube un documento a la base y devuelve nombre, tipo y peso ya deducidos,
    para que el panel solo tenga que confirmarlos. */
-router.post('/upload-doc', requireAdmin, conSubida(subidaDocumento.single('archivo'), 10), async (req, res) => {
+router.post('/upload-doc', requireAdmin, conSubida(subidaDocumento.single('archivo'), MB_PANEL), async (req, res) => {
   try {
     const ficha = await recibirDocumento(req, res)
     if (ficha) res.json(ficha)
@@ -324,7 +325,7 @@ router.get('/honor/:id/documentos', async (req, res) => {
 
 /* Un solo paso: sube el archivo y crea el registro. El nombre puede venir en
    el formulario; si no, se deduce del archivo. */
-router.post('/honor/:id/documentos', requireAdmin, conSubida(subidaDocumento.single('archivo'), 10), async (req, res) => {
+router.post('/honor/:id/documentos', requireAdmin, conSubida(subidaDocumento.single('archivo'), MB_PANEL), async (req, res) => {
   try {
     const existe = await query('SELECT 1 FROM cuadro_honor WHERE id = $1', [req.params.id])
     if (!existe.rowCount) return res.status(404).json({ error: 'Estudiante no encontrado' })

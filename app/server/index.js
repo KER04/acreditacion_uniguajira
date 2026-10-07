@@ -29,6 +29,7 @@ import pensum, { leerPensum, leerPropuesta } from './routes/pensum.js'
 import tarjetas, { leerTodasLasTarjetas } from './routes/tarjetas.js'
 import contacto, { bloquesContacto, infoSedes } from './routes/contacto.js'
 import resoluciones, { leerActos } from './routes/resoluciones.js'
+import reglamento, { leerReglamento } from './routes/reglamento.js'
 import { upload } from './middleware/upload.js'
 import { requireAdmin, cargarUsuario } from './middleware/auth.js'
 
@@ -85,6 +86,7 @@ app.use('/api/pensum', pensum)
 app.use('/api/tarjetas', tarjetas)
 app.use('/api/contacto', contacto)
 app.use('/api/resoluciones', resoluciones)
+app.use('/api/reglamento', reglamento)
 
 /* Generic file upload endpoint */
 app.post('/api/upload/:tipo', requireAdmin, upload.single('archivo'), (req, res) => {
@@ -127,6 +129,7 @@ app.get('/api/all', async (_req, res) => {
     extension:     () => bloquesExtension(),     // PostgreSQL
     internacional: () => bloquesInternacionalizacion(), // PostgreSQL
     actos:         () => leerActos(),            // PostgreSQL
+    reglamento:    () => leerReglamento(),       // PostgreSQL
     acreditacion:  () => readData('acreditacion.json'),
     programa:      () => readData('programa.json'),
     pensum:        () => leerPensum(),          // PostgreSQL
@@ -152,7 +155,7 @@ app.get('/api/all', async (_req, res) => {
 
   const {
     noticias: noticiasD, convocatorias: convocatoriasD, docentes: docentesD,
-    estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD, extension: extensionD, internacional: internacionalD, actos: actosD,
+    estudiantes: estudiantesD, egresados: egresadosD, grado: gradoD, investigacion: investigacionD, extension: extensionD, internacional: internacionalD, actos: actosD, reglamento: reglamentoD,
     acreditacion: acreditacionD, programa: programaD, pensum: pensumD, propuesta: propuestaD, contacto: contactoD, eventos: eventosD,
     tarjetas: tarjetasD,
   } = datos
@@ -185,6 +188,7 @@ app.get('/api/all', async (_req, res) => {
     redes:               internacionalD?.redes ?? [],
     ori:                 internacionalD?.ori ?? null,
     actos:               actosD ?? [],
+    reglamento:          reglamentoD ?? [],
     factores:            acreditacionD?.factores ?? [],
     cronograma_cna:      acreditacionD?.cronograma ?? [],
     equipo_cna:          acreditacionD?.equipo ?? [],

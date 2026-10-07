@@ -1037,6 +1037,18 @@ export const ESQUEMAS = {
     orden:        { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 
+  reglamento: {
+    titulo:       { etiqueta: 'Título',       obligatorio: true,  validar: v => texto(v, { etiqueta: 'Título', min: 3, max: 200 }) },
+    referencia:   { etiqueta: 'Referencia',   obligatorio: false, validar: v => texto(v, { etiqueta: 'Referencia', max: 120 }) },
+    expedido_por: { etiqueta: 'Expedido por', obligatorio: false, validar: v => texto(v, { etiqueta: 'Expedido por', max: 160 }) },
+    fecha:        { etiqueta: 'Fecha',        obligatorio: false, validar: v => fechaISO(v, 'Fecha') },
+    descripcion:  { etiqueta: 'Descripción',  obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
+    archivo_id:   { etiqueta: 'Documento',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Documento', min: 1 }) },
+    url:          { etiqueta: 'Enlace',       obligatorio: false, validar: v => rutaOUrl(v, 'Enlace') },
+    principal:    { etiqueta: 'Principal',    obligatorio: false, validar: v => booleano(v, 'Principal') },
+    orden:        { etiqueta: 'Orden',        obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
   convenios_internacionales: {
     institucion: { etiqueta: 'Institución', obligatorio: true,  validar: v => texto(v, { etiqueta: 'Institución', min: 2, max: 200 }) },
     pais:        { etiqueta: 'País',        obligatorio: true,  validar: v => texto(v, { etiqueta: 'País', min: 2, max: 80 }) },

@@ -36,6 +36,7 @@ const EN_BASE = {
   convocatorias_mov:      'internacionalizacion/convocatorias',
   redes:                  'internacionalizacion/redes',
   actos:                  'resoluciones',
+  reglamento:             'reglamento',
   cargos:                 'contacto/cargos',
 }
 
@@ -446,6 +447,7 @@ const INITIAL = {
   ori: null,
   /* Marco legal del programa (migración 025). */
   actos: [],
+  reglamento: [],
   /* Contacto (migración 026): sedes, organigrama y presentación. `cargos`
      se edita por REST; `contacto` trae los tres bloques para la página. */
   cargos: [],

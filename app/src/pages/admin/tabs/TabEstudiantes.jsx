@@ -8,6 +8,7 @@ import {
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
 import Plegable from '../Plegable'
+import PanelLista from '../PanelLista'
 import { useFormulario, Campo, Acciones } from '../../../components/formulario'
 import {
   validar, hayErrores, ESQUEMAS, ordinalSemestre,
@@ -32,6 +33,7 @@ const SUBPESTANAS = [
   ['honor', 'Cuadro de honor'],
   ['calendario', 'Calendario'],
   ['documentos', 'Documentos'],
+  ['reglamento', 'Reglamento'],
 ]
 
 export default function TabEstudiantes() {
@@ -58,6 +60,52 @@ export default function TabEstudiantes() {
       {tab === 'honor' && <Honor {...props} />}
       {tab === 'calendario' && <Calendario {...props} />}
       {tab === 'documentos' && <Documentos {...props} />}
+      {tab === 'reglamento' && <ReglamentoPanel />}
+    </div>
+  )
+}
+
+/* ─── Reglamento (migración 031) ───────────────────────────────── */
+
+/* Documentos de /estudiantes?seccion=reglamento. La página abre en el visor
+   el marcado como principal (o el primero) y lista el resto al lado. */
+const CAMPOS_REGLAMENTO = [
+  { k: 'titulo', l: 'Título', tipo: 'texto', requerido: true, placeholder: 'Reglamento estudiantil' },
+  { k: 'referencia', l: 'Referencia (como se cita)', tipo: 'texto', placeholder: 'Acuerdo 026 de 2018' },
+  { k: 'expedido_por', l: 'Expedido por', tipo: 'texto', placeholder: 'Consejo Superior' },
+  { k: 'fecha', l: 'Fecha', tipo: 'fecha' },
+  { k: 'descripcion', l: 'Descripción breve (se ve en la barra lateral)', tipo: 'area', ancho: true },
+  { k: 'archivo_id', l: 'Documento (PDF)', tipo: 'archivo', ancho: true },
+  { k: 'url', l: 'O enlace externo, si no se sube el PDF', tipo: 'url', ancho: true },
+  { k: 'principal', l: 'Abrir este documento por defecto', tipo: 'check' },
+  { k: 'orden', l: 'Orden', tipo: 'numero' },
+]
+const VACIO_REGLAMENTO = {
+  titulo: '', referencia: '', expedido_por: '', fecha: '', descripcion: '',
+  archivo_id: '', url: '', principal: false, orden: 0,
+}
+
+function ReglamentoPanel() {
+  const tenue = { fontSize: 12, color: 'var(--ink-3)' }
+  return (
+    <div>
+      <p style={{ fontSize: 13, color: 'var(--ink-3)', marginBottom: 16, maxWidth: '76ch' }}>
+        Se publica en <a href="#/estudiantes?seccion=reglamento" target="_blank" rel="noopener noreferrer">Estudiantes → Reglamento</a>:
+        el documento principal se muestra en un visor de PDF y los demás quedan en la barra lateral.
+      </p>
+      <PanelLista clave="reglamento" id="tabestudiantes-reglamento" titulos={['Nuevo documento', 'Editar documento']}
+        campos={CAMPOS_REGLAMENTO} vacio={VACIO_REGLAMENTO} columnas="1fr 160px 110px auto"
+        vacioTexto="Todavía no hay documentos cargados."
+        resumen={d => (<>
+          <div>
+            <div style={{ fontWeight: 500, fontSize: 14 }}>{d.titulo}{d.principal ? ' · principal' : ''}</div>
+            <div style={tenue}>{d.referencia}</div>
+          </div>
+          <span style={tenue}>{d.expedido_por || '—'}</span>
+          <span style={{ ...tenue, color: d.enlace ? undefined : 'var(--ug-flamingo)' }}>
+            {d.archivo_id ? 'PDF' : d.url ? 'Enlace' : 'Sin documento'}
+          </span>
+        </>)} />
     </div>
   )
 }

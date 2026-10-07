@@ -72,6 +72,18 @@ function mesesDelCalendario(eventos) {
 
 const DIAS_SEMANA = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
 
+/* El cronograma muestra solo los próximos hitos: los que ya vencieron salen
+   y el siguiente de la lista entra en su lugar. Un hito vence cuando pasa su
+   fecha final (o la de inicio, si es de un solo día); el que está en curso
+   sigue visible hasta su último día. */
+const HITOS_VISIBLES = 10
+
+function hoyISO() {
+  const d = new Date()
+  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-')
+}
+const finDe = e => e.fecha_fin || e.fecha_inicio || ''
+
 function RejillaMes({ mes }) {
   const celdas = []
   for (let i = 0; i < mes.inicio; i++) celdas.push(null)
@@ -103,7 +115,14 @@ function Calendario() {
   const eventos = data.calendario ?? []
   const periodo = eventos.find(e => e.periodo)?.periodo ?? ''
   const meses = mesesDelCalendario(eventos)
-  const [mesActivo, setMesActivo] = useState(0)
+  const hoy = hoyISO()
+  const vigentes = eventos
+    .filter(e => finDe(e) >= hoy)
+    .sort((a, b) => String(a.fecha_inicio).localeCompare(String(b.fecha_inicio)))
+  const proximos = vigentes.slice(0, HITOS_VISIBLES)
+  /* null = «automático»: la rejilla abre en el mes del próximo hito y no en el
+     primero del semestre, que ya quedó atrás. */
+  const [mesActivo, setMesActivo] = useState(null)
 
   if (eventos.length === 0) {
     return (
@@ -114,7 +133,8 @@ function Calendario() {
   }
 
   /* El índice puede quedar fuera de rango si los datos llegan después. */
-  const i = Math.min(mesActivo, meses.length - 1)
+  const mesInicial = Math.max(0, meses.findIndex(m => proximos[0]?.fecha_inicio?.startsWith(m.anio + '-' + String(m.mes).padStart(2, '0'))))
+  const i = Math.min(mesActivo ?? mesInicial, meses.length - 1)
   const mes = meses[i]
 
   /* La leyenda sale de lo que hay publicado, no de una lista fija: si no hay
@@ -151,12 +171,17 @@ function Calendario() {
             <div className="cal-rotulo">
               <span className="cal-rotulo__texto">Cronograma semestral</span>
               <span className="doc-pin doc-pin--azul">
-                {eventos.length} {eventos.length === 1 ? 'hito' : 'hitos'}
+                {vigentes.length > proximos.length
+                  ? `Próximos ${proximos.length} de ${vigentes.length}`
+                  : `${proximos.length} ${proximos.length === 1 ? 'hito' : 'hitos'} por venir`}
               </span>
             </div>
 
+            {proximos.length === 0 && (
+              <div className="doc-vacio">No quedan fechas pendientes en este calendario.</div>
+            )}
             <div className="cal-hitos">
-              {eventos.map(e => (
+              {proximos.map(e => (
                 <div key={e.id} className="cal-hito" style={{ '--tono': COLOR_TIPO[e.tipo] ?? 'var(--ink-3)' }}>
                   <span className="cal-hito__punto" aria-hidden="true" />
                   <div>
@@ -473,63 +498,96 @@ function Honor() {
   )
 }
 
-const REGLAMENTO = [
-  {t:'Capítulo I · Disposiciones generales',s:'Objeto, ámbito de aplicación y principios que orientan el reglamento estudiantil.',art:'Art. 1 – 5'},
-  {t:'Capítulo II · Admisiones',s:'Requisitos de inscripción, criterios de selección, traslados y transferencias.',art:'Art. 6 – 18'},
-  {t:'Capítulo III · Matrícula',s:'Proceso de matrícula académica, financiera, novedades y devoluciones.',art:'Art. 19 – 32'},
-  {t:'Capítulo IV · Régimen académico',s:'Asistencia, evaluaciones, promoción, repitencia y cancelaciones de asignatura.',art:'Art. 33 – 58'},
-  {t:'Capítulo V · Derechos y deberes',s:'Derechos fundamentales del estudiante, deberes académicos y convivencia.',art:'Art. 59 – 70'},
-  {t:'Capítulo VI · Régimen disciplinario',s:'Faltas, procedimiento disciplinario, sanciones y recursos.',art:'Art. 71 – 94'},
-  {t:'Capítulo VII · Distinciones y estímulos',s:'Cuadro de honor, menciones, becas de excelencia y otros reconocimientos.',art:'Art. 95 – 102'},
-  {t:'Capítulo VIII · Graduación',s:'Requisitos de grado, modalidades de trabajo de grado y ceremonia.',art:'Art. 103 – 118'},
-]
+/* ─── Reglamento ─────────────────────────────────────────────────
+   Sale de la base (migración 031; se edita en Admin → Estudiantes →
+   Reglamento). A un lado, el visor con el documento elegido; al otro, la
+   barra con todos los documentos de la sección. Hoy es uno solo, pero la
+   barra ya está para cuando se agreguen más. */
+
+const pesoLegible = b => {
+  if (!b) return ''
+  return b >= 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'
+}
+/* Solo los PDF se incrustan: un .doc o un enlace a otra web no se ve en un
+   iframe, y para esos se ofrece abrir o descargar. */
+const esPdf = d => d.archivo_ext ? d.archivo_ext.toLowerCase() === 'pdf' : /\.pdf($|[?#])/i.test(d.url ?? '')
 
 function Reglamento() {
-  const [open, setOpen] = useState(0)
+  const { data } = useData()
+  const docs = data.reglamento ?? []
+  const [elegidoId, setElegidoId] = useState(null)
+  const doc = docs.find(d => d.id === elegidoId) ?? docs.find(d => d.principal) ?? docs[0]
+
   return (
     <section className="section" style={{ paddingTop: 30 }}>
       <div className="inner">
         <div className="section-head">
           <div className="title">
             <div className="eyebrow">Reglamento estudiantil</div>
-            <h2 style={{ marginTop: 10 }}>Acuerdo 018 de 2021 · Consejo Superior.</h2>
+            <h2 style={{ marginTop: 10 }}>{doc ? [doc.titulo, doc.referencia].filter(Boolean).join(' · ') : 'Reglamento estudiantil'}.</h2>
           </div>
-          <p className="desc">Navega por capítulo, descarga el texto completo o consulta un artículo específico.</p>
+          <p className="desc">Consulta el documento completo aquí mismo o descárgalo para leerlo sin conexión.</p>
         </div>
-        <div className="reg-grid">
-          <div>
-            {REGLAMENTO.map((c,i) => (
-              <div key={i} style={{ borderTop: i===0 ? '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' : 'none', borderBottom: '1px solid color-mix(in oklab, var(--ink) 10%, transparent)' }}>
-                <button onClick={() => setOpen(open===i ? -1 : i)}
-                  style={{ width: '100%', padding: '22px 4px', background: 'transparent', border: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20, textAlign: 'left' }}>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '.12em', color: 'var(--ink-3)' }}>{c.art}</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, marginTop: 6, fontWeight: 500 }}>{c.t}</div>
-                  </div>
-                  <div style={{ width: 32, height: 32, borderRadius: 999, background: open===i ? 'var(--ink)' : 'transparent', border: open===i ? 'none' : '1px solid color-mix(in oklab, var(--ink) 20%, transparent)', color: open===i ? 'var(--paper)' : 'var(--ink)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
-                    {open===i ? '–' : '+'}
-                  </div>
-                </button>
-                {open===i && (
-                  <div style={{ padding: '0 4px 22px', color: 'var(--ink-2)', fontSize: 15, lineHeight: 1.6 }}>
-                    {c.s} Este capítulo desarrolla los lineamientos, procedimientos y criterios aplicables, junto con las responsabilidades de las partes involucradas.
-                    <div style={{ marginTop: 14 }}>
-                      <button className="btn ghost" style={{ padding: '6px 14px', fontSize: 12 }}><Icons.download /> Ver capítulo completo</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <aside>
-            <div style={{ background: 'var(--paper-2)', borderRadius: 14, padding: 22, position: 'sticky', top: 100 }}>
-              <div className="eyebrow">Documento completo</div>
-              <p style={{ fontSize: 14, color: 'var(--ink-2)', marginTop: 10, marginBottom: 16 }}>Acuerdo 018 de 2021 · 42 páginas</p>
-              <button className="btn accent" style={{ width: '100%', justifyContent: 'center', marginBottom: 8 }}><Icons.download /> Descargar PDF</button>
-              <button className="btn ghost" style={{ width: '100%', justifyContent: 'center' }}><Icons.search /> Buscar artículo</button>
+
+        {docs.length === 0 ? (
+          <div className="doc-vacio">El reglamento se publicará aquí próximamente.</div>
+        ) : (
+          <div className="reg-visor">
+            <div className="reg-visor__marco">
+              {doc?.enlace && esPdf(doc) ? (
+                <iframe key={doc.id} className="reg-visor__pdf" src={doc.enlace + '#view=FitH'}
+                        title={'Documento: ' + doc.titulo} />
+              ) : (
+                <div className="reg-visor__vacio">
+                  <Icons.archivo />
+                  <p>{doc?.enlace
+                    ? 'Este documento no se puede mostrar aquí. Ábrelo o descárgalo desde la barra lateral.'
+                    : 'El PDF de este documento todavía no está cargado.'}</p>
+                </div>
+              )}
             </div>
-          </aside>
-        </div>
+
+            <aside className="reg-barra" aria-label="Documentos del reglamento">
+              <div className="reg-barra__titulo">
+                Documentos <span>{docs.length}</span>
+              </div>
+              <ul className="reg-barra__lista">
+                {docs.map(d => (
+                  <li key={d.id}>
+                    <button type="button" className={'reg-doc' + (d.id === doc?.id ? ' is-activo' : '')}
+                            aria-current={d.id === doc?.id} onClick={() => setElegidoId(d.id)}>
+                      <span className="reg-doc__icono" aria-hidden="true">{(d.archivo_ext || (d.url ? 'web' : '—')).toUpperCase()}</span>
+                      <span className="reg-doc__textos">
+                        <span className="reg-doc__t">{d.titulo}</span>
+                        <span className="reg-doc__s">
+                          {[d.referencia, d.expedido_por, pesoLegible(d.archivo_bytes)].filter(Boolean).join(' · ') || 'Sin datos de referencia'}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              {doc && (
+                <div className="reg-barra__ficha">
+                  {doc.descripcion && <p>{doc.descripcion}</p>}
+                  {doc.descarga ? (
+                    <>
+                      <a className="btn accent reg-barra__btn" href={doc.descarga} download>
+                        <Icons.download /> Descargar
+                      </a>
+                      <a className="btn ghost reg-barra__btn" href={doc.enlace} target="_blank" rel="noopener noreferrer">
+                        <Icons.external /> Abrir en otra pestaña
+                      </a>
+                    </>
+                  ) : (
+                    <p className="reg-barra__pendiente">Documento pendiente de carga.</p>
+                  )}
+                </div>
+              )}
+            </aside>
+          </div>
+        )}
       </div>
     </section>
   )
