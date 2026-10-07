@@ -340,6 +340,12 @@ function FichaPublica({ estudiante, puesto, color, onCerrar }) {
   )
 }
 
+/* "Jose Francisco Perozo Rodriguez" -> "JP": nombre y primer apellido. */
+const iniciales = nombre => {
+  const p = String(nombre ?? '').split(/\s+/).filter(w => /^[A-ZÁÉÍÓÚÑ]/.test(w))
+  return ((p[0]?.[0] ?? '') + (p[p.length >= 4 ? 2 : 1]?.[0] ?? '')).toUpperCase()
+}
+
 function Honor() {
   const { data } = useData()
   const todos = data.honor ?? []
@@ -406,32 +412,40 @@ function Honor() {
           <div style={{ color: 'var(--ink-3)' }}>No hay estudiantes publicados en este período.</div>
         )}
 
+        {/* Podio en fichas de perfil: la foto ocupa toda la cabecera de la
+            tarjeta, con el puesto como cinta encima. Dentro de un círculo de
+            80 px la cara apenas se distinguía. Sin foto, la cabecera muestra
+            las iniciales sobre la trama de la marca en el color del puesto. */}
         <div className="podium">
           {podium.map((e, i) => (
-            /* Las medidas pasan a .honor-podio porque la tarjeta necesita
-               position/overflow propios: sin ellos la cuadrícula del emblema se
-               saldría por las esquinas redondeadas y taparía el contenido. */
-            <div key={e.id ?? i} className="card honor-podio" role="button" tabIndex={0}
+            <div key={e.id ?? i} className="honor-podio" role="button" tabIndex={0}
                  onClick={() => abrir(e, i + 1)} onKeyDown={ev => teclaAbre(ev, e, i + 1)}
                  style={{ '--puesto': colors[i] }}>
-              {/* El podio no tiene portada: la cuadrícula hace de fondo por
-                  defecto y toma el color del puesto. */}
-              <TramaMarca escala={82} opacidad={0.09} tono={colors[i]} />
+              <div className="honor-podio__retrato">
+                {e.foto_url
+                  ? <img src={e.foto_url} alt={'Foto de ' + e.nombre} loading="lazy" />
+                  : (
+                    <div className="honor-podio__sinfoto" aria-hidden="true">
+                      <TramaMarca blanco escala={82} opacidad={0.16} />
+                      <span>{iniciales(e.nombre)}</span>
+                    </div>
+                  )}
+                <span className="honor-podio__puesto">
+                  <b>{i + 1}°</b> puesto
+                </span>
+              </div>
               <div className="honor-podio__cuerpo">
-                <div className="honor-podio__puesto">
-                  {i === 0 ? '1°' : i === 1 ? '2°' : '3°'}
-                </div>
-                <div className="honor-podio__foto">
-                  <Retrato persona={e} size={80} borde={colors[i]} />
-                </div>
                 <div className="honor-podio__nombre">{e.nombre}</div>
                 <div className="honor-podio__sem">
-                  Semestre {ordinalSemestre(e.semestre)}
+                  Semestre {ordinalSemestre(e.semestre)} · {e.sede === 'maicao' ? 'Maicao' : 'Riohacha'}
                 </div>
-                <div className="honor-podio__promedio">
-                  {Number(e.promedio).toFixed(2)}
+                <div className="honor-podio__pie">
+                  <div>
+                    <div className="honor-podio__promedio">{Number(e.promedio).toFixed(2)}</div>
+                    <div className="honor-podio__rotulo">Promedio acumulado</div>
+                  </div>
+                  <span className="honor-podio__ver">Ver ficha <Icons.arrow /></span>
                 </div>
-                <div className="honor-podio__ver">Ver ficha</div>
               </div>
             </div>
           ))}
