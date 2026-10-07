@@ -40,15 +40,50 @@ const BRIDGE = 8
 function NavDrop({ item, isOpen, onOpen, onClose }) {
   const location = useLocation()
   const closeTimer = useRef(null)
+  const caja = useRef(null)
+  /* Con qué se pulsó el botón por última vez (ratón, toque o lápiz). */
+  const tipoPuntero = useRef('')
 
-  const handleMouseEnter = () => {
+  /* Solo el ratón abre al pasar por encima. En pantallas táctiles el
+     navegador simula un «hover» justo antes del toque y pasaba lo mismo:
+     se abría y el toque lo cerraba. Ahí solo cuenta el toque. */
+  const handlePointerEnter = e => {
+    if (e.pointerType !== 'mouse') return
     clearTimeout(closeTimer.current)
     onOpen()
   }
 
-  const handleMouseLeave = () => {
-    closeTimer.current = setTimeout(onClose, 150)
+  const handlePointerLeave = e => {
+    if (e.pointerType !== 'mouse') return
+    closeTimer.current = setTimeout(onClose, 200)
   }
+
+  /* Con ratón el menú ya lo abrió el hover, así que el clic sobre la
+     pestaña nunca lo cierra. Antes alternaba con una gracia de 600 ms: quien
+     se quedaba un momento sobre la pestaña y luego hacía clic veía el menú
+     abrirse y cerrarse solo. Con ratón se cierra al salir, con Esc o con un
+     clic fuera. Con toque o teclado (Enter/Espacio) sigue alternando. */
+  const handleClick = () => {
+    const conRaton = tipoPuntero.current === 'mouse'
+    tipoPuntero.current = ''
+    if (!isOpen) { onOpen(); return }
+    if (!conRaton) onClose()
+  }
+
+  /* Abierto, se cierra con Esc o con un clic fuera de él. */
+  useEffect(() => {
+    if (!isOpen) return
+    const fuera = e => { if (!caja.current?.contains(e.target)) onClose() }
+    const esc = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('pointerdown', fuera)
+    document.addEventListener('keydown', esc)
+    return () => {
+      document.removeEventListener('pointerdown', fuera)
+      document.removeEventListener('keydown', esc)
+    }
+  }, [isOpen, onClose])
+
+  useEffect(() => () => clearTimeout(closeTimer.current), [])
 
   /* También cuenta una subpágina (la ficha de una acción del plan, por
      ejemplo): sigue estando dentro de esa sección del menú. */
@@ -56,11 +91,14 @@ function NavDrop({ item, isOpen, onOpen, onClose }) {
 
   return (
     <div
+      ref={caja}
       style={{ position: 'relative', paddingBottom: BRIDGE }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
     >
-      <button className={active ? 'active' : ''} onClick={() => isOpen ? onClose() : onOpen()}>
+      <button className={active ? 'active' : ''} onClick={handleClick}
+              onPointerDown={e => { tipoPuntero.current = e.pointerType }}
+              aria-expanded={isOpen} aria-haspopup="true">
         {item.label}
         {item.badge && <span style={{ marginLeft: 6, color: 'var(--ug-flamingo)' }}>●</span>}
         {' '}<span style={{ fontSize: 9, marginLeft: 4, opacity: .6 }}>▼</span>
@@ -152,7 +190,11 @@ export default function Header({ theme, setTheme }) {
                   item={n}
                   isOpen={dropOpen === i}
                   onOpen={() => setDropOpen(i)}
-                  onClose={() => setDropOpen(null)}
+                  /* Cada menú solo puede cerrarse a SÍ MISMO. Al pasar de
+                     «Programa» a «Acreditación», el temporizador de salida de
+                     Programa vencía 200 ms después y cerraba el que estuviera
+                     abierto, que ya era Acreditación: se abría y se cerraba. */
+                  onClose={() => setDropOpen(actual => (actual === i ? null : actual))}
                 />
               )
             }

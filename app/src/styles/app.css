@@ -6866,3 +6866,25 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
 .sp-cifras__enlace { color: inherit; text-decoration: none; }
 .sp-cifras__enlace span { display: inline-flex; align-items: center; gap: 6px; }
 .sp-cifras__enlace:hover span { color: #fff; text-decoration: underline; }
+
+/* ---------- Convocatorias (misionales/Convocatorias.jsx) ----------
+   Estado en pastilla (Cerrada en gris cuando pasó la fecha de cierre), los
+   enlaces reales de postulación y documento, y el desplegable de detalles. */
+.conv-estado {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px; background: var(--doc-azul-tint); color: var(--doc-azul-texto);
+}
+.conv-estado.is-cerrada { background: var(--doc-neutro-tint); color: var(--doc-neutro-texto); }
+.conv-detalle {
+  background: var(--paper); border-radius: 8px; padding: 14px; font-size: 13px; color: var(--ink-2);
+  display: grid; gap: 4px; line-height: 1.5;
+}
+.conv-detalle b { color: var(--ink); font-weight: 600; }
+.conv-detalle ul { margin: 2px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+.conv-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: auto; padding-top: 4px; }
+.conv-acciones .btn { padding: 8px 16px; font-size: 13px; }
+.conv-toggle {
+  background: none; border: 0; padding: 4px 0; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--doc-azul-texto); text-decoration: underline; text-underline-offset: 3px;
+}
+.conv-toggle:hover { color: var(--ink); }

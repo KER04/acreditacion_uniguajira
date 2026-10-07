@@ -243,7 +243,7 @@ function CNAPreview() {
                           style={{ '--tono': STATUS_COLOR[statusFromScore(f.score)] }}
                           onClick={() => nav(`/acreditacion?factor=${f.n}`)}
                           aria-label={`Factor ${f.n}: ${f.t}. Ver el detalle`} title={f.t}>
-                    <img className="inicio-cna__img" src={imagenFactor(f.n)} alt="" loading="lazy" />
+                    <img className="inicio-cna__img" src={imagenFactor(f.n, 'sm')} alt="" loading="lazy" decoding="async" />
                     <span className="inicio-cna__n">{f.n}</span>
                   </button>
                 ))

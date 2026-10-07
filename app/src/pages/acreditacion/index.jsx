@@ -193,7 +193,7 @@ export default function Acreditacion() {
               <button key={f.n} className="factor-card" data-status={f.status}
                 style={{ opacity: filter !== 'all' && f.status !== filter ? 0.28 : 1 }}
                 onClick={() => abrir(f.n)}>
-                <img className="factor-card__img" src={imagenFactor(f.n)} alt="" loading="lazy" />
+                <img className="factor-card__img" src={imagenFactor(f.n, 'sm')} alt="" loading="lazy" decoding="async" />
                 <div className="factor-card__cab">
                   <div className="n">Factor {String(f.n).padStart(2,'0')}{f.ponderacion ? ' · ' + f.ponderacion.toFixed(2).replace('.', ',') + ' %' : ''}</div>
                   <div className="factor-pill">{STATUS_LABELS[f.status]}</div>

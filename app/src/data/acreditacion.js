@@ -9,8 +9,12 @@ export const ESCALA = [
   { k: 'nocumple',        letra: 'E', label: 'No se cumple',                desde: 0,  hasta: 30,  color: '#5a5f63' },
 ]
 
-/* Ilustración de cada factor (public/images/factores/factor-N.webp). */
-export const imagenFactor = n => `/images/factores/factor-${n}.webp`
+/* Ilustración de cada factor, en dos tamaños (public/images/factores/):
+   factor-N.webp (1024 px) para la franja de la página del factor, que se abre
+   de una en una, y factor-N-sm.webp (560 px, ~34 KB) para las tarjetas del
+   tablero y la portada, donde se cargan las doce juntas. */
+export const imagenFactor = (n, tam = 'grande') =>
+  `/images/factores/factor-${n}${tam === 'sm' ? '-sm' : ''}.webp`
 
 export const STATUS_LABELS = Object.fromEntries(ESCALA.map(e => [e.k, e.label]))
 export const STATUS_COLOR  = Object.fromEntries(ESCALA.map(e => [e.k, e.color]))
