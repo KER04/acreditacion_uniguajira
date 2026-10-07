@@ -1,4 +1,4 @@
--- 028_reglamento — Documentos de la sección «Reglamento» de /estudiantes.
+-- 031_reglamento — Documentos de la sección «Reglamento» de /estudiantes.
 --
 -- Sustituye la copia escrita a mano en Estudiantes.jsx: ocho «capítulos» con
 -- resúmenes de relleno, rangos de artículos sin fuente y botones de descarga
