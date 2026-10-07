@@ -270,7 +270,7 @@ function FichaPublica({ estudiante, puesto, color, onCerrar }) {
         <div className="ficha-est__cuerpo">
           <h3 className="ficha-est__nombre">{estudiante.nombre}</h3>
           <div className="ficha-est__promedio">{Number(estudiante.promedio).toFixed(2)}</div>
-          <div className="eyebrow" style={{ fontSize: 10 }}>Promedio ponderado</div>
+          <div className="eyebrow" style={{ fontSize: 10 }}>Promedio acumulado</div>
 
           <div className="ficha-est__datos">
             {dato('Semestre', ordinalSemestre(estudiante.semestre))}
@@ -357,10 +357,10 @@ function Honor() {
         <div className="section-head">
           <div className="title">
             <div className="eyebrow">Cuadro de Honor · {activo ?? 'sin período'}</div>
-            <h2 style={{ marginTop: 10 }}>Mejores promedios del semestre.</h2>
+            <h2 style={{ marginTop: 10 }}>Mejores promedios acumulados.</h2>
           </div>
           <p className="desc">
-            Los diez mejores promedios del semestre en cada sede, según el reporte académico del
+            Los diez mejores promedios acumulados de cada sede, según el reporte académico del
             período. Pulsa a cualquiera para ver su ficha y sus documentos.
           </p>
         </div>
@@ -415,7 +415,7 @@ function Honor() {
         {rest.length > 0 && (
           <div className="card" style={{ background: 'var(--paper-2)', padding: 0, overflow: 'hidden' }}>
             <div className="honor-fila honor-fila--cab">
-              <div>Puesto</div><div>Estudiante</div><div>Semestre</div><div style={{ textAlign: 'right' }}>Promedio</div>
+              <div>Puesto</div><div>Estudiante</div><div>Semestre</div><div style={{ textAlign: 'right' }}>Acumulado</div>
             </div>
             {rest.map((e, i) => (
               <div key={e.id ?? i} role="button" tabIndex={0}
