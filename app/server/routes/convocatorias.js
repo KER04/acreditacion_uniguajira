@@ -79,12 +79,19 @@ export async function leerConvocatorias({ id = null } = {}) {
   let where = ''
   if (id !== null) { valores.push(id); where = ' WHERE id = $1' }
 
-  const { rows } = await query(
-    'SELECT ' + SEL + ', ' + SEL_FOTOS + ' FROM convocatoria' + where +
-    ' ORDER BY fecha_cierre ASC NULLS LAST, id DESC',
-    valores,
-  )
-  return rows.map(conVigencia)
+  const orden = ' ORDER BY fecha_cierre ASC NULLS LAST, id DESC'
+  try {
+    const { rows } = await query('SELECT ' + SEL + ', ' + SEL_FOTOS + ' FROM convocatoria' + where + orden, valores)
+    return rows.map(conVigencia)
+  } catch (e) {
+    /* Sin la migración 033 la tabla de fotos no existe, y eso no debe tumbar
+       la lista entera: pasó en producción, donde el portal y el panel se
+       quedaron sin convocatorias. Se sirven sin fotos y el log lo dice. */
+    if (e.code !== '42P01') throw e
+    console.warn('[convocatorias] falta la tabla convocatoria_foto: corre `npm run db:migrate`')
+    const { rows } = await query('SELECT ' + SEL + ' FROM convocatoria' + where + orden, valores)
+    return rows.map(c => conVigencia({ ...c, fotos: [] }))
+  }
 }
 
 /* Tras tocar las fotos se devuelve la convocatoria entera: el panel la
