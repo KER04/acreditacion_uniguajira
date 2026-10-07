@@ -6867,6 +6867,169 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
 .sp-cifras__enlace span { display: inline-flex; align-items: center; gap: 6px; }
 .sp-cifras__enlace:hover span { color: #fff; text-decoration: underline; }
 
+/* Tarjeta de semillero con página propia: toda la tarjeta es enlace y lleva
+   la cuenta de logros con un toque de ámbar. */
+.semillero--pagina { text-decoration: none; position: relative; }
+.semillero--pagina::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--ug-amarillo) 70%, transparent);
+}
+.semillero__logros {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  background: var(--ug-amarillo); color: var(--ug-negro);
+}
+.semillero__logros svg { transition: transform .2s ease; }
+.semillero--pagina:hover .semillero__logros svg { transform: translateX(3px); }
+
+/* ---------------------------------------------------------------------------
+   Página de un semillero (/investigacion/semillero/:slug)
+--------------------------------------------------------------------------- */
+.semp-hero {
+  position: relative; overflow: hidden; color: #fff;
+  padding: clamp(36px, 5vw, 56px) var(--gutter) clamp(48px, 7vw, 88px);
+  background: linear-gradient(150deg, var(--ug-marino-2) 0%, var(--ug-marino) 45%, #0b3a4a 100%);
+}
+.semp-hero .inner { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; }
+/* Un halo ámbar detrás del título: el brillo del trofeo. */
+.semp-hero__brillo {
+  position: absolute; z-index: 0; width: 720px; height: 720px; right: -160px; top: -260px; pointer-events: none;
+  background: radial-gradient(circle, color-mix(in oklab, var(--ug-amarillo) 38%, transparent), transparent 62%);
+}
+.semp-miga { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: rgba(255,255,255,.7); margin-bottom: clamp(28px, 5vw, 48px); }
+.semp-miga a { color: rgba(255,255,255,.85); text-decoration: none; }
+.semp-miga a:hover { color: #fff; text-decoration: underline; }
+.semp-miga > span:last-child { color: #fff; font-weight: 600; }
+.semp-hero__eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--ug-amarillo); }
+.semp-hero__titulo { font-size: clamp(56px, 11vw, 132px); line-height: .95; letter-spacing: -0.04em; color: #fff; margin-top: 14px; }
+.semp-hero__lema { max-width: 52ch; margin-top: 18px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.55; color: rgba(255,255,255,.88); }
+.semp-hero__chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.semp-hero__chips span {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22); font-size: 13.5px;
+}
+.semp-hero__chips svg { width: 15px; height: 15px; opacity: .85; }
+
+.semp-cifras {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;
+  margin: clamp(32px, 5vw, 48px) 0 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.18);
+}
+.semp-cifras dt { font-family: var(--font-display); font-size: clamp(40px, 5vw, 60px); font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: #fff; }
+.semp-cifras .is-oro dt { color: var(--ug-amarillo); }
+.semp-cifras dd { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+
+/* Palmarés: una tarjeta por logro, con la medalla a la izquierda. */
+.semp-palmares { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 860px) { .semp-palmares { grid-template-columns: minmax(0, 1fr); } }
+.semp-logro {
+  --metal: #9aa6b0; --metal-2: #d9dfe3;
+  display: flex; gap: 18px; padding: 24px; border-radius: var(--radius-lg);
+  background: var(--paper-2); border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.semp-logro:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.semp-logro::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: linear-gradient(90deg, var(--metal), var(--metal-2)); }
+.semp-logro--oro    { --metal: #d9861c; --metal-2: #f5c96a; }
+.semp-logro--plata  { --metal: #8f9ba5; --metal-2: #dfe5e9; }
+.semp-logro--bronce { --metal: #a8642a; --metal-2: #e3a46a; }
+.semp-logro--mencion{ --metal: var(--ug-marino-soft); --metal-2: var(--ug-azul); }
+/* Los primeros lugares, un punto más presentes. */
+.semp-logro--oro { background: linear-gradient(160deg, color-mix(in oklab, #f5c96a 14%, var(--paper-2)), var(--paper-2) 55%); border-color: color-mix(in oklab, #d9861c 35%, transparent); }
+
+.semp-logro__medalla {
+  flex: none; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, var(--metal-2), var(--metal) 70%);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--metal) 22%, transparent), 0 6px 16px color-mix(in oklab, var(--metal) 45%, transparent);
+  color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+.semp-logro__cuerpo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+/* Miniaturas de la competencia, arriba de la tarjeta. */
+.semp-logro__fotos { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; margin-bottom: 4px; }
+.semp-logro__fotos button { border: 0; padding: 0; border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 3; cursor: zoom-in; background: var(--paper-3); }
+.semp-logro__fotos img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease; }
+.semp-logro__fotos button:hover img { transform: scale(1.06); }
+.semp-logro__resultado { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: color-mix(in oklab, var(--metal) 75%, var(--ink)); }
+.semp-logro__nombre { font-family: var(--font-display); font-size: 21px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+.semp-logro__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.semp-logro__chips span {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px;
+  font-size: 12px; color: var(--ink-2); background: var(--paper); border: 1px solid var(--borde);
+}
+.semp-logro__chips svg { width: 12px; height: 12px; }
+.semp-logro__texto { font-size: 14px; line-height: 1.6; color: var(--ink-2); }
+.semp-logro__equipo { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--borde); }
+.semp-logro__rotulo { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.semp-logro__equipo ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.semp-logro__equipo li { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; }
+@media (max-width: 480px) {
+  .semp-logro { flex-direction: column; gap: 14px; padding: 20px; }
+  .semp-logro__medalla { width: 54px; height: 54px; font-size: 17px; }
+}
+
+.semp-avatar {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  background: color-mix(in oklab, var(--ug-azul) 22%, var(--paper-2)); color: var(--ug-marino);
+  font-family: var(--font-display); font-size: 11.5px; font-weight: 700;
+}
+.semp-avatar--grande { width: 56px; height: 56px; font-size: 18px; background: linear-gradient(150deg, var(--ug-azul), var(--ug-marino)); color: #fff; }
+
+/* Quiénes han competido. */
+.semp-equipo { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 12px; }
+.semp-equipo li {
+  display: grid; grid-template-columns: auto 1fr; grid-template-areas: "a n" "a v"; column-gap: 14px; align-items: center;
+  padding: 14px 16px; border-radius: var(--radius); background: var(--paper-2);
+  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent); box-shadow: var(--shadow-sm);
+}
+.semp-equipo .semp-avatar { grid-area: a; }
+.semp-equipo__nombre { grid-area: n; font-weight: 600; font-size: 15px; line-height: 1.25; }
+.semp-equipo__veces { grid-area: v; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+
+/* Galería y visor. */
+/* Mosaico de cuatro columnas: la primera foto ocupa dos por dos. */
+.semp-galeria { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 200px; grid-auto-flow: dense; gap: 12px; }
+.semp-galeria__item:first-child { grid-column: span 2; grid-row: span 2; }
+.semp-galeria__item:nth-child(5n+4) { grid-row: span 2; }
+@media (max-width: 860px) { .semp-galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 160px; } }
+@media (max-width: 480px) { .semp-galeria { grid-auto-rows: 130px; gap: 8px; } }
+.semp-galeria__item {
+  position: relative; border: 0; padding: 0; border-radius: var(--radius);
+  overflow: hidden; cursor: zoom-in; background: var(--paper-3);
+}
+.semp-galeria__item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+.semp-galeria__item:hover img { transform: scale(1.05); }
+.semp-galeria__pie {
+  position: absolute; inset: auto 0 0 0; padding: 26px 12px 10px; text-align: left;
+  font-size: 12.5px; font-weight: 600; color: #fff; background: linear-gradient(transparent, rgba(3,9,15,.7));
+}
+.semp-visor { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; background: rgba(3,9,15,.88); animation: fadeIn .2s ease both; }
+.semp-visor__marco { margin: 0; max-width: min(1100px, 100%); }
+.semp-visor__marco img { max-width: 100%; max-height: 82vh; border-radius: 12px; display: block; margin: 0 auto; }
+.semp-visor__marco figcaption { margin-top: 12px; text-align: center; color: rgba(255,255,255,.88); font-size: 14px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.semp-visor__cuenta { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,.6); }
+.semp-visor__cerrar, .semp-visor__flecha {
+  position: fixed; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); color: #fff;
+}
+.semp-visor__cerrar { top: 18px; right: 18px; }
+.semp-visor__flecha { top: 50%; right: 18px; transform: translateY(-50%); }
+.semp-visor__flecha--atras { right: auto; left: 18px; }
+.semp-visor__flecha--atras svg { transform: rotate(180deg); }
+
+/* Únete. */
+.semp-unete {
+  display: flex; justify-content: space-between; align-items: center; gap: 28px; flex-wrap: wrap;
+  padding: clamp(28px, 4vw, 44px); border-radius: var(--radius-lg); color: #fff;
+  background: linear-gradient(130deg, var(--ug-marino), var(--ug-marino-soft));
+  position: relative; overflow: hidden;
+}
+.semp-unete__eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ug-amarillo); }
+.semp-unete__titulo { color: #fff; margin-top: 10px; }
+.semp-unete__texto { margin-top: 10px; max-width: 52ch; color: rgba(255,255,255,.85); }
+.semp-unete__acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.semp-unete .btn.ghost { color: #fff; border-color: rgba(255,255,255,.6); }
+
 /* ---------- Convocatorias (misionales/Convocatorias.jsx) ----------
    Estado en pastilla (Cerrada en gris cuando pasó la fecha de cierre), los
    enlaces reales de postulación y documento, y el desplegable de detalles. */

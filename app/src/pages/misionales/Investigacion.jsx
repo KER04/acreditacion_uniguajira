@@ -8,8 +8,8 @@
  * Las cifras del titular se cuentan: un número escrito en el texto se queda
  * viejo en cuanto alguien añade o quita un semillero.
  */
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import { Icons } from '../../components/Icons'
 import TramaMarca from '../../components/TramaMarca'
@@ -76,8 +76,13 @@ function Semilleros({ semilleros, grupos }) {
         )}
 
         <div className="semilleros__rejilla">
-          {visibles.map(s => (
-            <article key={s.id} className="semillero" style={{ '--tono': colorDe(s.grupo_id) }}
+          {visibles.map(s => {
+            /* Con página propia (y logros), la tarjeta entera lleva a ella. */
+            const Tarjeta = s.slug ? Link : 'article'
+            return (
+            <Tarjeta key={s.id} className={'semillero' + (s.slug ? ' semillero--pagina' : '')}
+                     style={{ '--tono': colorDe(s.grupo_id) }}
+                     {...(s.slug ? { to: '/investigacion/semillero/' + s.slug } : {})}
                      title={s.descripcion || undefined}>
               <div className="semillero__etiquetas">
                 {s.grupo && <span className="semillero__grupo">{s.grupo}</span>}
@@ -93,8 +98,14 @@ function Semilleros({ semilleros, grupos }) {
               {/* Activo, pero con la propuesta aún en manos de los pares:
                   no se presenta como oficializado. */}
               {s.en_evaluacion && <span className="semillero__eval">En evaluación</span>}
-            </article>
-          ))}
+              {s.slug && (
+                <span className="semillero__logros">
+                  {s.logros > 0 ? `${s.logros} ${s.logros === 1 ? 'logro' : 'logros'} · ` : ''}Ver página <Icons.arrow />
+                </span>
+              )}
+            </Tarjeta>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -170,6 +181,15 @@ function LineasInvestigacion({ lineas }) {
 
 export default function Investigacion() {
   const { data } = useData()
+  /* ?seccion=semilleros: se llega desde la página de un semillero y se baja
+     directo a la sección, como hace la cifra del encabezado. */
+  const [params] = useSearchParams()
+  const seccion = params.get('seccion')
+  useEffect(() => {
+    if (seccion !== 'semilleros') return
+    const t = setTimeout(() => document.getElementById('semilleros')?.scrollIntoView(), 150)
+    return () => clearTimeout(t)
+  }, [seccion, (data.semilleros ?? []).length])
   const grupos = data.grupos ?? []
   const semilleros = data.semilleros ?? []
   const produccion = data.produccion ?? []
