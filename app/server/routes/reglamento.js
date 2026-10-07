@@ -1,5 +1,5 @@
 /* Módulo Reglamento — documentos de la sección «Reglamento» de /estudiantes
- * (migración 028).
+ * (migración 031).
  *
  * REST por elemento sobre `reglamento_documento` con la fábrica común. El PDF
  * se sube aparte por /api/estudiantes/upload-doc y aquí solo se guarda el

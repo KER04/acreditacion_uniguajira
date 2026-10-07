@@ -16,7 +16,7 @@ import { Icons } from '../components/Icons'
 import { WayuuBackdrop, WayuuGlyph } from '../components/WayuuPatterns'
 import CarruselPortada, { hayDiapositivas } from '../components/CarruselPortada'
 import { useData } from '../context/DataContext'
-import { statusFromScore, STATUS_COLOR, imagenFactor } from '../data/acreditacion'
+import { statusFromScore, STATUS_COLOR, globalPonderado, imagenFactor } from '../data/acreditacion'
 import { fechaLarga } from '../../shared/validacion'
 
 /* ─── Cinta de titulares ───────────────────────────────────────── */
@@ -216,7 +216,10 @@ function CNAPreview() {
   const nav = useNavigate()
   const { data } = useData()
   const factores = data.factores ?? []
-  const prom = factores.length ? factores.reduce((a, f) => a + f.score, 0) / factores.length : 0
+  /* La misma media PONDERADA por el peso de cada factor que muestra el tablero
+     (Resolución 007 de 2022). Con la media simple la portada decía 93,5
+     mientras el informe y /acreditacion dicen 93,3. */
+  const prom = factores.length ? globalPonderado(factores) : 0
   const pleno = factores.filter(f => statusFromScore(f.score) === 'pleno').length
   const alto  = factores.filter(f => statusFromScore(f.score) === 'alto').length
   const dev   = factores.filter(f => statusFromScore(f.score) === 'aceptable').length
@@ -248,7 +251,7 @@ function CNAPreview() {
           </div>
 
           <div>
-            <div className="inicio-cna__promedio">{prom.toFixed(1)}</div>
+            <div className="inicio-cna__promedio">{prom.toFixed(1).replace('.', ',')}</div>
             <div className="inicio-eyebrow" style={{ fontSize: 11, marginTop: 6, marginBottom: 20 }}>
               Promedio · Escala 0–100
             </div>

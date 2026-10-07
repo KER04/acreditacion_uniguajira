@@ -65,7 +65,7 @@ export default function TabEstudiantes() {
   )
 }
 
-/* ─── Reglamento (migración 028) ───────────────────────────────── */
+/* ─── Reglamento (migración 031) ───────────────────────────────── */
 
 /* Documentos de /estudiantes?seccion=reglamento. La página abre en el visor
    el marcado como principal (o el primero) y lista el resto al lado. */

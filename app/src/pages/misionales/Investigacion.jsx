@@ -1,4 +1,4 @@
-/* Investigación: grupos, semilleros y producción destacada.
+/* Investigación: grupos, líneas, semilleros y producción destacada.
  *
  * Todo sale de la base (migración 019) por DataContext. Antes esta página
  * tenía su propia copia escrita a mano —con catorce semilleros cuando el panel
@@ -8,6 +8,7 @@
  * Las cifras del titular se cuentan: un número escrito en el texto se queda
  * viejo en cuanto alguien añade o quita un semillero.
  */
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
 import { Icons } from '../../components/Icons'
@@ -26,11 +27,153 @@ function cuenta(n, singular, plural, { mayuscula = false, femenino = false } = {
 
 const ETIQUETA_SEDE = { riohacha: 'Riohacha', maicao: 'Maicao', ambas: 'Riohacha y Maicao' }
 
+/* Semilleros: es la puerta de entrada de un estudiante a la investigación, y
+   en una cuadrícula de tarjetas grises al fondo de la página pasaban
+   desapercibidos. Van justo después de los grupos, en una franja de color
+   propia, con el color de su grupo y un filtro por grupo. */
+function Semilleros({ semilleros, grupos }) {
+  const [grupo, setGrupo] = useState('todos')
+  const colorDe = id => grupos.find(g => g.id === id)?.color || 'var(--ug-azul)'
+  const conSemilleros = grupos.filter(g => semilleros.some(s => s.grupo_id === g.id))
+  const visibles = grupo === 'todos' ? semilleros : semilleros.filter(s => s.grupo_id === grupo)
+  const porSede = sede => semilleros.filter(s => s.sede === sede).length
+
+  return (
+    <section className="semilleros" id="semilleros">
+      <TramaMarca blanco escala={118} opacidad={0.08} />
+      <div className="inner">
+        <div className="semilleros__cab">
+          <div>
+            <div className="semilleros__eyebrow">Semilleros de investigación</div>
+            <h2 className="semilleros__titulo">
+              {cuenta(semilleros.length, 'forma', 'formas', { mayuscula: true, femenino: true })} de aprender investigando.
+            </h2>
+            <p className="semilleros__texto">
+              Los semilleros reúnen a estudiantes y docentes alrededor de un proyecto desde los
+              primeros semestres. Acércate al coordinador del que te interese para unirte.
+            </p>
+          </div>
+          <dl className="semilleros__cifras">
+            <div><dt>{porSede('riohacha')}</dt><dd>en Riohacha</dd></div>
+            <div><dt>{porSede('maicao')}</dt><dd>en Maicao</dd></div>
+          </dl>
+        </div>
+
+        {conSemilleros.length > 1 && (
+          <div className="semilleros__filtros" role="group" aria-label="Filtrar por grupo">
+            <button type="button" aria-pressed={grupo === 'todos'}
+                    className={'semilleros__filtro' + (grupo === 'todos' ? ' is-activo' : '')}
+                    onClick={() => setGrupo('todos')}>Todos · {semilleros.length}</button>
+            {conSemilleros.map(g => (
+              <button key={g.id} type="button" aria-pressed={grupo === g.id}
+                      className={'semilleros__filtro' + (grupo === g.id ? ' is-activo' : '')}
+                      style={{ '--tono': g.color || 'var(--ug-azul)' }}
+                      onClick={() => setGrupo(g.id)}>
+                {g.nombre} · {semilleros.filter(s => s.grupo_id === g.id).length}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="semilleros__rejilla">
+          {visibles.map(s => (
+            <article key={s.id} className="semillero" style={{ '--tono': colorDe(s.grupo_id) }}
+                     title={s.descripcion || undefined}>
+              <div className="semillero__etiquetas">
+                {s.grupo && <span className="semillero__grupo">{s.grupo}</span>}
+                <span className="semillero__sede">{ETIQUETA_SEDE[s.sede] ?? s.sede}</span>
+              </div>
+              <h3 className="semillero__nombre">{s.nombre}</h3>
+              {s.lider && (
+                <div className="semillero__lider">
+                  <span className="semillero__rotulo">Coordinador</span>
+                  {s.lider}
+                </div>
+              )}
+              {/* Activo, pero con la propuesta aún en manos de los pares:
+                  no se presenta como oficializado. */}
+              {s.en_evaluacion && <span className="semillero__eval">En evaluación</span>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* Líneas de investigación del programa (migración 028). Cada una es una
+   tarjeta plegable: cerrada dice cuántos ejes tiene; abierta, el objetivo y
+   los ejes. Abiertas todas a la vez serían un muro de texto de diez párrafos
+   y más de cien ejes. */
+function LineasInvestigacion({ lineas }) {
+  const [abiertas, setAbiertas] = useState(() => new Set())
+  const alternar = id => setAbiertas(prev => {
+    const s = new Set(prev)
+    if (s.has(id)) s.delete(id); else s.add(id)
+    return s
+  })
+
+  return (
+    <section className="section section--tinte">
+      <div className="inner">
+        <div className="section-head">
+          <div className="title">
+            <div className="eyebrow">Líneas de investigación</div>
+            <h2>{cuenta(lineas.length, 'línea', 'líneas', { mayuscula: true, femenino: true })} que orientan la investigación del programa.</h2>
+          </div>
+          <p className="desc">Cada línea define un objetivo y los ejes temáticos en los que se inscriben los proyectos, semilleros y trabajos de grado. Ábrelas para ver el detalle.</p>
+        </div>
+
+        <div className="lineas-inv">
+          {lineas.map((l, i) => {
+            const abierta = abiertas.has(l.id)
+            const ejes = l.ejes ?? []
+            return (
+              <article key={l.id} className={'linea-inv' + (abierta ? ' is-abierta' : '')}>
+                <button type="button" className="linea-inv__cab" aria-expanded={abierta}
+                        aria-controls={'linea-' + l.id} onClick={() => alternar(l.id)}>
+                  <span className="linea-inv__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="linea-inv__textos">
+                    <span className="linea-inv__nombre">{l.nombre}</span>
+                    {ejes.length > 0 && (
+                      <span className="linea-inv__cuenta">{ejes.length} {ejes.length === 1 ? 'eje temático' : 'ejes temáticos'}</span>
+                    )}
+                  </span>
+                  <span className="linea-inv__signo" aria-hidden="true">{abierta ? '–' : '+'}</span>
+                </button>
+                {abierta && (
+                  <div id={'linea-' + l.id} className="linea-inv__cuerpo">
+                    {l.objetivo && (
+                      <>
+                        <div className="linea-inv__rotulo">Objetivo</div>
+                        <p className="linea-inv__objetivo">{l.objetivo}</p>
+                      </>
+                    )}
+                    {ejes.length > 0 && (
+                      <>
+                        <div className="linea-inv__rotulo">Ejes temáticos</div>
+                        <ul className="linea-inv__ejes">
+                          {ejes.map(e => <li key={e}>{e}</li>)}
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                )}
+              </article>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Investigacion() {
   const { data } = useData()
   const grupos = data.grupos ?? []
   const semilleros = data.semilleros ?? []
   const produccion = data.produccion ?? []
+  const lineas = data.lineas_investigacion ?? []
 
   const titular = grupos.length || semilleros.length
     ? `${cuenta(grupos.length, 'grupo', 'grupos', { mayuscula: true })}, ${cuenta(semilleros.length, 'semillero', 'semilleros')}, una región que se investiga a sí misma.`
@@ -53,7 +196,12 @@ export default function Investigacion() {
           {(grupos.length > 0 || produccion.length > 0) && (
             <div className="sp-cifras">
               <div><b>{grupos.length}</b><span>{grupos.length === 1 ? 'grupo' : 'grupos'} de investigación</span></div>
-              <div><b>{semilleros.length}</b><span>{semilleros.length === 1 ? 'semillero' : 'semilleros'}</span></div>
+              {/* Enlace a la sección: los semilleros son lo que más busca un
+                  estudiante que quiere empezar a investigar. */}
+              <a href="#semilleros" className="sp-cifras__enlace"
+                 onClick={e => { e.preventDefault(); document.getElementById('semilleros')?.scrollIntoView({ behavior: 'smooth' }) }}>
+                <b>{semilleros.length}</b><span>{semilleros.length === 1 ? 'semillero' : 'semilleros'} <Icons.arrow /></span>
+              </a>
               {produccion.length > 0 && <div><b>{produccion.length}</b><span>productos destacados</span></div>}
             </div>
           )}
@@ -68,7 +216,7 @@ export default function Investigacion() {
             <div className="grid-3">
               {grupos.map(g => (
                 <div key={g.id} className="card" style={{ background: 'var(--paper-2)', padding: 0, overflow: 'hidden' }}>
-                  <div style={{ height: 120, background: g.color || 'var(--ug-azul)', padding: 20, color: 'var(--ug-negro)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ height: 120, background: g.color || 'var(--ug-azul)', padding: 20, color: g.color === 'var(--ug-marino)' ? '#fff' : 'var(--ug-negro)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', textTransform: 'uppercase' }}>
                       {g.categoria ? `${g.categoria} · MinCiencias` : 'Sin categoría MinCiencias'}
                     </div>
@@ -99,30 +247,9 @@ export default function Investigacion() {
         </div>
       </section>
 
-      {semilleros.length > 0 && (
-        <section className="section section--papel">
-          <div className="inner">
-            <div className="section-head">
-              <div className="title">
-                <div className="eyebrow">Semilleros activos</div>
-                <h2>{cuenta(semilleros.length, 'forma', 'formas', { mayuscula: true, femenino: true })} de aprender investigando.</h2>
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px,1fr))', gap: 12 }}>
-              {semilleros.map((s, i) => (
-                <div key={s.id} title={s.descripcion || undefined} style={{ padding: '16px 18px', background: 'var(--paper-2)', borderRadius: 10, border: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', boxShadow: 'var(--shadow-sm)' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '.15em', color: 'var(--ink-3)', display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                    <span>{String(i + 1).padStart(2, '0')}</span>
-                    {s.grupo && <span>{s.grupo}</span>}
-                  </div>
-                  <div style={{ fontWeight: 500, marginTop: 4 }}>{s.nombre}</div>
-                  {s.lider && <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 6 }}>{s.lider}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {semilleros.length > 0 && <Semilleros semilleros={semilleros} grupos={grupos} />}
+
+      {lineas.length > 0 && <LineasInvestigacion lineas={lineas} />}
 
       {/* Sin producción cargada la sección no se pinta: un bloque «Lo que
           publicamos» vacío dice peor cosa que no tenerlo. */}

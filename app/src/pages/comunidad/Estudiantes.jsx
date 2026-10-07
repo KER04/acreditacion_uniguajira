@@ -353,8 +353,18 @@ function Honor() {
   const [detalle, setDetalle] = useState(null)
 
   const delPeriodo = activo ? todos.filter(e => e.periodo === activo) : todos
-  // Copia antes de ordenar: .sort() mutaria el arreglo del estado.
-  const top = [...delPeriodo].sort((a, b) => Number(b.promedio) - Number(a.promedio))
+
+  /* Cada sede tiene su propio cuadro (los diez mejores de cada una), así que
+     se elige la sede en vez de mezclarlas en un solo ranking. El selector
+     solo aparece si el periodo tiene estudiantes de las dos. */
+  const sedesDelPeriodo = ['riohacha', 'maicao'].filter(s => delPeriodo.some(e => e.sede === s))
+  const [sedeElegida, setSedeElegida] = useState('riohacha')
+  const sede = sedesDelPeriodo.includes(sedeElegida) ? sedeElegida : (sedesDelPeriodo[0] ?? null)
+  const deLaSede = sede ? delPeriodo.filter(e => e.sede === sede) : delPeriodo
+
+  // Copia antes de ordenar: .sort() mutaria el arreglo del estado. El sort es
+  // estable: a igual promedio queda el orden de la API (el del reporte).
+  const top = [...deLaSede].sort((a, b) => Number(b.promedio) - Number(a.promedio))
   const podium = top.slice(0, 3)
   const rest = top.slice(3)
   const colors = ['var(--ug-amarillo)', 'var(--ug-azul)', 'var(--ug-flamingo)']
@@ -375,10 +385,22 @@ function Honor() {
             <h2 style={{ marginTop: 10 }}>Mejores promedios del semestre.</h2>
           </div>
           <p className="desc">
-            Estudiantes con promedio ponderado superior a 4.60 que aprobaron todas sus asignaturas
-            en primera oportunidad. Pulsa a cualquiera para ver su ficha y sus documentos.
+            Los diez mejores promedios del semestre en cada sede, según el reporte académico del
+            período. Pulsa a cualquiera para ver su ficha y sus documentos.
           </p>
         </div>
+
+        {sedesDelPeriodo.length > 1 && (
+          <div className="sede-filtro honor-sedes" role="group" aria-label="Sede">
+            {sedesDelPeriodo.map(s => (
+              <button key={s} type="button" aria-pressed={sede === s}
+                      className={'sede-filtro__opcion' + (sede === s ? ' sede-filtro__opcion--activa' : '')}
+                      onClick={() => setSedeElegida(s)}>
+                Sede {s === 'riohacha' ? 'Riohacha' : 'Maicao'}
+              </button>
+            ))}
+          </div>
+        )}
 
         {top.length === 0 && (
           <div style={{ color: 'var(--ink-3)' }}>No hay estudiantes publicados en este período.</div>
@@ -477,7 +499,7 @@ function Honor() {
 }
 
 /* ─── Reglamento ─────────────────────────────────────────────────
-   Sale de la base (migración 028; se edita en Admin → Estudiantes →
+   Sale de la base (migración 031; se edita en Admin → Estudiantes →
    Reglamento). A un lado, el visor con el documento elegido; al otro, la
    barra con todos los documentos de la sección. Hoy es uno solo, pero la
    barra ya está para cuando se agreguen más. */

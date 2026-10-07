@@ -920,6 +920,13 @@ export const ESQUEMAS = {
     orden:           { etiqueta: 'Orden',           obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 
+  lineas_investigacion: {
+    nombre:   { etiqueta: 'Nombre',   obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 3, max: 160 }) },
+    objetivo: { etiqueta: 'Objetivo', obligatorio: false, validar: v => texto(v, { etiqueta: 'Objetivo', max: 2000 }) },
+    ejes:     { etiqueta: 'Ejes temáticos', obligatorio: false, validar: v => listaDeTextos(v, { etiqueta: 'Ejes temáticos', maximo: 30, largo: 160 }) },
+    orden:    { etiqueta: 'Orden',    obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
+  },
+
   semilleros: {
     nombre:      { etiqueta: 'Nombre',      obligatorio: true,  validar: v => texto(v, { etiqueta: 'Nombre', min: 2, max: 120 }) },
     grupo_id:    { etiqueta: 'Grupo',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Grupo', min: 1 }) },
@@ -927,6 +934,7 @@ export const ESQUEMAS = {
     sede:        { etiqueta: 'Sede',        obligatorio: false, validar: v => enumerado(v, SEDES_CON_AMBAS, 'Sede') },
     descripcion: { etiqueta: 'Descripción', obligatorio: false, validar: v => texto(v, { etiqueta: 'Descripción', max: 2000 }) },
     integrantes: { etiqueta: 'Integrantes', obligatorio: false, validar: v => entero(v, { etiqueta: 'Integrantes', min: 0, max: 500 }) },
+    en_evaluacion: { etiqueta: 'En evaluación', obligatorio: false, validar: v => booleano(v, 'En evaluación') },
     orden:       { etiqueta: 'Orden',       obligatorio: false, validar: v => entero(v, { etiqueta: 'Orden', min: 0, max: 999 }) },
   },
 

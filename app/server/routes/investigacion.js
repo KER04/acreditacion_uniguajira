@@ -8,8 +8,9 @@
  *   /grupos      ->  grupo_investigacion
  *   /semilleros  ->  semillero                (cuelga de un grupo)
  *   /produccion  ->  produccion_investigacion (cuelga de un grupo)
+ *   /lineas      ->  linea_investigacion      (líneas del programa, 028)
  *
- * GET / devuelve los tres de una vez para la página y para /api/all.
+ * GET / devuelve los cuatro de una vez para la página y para /api/all.
  */
 import { Router } from 'express'
 import { query } from '../db/pool.js'
@@ -38,6 +39,8 @@ const MENSAJES = {
   produccion_tipo_valido:       'Tipo de producción no válido',
   produccion_anio_valido:       'El año debe estar entre 1976 y 2100',
   produccion_orden_valido:      'El orden debe estar entre 0 y 999',
+  linea_nombre_no_vacio:        'El nombre debe tener al menos 3 caracteres',
+  linea_orden_valido:           'El orden debe estar entre 0 y 999',
 }
 
 /* El UNIQUE de la sigla es un índice sobre lower(nombre), no una restricción
@@ -46,6 +49,9 @@ const MENSAJES = {
 function falloInvestigacion(res, e, etiqueta) {
   if (e.code === '23505' && e.constraint === 'grupo_nombre_unico') {
     return res.status(409).json({ error: 'Ya hay un grupo con esa sigla' })
+  }
+  if (e.code === '23505' && e.constraint === 'linea_nombre_unico') {
+    return res.status(409).json({ error: 'Ya hay una línea con ese nombre' })
   }
   return fallo(res, e, MENSAJES, etiqueta)
 }
@@ -66,14 +72,27 @@ export async function leerGrupos() {
   return rows.map(conLineas)
 }
 
+/* ─── Líneas de investigación ──────────────────────────────────── */
+
+const COL_LINEA = ['nombre', 'objetivo', 'ejes', 'orden']
+const SEL_LINEA = 'id, ' + COL_LINEA.join(', ')
+
+const conEjes = l => ({ ...l, ejes: l.ejes ?? [] })
+
+export async function leerLineas() {
+  const { rows } = await query(
+    'SELECT ' + SEL_LINEA + ' FROM linea_investigacion ORDER BY orden ASC, id ASC')
+  return rows.map(conEjes)
+}
+
 /* ─── Semilleros y producción ──────────────────────────────────── */
 
 /* Los dos cuelgan de un grupo. La sigla se trae resuelta porque la página la
    pinta como texto, y sin esto tendría que cruzar colecciones en el navegador. */
 
-const COL_SEMILLERO = ['nombre', 'grupo_id', 'lider', 'sede', 'descripcion', 'integrantes', 'orden']
+const COL_SEMILLERO = ['nombre', 'grupo_id', 'lider', 'sede', 'descripcion', 'integrantes', 'en_evaluacion', 'orden']
 const SEL_SEMILLERO = `s.id, s.nombre, s.grupo_id, s.lider, s.sede, s.descripcion,
-  s.integrantes, s.orden, g.nombre AS grupo`
+  s.integrantes, s.en_evaluacion, s.orden, g.nombre AS grupo`
 const DE_SEMILLERO = 'FROM semillero s LEFT JOIN grupo_investigacion g ON g.id = s.grupo_id'
 
 /* `portada_id` no está en las columnas editables: la portada se cambia por
@@ -172,6 +191,19 @@ recurso({
 /* El formulario manda '' cuando se deja "sin grupo" o se borra el número de
    integrantes, y PostgreSQL rechaza '' como INTEGER. */
 recurso({
+  ruta: 'lineas',
+  tabla: 'linea_investigacion',
+  esquema: 'lineas_investigacion',
+  columnas: COL_LINEA,
+  nulas: new Set(),
+  leer: leerLineas,
+  releer: async id => {
+    const { rows } = await query('SELECT ' + SEL_LINEA + ' FROM linea_investigacion WHERE id = $1', [id])
+    return conEjes(rows[0])
+  },
+})
+
+recurso({
   ruta: 'semilleros',
   tabla: 'semillero',
   esquema: 'semilleros',
@@ -246,13 +278,13 @@ router.delete('/produccion/:id(\\d+)/portada', requireAdmin, async (req, res) =>
   } catch (e) { falloInvestigacion(res, e, 'produccion') }
 })
 
-/* ─── Los tres bloques de una vez ──────────────────────────────── */
+/* ─── Los cuatro bloques de una vez ────────────────────────────── */
 
 export async function bloquesInvestigacion() {
-  const [grupos, semilleros, produccion] = await Promise.all([
-    leerGrupos(), leerSemilleros(), leerProduccion(),
+  const [grupos, semilleros, produccion, lineas] = await Promise.all([
+    leerGrupos(), leerSemilleros(), leerProduccion(), leerLineas(),
   ])
-  return { grupos, semilleros, produccion }
+  return { grupos, semilleros, produccion, lineas }
 }
 
 router.get('/', async (_req, res) => {
