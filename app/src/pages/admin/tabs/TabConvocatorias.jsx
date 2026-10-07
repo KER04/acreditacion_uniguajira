@@ -3,6 +3,8 @@ import { useData } from '../../../context/DataContext'
 import { Icons } from '../../../components/Icons'
 import RowActions from '../RowActions'
 import Plegable from '../Plegable'
+import FotosConvocatoria from '../FotosConvocatoria'
+import { apiSubirFotosConvocatoria } from '../../../context/DataContext'
 import {
   CATEGORIAS_CONVOCATORIA, ESTADOS_CONVOCATORIA, SEDES_CON_AMBAS, fechaLarga,
 } from '../../../../shared/validacion'
@@ -17,18 +19,34 @@ const vacia = {
 }
 
 export default function TabConvocatorias() {
-  const { data, addItem, removeItem, updateItem } = useData()
+  const { data, addItem, removeItem, updateItem, recargar, setError } = useData()
   const [form, setForm] = useState(vacia)
   const [editando, setEditando] = useState(null)
+  /* Fotos elegidas para una convocatoria que aún no existe: necesitan su id,
+     así que se suben justo después de publicarla. */
+  const [cola, setCola] = useState([])
+  const [publicando, setPublicando] = useState(false)
 
-  const guardar = e => {
+  const guardar = async e => {
     e.preventDefault()
     /* El textarea edita los requisitos como líneas; la base los guarda como
        arreglo. La conversión ocurre aquí, en el borde. */
     const item = { ...form, requisitos: form.requisitos.split('\n').map(r => r.trim()).filter(Boolean) }
-    if (editando !== null) { updateItem('convocatorias', editando, item); setEditando(null) }
-    else addItem('convocatorias', item)
-    setForm(vacia)
+    if (editando !== null) { updateItem('convocatorias', editando, item); setEditando(null); setForm(vacia); return }
+
+    setPublicando(true)
+    const creada = await addItem('convocatorias', item)
+    if (creada && cola.length) {
+      try {
+        await apiSubirFotosConvocatoria(creada.id, cola)
+        await recargar('convocatorias')
+      } catch (err) {
+        setError('La convocatoria se publicó, pero las fotos no se subieron: ' + err.message +
+                 '. Edítala para volver a intentarlo.')
+      }
+    }
+    setPublicando(false)
+    if (creada) { setForm(vacia); setCola([]) }
   }
   const editar = c => {
     setForm({
@@ -41,6 +59,7 @@ export default function TabConvocatorias() {
     setEditando(c.id)
   }
   const cancelar = () => { setForm(vacia); setEditando(null) }
+  const enEdicion = editando !== null ? (data.convocatorias ?? []).find(c => c.id === editando) : null
   const f = (k, v) => setForm(x => ({ ...x, [k]: v }))
 
   return (
@@ -99,10 +118,20 @@ export default function TabConvocatorias() {
               <label>Requisitos (uno por línea)</label>
               <textarea rows="3" value={form.requisitos} onChange={e => f('requisitos', e.target.value)} />
             </div>
+            <div className="field" style={{ gridColumn: '1 / -1' }}>
+              <label>Afiche y fotos</label>
+              <p style={{ fontSize: 12.5, color: 'var(--ink-3)', margin: '0 0 10px' }}>
+                La primera es el afiche: sale grande en la vitrina de la página de convocatorias.
+                Las demás forman la galería que se abre al pulsarlo.
+              </p>
+              {enEdicion
+                ? <FotosConvocatoria convocatoria={enEdicion} onCambio={() => recargar('convocatorias')} setError={setError} />
+                : <FotosConvocatoria cola={cola} onCola={setCola} setError={setError} />}
+            </div>
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
-            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }}>
-              {editando !== null ? 'Guardar cambios' : 'Publicar'} <Icons.check />
+            <button className="btn accent" type="submit" style={{ padding: '8px 20px' }} disabled={publicando}>
+              {editando !== null ? 'Guardar cambios' : publicando ? 'Publicando…' : 'Publicar'} <Icons.check />
             </button>
             {editando !== null && <button type="button" className="btn ghost" style={{ padding: '8px 16px' }} onClick={cancelar}>Cancelar</button>}
           </div>
@@ -110,7 +139,15 @@ export default function TabConvocatorias() {
       </Plegable>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {(data.convocatorias ?? []).map(c => (
-          <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '1fr 140px 80px 90px 130px auto', gap: 16, padding: '14px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', alignItems: 'center' }}>
+          <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '56px 1fr 140px 80px 90px 130px auto', gap: 16, padding: '14px 0', borderBottom: '1px solid color-mix(in oklab, var(--ink) 8%, transparent)', alignItems: 'center' }}>
+            {/* El afiche como miniatura: de un vistazo se ve cuáles no tienen. */}
+            <button type="button" className="conv-mini" onClick={() => editar(c)}
+                    title={c.fotos?.length ? `${c.fotos.length} foto(s) · editar` : 'Sin fotos · añadir'}>
+              {c.fotos?.[0]
+                ? <img src={c.fotos[0].url} alt="" />
+                : <Icons.camara size={18} />}
+              {c.fotos?.length > 1 && <span>{c.fotos.length}</span>}
+            </button>
             <div style={{ fontWeight: 500, fontSize: 14 }}>
               {c.titulo}
               {/* La base no sabe si alguien actualizó el estado; la fecha sí. */}

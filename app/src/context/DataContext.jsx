@@ -269,6 +269,25 @@ export function apiSubirImagenTarjeta(id, file) {
 export const apiBorrarImagenTarjeta = id =>
   apiJSON(`tarjetas/tarjeta/${id}/imagen`, { method: 'DELETE' })
 
+/* ─── Fotos de convocatorias ───────────────────────────────────── */
+
+/* Todas devuelven la convocatoria completa, con `fotos` ya en orden: la
+   primera es el afiche. */
+export function apiSubirFotosConvocatoria(id, files) {
+  const fd = new FormData()
+  for (const f of files) fd.append('fotos', f)
+  return enviarArchivo(`convocatorias/${id}/fotos`, fd)
+}
+
+export const apiOrdenarFotosConvocatoria = (id, ids) =>
+  apiJSON(`convocatorias/${id}/fotos/orden`, { method: 'PUT', body: { ids } })
+
+export const apiPieFotoConvocatoria = (fotoId, pie) =>
+  apiJSON(`convocatorias/fotos/${fotoId}`, { method: 'PATCH', body: { pie } })
+
+export const apiBorrarFotoConvocatoria = fotoId =>
+  apiJSON(`convocatorias/fotos/${fotoId}`, { method: 'DELETE' })
+
 /* ─── Egresados ────────────────────────────────────────────────── */
 
 /* Foto redonda del egresado y fotograma del vídeo. Son la misma operación
@@ -614,11 +633,13 @@ export function DataProvider({ children }) {
 
   const addItem = useCallback(async (key, item) => {
     if (EN_BASE[key]) {
+      /* Devuelve lo creado (con su id) para quien tenga que colgarle algo
+         después, como las fotos de una convocatoria; null si falló. */
       try {
-        await apiJSON(EN_BASE[key], { method: 'POST', body: item })
+        const creado = await apiJSON(EN_BASE[key], { method: 'POST', body: item })
         await recargar(key)
-      } catch (e) { setError(e.message) }
-      return
+        return creado
+      } catch (e) { setError(e.message); return null }
     }
     const next = [...(dataRef.current[key] ?? []), { ...item, id: item.id ?? Date.now() }]
     setData(d => ({ ...d, [key]: next }))

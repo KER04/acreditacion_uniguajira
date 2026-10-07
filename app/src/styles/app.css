@@ -6888,3 +6888,202 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
   color: var(--doc-azul-texto); text-decoration: underline; text-underline-offset: 3px;
 }
 .conv-toggle:hover { color: var(--ink); }
+
+/* Vitrina: afiche y texto en un mismo panel, como una sola pieza. El afiche
+   no se recorta (cada pieza trae su proporción y el texto del diseño no puede
+   perder los bordes); el hueco lo llena la misma imagen difuminada. */
+.conv-vitrina { padding-top: 8px; padding-bottom: 32px; }
+.conv-vitrina__panel {
+  display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr);
+  background: var(--paper); border-radius: 20px; overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--ink) 9%, transparent);
+  box-shadow: var(--shadow-lg);
+}
+
+.conv-vitrina__afiche {
+  position: relative; margin: 0; overflow: hidden; isolation: isolate;
+  min-height: clamp(320px, 38vw, 540px); display: grid; background: var(--ug-marino);
+}
+.conv-vitrina__fondo {
+  position: absolute; inset: -40px; z-index: -2;
+  background-size: cover; background-position: center;
+  filter: blur(32px) saturate(1.2); transform: scale(1.1);
+}
+.conv-vitrina__afiche::after {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(135deg, rgba(3, 9, 15, .10), rgba(3, 9, 15, .32));
+}
+.conv-vitrina__afiche button {
+  display: grid; place-items: center; width: 100%; height: 100%;
+  padding: clamp(16px, 2.6vw, 32px); border: 0; background: none; cursor: zoom-in;
+}
+.conv-vitrina__afiche img {
+  display: block; max-width: 100%; max-height: 500px; width: auto; height: auto;
+  border-radius: 10px; box-shadow: 0 22px 44px -14px rgba(3, 9, 15, .55);
+  transition: transform .3s ease; animation: conv-aparece .35s ease;
+}
+.conv-vitrina__afiche button:hover img { transform: scale(1.015); }
+.conv-vitrina__afiche button:focus-visible { outline: 3px solid var(--ug-amarillo); outline-offset: -6px; }
+@keyframes conv-aparece { from { opacity: 0; } to { opacity: 1; } }
+.conv-vitrina__mas {
+  position: absolute; left: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; pointer-events: none;
+  background: rgba(3, 9, 15, .58); color: #fff; backdrop-filter: blur(4px);
+}
+
+.conv-vitrina__texto { display: flex; flex-direction: column; min-width: 0; padding: clamp(22px, 3vw, 36px); }
+.conv-vitrina__cabeza {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-top: 14px; margin-bottom: 22px;
+}
+.conv-vitrina__cabeza::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 48px; height: 3px;
+  background: var(--ug-amarillo); border-radius: 2px;
+}
+.conv-vitrina__nav { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+.conv-vitrina__nav span { margin-right: 4px; }
+.conv-vitrina__nav button,
+.galeria__flecha {
+  width: 34px; height: 34px; border-radius: 999px; cursor: pointer; font-size: 21px; line-height: 1;
+  display: inline-grid; place-items: center; padding: 0 0 3px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+}
+.conv-vitrina__nav button:hover { border-color: var(--ug-amarillo-deep); color: var(--ug-amarillo-deep); }
+
+.conv-vitrina__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 14px; }
+.conv-vitrina__fecha { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+.conv-vitrina__texto h2 {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 28px);
+  letter-spacing: -0.015em; line-height: 1.18; margin: 0 0 12px;
+}
+.conv-vitrina__texto p {
+  font-size: 15.5px; line-height: 1.65; color: var(--ink-2); margin: 0 0 20px;
+  display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden;
+}
+.conv-vitrina__texto .conv-acciones { margin-top: 0; }
+.conv-vitrina__texto .conv-acciones:has(+ .conv-vitrina__tira) { margin-bottom: 24px; }
+/* Ficha al pie de la columna: empuja datos y acciones hacia abajo. */
+.conv-vitrina__datos {
+  margin: auto 0 20px; padding-top: 16px; display: grid; gap: 10px;
+  border-top: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.conv-vitrina__datos div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: baseline; }
+.conv-vitrina__datos dt { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.conv-vitrina__datos dd { margin: 0; font-size: 14px; color: var(--ink); }
+
+/* Las demás convocatorias con fotos, al pie del panel. */
+.conv-vitrina__tira {
+  display: flex; gap: 8px; overflow-x: auto; margin-top: auto; padding-top: 16px;
+  border-top: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.conv-vitrina__mini {
+  flex: 0 0 64px; height: 48px; padding: 0; border-radius: 8px; overflow: hidden; cursor: pointer;
+  background: var(--paper-3); border: 2px solid transparent; opacity: .55;
+  transition: opacity .2s ease, border-color .2s ease;
+}
+.conv-vitrina__mini:hover { opacity: .9; }
+.conv-vitrina__mini.is-activa { opacity: 1; border-color: var(--ug-amarillo-deep); }
+.conv-vitrina__mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@media (max-width: 860px) {
+  .conv-vitrina__panel { grid-template-columns: 1fr; }
+  .conv-vitrina__afiche { min-height: 0; }
+  .conv-vitrina__afiche img { max-height: 62vh; }
+}
+
+/* Miniatura del afiche en cada tarjeta de la lista. */
+.conv-card__foto {
+  position: relative; display: block; padding: 0; border: 0; cursor: zoom-in; background: var(--paper-3);
+  margin: -6px -6px 2px; border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 10;
+}
+.conv-card__foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease; }
+.conv-card__foto:hover img { transform: scale(1.03); }
+.conv-card__foto span {
+  position: absolute; right: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  background: rgba(3, 9, 15, .62); color: #fff;
+}
+
+/* Visor a pantalla completa (components/GaleriaFotos.jsx). */
+.galeria {
+  position: fixed; inset: 0; z-index: 200; background: rgba(3, 9, 15, .92);
+  display: grid; grid-template-rows: auto 1fr auto; color: #fff;
+  padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+}
+.galeria__barra { display: flex; align-items: center; gap: 14px; padding: 14px clamp(14px, 3vw, 28px); }
+.galeria__titulo { font-weight: 600; font-size: 15px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.galeria__cuenta { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
+.galeria__cerrar {
+  width: 40px; height: 40px; border-radius: 999px; cursor: pointer; display: grid; place-items: center;
+  background: rgba(255, 255, 255, .1); color: #fff; border: 1px solid rgba(255, 255, 255, .25);
+}
+.galeria__cerrar:hover { background: rgba(255, 255, 255, .2); }
+.galeria__escena { margin: 0; min-height: 0; display: grid; place-items: center; align-content: center; gap: 12px; padding: 0 clamp(14px, 7vw, 90px); }
+.galeria__escena img {
+  max-width: 100%; max-height: calc(100vh - 210px); object-fit: contain; border-radius: 8px;
+  animation: conv-aparece .25s ease;
+}
+.galeria__escena figcaption { font-size: 14px; opacity: .85; text-align: center; max-width: 70ch; }
+.galeria__flecha {
+  position: fixed; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; font-size: 30px;
+  background: rgba(255, 255, 255, .1); color: #fff; border-color: rgba(255, 255, 255, .25);
+}
+.galeria__flecha:hover { background: rgba(255, 255, 255, .22); }
+.galeria__flecha.is-izq { left: clamp(8px, 2vw, 24px); }
+.galeria__flecha.is-der { right: clamp(8px, 2vw, 24px); }
+.galeria__tira { display: flex; justify-content: center; gap: 8px; overflow-x: auto; padding: 12px 16px 16px; }
+.galeria__mini {
+  flex: 0 0 64px; height: 48px; padding: 0; border-radius: 6px; overflow: hidden; cursor: pointer;
+  border: 2px solid transparent; opacity: .55; background: none;
+}
+.galeria__mini.is-activa { opacity: 1; border-color: var(--ug-amarillo); }
+.galeria__mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 640px) {
+  .galeria__flecha { display: none; }
+}
+
+/* Panel: gestor de fotos de una convocatoria (admin/FotosConvocatoria.jsx). */
+.conv-fotos-admin { display: grid; gap: 12px; }
+.conv-fotos-admin__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.conv-foto-admin {
+  margin: 0; display: grid; gap: 6px; padding: 6px; border-radius: 10px; background: var(--paper);
+  border: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+}
+.conv-foto-admin.is-afiche { border-color: var(--ug-amarillo-deep); box-shadow: 0 0 0 1px var(--ug-amarillo-deep); }
+.conv-foto-admin__img { position: relative; aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; background: var(--paper-3); }
+.conv-foto-admin__img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.conv-foto-admin__marca {
+  position: absolute; left: 6px; top: 6px; padding: 2px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--ug-amarillo); color: var(--ug-negro);
+}
+.conv-foto-admin__pie { font: inherit; font-size: 12px; padding: 6px 8px; border-radius: 6px; border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent); background: var(--paper-2); color: var(--ink); }
+.conv-foto-admin__acciones { display: flex; flex-wrap: wrap; gap: 4px; }
+.conv-foto-admin__acciones .chip { cursor: pointer; font-size: 11px; padding: 3px 8px; }
+.conv-foto-admin__acciones .chip:disabled { opacity: .4; cursor: default; }
+.conv-foto-admin__quitar { color: var(--ug-flamingo); }
+.conv-foto-admin__quitar svg { width: 13px; height: 13px; }
+.conv-fotos-zona {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 10px;
+  border: 1.5px dashed color-mix(in oklab, var(--ink) 22%, transparent); color: var(--ink-2);
+  transition: border-color .15s ease, background .15s ease;
+}
+.conv-fotos-zona.is-encima { border-color: var(--ug-azul); background: color-mix(in oklab, var(--ug-azul) 8%, transparent); }
+.conv-fotos-zona > div { flex: 1; min-width: 200px; display: grid; gap: 2px; }
+.conv-fotos-zona b { font-size: 13.5px; color: var(--ink); }
+.conv-fotos-zona span { font-size: 12px; color: var(--ink-3); }
+.conv-fotos-zona .btn { padding: 7px 14px; font-size: 13px; }
+.conv-fotos-admin__nota { font-size: 12px; color: var(--ink-3); margin: 0; }
+.conv-fotos-admin__avisos { margin: 0; padding-left: 18px; font-size: 12px; color: var(--ug-flamingo); }
+.conv-mini {
+  position: relative; width: 56px; height: 42px; padding: 0; border-radius: 6px; overflow: hidden; cursor: pointer;
+  display: grid; place-items: center; color: var(--ink-3); background: var(--paper-2);
+  border: 1px dashed color-mix(in oklab, var(--ink) 20%, transparent);
+}
+.conv-mini:has(img) { border-style: solid; }
+.conv-mini img { width: 100%; height: 100%; object-fit: cover; }
+.conv-mini span {
+  position: absolute; right: 2px; bottom: 2px; font-size: 9px; font-weight: 700; padding: 0 4px;
+  border-radius: 4px; background: rgba(3, 9, 15, .7); color: #fff;
+}

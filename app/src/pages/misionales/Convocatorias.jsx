@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Icons } from '../../components/Icons'
 import { useData } from '../../context/DataContext'
 import SedeFilter, { sedeMatch } from '../../components/SedeFilter'
+import GaleriaFotos from '../../components/GaleriaFotos'
 import { fechaLarga } from '../../../shared/validacion'
 
 const CATS = [
@@ -23,12 +24,123 @@ const colorMap = {
   Eventos: 'var(--ug-azul)',
 }
 
+/* Vitrina: el afiche de una convocatoria, como lo publica la universidad, y su
+   texto al lado, en un mismo panel. Solo entran las que tienen fotos; primero
+   las vigentes, después las ya cerradas (sus fotos siguen contando el evento).
+   Se pasa de una a otra con las flechas o con las miniaturas del panel.
+
+   El afiche no se recorta (cada pieza trae su proporción y su texto no puede
+   perder los bordes). El hueco que deja lo llena la misma imagen, difuminada,
+   para que el panel se lea como una sola pieza y no como una foto suelta. */
+function Vitrina({ lista, onGaleria }) {
+  const [i, setI] = useState(0)
+  const n = lista.length
+  const actual = Math.min(i, n - 1)
+  const c = lista[actual]
+  if (!c) return null
+  const cerrada = Boolean(c.vencida)
+  const postular = !cerrada && c.url_postulacion
+  /* Misma regla que las tarjetas: cerrada, el enlace de postulación pasa a
+     ser el de consulta, y no se repite si es el mismo que «Postularme». */
+  const verDoc = c.documento_url || (cerrada ? c.url_postulacion : '')
+  const mostrarDoc = verDoc && verDoc !== postular
+  const fotos = c.fotos
+  const datos = [
+    ['Dirigida a', c.dirigida_a],
+    ['Sede', c.sede && c.sede !== 'ambas' ? c.sede[0].toUpperCase() + c.sede.slice(1) : 'Riohacha y Maicao'],
+    ['Cierre', c.fecha_cierre && fechaLarga(c.fecha_cierre)],
+  ].filter(([, v]) => v)
+  const ir = d => setI(x => (Math.min(x, n - 1) + d + n) % n)
+
+  return (
+    <section className="section conv-vitrina" aria-roledescription="carrusel" aria-label="Convocatorias y eventos en imágenes">
+      <div className="inner">
+        <article className="conv-vitrina__panel">
+          <figure className="conv-vitrina__afiche">
+            <div className="conv-vitrina__fondo" style={{ backgroundImage: `url("${fotos[0].url}")` }} aria-hidden="true" />
+            <button type="button" onClick={() => onGaleria(c, 0)}
+                    aria-label={`Ver ${fotos.length > 1 ? 'las ' + fotos.length + ' fotos' : 'el afiche'} de ${c.titulo}`}>
+              <img key={fotos[0].id} src={fotos[0].url} alt={fotos[0].pie || 'Afiche: ' + c.titulo} />
+            </button>
+            {fotos.length > 1 && (
+              <span className="conv-vitrina__mas"><Icons.camara size={14} /> {fotos.length} fotos</span>
+            )}
+          </figure>
+
+          <div className="conv-vitrina__texto">
+            <div className="conv-vitrina__cabeza">
+              <div className="eyebrow">En imágenes</div>
+              {n > 1 && (
+                <div className="conv-vitrina__nav">
+                  <span>{actual + 1} / {n}</span>
+                  <button type="button" onClick={() => ir(-1)} aria-label="Convocatoria anterior">‹</button>
+                  <button type="button" onClick={() => ir(1)} aria-label="Convocatoria siguiente">›</button>
+                </div>
+              )}
+            </div>
+
+            <div className="conv-vitrina__meta">
+              <span className="chip" style={{ fontSize: 10, background: colorMap[c.categoria] ?? 'var(--paper-3)', color: 'var(--ug-negro)', border: 'none' }}>{c.categoria}</span>
+              <span className={'conv-estado' + (cerrada ? ' is-cerrada' : '')}>{cerrada ? 'Cerrada' : (c.estado || 'Abierta')}</span>
+              {(c.fecha_apertura || c.fecha_cierre) && (
+                <span className="conv-vitrina__fecha">
+                  {[c.fecha_apertura && fechaLarga(c.fecha_apertura), c.fecha_cierre && fechaLarga(c.fecha_cierre)].filter(Boolean).join(' – ')}
+                </span>
+              )}
+            </div>
+            <h2>{c.titulo}</h2>
+            {c.descripcion && <p>{c.descripcion}</p>}
+
+            {/* La ficha va al pie: llena la columna cuando la descripción es
+                corta y deja las acciones siempre en el mismo sitio. */}
+            {datos.length > 0 && (
+              <dl className="conv-vitrina__datos">
+                {datos.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+              </dl>
+            )}
+            <div className="conv-acciones">
+              {postular && (
+                <a className="btn accent" href={postular} target="_blank" rel="noopener noreferrer">Postularme <Icons.external /></a>
+              )}
+              {mostrarDoc && (
+                <a className="btn ghost" href={verDoc} target="_blank" rel="noopener noreferrer">Ver convocatoria <Icons.external /></a>
+              )}
+              {fotos.length > 1 && (
+                <button type="button" className="btn ghost" onClick={() => onGaleria(c, 0)}>
+                  <Icons.camara size={15} /> Ver galería
+                </button>
+              )}
+            </div>
+
+            {n > 1 && (
+              <div className="conv-vitrina__tira" role="tablist" aria-label="Elegir convocatoria">
+                {lista.map((x, j) => (
+                  <button key={x.id} type="button" role="tab" aria-selected={j === actual} title={x.titulo}
+                          aria-label={x.titulo}
+                          className={'conv-vitrina__mini' + (j === actual ? ' is-activa' : '')} onClick={() => setI(j)}>
+                    <img src={x.fotos[0].url} alt="" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </article>
+      </div>
+    </section>
+  )
+}
+
 export default function Convocatorias() {
   const { data } = useData()
   const [cat, setCat] = useState('all')
   const [sede, setSede] = useState('ambas')
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(null)
+  const [galeria, setGaleria] = useState(null)
+  const verGaleria = (c, inicio) => setGaleria({ fotos: c.fotos, titulo: c.titulo, inicio })
+
+  const conFotos = (data.convocatorias ?? []).filter(c => c.fotos?.length)
+  const vitrina = [...conFotos.filter(c => !c.vencida), ...conFotos.filter(c => c.vencida)]
 
   const items = (data.convocatorias ?? []).filter(c => {
     const matchCat = cat === 'all' || c.categoria === cat
@@ -48,6 +160,8 @@ export default function Convocatorias() {
           </p>
         </div>
       </section>
+
+      {vitrina.length > 0 && <Vitrina lista={vitrina} onGaleria={verGaleria} />}
 
       <section className="section" style={{ paddingTop: 16 }}>
         <div className="inner">
@@ -86,6 +200,13 @@ export default function Convocatorias() {
                 const hayDetalles = reqs.length > 0 || c.fecha_apertura || c.dirigida_a
                 return (
                   <article key={id} className="card conv-card" style={{ background: 'var(--paper-2)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {c.fotos?.length > 0 && (
+                      <button type="button" className="conv-card__foto" onClick={() => verGaleria(c, 0)}
+                              aria-label={`Ver fotos de ${c.titulo}`}>
+                        <img src={c.fotos[0].url} alt="" loading="lazy" />
+                        {c.fotos.length > 1 && <span><Icons.camara size={13} /> {c.fotos.length}</span>}
+                      </button>
+                    )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', gap: 8 }}>
                       <span className="chip" style={{ fontSize: 10, background: colorMap[c.categoria] ?? 'var(--paper-3)', color: 'var(--ug-negro)', border: 'none' }}>{c.categoria}</span>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', gap: 4 }}>
@@ -141,6 +262,11 @@ export default function Convocatorias() {
           )}
         </div>
       </section>
+
+      {galeria && (
+        <GaleriaFotos fotos={galeria.fotos} inicio={galeria.inicio} titulo={galeria.titulo}
+                      onCerrar={() => setGaleria(null)} />
+      )}
     </div>
   )
 }
