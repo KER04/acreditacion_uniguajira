@@ -1342,6 +1342,35 @@ a.cna-informe:hover { transform: translateY(-2px); border-color: var(--ug-marino
   font-size: 14px;
 }
 
+/* ---------- Paginación (9 por página) ---------- */
+.docentes-paginas {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 14px 20px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--doc-borde-suave);
+}
+.docentes-paginas__resumen { margin: 0; font-size: 13px; color: var(--ink-3); }
+.docentes-paginas__resumen b { color: var(--ink); font-weight: 600; }
+.docentes-paginas__botones { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.docentes-pagina {
+  min-width: 38px; height: 38px; padding: 0 12px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--doc-borde); background: var(--paper-2); color: var(--ink);
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.docentes-pagina:hover:not(:disabled):not(.is-activa) { border-color: var(--accent); color: var(--doc-azul-texto); }
+.docentes-pagina.is-activa { background: var(--ug-marino); border-color: var(--ug-marino); color: #fff; font-weight: 700; cursor: default; }
+.docentes-pagina:disabled { opacity: .4; cursor: not-allowed; }
+.docentes-pagina:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.docentes-pagina__hueco { min-width: 22px; text-align: center; color: var(--ink-3); }
+/* En el teléfono las flechas pierden la palabra y el resumen va arriba,
+   centrado, para que los botones quepan en una fila. */
+@media (max-width: 560px) {
+  .docentes-paginas { justify-content: center; }
+  .docentes-paginas__resumen { width: 100%; text-align: center; }
+  .docentes-pagina--flecha span { display: none; }
+  .docentes-pagina { min-width: 34px; height: 34px; padding: 0 8px; }
+}
+
 .docente-card {
   background: var(--paper-2);
   border: 1px solid var(--doc-borde);
@@ -3149,6 +3178,38 @@ video.video-eg__medio {
 /* Selector de sede del cuadro de honor. */
 .honor-sedes { width: fit-content; margin: -24px 0 28px; }
 @media (max-width: 560px) { .honor-sedes { width: 100%; margin-top: -12px; } }
+
+/* Documentos descargables: 5 por tarjeta y el resto en páginas que se pasan
+   como carrusel (sin avance automático). Las páginas van en fila dentro de
+   una pista que se desplaza; la tarjeta toma la altura de la página más alta,
+   así no salta al cambiar. */
+.docs-grupo { display: flex; flex-direction: column; min-width: 0; }
+.docs-grupo__cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.docs-grupo__cuenta { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; color: var(--ink-3); white-space: nowrap; }
+.docs-carrusel { margin-top: 16px; overflow: hidden; touch-action: pan-y; }
+.docs-carrusel__pista { display: flex; transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+.docs-carrusel__pagina { flex: 0 0 100%; min-width: 0; }
+@media (prefers-reduced-motion: reduce) { .docs-carrusel__pista { transition: none; } }
+
+.docs-carrusel__pie {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-top: auto; padding-top: 16px; border-top: 1px solid color-mix(in oklab, var(--ink) 7%, transparent);
+}
+.docs-carrusel__rango { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--ink-3); white-space: nowrap; }
+.docs-carrusel__puntos { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.docs-carrusel__punto {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; cursor: pointer;
+  background: color-mix(in oklab, var(--ink) 20%, transparent); transition: width .25s ease, background .25s ease;
+}
+.docs-carrusel__punto.is-activo { width: 22px; background: var(--ug-azul); }
+.docs-carrusel__flechas { display: flex; gap: 6px; }
+.docs-carrusel__flechas button {
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer; padding: 0 0 2px;
+  border: 1px solid var(--doc-borde); background: var(--paper-2); color: var(--ink);
+  font-size: 18px; line-height: 1; display: grid; place-items: center;
+}
+.docs-carrusel__flechas button:hover:not(:disabled) { border-color: var(--accent); color: var(--doc-azul-texto); }
+.docs-carrusel__flechas button:disabled { opacity: .35; cursor: not-allowed; }
 
 /* Reglamento: visor de PDF a la izquierda y barra de documentos a la
    derecha. En tableta la barra sube encima del visor, que es lo que se busca

@@ -320,6 +320,56 @@ function FichaDocente({ d, rect, onCerrar }) {
   )
 }
 
+/* ─── Paginación ───────────────────────────────────────────────
+   9 por página: tres filas de la rejilla de tres columnas. Se pagina lo ya
+   filtrado, así el número de páginas responde a la búsqueda y a los filtros. */
+const POR_PAGINA = 9
+
+/* Números a mostrar: siempre la primera y la última, la actual y sus
+   vecinas; los huecos se marcan con '…'. Con 8 páginas: 1 … 4 5 6 … 8. */
+function paginasVisibles(actual, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const set = new Set([1, total, actual - 1, actual, actual + 1])
+  const nums = [...set].filter(n => n >= 1 && n <= total).sort((a, b) => a - b)
+  const out = []
+  nums.forEach((n, i) => {
+    if (i && n - nums[i - 1] > 1) out.push('…' + n)
+    out.push(n)
+  })
+  return out
+}
+
+function Paginacion({ pagina, total, desde, hasta, cuantos, ir }) {
+  if (total <= 1) return null
+  return (
+    <nav className="docentes-paginas" aria-label="Páginas del directorio docente">
+      <p className="docentes-paginas__resumen">
+        Mostrando <b>{desde}–{hasta}</b> de <b>{cuantos}</b> docentes
+      </p>
+      <div className="docentes-paginas__botones">
+        <button type="button" className="docentes-pagina docentes-pagina--flecha"
+                onClick={() => ir(pagina - 1)} disabled={pagina === 1} aria-label="Página anterior">
+          ‹ <span>Anterior</span>
+        </button>
+        {paginasVisibles(pagina, total).map(n => typeof n === 'string'
+          ? <span key={n} className="docentes-pagina__hueco" aria-hidden="true">…</span>
+          : (
+            <button key={n} type="button"
+                    className={'docentes-pagina' + (n === pagina ? ' is-activa' : '')}
+                    aria-current={n === pagina ? 'page' : undefined}
+                    aria-label={`Página ${n}`} onClick={() => ir(n)}>
+              {n}
+            </button>
+          ))}
+        <button type="button" className="docentes-pagina docentes-pagina--flecha"
+                onClick={() => ir(pagina + 1)} disabled={pagina === total} aria-label="Página siguiente">
+          <span>Siguiente</span> ›
+        </button>
+      </div>
+    </nav>
+  )
+}
+
 export default function Docentes() {
   const { data } = useData()
   const docentes = data.docentes ?? []
@@ -330,6 +380,8 @@ export default function Docentes() {
   /* { d, rect }: el docente abierto y el rectángulo de su tarjeta, que es de
      donde crece la ficha. */
   const [ficha, setFicha] = useState(null)
+  const [pagina, setPagina] = useState(1)
+  const rejilla = useRef(null)
 
   const abrir = useCallback((d, evento) => {
     const tarjeta = evento.currentTarget.closest('.docente-card')
@@ -355,6 +407,26 @@ export default function Docentes() {
       return coincideTexto && coincideVinculacion && sedeMatch(d.sede, sede)
     })
   }, [docentes, q, vinculacion, sede])
+
+  /* Cambiar un filtro devuelve a la primera página: la página 5 de «todos»
+     no tiene por qué existir en «Maicao». */
+  useEffect(() => { setPagina(1) }, [q, vinculacion, sede])
+
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA))
+  const paginaActual = Math.min(pagina, totalPaginas)
+  const inicio = (paginaActual - 1) * POR_PAGINA
+  const visibles = filtrados.slice(inicio, inicio + POR_PAGINA)
+
+  /* Al pasar de página se sube al principio de la rejilla, no al de la
+     página entera: el visitante ya pasó el encabezado y los filtros. */
+  const irAPagina = n => {
+    setPagina(Math.min(Math.max(1, n), totalPaginas))
+    const y = rejilla.current?.getBoundingClientRect().top
+    if (y !== undefined && y < 0) {
+      const alto = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alto-cabecera')) || 76
+      window.scrollTo({ top: window.scrollY + y - alto - 16, behavior: 'smooth' })
+    }
+  }
 
   const resumen = useMemo(() => resumenDe(docentes), [docentes])
   const contadores = useMemo(() => contadoresDe(docentes), [docentes])
@@ -471,8 +543,9 @@ export default function Docentes() {
             : 'No se encontraron docentes con ese criterio.'}
         </p>
       ) : (
-        <section className="docentes-grid">
-          {filtrados.map(d => {
+        <>
+        <section className="docentes-grid" ref={rejilla}>
+          {visibles.map(d => {
             const abierta = ficha?.d.id === d.id
             const g = grupoDe(d)   /* la tarjeta agrupa; la figura exacta se ve al abrirla */
             return (
@@ -541,6 +614,9 @@ export default function Docentes() {
             )
           })}
         </section>
+        <Paginacion pagina={paginaActual} total={totalPaginas} cuantos={filtrados.length}
+                    desde={inicio + 1} hasta={inicio + visibles.length} ir={irAPagina} />
+        </>
       )}
 
       {ficha && <FichaDocente d={ficha.d} rect={ficha.rect} onCerrar={cerrar} />}
