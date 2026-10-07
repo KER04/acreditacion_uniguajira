@@ -92,7 +92,8 @@ export async function leerLineas() {
 
 const COL_SEMILLERO = ['nombre', 'grupo_id', 'lider', 'sede', 'descripcion', 'integrantes', 'en_evaluacion', 'orden']
 const SEL_SEMILLERO = `s.id, s.nombre, s.grupo_id, s.lider, s.sede, s.descripcion,
-  s.integrantes, s.en_evaluacion, s.orden, g.nombre AS grupo`
+  s.integrantes, s.en_evaluacion, s.orden, s.slug, g.nombre AS grupo,
+  (SELECT count(*)::int FROM semillero_logro l WHERE l.semillero_id = s.id) AS logros`
 const DE_SEMILLERO = 'FROM semillero s LEFT JOIN grupo_investigacion g ON g.id = s.grupo_id'
 
 /* `portada_id` no está en las columnas editables: la portada se cambia por
@@ -226,6 +227,30 @@ recurso({
   releer: unaProduccion,
   // La portada de una publicación borrada se queda sin dueño: no hay que acumularla.
   alBorrar: f => borrarSiHuerfano(f.portada_id),
+})
+
+/* Página propia de un semillero: la ficha, sus logros y la galería. Pública.
+   Se pide por slug porque es la dirección que se comparte. */
+router.get('/semilleros/pagina/:slug', async (req, res) => {
+  try {
+    const { rows } = await query(
+      `SELECT ${SEL_SEMILLERO}, g.nombre_completo AS grupo_nombre_completo, g.color AS grupo_color
+       ${DE_SEMILLERO} WHERE s.slug = $1`, [req.params.slug])
+    const semillero = rows[0]
+    if (!semillero) return res.status(404).json({ error: 'Semillero no encontrado' })
+
+    const [logros, fotos] = await Promise.all([
+      query(`SELECT id, tipo, nombre, resultado, puesto, alcance, lugar, fecha, descripcion, participantes, orden
+             FROM semillero_logro WHERE semillero_id = $1 ORDER BY orden ASC, id ASC`, [semillero.id]),
+      query(`SELECT id, logro_id, archivo_id, pie, orden
+             FROM semillero_foto WHERE semillero_id = $1 ORDER BY orden ASC, id ASC`, [semillero.id]),
+    ])
+    res.json({
+      ...conGrupo(semillero),
+      logros: logros.rows.map(l => ({ ...l, participantes: l.participantes ?? [] })),
+      fotos: fotos.rows.map(f => ({ ...f, url: '/api/archivos/' + f.archivo_id })),
+    })
+  } catch (e) { falloInvestigacion(res, e, 'semilleros') }
 })
 
 /* Ficha de una publicación, para su página propia. Pública. */

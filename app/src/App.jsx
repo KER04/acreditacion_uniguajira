@@ -24,6 +24,7 @@ import Infraestructura from './pages/programa/Infraestructura'
 
 import Investigacion from './pages/misionales/Investigacion'
 import ProduccionDetalle from './pages/misionales/ProduccionDetalle'
+import SemilleroPagina from './pages/misionales/SemilleroPagina'
 import PaisConvenios from './pages/misionales/PaisConvenios'
 import Extension from './pages/misionales/Extension'
 import Internacionalizacion from './pages/misionales/Internacionalizacion'
@@ -101,6 +102,7 @@ export default function App() {
 
         <Route path="/investigacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Investigacion /></Shell>} />
         <Route path="/investigacion/publicacion/:id" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><ProduccionDetalle /></Shell>} />
+        <Route path="/investigacion/semillero/:slug" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><SemilleroPagina /></Shell>} />
         <Route path="/extension" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Extension /></Shell>} />
         <Route path="/internacionalizacion" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><Internacionalizacion /></Shell>} />
         <Route path="/internacionalizacion/pais/:slug" element={<Shell theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}><PaisConvenios /></Shell>} />

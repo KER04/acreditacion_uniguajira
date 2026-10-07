@@ -337,6 +337,7 @@ export const apiInfraBorrar = id => apiJSON(`infraestructura/recursos/${id}`, { 
 /* Ficha de una publicación. La pide su página propia, que puede abrirse
    directamente desde un enlace sin pasar antes por /investigacion. */
 export const apiProduccion = id => apiJSON(`investigacion/produccion/${id}`)
+export const apiSemilleroPagina = slug => apiJSON(`investigacion/semilleros/pagina/${encodeURIComponent(slug)}`)
 
 export function apiSubirPortadaProduccion(id, file) {
   const fd = new FormData()
