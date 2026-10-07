@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import Portal from '../../components/Portal'
@@ -607,6 +607,99 @@ function Reglamento() {
   )
 }
 
+/* ─── Tarjeta de un grupo de documentos ─────────────────────────
+   Muestra 5 documentos a la vez. Si hay más, el resto queda en «páginas» que
+   se pasan como un carrusel (flechas, puntos o deslizando en el móvil), pero
+   nunca solas: un documento que se mueve mientras se lee no se puede pulsar. */
+const DOCS_POR_PAGINA = 5
+
+function FilaDoc({ d, ultimo }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '14px 0', borderBottom: ultimo ? 'none' : '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 0 }}>
+        <div style={{ width: 34, height: 34, flexShrink: 0, borderRadius: 6, background: 'var(--paper)', display: 'grid', placeItems: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--ink-3)' }}>{d.tipo}</div>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 500 }}>{d.nombre}</div>
+          <div style={{ fontSize: 11, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', letterSpacing: '.08em', marginTop: 2 }}>
+            {[d.tipo, d.peso, d.descripcion].filter(Boolean).join(' . ')}
+          </div>
+        </div>
+      </div>
+      {/* `descarga` apunta al adjunto de la base con el nombre original; para
+          los de tipo Enlace es la URL externa. */}
+      {(d.descarga || d.url)
+        ? <a className="icon-btn" href={d.descarga || d.url} style={{ width: 34, height: 34, flexShrink: 0, display: 'grid', placeItems: 'center' }} aria-label={'Descargar ' + d.nombre}><Icons.download /></a>
+        : <button className="icon-btn" style={{ width: 34, height: 34, flexShrink: 0, opacity: .4 }} disabled title="Sin archivo cargado"><Icons.download /></button>}
+    </div>
+  )
+}
+
+function GrupoDocs({ grupo, items }) {
+  const paginas = []
+  for (let i = 0; i < items.length; i += DOCS_POR_PAGINA) paginas.push(items.slice(i, i + DOCS_POR_PAGINA))
+  const total = paginas.length
+  const [pag, setPag] = useState(0)
+  const actual = Math.min(pag, total - 1)
+  const ir = n => setPag(Math.min(Math.max(0, n), total - 1))
+
+  /* Deslizar con el dedo; con ratón se usan las flechas. */
+  const inicioX = useRef(null)
+  const onPointerDown = e => { if (e.pointerType !== 'mouse') inicioX.current = e.clientX }
+  const onPointerUp = e => {
+    if (inicioX.current === null) return
+    const dx = e.clientX - inicioX.current
+    inicioX.current = null
+    if (Math.abs(dx) > 45) ir(actual + (dx < 0 ? 1 : -1))
+  }
+
+  const desde = actual * DOCS_POR_PAGINA + 1
+  const hasta = desde + paginas[actual].length - 1
+
+  return (
+    <div className="card docs-grupo" style={{ background: 'var(--paper-2)' }}
+         onKeyDown={e => {
+           if (total < 2) return
+           if (e.key === 'ArrowRight') ir(actual + 1)
+           if (e.key === 'ArrowLeft') ir(actual - 1)
+         }}>
+      <div className="docs-grupo__cab">
+        <div className="eyebrow" style={{ color: 'var(--accent-deep)' }}>. {grupo}</div>
+        {total > 1 && <span className="docs-grupo__cuenta">{items.length} documentos</span>}
+      </div>
+
+      <div className="docs-carrusel" aria-roledescription={total > 1 ? 'carrusel' : undefined}
+           onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => { inicioX.current = null }}>
+        <div className="docs-carrusel__pista" style={{ transform: `translateX(-${actual * 100}%)` }}>
+          {paginas.map((docs, p) => (
+            <div key={p} className="docs-carrusel__pagina" aria-hidden={p !== actual}
+                 inert={p !== actual ? '' : undefined}
+                 aria-label={total > 1 ? `Documentos ${p * DOCS_POR_PAGINA + 1} a ${p * DOCS_POR_PAGINA + docs.length}` : undefined}>
+              {docs.map((d, j) => <FilaDoc key={d.id} d={d} ultimo={j === docs.length - 1} />)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {total > 1 && (
+        <div className="docs-carrusel__pie">
+          <span className="docs-carrusel__rango" aria-live="polite">{desde === hasta ? desde : `${desde}–${hasta}`} de {items.length}</span>
+          <div className="docs-carrusel__puntos" role="group" aria-label={'Páginas de ' + grupo}>
+            {paginas.map((_, p) => (
+              <button key={p} type="button" className={'docs-carrusel__punto' + (p === actual ? ' is-activo' : '')}
+                      aria-label={`Página ${p + 1} de ${total}`} aria-current={p === actual ? 'true' : undefined}
+                      onClick={() => ir(p)} />
+            ))}
+          </div>
+          <div className="docs-carrusel__flechas">
+            <button type="button" onClick={() => ir(actual - 1)} disabled={actual === 0} aria-label="Documentos anteriores">‹</button>
+            <button type="button" onClick={() => ir(actual + 1)} disabled={actual === total - 1} aria-label="Documentos siguientes">›</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function Docs() {
   const { data } = useData()
 
@@ -632,31 +725,7 @@ function Docs() {
           <div style={{ color: 'var(--ink-3)' }}>Todavia no hay documentos publicados.</div>
         ) : (
           <div className="grid-2">
-            {entradas.map(([grupo, items]) => (
-              <div key={grupo} className="card" style={{ background: 'var(--paper-2)' }}>
-                <div className="eyebrow" style={{ color: 'var(--accent-deep)' }}>. {grupo}</div>
-                <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 0 }}>
-                  {items.map((d, j) => (
-                    <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: j < items.length - 1 ? '1px solid color-mix(in oklab, var(--ink) 7%, transparent)' : 'none' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1 }}>
-                        <div style={{ width: 34, height: 34, borderRadius: 6, background: 'var(--paper)', display: 'grid', placeItems: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, color: 'var(--ink-3)' }}>{d.tipo}</div>
-                        <div>
-                          <div style={{ fontSize: 14, fontWeight: 500 }}>{d.nombre}</div>
-                          <div style={{ fontSize: 11, color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', letterSpacing: '.08em', marginTop: 2 }}>
-                            {[d.tipo, d.peso, d.descripcion].filter(Boolean).join(' . ')}
-                          </div>
-                        </div>
-                      </div>
-                      {/* `descarga` apunta al adjunto de la base con el nombre
-                          original; para los de tipo Enlace es la URL externa. */}
-                      {(d.descarga || d.url)
-                        ? <a className="icon-btn" href={d.descarga || d.url} style={{ width: 34, height: 34, display: 'grid', placeItems: 'center' }} aria-label={'Descargar ' + d.nombre}><Icons.download /></a>
-                        : <button className="icon-btn" style={{ width: 34, height: 34, opacity: .4 }} disabled title="Sin archivo cargado"><Icons.download /></button>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+            {entradas.map(([grupo, items]) => <GrupoDocs key={grupo} grupo={grupo} items={items} />)}
           </div>
         )}
       </div>

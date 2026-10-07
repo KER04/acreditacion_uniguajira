@@ -458,7 +458,7 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
           <div className="hero-card__patron" aria-hidden="true" />
           {/* Ilustración del factor como franja: la imagen es cuadrada y se
               recorta al centro. Decorativa, por eso alt vacío. */}
-          <img className="fac-hero__img" src={imagenFactor(factor.n)} alt="" />
+          <img className="fac-hero__img" src={imagenFactor(factor.n)} alt="" decoding="async" fetchpriority="high" />
           <div className="hero-card__contenido">
             {/* El título a la izquierda y la calificación en su anillo a la
                 derecha, el mismo del tablero, para que el número se vea antes
