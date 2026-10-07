@@ -3146,9 +3146,58 @@ video.video-eg__medio {
   .honor-fila__prom { grid-area: prom; }
 }
 
-/* Reglamento: capítulos y columna lateral; se apilan en tableta. */
-.reg-grid { display: grid; grid-template-columns: 1fr 320px; gap: 40px; }
-@media (max-width: 900px) { .reg-grid { grid-template-columns: 1fr; } }
+/* Reglamento: visor de PDF a la izquierda y barra de documentos a la
+   derecha. En tableta la barra sube encima del visor, que es lo que se busca
+   primero en pantalla pequeña (descargar), y el visor se acorta. */
+.reg-visor { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
+.reg-visor__marco {
+  border: 1px solid var(--doc-borde); border-radius: 14px; overflow: hidden;
+  background: var(--paper-3); height: min(82vh, 900px); min-height: 480px;
+}
+.reg-visor__pdf { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+.reg-visor__vacio {
+  height: 100%; display: grid; place-content: center; justify-items: center; gap: 12px;
+  padding: 24px; text-align: center; color: var(--ink-3); font-size: 14px;
+}
+.reg-visor__vacio svg { width: 36px; height: 36px; opacity: .6; }
+.reg-visor__vacio p { max-width: 36ch; margin: 0; line-height: 1.55; }
+
+.reg-barra {
+  position: sticky; top: calc(var(--alto-cabecera, 76px) + 20px);
+  background: var(--paper-2); border: 1px solid var(--doc-borde); border-radius: 14px; padding: 18px;
+}
+.reg-barra__titulo {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: 12px;
+}
+.reg-barra__titulo span { font-family: var(--font-mono); padding: 2px 8px; border-radius: 999px; background: var(--doc-azul-tint); color: var(--doc-azul-texto); }
+.reg-barra__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 46vh; overflow-y: auto; }
+.reg-doc {
+  width: 100%; display: flex; align-items: flex-start; gap: 12px; text-align: left; cursor: pointer;
+  padding: 10px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--ink);
+  transition: background .15s ease, border-color .15s ease;
+}
+.reg-doc:hover { background: color-mix(in oklab, var(--ug-azul) 7%, transparent); }
+.reg-doc.is-activo { background: var(--doc-azul-tint); border-color: color-mix(in oklab, var(--ug-azul) 40%, transparent); }
+.reg-doc__icono {
+  flex-shrink: 0; width: 34px; height: 40px; border-radius: 6px; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700; color: var(--doc-terracota-texto);
+  background: var(--doc-terracota-tint);
+}
+.reg-doc__textos { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.reg-doc__t { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.reg-doc__s { font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+.reg-barra__ficha { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--doc-borde-suave); display: grid; gap: 8px; }
+.reg-barra__ficha p { font-size: 13px; line-height: 1.55; color: var(--ink-2); margin: 0 0 6px; }
+.reg-barra__btn { width: 100%; justify-content: center; }
+.reg-barra__pendiente { font-size: 13px; color: var(--doc-ambar-texto) !important; }
+
+@media (max-width: 900px) {
+  .reg-visor { grid-template-columns: 1fr; }
+  .reg-barra { position: static; order: -1; }
+  .reg-visor__marco { height: 70vh; min-height: 380px; }
+}
 
 .honor-podio:hover { border-color: var(--puesto, var(--accent)); box-shadow: var(--shadow); }
 .honor-podio:focus-visible { outline: 2px solid var(--puesto, var(--accent)); outline-offset: 3px; }

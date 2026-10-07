@@ -8,6 +8,10 @@ import { query } from '../db/pool.js'
 /* Límites pensados para guardar en base, no en disco: en base64 cada archivo
    ocupa un tercio más, y toda la fila viaja por memoria al leerla. */
 export const LIMITE_DOCUMENTO = 10 * 1024 * 1024   // 10 MB
+/* Documentos que sube el panel (reglamentos, actos, normativas): suelen ser
+   escaneos largos. Solo para rutas con requireAdmin; lo que sube el público
+   (hojas de vida) sigue con LIMITE_DOCUMENTO. */
+export const LIMITE_DOCUMENTO_PANEL = 20 * 1024 * 1024   // 20 MB
 export const LIMITE_FOTO = 3 * 1024 * 1024         //  3 MB
 
 const MIME_POR_EXTENSION = {
