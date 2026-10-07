@@ -1,4 +1,4 @@
--- 031_cuadro_honor_acumulado — El cuadro de honor 2026-I pasa a ordenarse
+-- 032_cuadro_honor_acumulado — El cuadro de honor 2026-I pasa a ordenarse
 -- por PROMEDIO ACUMULADO en vez del promedio del semestre.
 --
 -- Mismo reporte académico del periodo 2026-1 que la 029. Cambiar el criterio

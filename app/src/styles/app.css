@@ -3076,46 +3076,73 @@ video.video-eg__medio {
 }
 
 /* --- Tarjeta del podio del cuadro de honor -------------------------------
-   Lo que antes iba en estilos en línea. Se mueve aquí porque la tarjeta ahora
-   lleva la cuadrícula del emblema de fondo, y eso exige contexto de
-   posicionamiento propio y recorte en las esquinas. */
-.honor-podio {
-  position: relative;
-  overflow: hidden;
-  background: var(--paper-2);
-  border: 2px solid var(--puesto, var(--accent));
-  padding: 32px 20px;
-  text-align: center;
-  cursor: pointer;
-}
-/* El contenido por encima de la trama: un elemento posicionado pinta sobre el
-   contenido en flujo aunque su z-index sea 0, así que hay que levantarlo. */
-.honor-podio__cuerpo { position: relative; z-index: 1; }
-
-/* Podio: tres tarjetas en fila. En el teléfono cada una pasa a ser una franja
-   horizontal —puesto, foto, nombre y promedio— porque a tres columnas de
-   90 px los nombres se cortaban letra por letra. */
+   Ficha de perfil: la foto a sangre en la cabecera y los datos debajo. Tres
+   en fila; en el teléfono cada una pasa a ser una franja horizontal. */
 .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-.honor-podio__puesto { font-family: var(--font-display); font-size: 72px; font-weight: 500; line-height: 1; color: var(--puesto); letter-spacing: -0.04em; }
-.honor-podio__foto { margin: 20px auto; display: grid; place-items: center; }
-.honor-podio__nombre { font-weight: 600; font-size: 17px; }
+.honor-podio {
+  display: flex; flex-direction: column; overflow: hidden; cursor: pointer;
+  background: var(--paper-2);
+  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.honor-podio:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--puesto); }
+.honor-podio:focus-visible { outline: 3px solid var(--puesto); outline-offset: 3px; }
+
+/* Cabecera: la foto a sangre. Recorte centrado un poco hacia arriba, que es
+   donde suele estar la cara en un retrato. */
+.honor-podio__retrato { position: relative; aspect-ratio: 1 / 1; background: color-mix(in oklab, var(--puesto) 25%, var(--paper-3)); overflow: hidden; }
+.honor-podio__retrato img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; display: block; transition: transform .4s ease; }
+.honor-podio:hover .honor-podio__retrato img { transform: scale(1.04); }
+/* Degradado al pie de la foto para que la cinta del puesto se lea sobre
+   cualquier imagen. */
+.honor-podio__retrato::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 38%; pointer-events: none;
+  background: linear-gradient(transparent, rgba(3,9,15,.45));
+}
+.honor-podio__sinfoto {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: linear-gradient(155deg, color-mix(in oklab, var(--puesto) 85%, #fff), var(--puesto));
+}
+.honor-podio__sinfoto span {
+  position: relative; font-family: var(--font-display); font-size: clamp(56px, 7vw, 88px);
+  font-weight: 700; letter-spacing: -0.03em; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+.honor-podio__puesto {
+  position: absolute; left: 14px; bottom: 14px; z-index: 1;
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 6px 14px 6px 12px; border-radius: 999px;
+  background: var(--puesto); color: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+}
+.honor-podio__puesto b { font-family: var(--font-display); font-size: 22px; letter-spacing: -0.02em; line-height: 1; }
+
+.honor-podio__cuerpo { display: flex; flex-direction: column; flex: 1; padding: 18px 20px 18px; border-top: 4px solid var(--puesto); }
+.honor-podio__nombre { font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1.25; letter-spacing: -0.01em; }
 .honor-podio__sem { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: var(--ink-3); text-transform: uppercase; margin-top: 6px; }
-.honor-podio__promedio { font-family: var(--font-display); font-size: 32px; margin-top: 14px; color: var(--puesto); }
-.honor-podio__ver { font-size: 11px; color: var(--accent-deep); margin-top: 10px; }
+.honor-podio__pie { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: auto; padding-top: 16px; }
+.honor-podio__promedio { font-family: var(--font-display); font-size: 36px; font-weight: 700; line-height: 1; color: var(--puesto); letter-spacing: -0.02em; }
+.honor-podio__rotulo { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-top: 5px; }
+.honor-podio__ver { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--accent-deep); white-space: nowrap; }
+.honor-podio:hover .honor-podio__ver svg { transform: translateX(3px); }
+.honor-podio__ver svg { transition: transform .2s ease; }
+
+/* Teléfono: cada ficha es una franja, con la foto como miniatura cuadrada. */
 @media (max-width: 640px) {
   .podium { grid-template-columns: 1fr; gap: 12px; margin-bottom: 28px; }
-  .podium .honor-podio { padding: 16px 18px; text-align: left; }
-  .honor-podio__cuerpo {
-    display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; column-gap: 14px;
-    grid-template-areas: "puesto foto nombre promedio" "puesto foto sem ver";
-  }
-  .honor-podio__puesto { grid-area: puesto; font-size: 40px; }
-  .honor-podio__foto { grid-area: foto; margin: 0; }
-  .honor-podio__foto > * { width: 52px !important; height: 52px !important; }
-  .honor-podio__nombre { grid-area: nombre; font-size: 15px; line-height: 1.25; }
-  .honor-podio__sem { grid-area: sem; margin-top: 2px; }
-  .honor-podio__promedio { grid-area: promedio; margin: 0; font-size: 24px; text-align: right; }
-  .honor-podio__ver { grid-area: ver; margin: 0; text-align: right; }
+  .honor-podio { flex-direction: row; }
+  .honor-podio__retrato { flex: 0 0 116px; aspect-ratio: auto; min-height: 132px; }
+  .honor-podio__retrato::after { height: 50%; }
+  .honor-podio__sinfoto span { font-size: 36px; }
+  .honor-podio__puesto { left: 8px; bottom: 8px; padding: 4px 9px; font-size: 0; gap: 0; }
+  .honor-podio__puesto b { font-size: 16px; }
+  .honor-podio__cuerpo { border-top: 0; border-left: 4px solid var(--puesto); padding: 14px 16px; }
+  .honor-podio__nombre { font-size: 16px; }
+  .honor-podio__sem { font-size: 10px; }
+  .honor-podio__pie { padding-top: 10px; }
+  .honor-podio__promedio { font-size: 26px; }
+  .honor-podio__ver { font-size: 12px; }
 }
 
 /* Resto del cuadro: tabla en escritorio; en el teléfono el semestre baja
@@ -3203,8 +3230,6 @@ video.video-eg__medio {
   .reg-visor__marco { height: 70vh; min-height: 380px; }
 }
 
-.honor-podio:hover { border-color: var(--puesto, var(--accent)); box-shadow: var(--shadow); }
-.honor-podio:focus-visible { outline: 2px solid var(--puesto, var(--accent)); outline-offset: 3px; }
 
 /* ---------------------------------------------------------------------------
    SABER PRO
