@@ -52,6 +52,9 @@ export default function VideoEgresado({
      seguir rotando cuando la sección ni siquiera está en pantalla. */
   onVisibilidad,
   onSonido,
+  /* Pausa pedida desde fuera (el botón de pausa del carrusel). Detiene el
+     vídeo donde va, sin desmontarlo: al reanudar sigue desde ese punto. */
+  pausado = false,
 }) {
   const marco = useRef(null)
   const iframe = useRef(null)
@@ -117,10 +120,22 @@ export default function VideoEgresado({
     onSonido?.(!siguiente)
   }
 
+  useEffect(() => {
+    if (!activo) return
+    if (videoYoutube) mandarAYoutube(pausado ? 'pauseVideo' : 'playVideo')
+    else if (medio.current) pausado ? medio.current.pause() : medio.current.play().catch(() => {})
+  }, [pausado, activo, videoYoutube])
+
   /* El iframe se remonta cada vez que la tarjeta vuelve a entrar en pantalla,
-     y nace en silencio. Si el visitante ya había pedido sonido, se le devuelve
-     en cuanto el reproductor está listo. */
+     y nace en silencio y reproduciendo. Si el visitante ya había pedido sonido
+     o pausa, se le devuelve en cuanto el reproductor está listo. El reproductor
+     de YouTube tarda un poco en atender mensajes tras el load, así que la
+     pausa se repite una vez por si la primera llegó antes de tiempo. */
   const alCargarIframe = () => {
+    if (pausado) {
+      mandarAYoutube('pauseVideo')
+      setTimeout(() => mandarAYoutube('pauseVideo'), 800)
+    }
     if (silenciado) return
     mandarAYoutube('unMute')
     mandarAYoutube('setVolume', 60)
@@ -169,7 +184,7 @@ export default function VideoEgresado({
           muted={silenciado}
           loop
           playsInline
-          autoPlay
+          autoPlay={!pausado}
           /* none: el binario no se toca hasta que la tarjeta se ve. */
           preload="none"
         />

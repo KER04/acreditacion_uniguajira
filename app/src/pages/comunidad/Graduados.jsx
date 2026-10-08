@@ -18,9 +18,10 @@ const dondeTrabaja = e => [e.empresa, e.ciudad, e.pais].filter(Boolean).join(' �
    escucharlo activa el sonido —lo que detiene la rotación— o se va a YouTube. */
 const SEGUNDOS_POR_PORTADA = 16
 
-function Protagonista({ egresado, onVisibilidad, onSonido }) {
+function Protagonista({ egresado, onVisibilidad, onSonido, pausado }) {
   return (
     <VideoEgresado
+      pausado={pausado}
       className="eg-hero"
       videoYoutube={egresado.video_youtube}
       videoUrl={egresado.video_url}
@@ -77,6 +78,7 @@ function usarRotacion(todos) {
   const [conRaton, setConRaton] = useState(false)
   const [conSonido, setConSonido] = useState(false)
   const [detenidoAMano, setDetenidoAMano] = useState(false)
+  const [pausado, setPausado] = useState(false)
   const [menosMovimiento, setMenosMovimiento] = useState(false)
 
   useEffect(() => {
@@ -109,12 +111,22 @@ function usarRotacion(todos) {
   const alCambiarVisibilidad = useCallback(v => setEnPantalla(v), [])
   const alCambiarSonido = useCallback(v => setConSonido(v), [])
 
-  const ir = i => { setIndice(i); setDetenidoAMano(true) }
+  /* Elegir otro testimonio con las flechas o los puntos detiene la ronda (ya
+     hay alguien mirando) pero no pausa el vídeo nuevo: se eligió para verlo. */
+  const ir = i => { setIndice(i); setDetenidoAMano(true); setPausado(false) }
 
   return {
-    ronda, actual, posicion, total, rotando, detenidoAMano,
+    ronda, actual, posicion, total, rotando, pausado,
     ir,
-    alternarPausa: () => setDetenidoAMano(p => !p),
+    /* El botón de pausa antes solo detenía la ronda, y con el ratón encima la
+       ronda ya estaba quieta: el clic no cambiaba nada visible y el vídeo
+       seguía corriendo. Ahora pausa el vídeo y la ronda; reanudar devuelve
+       las dos cosas. */
+    alternarPausa: () => {
+      const siguiente = !pausado
+      setPausado(siguiente)
+      setDetenidoAMano(siguiente)
+    },
     alCambiarVisibilidad, alCambiarSonido,
     /* El raton lleva su propio estado y no el de visibilidad: si compartieran
        uno, sacar el puntero de la tarjeta diría "ya se ve" aunque la sección
@@ -159,7 +171,7 @@ function Destacados() {
                onFocusCapture={r.entraRaton} onBlurCapture={r.saleRaton}>
             {/* key: al cambiar de egresado hay que montar otro reproductor,
                 no reaprovechar el que está sonando. */}
-            <Protagonista key={r.actual.id} egresado={r.actual}
+            <Protagonista key={r.actual.id} egresado={r.actual} pausado={r.pausado}
                           onVisibilidad={r.alCambiarVisibilidad}
                           onSonido={r.alCambiarSonido} />
 
@@ -184,9 +196,10 @@ function Destacados() {
                         aria-label="Testimonio siguiente">›</button>
 
                 <button className="eg-ronda__pausa" onClick={r.alternarPausa}
-                        aria-pressed={r.detenidoAMano}
-                        aria-label={r.detenidoAMano ? 'Reanudar la rotación' : 'Detener la rotación'}>
-                  {r.detenidoAMano ? <Icons.play /> : <span className="eg-punto__pausa" />}
+                        aria-pressed={r.pausado}
+                        aria-label={r.pausado ? 'Reanudar el vídeo y la rotación' : 'Pausar el vídeo y la rotación'}
+                        title={r.pausado ? 'Reanudar' : 'Pausar'}>
+                  {r.pausado ? <Icons.play /> : <span className="eg-punto__pausa" />}
                 </button>
               </div>
             )}
