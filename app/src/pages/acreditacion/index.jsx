@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Icons } from '../../components/Icons'
 import { WayuuBackdrop } from '../../components/WayuuPatterns'
 import { ESCALA, STATUS_LABELS, STATUS_COLOR, statusFromScore, judgmentFromScore, globalPonderado, imagenFactor } from '../../data/acreditacion'
+import { JUICIO_META } from '../../data/juicioGlobal'
 import { useData } from '../../context/DataContext'
 import CircularProgress from './CircularProgress'
 import MetodologiaSection from './MetodologiaSection'
@@ -188,6 +189,28 @@ export default function Acreditacion() {
               ))}
             </div>
           </div>
+          {/* Juicio global: la misma familia que las tarjetas de factor, pero a
+              todo lo ancho y antes de ellas, porque es la conclusión de las doce. */}
+          <Link to="/acreditacion/juicio-global" className="factor-card juicio-card" data-status={statusFromScore(prom)}
+            onClick={() => { scrollTablero = window.scrollY }}>
+            <img className="juicio-card__img" src={JUICIO_META.imagenSm} alt="" loading="lazy" decoding="async" />
+            <div className="juicio-card__cuerpo">
+              <div className="factor-card__cab">
+                <div className="n">Juicio global · {factores.length} factores ponderados</div>
+                <div className="factor-pill">{judgmentFromScore(prom)}</div>
+              </div>
+              <div className="title">Juicio global sobre la calidad del programa</div>
+              <p className="juicio-card__texto">
+                Los doce factores se comportan como fortalezas: {stats.pleno ?? 0} se cumplen plenamente
+                {stats.alto ? ` y ${stats.alto} en alto grado` : ''}. Incluye la tabla de ponderación,
+                el juicio argumentado de cada factor y sus anexos.
+              </p>
+              <div className="score"><span>Calificación global</span><b>{prom.toFixed(2).replace('.', ',')}</b></div>
+              <div className="meter"><i style={{ width: `${prom}%` }} /></div>
+              <span className="juicio-card__ver">Leer el juicio completo <Icons.arrow /></span>
+            </div>
+          </Link>
+
           <div className="factor-grid">
             {factores.map(f => (
               <button key={f.n} className="factor-card" data-status={f.status}

@@ -17,6 +17,7 @@ import { WayuuBackdrop, WayuuGlyph } from '../components/WayuuPatterns'
 import CarruselPortada, { hayDiapositivas } from '../components/CarruselPortada'
 import { useData } from '../context/DataContext'
 import { statusFromScore, STATUS_COLOR, globalPonderado, imagenFactor } from '../data/acreditacion'
+import { JUICIO_META } from '../data/juicioGlobal'
 import { fechaLarga } from '../../shared/validacion'
 
 /* ─── Cinta de titulares ───────────────────────────────────────── */
@@ -260,7 +261,67 @@ function CNAPreview() {
               {alto  > 0 && <span className="doc-pin doc-pin--ambar">Se cumple en alto grado · {alto}</span>}
               {dev   > 0 && <span className="doc-pin doc-pin--terracota">Se cumple aceptablemente · {dev}</span>}
             </div>
+            {/* El juicio global en pequeño: la conclusión de los doce factores,
+                debajo de la cifra que resume. La versión grande vive en el tablero. */}
+            {factores.length > 0 && (
+              <button type="button" className="inicio-juicio" onClick={() => nav('/acreditacion/juicio-global')}>
+                <img className="inicio-juicio__img" src={JUICIO_META.imagenSm} alt="" loading="lazy" decoding="async" />
+                <span className="inicio-juicio__textos">
+                  <span className="inicio-juicio__sobre">Juicio global · {pleno + alto} de {factores.length} factores son fortaleza</span>
+                  <span className="inicio-juicio__titulo">Juicio global sobre la calidad del programa</span>
+                  <span className="inicio-juicio__desc">
+                    La conclusión de la autoevaluación: tabla de ponderación, juicio argumentado de cada factor y anexos.
+                  </span>
+                  <span className="inicio-juicio__ver">Leer el juicio completo <Icons.arrow /></span>
+                </span>
+              </button>
+            )}
             <button className="btn" onClick={() => nav('/acreditacion')}>Ir al tablero CNA <Icons.arrow /></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Proyecto Educativo del Programa ──────────────────────────── */
+
+/* Qué es el PEP y qué trae, y un botón que lo abre en una pestaña aparte con
+   el visor del propio navegador. Antes iba incrustado aquí: 38 páginas dentro
+   de la portada pesaban más de lo que aportaban. Temas tomados del índice. */
+const PEP_PDF = '/descargas/pep-ingenieria-de-sistemas.pdf'
+const PEP_TEMAS = [
+  'Misión, visión y objeto de estudio',
+  'Perfiles de ingreso, ocupacional y de egreso',
+  'Propósito de formación y resultados de aprendizaje',
+  'Plan de estudios y malla curricular',
+  'Modelo pedagógico',
+  'Internacionalización y articulación con el medio',
+]
+
+function PEP() {
+  return (
+    <section className="section">
+      <div className="inner inicio-pep">
+        <div>
+          <div className="inicio-eyebrow">Proyecto Educativo del Programa</div>
+          <h2 style={{ marginTop: 14 }}>El PEP: la carta de navegación del programa.</h2>
+        </div>
+        <div className="inicio-pep__cuerpo">
+          <p className="inicio-pep__texto">
+            Es el documento que define la identidad del programa de Ingeniería de Sistemas: qué
+            ingeniero forma, con qué propósitos y cómo. Organiza los principios y lineamientos que
+            guían la docencia, la investigación y la proyección social, alineados con el Proyecto
+            Educativo Institucional de la Universidad de La Guajira.
+          </p>
+          <ul className="inicio-pep__temas">
+            {PEP_TEMAS.map(t => <li key={t}>{t}</li>)}
+          </ul>
+          <div className="inicio-pep__accion">
+            <a className="btn" href={PEP_PDF} target="_blank" rel="noopener noreferrer">
+              Leer el PEP <Icons.arrow />
+            </a>
+            <span className="inicio-pep__meta">PDF · 38 páginas · se abre en una pestaña nueva</span>
           </div>
         </div>
       </div>
@@ -382,6 +443,7 @@ export default function Home() {
       <Ticker items={titulares} />
       <Features />
       <CNAPreview />
+      <PEP />
       <Missions />
       <Convocatorias />
     </div>

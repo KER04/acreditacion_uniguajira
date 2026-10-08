@@ -5933,7 +5933,7 @@
       "n": 8,
       "t": "Aportes de la Investigación, la Innovación, el Desarrollo Tecnológico y la Creación",
       "score": 88.7,
-      "summary": "Cómo se forma para investigar y qué produce el programa: 8 grupos clasificados por Minciencias, 40 proyectos de investigación y 200 productos científicos entre 2020 y 2025, con semilleros activos en las dos sedes.",
+      "summary": "Cómo se forma para investigar y qué produce el programa: 8 grupos clasificados por Minciencias, 37 proyectos de investigación y 200 productos científicos entre 2020 y 2025, con semilleros activos en las dos sedes.",
       "fortalezas": [
         "Semilleros de investigación activos y en operación en ambas sedes.",
         "Formación investigativa integrada al currículo, desde las asignaturas básicas hasta el trabajo de grado.",
@@ -5948,7 +5948,7 @@
       "caracteristicas": [
         {
           "n": "8.1",
-          "name": "Formación para la investigación, la innovación y la creación",
+          "name": "Formación para la investigación, el desarrollo tecnológico, la innovación y la creación",
           "peso": 53.33,
           "calificacion": 87.5,
           "score": 87.5,
@@ -5960,7 +5960,7 @@
               "tipo": "nota",
               "k": "Cómo se integra",
               "tono": "azul",
-              "v": "La formación investigativa va de las asignaturas básicas al trabajo de grado: investigación formativa, aprendizaje basado en proyectos y co-creación, redes y movilidad, infraestructura especializada y vínculo con el sector productivo."
+              "v": "La ruta de formación investigativa empieza en asignaturas como Fundamentos de Investigación y termina en el trabajo de grado con orientación investigativa. A ella se suman la investigación formativa en semilleros y grupos, el aprendizaje basado en proyectos y la co-creación, las redes y la movilidad, los fondos y la infraestructura especializada, las prácticas en el sector productivo y los hackatones."
             },
             {
               "tipo": "impacto",
@@ -5986,79 +5986,79 @@
               ]
             },
             {
-              "tipo": "pares",
-              "titulo": "Estudiantes vinculados a semilleros, por sede",
-              "max": 55,
-              "series": [
+              "tipo": "barras",
+              "titulo": "Estudiantes vinculados a semilleros de investigación",
+              "max": 89,
+              "items": [
                 {
-                  "l": "Riohacha",
+                  "l": "2020",
+                  "v": 60,
                   "tono": "azul"
                 },
                 {
-                  "l": "Maicao",
-                  "tono": "ambar"
+                  "l": "2021",
+                  "v": 37,
+                  "tono": "azul"
+                },
+                {
+                  "l": "2022",
+                  "v": 32,
+                  "tono": "azul"
+                },
+                {
+                  "l": "2023",
+                  "v": 45,
+                  "tono": "azul"
+                },
+                {
+                  "l": "2024",
+                  "v": 52,
+                  "tono": "azul"
+                },
+                {
+                  "l": "2025",
+                  "v": 89,
+                  "tono": "azul"
                 }
               ],
-              "nota": "Junto a cada año, el total de las dos sedes. Maicao pasa de 2 estudiantes en 2022 y 2023 a 34 en 2025. Fuente: Dirección de Investigación.",
-              "items": [
-                {
-                  "l": "2020 · 60",
-                  "v": [
-                    53,
-                    7
-                  ]
-                },
-                {
-                  "l": "2021 · 37",
-                  "v": [
-                    30,
-                    7
-                  ]
-                },
-                {
-                  "l": "2022 · 32",
-                  "v": [
-                    30,
-                    2
-                  ]
-                },
-                {
-                  "l": "2023 · 45",
-                  "v": [
-                    43,
-                    2
-                  ]
-                },
-                {
-                  "l": "2024 · 52",
-                  "v": [
-                    30,
-                    22
-                  ]
-                },
-                {
-                  "l": "2025 · 89",
-                  "v": [
-                    55,
-                    34
-                  ]
-                }
-              ]
+              "nota": "Entre 2020 y 2025 la sede Maicao pasó de 7 a 34 estudiantes vinculados y Riohacha de 53 a 55. Fuente: Dirección de Investigación y Facultad de Ingeniería, 2025."
             },
             {
-              "tipo": "etiquetas",
-              "titulo": "Semilleros activos",
-              "tono": "azul",
-              "items": [
-                "SIIS",
-                "Sembrando Futuro",
-                "Innovatech Dev",
-                "SecTec",
-                "D'Proit (Maicao)",
-                "Energías",
-                "Desarrolladores de Proyectos e Ideas Tecnológicas",
-                "Apertura del Emprendimiento Empresarial del Milenio"
-              ]
+              "tipo": "tabla",
+              "titulo": "Semilleros de investigación activos",
+              "cols": [
+                "Semillero",
+                "Grupo de investigación",
+                "Creación",
+                "Dirección"
+              ],
+              "alin": [
+                "txt",
+                "txt",
+                "txt",
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Semillero de Investigación de Ingeniería de Sistemas (SIIS)",
+                  "Universidad Paralela",
+                  "8/2/2005",
+                  "Nayeli Naidee Mejía Riveira · Pilar del Carmen Pomarico Pimienta"
+                ],
+                [
+                  "Sembrando Futuro",
+                  "Innovemos, Gerencia & Tecnología",
+                  "13/09/2014",
+                  "Diego Madrid Urrego · Hobber José Berrío Caballero"
+                ],
+                [
+                  "Innovatech Dev, Desarrollo Innovador de Tecnología",
+                  "Universidad Paralela",
+                  "21/04/2023",
+                  "Adanud Meza Valle"
+                ]
+              ],
+              "nota": "También han aportado a la formación los semilleros Desarrolladores de Proyectos e Ideas Tecnológicas, SecTec, Energías y Diproit (Maicao). Fuente: Dirección de Investigación y Facultad de Ingeniería, 2025."
             },
             {
               "tipo": "pares",
@@ -6093,47 +6093,58 @@
               ]
             },
             {
+              "tipo": "tabla",
+              "titulo": "Acciones para aumentar la participación estudiantil en la sede Maicao",
+              "cols": [
+                "Eje estratégico",
+                "Acciones",
+                "Indicador"
+              ],
+              "alin": [
+                "txt",
+                "txt",
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Diagnóstico de barreras",
+                  "Encuestas y grupos focales; análisis de las diferencias entre sedes",
+                  "Informe de diagnóstico por sede"
+                ],
+                [
+                  "Comunicación y divulgación activa",
+                  "Canales de difusión, mentor estudiantil por grupo y jornadas de socialización de experiencias",
+                  "Campañas activas por semestre"
+                ],
+                [
+                  "Incentivos y flexibilización académica",
+                  "Horarios ajustados de participación",
+                  "Estudiantes de Maicao en semilleros: del 24,6 % al 50 %"
+                ],
+                [
+                  "Fortalecimiento de semilleros y grupos",
+                  "Semilleros espejo en Maicao, proyectos cortos liderados por estudiantes y docentes mentores",
+                  "Semilleros activos en Maicao"
+                ],
+                [
+                  "Movilidad e integración intersede",
+                  "Tutorías intersede y eventos conjuntos virtuales o híbridos",
+                  "Eventos intersede por semestre"
+                ]
+              ],
+              "nota": "Fuente: programa de Ingeniería de Sistemas, 2025."
+            },
+            {
               "tipo": "dato",
               "tono": "azul",
               "v": "+85 %",
               "l": "de los estudiantes de ambas sedes califica como excelente o muy buena la calidad de la formación en investigación"
             },
             {
-              "tipo": "tabla",
-              "titulo": "Participación de estudiantes en proyectos de investigación, 2020–2025",
-              "cols": [
-                "Modalidad",
-                "Proyectos",
-                "Estudiantes"
-              ],
-              "filas": [
-                [
-                  "Proyectos con opción a grado",
-                  10,
-                  18
-                ],
-                [
-                  "Creación de semillero",
-                  5,
-                  18
-                ],
-                [
-                  "Convocatorias internas de financiamiento",
-                  2,
-                  4
-                ],
-                [
-                  "Experiencias investigativas",
-                  1,
-                  3
-                ],
-                [
-                  "Total",
-                  18,
-                  43
-                ]
-              ],
-              "nota": "De los 43 estudiantes, 36 son de Riohacha y 7 de Maicao."
+              "tipo": "dato",
+              "tono": "azul",
+              "v": "43",
+              "l": "estudiantes participaron en 18 proyectos de investigación entre 2020 y 2025: 36 de Riohacha y 7 de Maicao, varios bajo la modalidad de trabajo con opción de grado"
             },
             {
               "tipo": "impacto",
@@ -6146,15 +6157,15 @@
                   "tono": "azul"
                 },
                 {
-                  "k": "Jóvenes investigadores",
-                  "valor": "3",
-                  "l": "graduados financiados en 2024, con $12.800.000 cada uno",
+                  "k": "Diplomado en investigación",
+                  "valor": "12",
+                  "l": "estudiantes formados en competencias investigativas: 5 de Riohacha y 7 de Maicao",
                   "tono": "ambar"
                 },
                 {
-                  "k": "Trabajos de grado",
-                  "valor": "+10",
-                  "l": "con enfoque investigativo en los últimos cinco años",
+                  "k": "Jóvenes investigadores",
+                  "valor": "3",
+                  "l": "graduados vinculados por la convocatoria interna de joven investigador",
                   "tono": "marino"
                 }
               ]
@@ -6164,27 +6175,29 @@
               "titulo": "Experiencias destacadas",
               "tono": "azul",
               "items": [
-                "ENISI – REDCOLSI 2024 (XXVII Encuentro Nacional y XXI Internacional de Semilleros): Uniguajirared, red social móvil para la comunidad universitaria, del semillero SIIS de Riohacha.",
-                "EDESI 2023 (VI Encuentro Departamental de Semilleros): aplicativo móvil para la cultura ciudadana en la recolección de residuos sólidos en Maicao (semillero D'Proit) y sistema de información para la gestión del deporte en La Guajira (semillero SecTec).",
+                "XXVII Encuentro Nacional y XXI Internacional de Semilleros de RedCOLSI: Uniguajirared, red social móvil para la comunidad universitaria, del semillero SIIS de Riohacha, presentada también en el VIII Encuentro Anual de Semilleros Uniguajira 2024 y en el VII Encuentro Departamental del nodo Guajira.",
+                "VII Encuentro Anual de Semilleros Uniguajira 2023 y VI Encuentro Departamental (EDESI): sistema de información para la gestión del deporte en La Guajira (semillero SecTec) y aplicativo móvil para la cultura ciudadana en la recolección de residuos sólidos de Maicao (semillero Diproit).",
+                "VIII Encuentro Anual de Semilleros Uniguajira 2024 y VII Encuentro Departamental: factores de riesgo de la adicción a las tecnologías en estudiantes universitarios de Maicao (semillero Sembrando Futuro).",
+                "Proyecto de semillero financiado por la Universidad en 2023 (grupo Universidad Paralela, Acta 018 del 18/10/2023): competencias digitales en los estudiantes de 3.º de primaria de la Institución Educativa Helión Pinedo Ríos.",
                 "Proyectos con opción a grado que digitalizan procesos institucionales: sistema de gestión de la investigación, sistema web para la revista Ciencia e Ingeniería y software de seguimiento a graduados (grupo Universidad Paralela)."
               ]
             },
             {
               "tipo": "lista",
-              "titulo": "Estímulos e incentivos para estudiantes",
+              "titulo": "Vías de participación para estudiantes",
               "tono": "ambar",
               "items": [
-                "Participación en grupos y semilleros de investigación.",
-                "Opción de grado: trabajo investigativo, artículo o pasantía de investigación.",
-                "Financiación de ponencias, artículos, libros y proyectos.",
-                "Convocatoria Joven Investigador para graduados."
+                "Vinculación a semilleros de investigación desde cualquier semestre (Estatuto de Investigación, art. 31).",
+                "Trabajo de investigación como opción de grado (art. 34).",
+                "Financiación de proyectos de investigación estudiantil por convocatoria interna, hasta $9.000.000 por proyecto (Resolución 1481 de 2023).",
+                "Vinculación de graduados como jóvenes investigadores por convocatoria interna."
               ]
             }
           ]
         },
         {
           "n": "8.2",
-          "name": "Compromiso con la investigación y la creación",
+          "name": "Compromiso con la investigación, el desarrollo tecnológico, la innovación y la creación",
           "peso": 46.67,
           "calificacion": 90,
           "score": 90,
@@ -6196,7 +6209,7 @@
               "tipo": "nota",
               "k": "Propiedad intelectual y currículo",
               "tono": "azul",
-              "v": "El Acuerdo 002 de 2021 garantiza derechos patrimoniales y morales, confidencialidad y distribución de beneficios por licencias o explotación de resultados. Los proyectos responden a problemas del entorno regional y nacional, y sus resultados alimentan asignaturas como Ingeniería de Software, Inteligencia Artificial, Gestión de Proyectos y Bases de Datos."
+              "v": "El Acuerdo 002 del 29 de enero de 2021 regula la protección, el uso, la transferencia y la titularidad de las creaciones intelectuales: derechos patrimoniales y morales, confidencialidad, uso de marcas y distribución de beneficios por licencias o explotación de resultados. Los proyectos responden a problemas del entorno regional y nacional, y sus resultados alimentan asignaturas como Ingeniería de Software, Inteligencia Artificial, Gestión de Proyectos y Bases de Datos."
             },
             {
               "tipo": "tabla",
@@ -6269,15 +6282,15 @@
                 },
                 {
                   "v": "10",
-                  "l": "docentes reconocidos por Minciencias en la Convocatoria 957 de 2024: 8 Investigadores Junior y 2 Asociados"
+                  "l": "docentes reconocidos por Minciencias en la Convocatoria 957 de 2024 (8 Investigadores Junior y 2 Asociados), de 185 categorizados en la Universidad"
+                },
+                {
+                  "v": "22",
+                  "l": "proyectos de investigación, desarrollo tecnológico e innovación entre 2020 y 2024: 17 de Riohacha y 5 de Maicao"
                 },
                 {
                   "v": "37",
-                  "l": "proyectos internos entre 2020 y 2025: 28 de Riohacha y 9 de Maicao"
-                },
-                {
-                  "v": "3",
-                  "l": "proyectos con financiación externa"
+                  "l": "proyectos asociados al programa con corte a 2025: 28 de Riohacha y 9 de Maicao"
                 }
               ]
             },
@@ -6288,26 +6301,30 @@
                 "Proyecto",
                 "Financiador",
                 "Rol de Uniguajira",
-                "Valor total"
+                "Valor total",
+                "Corresponde a Uniguajira"
               ],
               "filas": [
                 [
                   "Diseño hidrológico con la técnica Keyline para el aprovechamiento del agua lluvia en la Media Guajira (2024)",
                   "Ecopetrol",
                   "Ejecutor",
-                  "$3.363.930.032"
+                  "$3.363.930.032",
+                  "$667.003.428"
                 ],
                 [
                   "Sistema de actualización de catastro urbano a partir de información satelital de Riohacha (2024)",
-                  "Minciencias · IGAC",
+                  "Minciencias",
                   "Aliado",
-                  "$138.566.000"
+                  "$138.566.000",
+                  "$84.440.000"
                 ],
                 [
                   "Educación transformadora en energía: EU-COLMEV (2025)",
-                  "Unión Europea · Erasmus+",
+                  "Unión Europea · Erasmus",
                   "Aliado",
-                  "€738.993"
+                  "€738.993",
+                  "€83.806"
                 ]
               ]
             },
@@ -6316,74 +6333,125 @@
               "titulo": "Qué aporta el programa en cada uno",
               "tono": "marino",
               "items": [
-                "Keyline (Ecopetrol): el programa desarrolla la app AgroGuajira para el monitoreo del proyecto y el apoyo tecnológico a campesinos de la comunidad El Manantial.",
-                "SACURIS-R (Minciencias): aplicativo web de alerta temprana que, con 530 imágenes satelitales y modelos como YOLOv8 y SAM, detectó 336 construcciones adicionales frente al catastro del IGAC de 2018. Cumplió el 100 % de sus objetivos.",
-                "EU-COLMEV (Unión Europea): con el grupo DESTACAR, aporta a la formulación de una Maestría en Ingeniería y al diseño de un laboratorio remoto de energías solar, eólica y biomasa, junto a 10 IES nacionales e internacionales."
+                "Keyline (Ecopetrol, convenio 3054748): la solución tecnológica para el monitoreo del proyecto, la visualización en tiempo real del avance de sus componentes, la sistematización de la información y el soporte para su gestión y evaluación, en beneficio de la comunidad de El Manantial.",
+                "Catastro urbano (Minciencias, contrato 112721-045 de 2024): el aplicativo web SACURIS-R como sistema de alerta temprana, 530 imágenes satelitales y los polígonos de las construcciones existentes para compararlos con la información catastral. Cumplió el 100 % de sus objetivos; sus usuarios potenciales son el IGAC y las administraciones locales.",
+                "EU-COLMEV (Unión Europea, Erasmus 101235270): con el grupo DESTACAR, aporta a la formulación de una maestría en ingeniería, a cursos especializados y al diseño de un laboratorio remoto solar, eólico y de biomasa, junto a 4 IES colombianas, 6 internacionales y una empresa internacional."
               ]
             },
             {
-              "tipo": "pares",
-              "titulo": "Producción científica del programa, 2020–2025",
-              "max": 44,
-              "series": [
-                {
-                  "l": "Riohacha",
-                  "tono": "azul"
-                },
-                {
-                  "l": "Maicao",
-                  "tono": "ambar"
-                }
+              "tipo": "tabla",
+              "titulo": "Proyectos de investigación de los docentes, por línea",
+              "cols": [
+                "Línea",
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024",
+                "2025"
               ],
-              "nota": "Junto a cada tipo, el total de las dos sedes. Son 200 productos en total (161 entre 2020 y 2024), incluidos 3 productos conjuntos entre docentes de ambas sedes. Fuente: Dirección de Investigación.",
-              "items": [
-                {
-                  "l": "Artículos · 62",
-                  "v": [
-                    44,
-                    18
-                  ]
-                },
-                {
-                  "l": "Ponencias · 61",
-                  "v": [
-                    38,
-                    23
-                  ]
-                },
-                {
-                  "l": "Libros · 44",
-                  "v": [
-                    36,
-                    8
-                  ]
-                },
-                {
-                  "l": "Capítulos de libro · 25",
-                  "v": [
-                    15,
-                    10
-                  ]
-                },
-                {
-                  "l": "Software · 11",
-                  "v": [
-                    9,
-                    2
-                  ]
-                }
-              ]
+              "filas": [
+                [
+                  "Gerencia de la Ciencia, Tecnología e Innovación",
+                  1,
+                  2,
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                [
+                  "Desarrollo de software y sistemas de información",
+                  1,
+                  4,
+                  4,
+                  4,
+                  "",
+                  1
+                ],
+                [
+                  "Nuevas Tecnologías de la Informática y la Comunicación en la Educación",
+                  "",
+                  "",
+                  1,
+                  1,
+                  2,
+                  1
+                ],
+                [
+                  "Tecnologías de la informática y la comunicación en la educación",
+                  "",
+                  "",
+                  1,
+                  1,
+                  "",
+                  ""
+                ],
+                [
+                  "Gobernabilidad de TI",
+                  "",
+                  "",
+                  "",
+                  "",
+                  2,
+                  ""
+                ],
+                [
+                  "Total",
+                  2,
+                  6,
+                  6,
+                  6,
+                  4,
+                  2
+                ]
+              ],
+              "nota": "Fuente: Dirección de Investigación y Facultad de Ingeniería, 2025."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Productos de los proyectos liderados por docentes, 2020–2024",
+              "cols": [
+                "Tipo de producto",
+                "Cantidad"
+              ],
+              "filas": [
+                [
+                  "Artículos científicos",
+                  18
+                ],
+                [
+                  "Ponencias en eventos académicos",
+                  12
+                ],
+                [
+                  "Capítulos de libro",
+                  9
+                ],
+                [
+                  "Software registrado",
+                  7
+                ],
+                [
+                  "Informes técnicos institucionales",
+                  4
+                ],
+                [
+                  "Total",
+                  50
+                ]
+              ],
+              "nota": "Son los productos derivados de los 22 proyectos. La producción científica total de los docentes del programa suma 161 productos entre 2020 y 2024, y 200 con corte a 2025."
             },
             {
               "tipo": "etiquetas",
               "titulo": "Visibilidad",
               "tono": "ambar",
-              "nota": "Las revistas institucionales obtuvieron reconocimiento oficial de Publindex en la Convocatoria 977 de 2026.",
+              "nota": "La revista Ciencia e Ingeniería obtuvo reconocimiento oficial de Publindex en la Convocatoria 977 de 2026. Su sistema web de gestión lo desarrollaron estudiantes del programa en un proyecto de investigación con opción de grado.",
               "items": [
                 "Revista Ciencia e Ingeniería",
-                "Revista Entretextos",
-                "Revista Human@s",
-                "Sello Editorial Uniguajira"
+                "Sello editorial Entretextos",
+                "Sello editorial Human@s"
               ]
             },
             {
@@ -6416,13 +6484,15 @@
             },
             {
               "tipo": "lista",
-              "titulo": "Estímulos e incentivos para docentes",
+              "titulo": "Estímulos e incentivos para docentes · Estatuto de Investigación",
               "tono": "ambar",
               "items": [
-                "Horas de investigación en la asignación académica.",
-                "Financiación de resultados de investigación.",
-                "Viáticos, comisiones y comisiones de estudio.",
-                "Remuneración por productividad y Medalla al Mérito."
+                "Horas de investigación en el plan de trabajo, autorizadas por el Consejo Académico (art. 51).",
+                "Viáticos y comisiones para presentar resultados como ponentes en eventos científicos (art. 52).",
+                "Financiación de la publicación de resultados: libros, artículos y producción audiovisual (art. 52).",
+                "Puntaje en la hoja de vida según el Estatuto Docente y el Decreto 1279 de 2002 (art. 52).",
+                "Apoyo para acceder a becas de formación avanzada y capacitación en investigación (art. 52).",
+                "Medalla al Mérito Investigativo (art. 50)."
               ]
             }
           ]
@@ -6460,34 +6530,49 @@
       ],
       "evidencias": [
         {
-          "t": "GrupLac MinCiencias",
-          "d": "Categorización y producción de grupos",
-          "f": "Act. 2025",
-          "url": ""
+          "t": "Acuerdo 003 de 2021 · Estatuto de Investigación",
+          "d": "Consejo Superior · Anexo 29",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-8/anexo-29-acuerdo-003-2021-estatuto-investigacion.pdf"
         },
         {
-          "t": "Memorias de semilleros 2024",
-          "d": "Resultados de semilleros Innovatech Dev y SecTec",
-          "f": "Dic 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
-        {
-          "cat": "Proyectos",
-          "items": [
-            "Listado proyectos I+D 2020–2024",
-            "Presupuestos asignados"
-          ]
+          "t": "Acuerdo 002 de 2021 · Estatuto de Propiedad Intelectual",
+          "d": "Consejo Superior · Anexo 20",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-8/anexo-20-acuerdo-002-2021-propiedad-intelectual.pdf"
         },
         {
-          "cat": "Publicaciones",
-          "items": [
-            "Artículos indexados",
-            "Capítulos de libro y ponencias"
-          ]
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Bitácora de factores del proceso de autoevaluación",
+          "d": "Aspectos evaluados, soportes y calificaciones de los doce factores · Anexo 8",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-8/anexo-08-bitacora-autoevaluacion.xlsx"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -6511,6 +6596,10 @@
           "v": "Estatuto de Investigación: políticas, estrategias, estímulos e incentivos"
         },
         {
+          "k": "Resolución 007 de 2022",
+          "v": "Ponderación de los factores y características del programa (Consejo de Facultad de Ingeniería)"
+        },
+        {
           "k": "Resolución 1481 de 2023",
           "v": "Convocatoria interna de financiación de proyectos de investigación estudiantil"
         },
@@ -6523,7 +6612,7 @@
     {
       "n": 9,
       "t": "Bienestar de la Comunidad Académica del Programa",
-      "score": 93.04,
+      "score": 93.02,
       "summary": "Lo que Bienestar Social Universitario ofrece a la comunidad del programa y cuánto se usa: 22.039 participaciones de estudiantes entre 2020 y 2024, siete áreas estratégicas y un 96 % de estudiantes que reconoce y valora sus acciones.",
       "fortalezas": [
         "Alta participación estudiantil en los programas de Bienestar Social Universitario.",
@@ -6566,39 +6655,40 @@
               "filas": [
                 [
                   "Salud",
-                  "Medicina general, odontología, primeros auxilios, promoción y prevención, psicología, fisioterapia, quiropraxia, nutrición, cosmiatría y obesidad."
+                  "Odontología, primeros auxilios, promoción y prevención, medicina general, quiropraxia, psicología y fisioterapia; además nutrición, cosmiatría y convenios con entidades externas."
                 ],
                 [
                   "Recreación y Deporte",
-                  "16 disciplinas, entre ellas fútbol, fútbol sala, voleibol, baloncesto, atletismo, taekwondo, patinaje, porrismo, deporte inclusivo y entrenamiento funcional."
+                  "16 disciplinas: fútbol, fútbol sala, fútbol femenino, voleibol, baloncesto, atletismo, ajedrez, patinaje, taekwondo, karate-do, tenis de mesa, tenis de campo, softbol, rugby, rumba terapia y eventos."
                 ],
                 [
                   "Cultura",
-                  "9 actividades: música alternativa, tambobanda, teatro, artes plásticas, vallenato, coral étnica, danza urbana, danzas folclóricas y étnicas, y encuentro indígena."
+                  "9 actividades: encuentro indígena, danza, origami, vallenato, música alternativa, coral étnico, tambobanda, teatro y eventos."
                 ],
                 [
                   "Desarrollo Humano y Social",
-                  "Adaptación y cultura universitaria, atención psicológica, salud mental, ruta de atención a las violencias, desarrollo organizacional y equidad para la mujer."
+                  "Adaptación a la vida universitaria, cultura universitaria, orientación profesional, clima laboral, Uniguajira Inclusiva, atención psicológica y escuela de líderes; además salud mental, ruta de atención a las violencias y prevención del consumo de alcohol y drogas."
                 ],
                 [
                   "Promoción Socioeconómica",
-                  "15 estrategias de descuentos y subsidios (alimentación, transporte, estudiante auxiliar) para estratos 1, 2 y 3 y población vulnerable."
+                  "15 estrategias de descuentos y subsidios para estudiantes de estratos 1, 2 y 3 y en condición de vulnerabilidad, entre ellas el subsidio de alimentación y los descuentos por mejor promedio, monitoría, tutoría, comunidad indígena, negritudes, desplazamiento y discapacidad."
                 ],
                 [
                   "Permanencia y Graduación Exitosa",
-                  "Tutorías, acompañamiento al aprendizaje, mentorías y promoción a la graduación exitosa."
+                  "Tutorías, madrinazgo o acompañamiento al aprendizaje, mentorías, seguimiento a repitentes y promoción a la graduación exitosa."
                 ],
                 [
                   "Investigación y Evaluación",
                   "Medición del impacto de las acciones de bienestar mediante el uso de las TIC."
                 ]
-              ]
+              ],
+              "nota": "Cada área tiene un coordinador. Fuente: informe del factor y análisis de Bienestar Social Universitario (anexo 10)."
             },
             {
               "tipo": "barras",
               "titulo": "Participación de estudiantes del programa por área, 2020–2024",
               "max": 5378,
-              "nota": "Riohacha: 15.369 participaciones. Maicao: 6.670. Las áreas de mayor demanda están ligadas a la adaptación a la vida universitaria y al acompañamiento académico. Fuente: Bienestar Social Universitario.",
+              "nota": "Riohacha: 15.369 participaciones. Maicao: 6.670, el 30,3 % del total, por debajo de su peso en la matrícula del programa (34,8 %); por eso se refuerza la oferta en esa sede, con el subsidio de alimentación que antes solo operaba en Riohacha. Fuente: Bienestar Social Universitario.",
               "items": [
                 {
                   "l": "Desarrollo Humano",
@@ -6630,25 +6720,25 @@
             },
             {
               "tipo": "impacto",
-              "titulo": "Apoyos socioeconómicos a estudiantes del programa en 2024",
-              "nota": "Entre 2019 y 2024, 1.337 estudiantes recibieron apoyos socioeconómicos. El subsidio de alimentación se amplió a la sede Maicao.",
+              "titulo": "Apoyos socioeconómicos a estudiantes del programa, 2019–2024",
+              "nota": "1.337 apoyos en total; en 2024, 281 subsidios de alimentación. Fuente: Bienestar Social Universitario, anexo 10.",
               "items": [
                 {
                   "k": "Alimentación",
-                  "valor": "281",
-                  "l": "estudiantes con subsidio de alimentación",
+                  "valor": "623",
+                  "l": "subsidios de alimentación en el restaurante universitario",
                   "tono": "azul"
                 },
                 {
-                  "k": "Estudiantes auxiliares",
-                  "valor": "43",
-                  "l": "estudiantes vinculados como auxiliares",
+                  "k": "Descuentos",
+                  "valor": "603",
+                  "l": "descuentos socioeconómicos sobre el valor de la matrícula",
                   "tono": "ambar"
                 },
                 {
-                  "k": "Descuentos",
-                  "valor": "33",
-                  "l": "estudiantes con descuentos socioeconómicos",
+                  "k": "Estudiantes auxiliares",
+                  "valor": "111",
+                  "l": "vinculaciones como estudiante auxiliar",
                   "tono": "marino"
                 }
               ]
@@ -6660,19 +6750,19 @@
                 {
                   "k": "Tutores",
                   "valor": "111",
-                  "l": "estudiantes tutores que apoyan asignaturas de alta repitencia en otros programas",
+                  "l": "estudiantes del programa vinculados como tutores de otros programas académicos",
                   "tono": "azul"
                 },
                 {
                   "k": "Desempeño académico",
                   "valor": "14",
-                  "l": "estudiantes exaltados por su desempeño académico",
+                  "l": "estudiantes exaltados por su desempeño académico en la sede Maicao",
                   "tono": "ambar"
                 },
                 {
                   "k": "Deporte y cultura",
                   "valor": "5",
-                  "l": "estudiantes destacados en eventos deportivos y culturales: voleibol regional y ASCUN",
+                  "l": "estudiantes destacados: 1 en voleibol en los Juegos Regionales Universitarios y 4 en danzas folclóricas y teatro en ASCUN",
                   "tono": "marino"
                 }
               ]
@@ -6725,13 +6815,14 @@
             },
             {
               "tipo": "etiquetas",
-              "titulo": "Innovación en Bienestar",
+              "titulo": "Iniciativas recientes",
               "tono": "ambar",
               "items": [
-                "Deporte inclusivo: fútbol sonoro, voleibol sentado y tiro con arco",
-                "Coral étnica para fortalecer la interculturalidad",
-                "Subsidio de alimentación en la sede Maicao",
-                "Prevención del consumo de sustancias: cineforos y jornadas emocionales"
+                "Subsidio de alimentación ampliado a la sede Maicao",
+                "Estrategias mixtas, presenciales y virtuales",
+                "Salud mental y ruta de atención a las violencias",
+                "Prevención del consumo de alcohol y drogas",
+                "Deporte inclusivo, tiro con arco y entrenamiento funcional"
               ]
             }
           ]
@@ -6750,7 +6841,7 @@
               "tipo": "nota",
               "k": "Cómo se sigue",
               "tono": "azul",
-              "v": "El programa hace seguimiento sistemático a la participación de estudiantes, docentes y funcionarios en Bienestar."
+              "v": "El programa hace seguimiento sistemático a la participación de estudiantes, docentes y personal administrativo en los planes y actividades de Bienestar, por área, sede y año, y responde a lo que encuentra: estrategias mixtas, fortalecimiento de la salud mental y programas de acompañamiento institucionalizados."
             },
             {
               "tipo": "barras",
@@ -6789,46 +6880,32 @@
             },
             {
               "tipo": "pares",
-              "titulo": "Participación de docentes y funcionarios del programa, 2020–2024",
-              "max": 337,
+              "titulo": "Participación de docentes y personal administrativo del programa, por sede",
+              "max": 663,
               "series": [
                 {
                   "l": "Docentes (462)",
                   "tono": "ambar"
                 },
                 {
-                  "l": "Funcionarios (865)",
+                  "l": "Personal administrativo (865)",
                   "tono": "marino"
                 }
               ],
-              "nota": "1.327 participaciones en total, concentradas en salud y desarrollo humano. Incluyen fisioterapia, odontología, quiropraxia, la Copa de Convivencia de Fútbol Sala, la Carrera 5K y la Semana de Inclusión.",
+              "nota": "1.327 participaciones entre 2020 y 2024, en salud, desarrollo organizacional, hábitos saludables y bienestar físico. En cultura suman 72, concentradas en Maicao.",
               "items": [
                 {
-                  "l": "Salud",
+                  "l": "Riohacha",
                   "v": [
-                    218,
-                    337
+                    223,
+                    202
                   ]
                 },
                 {
-                  "l": "Desarrollo Humano",
+                  "l": "Maicao",
                   "v": [
-                    110,
-                    271
-                  ]
-                },
-                {
-                  "l": "Cultura",
-                  "v": [
-                    72,
-                    197
-                  ]
-                },
-                {
-                  "l": "Deporte",
-                  "v": [
-                    62,
-                    60
+                    239,
+                    663
                   ]
                 }
               ]
@@ -6837,44 +6914,44 @@
               "tipo": "nota",
               "k": "Seguimiento individual",
               "tono": "marino",
-              "v": "Cada estudiante identificado con riesgo económico, individual y familiar o académico recibe seguimiento semestre a semestre con la ruta de servicios que usa: alimentación, permanencia (tutorías y observatorio de repitencia), salud, desarrollo humano, deporte y cultura. Así se verifica que la atención responda a su situación."
+              "v": "El Sistema Integral de Alertas Tempranas (SIAT) caracteriza a cada estudiante según sus variables de riesgo académico, individual, socioeconómico y familiar, para anticipar las causas de deserción. Las tutorías refuerzan las asignaturas de alta repitencia y el acompañamiento al aprendizaje sigue las notas de cada cohorte."
             },
             {
               "tipo": "barras",
-              "titulo": "Cómo evalúan los usuarios cada servicio",
-              "unidad": "%",
-              "max": 100,
-              "nota": "Porcentaje de usuarios que responde que el servicio contribuyó a su bienestar, salud, permanencia, formación integral o condición socioeconómica. Se mide con encuestas de satisfacción por servicio.",
+              "titulo": "Qué pasó con los estudiantes atendidos por las estrategias de permanencia",
+              "max": 2565,
+              "nota": "3.072 estudiantes del programa atendidos entre 2019 y 2024-1 en tutorías, acompañamiento al aprendizaje, seguimiento a repitentes, promoción a la graduación y mentorías. Fuente: Bienestar Social Universitario, anexo 10.",
               "items": [
                 {
-                  "l": "Salud",
-                  "v": 100,
+                  "l": "Permanecieron",
+                  "v": 2565,
                   "tono": "azul"
                 },
                 {
-                  "l": "Promoción socioeconómica",
-                  "v": 100,
+                  "l": "Sin matrícula académica 2024-1",
+                  "v": 177
+                },
+                {
+                  "l": "Graduados",
+                  "v": 136,
                   "tono": "azul"
                 },
                 {
-                  "l": "Deporte",
-                  "v": 100,
-                  "tono": "azul"
+                  "l": "Desertores",
+                  "v": 106,
+                  "tono": "terracota"
                 },
                 {
-                  "l": "Permanencia y Graduación",
-                  "v": 98,
-                  "tono": "azul"
+                  "l": "En terminación académica",
+                  "v": 36
                 },
                 {
-                  "l": "Desarrollo Humano",
-                  "v": 98,
-                  "tono": "azul"
+                  "l": "P.F.P.",
+                  "v": 27
                 },
                 {
-                  "l": "Cultura",
-                  "v": 88,
-                  "tono": "ambar"
+                  "l": "Retirados 2024-1",
+                  "v": 25
                 }
               ]
             }
@@ -6899,21 +6976,49 @@
       ],
       "evidencias": [
         {
-          "t": "Informe Bienestar Universitario 2025",
-          "d": "Cobertura, programas y resultados",
-          "f": "Mar 2025",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Acuerdo 013 de 2020 · Estatuto General de Bienestar Social Universitario",
+          "d": "Consejo Superior · Anexo 8",
+          "cat": "Normativa institucional",
+          "f": "2020",
+          "url": "/descargas/factor-9/anexo-08-acuerdo-013-2020-estatuto-bienestar.pdf"
+        },
         {
-          "cat": "Programas",
-          "items": [
-            "Catálogo de servicios de bienestar",
-            "Indicadores de uso 2024"
-          ]
+          "t": "Informe de Bienestar Social Universitario",
+          "d": "Participación de estudiantes, docentes y administrativos del programa, 2019–2024 · Anexo 10",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-9/anexo-10-informe-bienestar-universitario.pdf"
+        },
+        {
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Bitácora de factores del proceso de autoevaluación",
+          "d": "Aspectos evaluados, soportes y calificaciones de los doce factores · Anexo 8",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-8/anexo-08-bitacora-autoevaluacion.xlsx"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -6925,8 +7030,16 @@
           "v": "Actualiza el Estatuto General de Bienestar Social Universitario (Consejo Superior)"
         },
         {
-          "k": "Acuerdo 020 de 2022",
-          "v": "Política de promoción, prevención e intervención del consumo de alcohol y drogas"
+          "k": "Resolución 007 de 2022",
+          "v": "Ponderación de los factores y características del programa (Consejo de Facultad de Ingeniería)"
+        },
+        {
+          "k": "Acuerdo 016 de 2023",
+          "v": "Política para el acceso, admisión, permanencia y graduación exitosa en los programas de pregrado; actualiza el Acuerdo 027 de 2020"
+        },
+        {
+          "k": "Resolución 0689 de 2024",
+          "v": "Servicio de tutorías para las asignaturas de alta repitencia"
         }
       ]
     },
@@ -6934,7 +7047,7 @@
       "n": 10,
       "t": "Medios Educativos y Ambientes de Aprendizaje",
       "score": 94.5,
-      "summary": "Con qué enseñan los profesores y con qué aprenden los estudiantes: 22 salas de informática en un bloque tecnológico de 6.859 m², más de $6.700 millones invertidos en recursos bibliográficos y software entre 2020 y 2025, y docentes formados en IA generativa.",
+      "summary": "Con qué enseñan los profesores y con qué aprenden los estudiantes: 22 salas de informática en un bloque tecnológico de 6.859 m², más de $4.900 millones invertidos en recursos bibliográficos y software entre 2020 y 2024, y docentes formados en IA generativa.",
       "fortalezas": [
         "Alta pertinencia y efectividad de las estrategias de formación docente.",
         "Uso intensivo de tecnologías para el aprendizaje.",
@@ -6966,7 +7079,7 @@
               "tipo": "dato",
               "tono": "azul",
               "v": "41 %",
-              "l": "del cuerpo docente, 13 profesores, se formó en IA generativa y enseñanza virtual en el convenio con la UNIR"
+              "l": "del cuerpo docente, 13 profesores del perfil profesional, se capacitó con la UNIR en IA generativa aplicada a la educación, materiales digitales, liderazgo pedagógico y enseñanza en entornos virtuales"
             },
             {
               "tipo": "cifras",
@@ -7185,61 +7298,37 @@
                 {
                   "k": "Bases de datos",
                   "valor": "73",
-                  "l": "con 99.220 documentos entre informes, tesis y artículos",
+                  "l": "especializadas, con 99.220 documentos",
                   "tono": "marino"
                 }
               ]
             },
             {
-              "tipo": "pares",
-              "titulo": "Consultas en bases de datos de la comunidad del programa",
+              "tipo": "barras",
+              "titulo": "Consultas de los estudiantes del programa en bases de datos",
               "max": 14327,
-              "series": [
-                {
-                  "l": "Estudiantes",
-                  "tono": "azul"
-                },
-                {
-                  "l": "Docentes",
-                  "tono": "ambar"
-                }
-              ],
-              "nota": "Las consultas de estudiantes pasaron de 158 en 2021 a 14.327 en 2025, y las de docentes de 194 a 4.734. Fuente: Biblioteca Universitaria.",
+              "nota": "Las consultas de los docentes pasaron de 194 en 2021 a 1.590 en 2024 y 4.734 en 2025. Fuente: Biblioteca Universitaria.",
               "items": [
                 {
                   "l": "2021",
-                  "v": [
-                    158,
-                    194
-                  ]
+                  "v": 158
                 },
                 {
                   "l": "2022",
-                  "v": [
-                    1248,
-                    285
-                  ]
+                  "v": 1248
                 },
                 {
                   "l": "2023",
-                  "v": [
-                    5405,
-                    926
-                  ]
+                  "v": 5405
                 },
                 {
                   "l": "2024",
-                  "v": [
-                    2128,
-                    1590
-                  ]
+                  "v": 2128
                 },
                 {
                   "l": "2025",
-                  "v": [
-                    14327,
-                    4734
-                  ]
+                  "v": 14327,
+                  "tono": "azul"
                 }
               ]
             },
@@ -7249,20 +7338,20 @@
               "items": [
                 {
                   "k": "Capacitación",
-                  "valor": "666",
-                  "l": "estudiantes capacitados en bases de datos y herramientas digitales entre 2022 y 2025",
+                  "valor": "314",
+                  "l": "participaciones en capacitaciones en bases de datos y herramientas digitales entre 2020 y 2024: 304 de estudiantes y 10 de docentes",
                   "tono": "azul"
                 },
                 {
-                  "k": "Préstamos",
-                  "valor": "1.307",
-                  "l": "préstamos de libros físicos a estudiantes entre 2020 y 2025",
+                  "k": "Préstamos 2020–2024",
+                  "valor": "603",
+                  "l": "préstamos de libros físicos: 561 a estudiantes y 42 a docentes",
                   "tono": "marino"
                 },
                 {
                   "k": "Préstamos en 2025",
-                  "valor": "746",
-                  "l": "el mayor registro de la serie",
+                  "valor": "754",
+                  "l": "préstamos adicionales, más que en los cinco años anteriores juntos",
                   "tono": "ambar"
                 }
               ]
@@ -7271,7 +7360,7 @@
               "tipo": "barras",
               "titulo": "Inversión institucional en recursos bibliográficos y software · millones de pesos",
               "max": 1514,
-              "nota": "$6.713 millones entre 2020 y 2025, de los cuales $5.419 millones corresponden a 2020–2024. Incluye bases de datos, software, libros físicos y revistas físicas; las bases de datos concentran la mayor parte.",
+              "nota": "$5.419 millones entre 2020 y 2024 en bases de datos, libros físicos, revistas físicas y software, para todos los programas académicos; las bases de datos concentran la mayor parte. Fuente: Biblioteca Uniguajira, anexo 32.",
               "items": [
                 {
                   "l": "2020",
@@ -7293,10 +7382,6 @@
                 {
                   "l": "2024",
                   "v": 1230
-                },
-                {
-                  "l": "2025",
-                  "v": 1295
                 }
               ]
             },
@@ -7409,27 +7494,49 @@
       ],
       "evidencias": [
         {
-          "t": "Inventario de laboratorios IS 2025",
-          "d": "Equipos, software y cobertura por sede",
-          "f": "Ene 2025",
-          "url": ""
+          "t": "Medios educativos y sistemas de información 2025",
+          "d": "Inversión, colecciones, consultas, préstamos y capacitaciones de la Biblioteca para el programa · Anexo 32",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-10/anexo-32-medios-educativos-sistema-informacion-2025.pdf"
         },
         {
-          "t": "Informe de capacitación docente UNIR",
-          "d": "Diplomados en IA y metodologías activas",
-          "f": "Dic 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Acuerdo 012 de 2023 · Plan de capacitación, actualización y perfeccionamiento docente 2022–2025",
+          "d": "Consejo Académico · Anexo 18",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-10/anexo-18-acuerdo-012-2023-plan-capacitacion-docente.pdf"
+        },
         {
-          "cat": "Infraestructura",
-          "items": [
-            "Inventario de equipos y software",
-            "Reportes de uso de laboratorios"
-          ]
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Bitácora de factores del proceso de autoevaluación",
+          "d": "Aspectos evaluados, soportes y calificaciones de los doce factores · Anexo 8",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-8/anexo-08-bitacora-autoevaluacion.xlsx"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -7443,6 +7550,14 @@
         {
           "k": "Acuerdo 006 de 2019",
           "v": "Política de gestión, selección y adquisición de recursos bibliográficos"
+        },
+        {
+          "k": "Resolución 007 de 2022",
+          "v": "Ponderación de los factores y características del programa (Consejo de Facultad de Ingeniería)"
+        },
+        {
+          "k": "Acuerdo 012 de 2023",
+          "v": "Actualiza el Plan de capacitación, actualización y perfeccionamiento docente 2022–2025 (Consejo Académico)"
         },
         {
           "k": "Acuerdo 001 de 2021",
@@ -7494,7 +7609,7 @@
               "tipo": "dato",
               "tono": "azul",
               "v": "96",
-              "l": "sobre 100 obtuvieron la organización académica y la participación de los estamentos"
+              "l": "sobre 100 obtuvo en la bitácora el aspecto 41.1, la participación de la comunidad académica en los órganos de decisión; la característica suma 94"
             },
             {
               "tipo": "barras",
@@ -7648,8 +7763,10 @@
               "titulo": "Herramientas y plataformas",
               "tono": "marino",
               "items": [
-                "Google Workspace for Education Plus: Classroom, Drive y Meet.",
-                "SMA, Sistema de Gestión de Investigación y herramientas de trazabilidad académica y documental.",
+                "Sistema Académico SMA: matrícula, notas, horarios y solicitudes académicas.",
+                "Google Workspace for Education Plus: Classroom, Drive y Meet para los espacios digitales de clase.",
+                "ADVISER para el seguimiento a la permanencia, SIGINV para la gestión de la investigación, GUNIG 2 para la gestión académica institucional y PLATINUM para la gestión administrativa y financiera.",
+                "Canales multimedia oficiales, redes sociales y canal de YouTube institucional para eventos académicos e inducciones.",
                 "Archivo Central: conservación, digitalización, clasificación, acceso seguro y respaldo de los documentos físicos.",
                 "Materiales didácticos de los docentes: los usa el 83,6 % de los estudiantes de Riohacha y el 66,7 % de los de Maicao."
               ]
@@ -7677,14 +7794,14 @@
               "items": [
                 {
                   "k": "Permanencia",
-                  "valor": "+3.800",
-                  "l": "participaciones estudiantiles en estrategias de permanencia",
+                  "valor": "5.132",
+                  "l": "participaciones estudiantiles en tutorías, mentorías y promoción a la graduación entre 2020 y 2024, en las dos sedes",
                   "tono": "azul"
                 },
                 {
                   "k": "Bienestar",
-                  "valor": "+10.000",
-                  "l": "servicios de bienestar a los que accedieron los estudiantes",
+                  "valor": "22.039",
+                  "l": "participaciones de los estudiantes en las áreas de Bienestar entre 2020 y 2024",
                   "tono": "marino"
                 },
                 {
@@ -7699,7 +7816,7 @@
               "tipo": "dato",
               "tono": "azul",
               "v": "43,40 %",
-              "l": "de tasa de graduación acumulada en el periodo 49, frente a 10,68 % en el periodo 14: se multiplicó por cuatro en la serie de cohortes"
+              "l": "de tasa de graduación acumulada en el semestre 49, frente a 10,68 % en el semestre 14: se multiplicó por cuatro en la serie de cohortes"
             },
             {
               "tipo": "pares",
@@ -7851,7 +7968,7 @@
         },
         {
           "n": "11.6",
-          "name": "Aseguramiento de la alta calidad y mejora continua",
+          "name": "Aseguramiento de la calidad y mejora continua",
           "peso": 18.65,
           "calificacion": 95,
           "score": 95,
@@ -7876,6 +7993,12 @@
                 "Articulación con la rendición de cuentas institucional"
               ],
               "nota": "SIAC: Sistema Interno de Aseguramiento de la Calidad."
+            },
+            {
+              "tipo": "nota",
+              "k": "Cómo se autoevalúa",
+              "tono": "azul",
+              "v": "Cada programa hace al menos dos autoevaluaciones durante la vigencia de su registro calificado, de siete años, con docentes, estudiantes, egresados, empleadores y directivos: encuestas, grupos focales, indicadores, revisión documental y discusión académica. Los resultados se convierten en planes de mejoramiento con acciones, responsables y cronogramas, a los que se hace seguimiento periódico."
             },
             {
               "tipo": "nota",
@@ -7918,37 +8041,84 @@
       ],
       "evidencias": [
         {
-          "t": "Organigrama y manual de funciones",
-          "d": "Estructura académica y administrativa",
-          "f": "Ene 2025",
-          "url": ""
+          "t": "Resolución 009 de 2024 · Equipo de autoevaluación del programa",
+          "d": "Consejo de Facultad de Ingeniería: coordinador y equipo de trabajo para la renovación de la acreditación · Anexo 3",
+          "cat": "Normativa institucional",
+          "f": "2024",
+          "url": "/descargas/factor-11/anexo-03-resolucion-009-2024-equipo-acreditacion.pdf"
         },
         {
-          "t": "Informe financiero 2025",
-          "d": "Ejecución presupuestal del programa",
-          "f": "Feb 2025",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Proyecto Político Educativo Institucional (PPEI) 2017–2030",
+          "d": "Acuerdo 005 de 2017 del Consejo Superior, por el cual se aprueba el PPEI · Anexo 1",
+          "cat": "Normativa institucional",
+          "f": "2017",
+          "url": "/descargas/factor-1/anexo-01-ppei-2017-2030.pdf"
+        },
         {
-          "cat": "Organización",
-          "items": [
-            "Organigrama del programa",
-            "Manual de procedimientos SIAC"
-          ]
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Medios educativos y sistemas de información 2025",
+          "d": "Inversión, colecciones, consultas, préstamos y capacitaciones de la Biblioteca para el programa · Anexo 32",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-10/anexo-32-medios-educativos-sistema-informacion-2025.pdf"
+        },
+        {
+          "t": "Bitácora de factores del proceso de autoevaluación",
+          "d": "Aspectos evaluados, soportes y calificaciones de los doce factores · Anexo 8",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-8/anexo-08-bitacora-autoevaluacion.xlsx"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
       "ponderacion": 8.8,
-      "pesoTotal": 100
+      "pesoTotal": 100,
+      "normativa": [
+        {
+          "k": "Ley 30 de 1992, art. 62",
+          "v": "Representación de docentes, estudiantes y egresados en los cuerpos colegiados"
+        },
+        {
+          "k": "Acuerdo 005 de 2017 (PPEI)",
+          "v": "Proyecto Político Educativo Institucional 2017–2030 (Consejo Superior)"
+        },
+        {
+          "k": "Resolución 007 de 2022",
+          "v": "Ponderación de los factores y características del programa (Consejo de Facultad de Ingeniería)"
+        },
+        {
+          "k": "Resolución 009 de 2024",
+          "v": "Designa el coordinador y el equipo de trabajo de la autoevaluación para la renovación de la acreditación (Consejo de Facultad de Ingeniería)"
+        }
+      ]
     },
     {
       "n": 12,
       "t": "Recursos Físicos y Tecnológicos",
-      "score": 94.81,
+      "score": 94.77,
       "summary": "Dónde y con qué se estudia: 83.020 m² construidos en la sede principal, 7.168 Mbps de internet en Riohacha en 2025 (250 % más que en 2024) y 2.215 computadores institucionales, frente a 1.964 en 2019.",
       "fortalezas": [
         "Infraestructura física adecuada, moderna y distribuida en ambas sedes.",
@@ -8004,7 +8174,7 @@
               "titulo": "Bloques de uso intensivo del programa frente a otras áreas de la sede",
               "unidad": "m²",
               "max": 5586,
-              "nota": "Los bloques VI y VIII, con 5.586 m² cada uno en cuatro niveles, son los espacios de mayor superficie de la sede.",
+              "nota": "Los bloques VI y VIII, con 5.586 m² cada uno en cuatro niveles, son los de uso intensivo del programa. Fuente: Oficina de Planeación Física, 2022.",
               "items": [
                 {
                   "l": "Bloque VI · aulas",
@@ -8048,7 +8218,7 @@
                 ],
                 [
                   "Bloque VIII (tecnológico)",
-                  "22 salas de informática de 20 a 40 puestos, 8 salas audiovisuales de 56 a 62 puestos, laboratorio de redes y telemática, laboratorio de idiomas, sala de dibujo y 782 puntos de red categoría 7A. Climatizado y con acceso para personas con discapacidad. Cerca del 50 % de su uso se asigna a las ingenierías."
+                  "6.859 m² con 22 salas de informática de 20 a 40 puestos, 8 salas audiovisuales de 56 a 62 puestos, laboratorio de redes y telemática, laboratorio de idiomas, sala de dibujo y 782 puntos de red categoría 7A. Climatizado y con acceso para personas con discapacidad. Cerca del 50 % de su uso se asigna a las ingenierías."
                 ]
               ]
             },
@@ -8057,8 +8227,8 @@
               "titulo": "Conservación, expansión y mantenimiento",
               "tono": "azul",
               "items": [
-                "Remodelación de laboratorios especializados en Riohacha y Maicao y ampliación de espacios académicos en los bloques VI y VIII.",
-                "Expansión de la red wifi y del ancho de banda, y actualización del sistema de cómputo, en ejecución.",
+                "Remodelación de laboratorios especializados para prácticas en redes, en Riohacha y Maicao, y ampliación de espacios académicos en los bloques VI y VIII (ejecutadas).",
+                "Expansión de la red wifi y del ancho de banda (ejecutada) y actualización de los equipos de las salas del bloque VIII (en ejecución).",
                 "Mantenimiento preventivo y correctivo permanente, y adecuaciones de accesibilidad con señalética y rampas.",
                 "Obras ejecutadas conforme a la Norma Técnica Colombiana NTC 4595 para edificaciones educativas."
               ]
@@ -8077,61 +8247,46 @@
           "bloques": [
             {
               "tipo": "nota",
-              "k": "Quién lo gestiona",
+              "k": "Laboratorios de redes",
               "tono": "azul",
-              "v": "La Dirección de Sistemas, adscrita a Planeación, gestiona la infraestructura tecnológica académica y administrativa con cinco áreas: mantenimiento, redes, desarrollo de software, servidores y bases de datos, y recursos audiovisuales."
+              "v": "El laboratorio de redes de Riohacha se dotó con switches, routers, cableado estructurado, racks, herramientas de diagnóstico y dispositivos de conectividad. En Maicao se adecuó un laboratorio nuevo con equipos de especificaciones similares, para garantizar condiciones equivalentes en las dos sedes."
             },
             {
               "tipo": "pares",
-              "titulo": "Crecimiento del ancho de banda",
+              "titulo": "Crecimiento del ancho de banda, 2024–2025",
               "unidad": "Mbps",
               "max": 8192,
               "series": [
                 {
-                  "l": "Riohacha",
-                  "tono": "azul"
-                },
-                {
-                  "l": "Maicao",
-                  "tono": "ambar"
-                },
-                {
-                  "l": "Total institucional",
-                  "tono": "marino"
-                }
-              ],
-              "nota": "El total institucional pasó de 70 Mbps en 2015 a 8.192 Mbps en 2025. En 2024 los 3.072 Mbps se distribuían así: Riohacha 2.048, Maicao 500, Fonseca 200, Villanueva 200 y Uniguajira Estéreo 100. Fuente: Dirección de Sistemas.",
-              "items": [
-                {
-                  "l": "2015",
-                  "v": [
-                    50,
-                    10,
-                    70
-                  ]
-                },
-                {
-                  "l": "2019",
-                  "v": [
-                    550,
-                    150,
-                    1024
-                  ]
-                },
-                {
                   "l": "2024",
-                  "v": [
-                    2048,
-                    500,
-                    3072
-                  ]
+                  "tono": "marino"
                 },
                 {
                   "l": "2025",
+                  "tono": "azul"
+                }
+              ],
+              "nota": "Riohacha creció 250 % en un año; Maicao mantiene 500. El informe expresa estas cifras en «MB». Fuente: Dirección de Sistemas.",
+              "items": [
+                {
+                  "l": "Total institucional",
                   "v": [
-                    7168,
-                    500,
+                    3072,
                     8192
+                  ]
+                },
+                {
+                  "l": "Riohacha",
+                  "v": [
+                    2048,
+                    7168
+                  ]
+                },
+                {
+                  "l": "Maicao",
+                  "v": [
+                    500,
+                    500
                   ]
                 }
               ]
@@ -8142,20 +8297,19 @@
                 {
                   "k": "Puntos de acceso wifi",
                   "valor": "260",
-                  "l": "en 2025, 44 % más que en 2024: 189 en Riohacha y 30 en Maicao",
+                  "l": "en total institucional: 189 en Riohacha y 30 en Maicao",
                   "tono": "azul"
                 },
                 {
                   "k": "Cobertura wifi",
-                  "de": "68 %",
-                  "a": "96 %",
-                  "l": "de 2015 a hoy",
+                  "valor": "96 %",
+                  "l": "de la sede principal",
                   "tono": "marino"
                 },
                 {
-                  "k": "Portátiles para préstamo",
-                  "valor": "74",
-                  "l": "42 en Riohacha y 32 en Maicao",
+                  "k": "Software y plataformas",
+                  "valor": "9 + 6",
+                  "l": "programas especializados y plataformas tecnológicas asociados al programa: programación, redes, bases de datos, IA y simulación",
                   "tono": "ambar"
                 }
               ]
@@ -8165,78 +8319,47 @@
               "titulo": "Equipamiento tecnológico de la sede Riohacha",
               "cols": [
                 "Equipo",
-                "2020–2021",
-                "2022",
-                "2023–2024",
-                "2025",
-                "Meta a 7 años"
+                "Antes",
+                "Ahora"
               ],
               "filas": [
                 [
                   "Puntos de red",
-                  "1.582",
-                  "1.582",
-                  "1.770",
-                  "2.212",
-                  "4.000"
+                  "1.582 (2020–2021)",
+                  "2.212 (2025)"
                 ],
                 [
-                  "Computadores",
+                  "Computadores de escritorio",
                   "938",
-                  "938",
-                  "1.071",
-                  "1.071",
-                  "2.000"
+                  "1.071"
                 ],
                 [
                   "Computadores portátiles",
                   "467",
-                  "473",
-                  "556",
-                  "556",
-                  "1.000"
+                  "556"
                 ],
                 [
                   "Video beam",
                   "122",
-                  "129",
-                  "151",
-                  "191",
-                  "300"
+                  "191"
                 ],
                 [
                   "Impresoras",
                   "172",
-                  "181",
-                  "240",
-                  "240",
-                  "350"
+                  "240"
                 ],
                 [
                   "Servidores",
                   "11",
-                  "11",
-                  "11",
-                  "11",
-                  "20"
-                ],
-                [
-                  "Aulas de informática",
-                  "26",
-                  "26",
-                  "23",
-                  "23",
-                  "50"
+                  "11"
                 ],
                 [
                   "Internet (Mbps)",
-                  "560",
-                  "560",
-                  "2.048",
-                  "7.168",
-                  "10.240"
+                  "2.048 (2024)",
+                  "7.168 (2025)"
                 ]
-              ]
+              ],
+              "nota": "Los puntos de red pasaron por 1.770 en 2023 y 2024, y la proyección a siete años es de 4.000. Fuente: Dirección de Sistemas."
             },
             {
               "tipo": "tabla",
@@ -8244,90 +8367,59 @@
               "cols": [
                 "Equipo",
                 "2018",
-                "2025",
-                "Meta a 7 años"
+                "2025"
               ],
               "filas": [
                 [
                   "Puntos de red",
                   "500",
-                  "600",
-                  "1.000"
+                  "600"
                 ],
                 [
                   "Computadores",
                   "108",
-                  "145",
-                  "300"
+                  "145"
                 ],
                 [
                   "Computadores portátiles",
                   "71",
-                  "104",
-                  "300"
-                ],
-                [
-                  "Video beam",
-                  "23",
-                  "36",
-                  "50"
-                ],
-                [
-                  "Impresoras",
-                  "12",
-                  "27",
-                  "50"
+                  "104"
                 ],
                 [
                   "Aulas de informática",
                   "4",
-                  "5",
-                  "10"
+                  "5"
                 ],
                 [
                   "Internet (Mbps)",
                   "10",
-                  "500",
-                  "1.024"
+                  "500"
                 ]
-              ]
+              ],
+              "nota": "Fuente: Dirección de Sistemas."
             },
             {
-              "tipo": "pares",
-              "titulo": "Computadores institucionales por estamento",
-              "max": 1375,
-              "series": [
+              "tipo": "impacto",
+              "titulo": "Parque computacional de la institución",
+              "items": [
                 {
-                  "l": "2019 · 1.964 equipos",
+                  "k": "Computadores",
+                  "de": "1.964",
+                  "a": "2.215",
+                  "l": "equipos entre 2019 y 2025",
+                  "tono": "azul"
+                },
+                {
+                  "k": "Docentes de tiempo completo",
+                  "valor": "1,4",
+                  "l": "por computador",
                   "tono": "marino"
                 },
                 {
-                  "l": "2025 · 2.215 equipos",
-                  "tono": "azul"
-                }
-              ],
-              "nota": "Personas por computador en 2025: 12,7 estudiantes, 1,4 docentes de tiempo completo y 1,1 administrativos.",
-              "items": [
-                {
-                  "l": "Estudiantes",
-                  "v": [
-                    1375,
-                    1345
-                  ]
-                },
-                {
-                  "l": "Docentes de tiempo completo",
-                  "v": [
-                    141,
-                    150
-                  ]
-                },
-                {
-                  "l": "Administrativos",
-                  "v": [
-                    448,
-                    720
-                  ]
+                  "k": "Administrativos",
+                  "valor": "1,1",
+                  "l": "por computador",
+                  "tono": "ambar"
                 }
               ]
             },
@@ -8342,18 +8434,34 @@
               ]
             },
             {
-              "tipo": "etiquetas",
-              "titulo": "Software y sistemas de información",
-              "tono": "azul",
-              "items": [
-                "Microsoft Open Value Education",
-                "Matlab, MathCad y SPSS",
-                "AutoCad, SolidWorks y ArcGIS",
-                "Software libre: Node.js, MySQL, PostgreSQL, GitHub",
-                "LMS: Moodle y Akumaja",
-                "Google Workspace for Education Plus",
-                "SIG, SIGINV y Adviser",
-                "Turnitin, Kaspersky y repositorio institucional"
+              "tipo": "tabla",
+              "titulo": "Recursos tecnológicos del programa",
+              "cols": [
+                "Recurso",
+                "Cantidad",
+                "Finalidad principal"
+              ],
+              "alin": [
+                null,
+                null,
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Software especializado",
+                  "9",
+                  "Simulación, programación, IA y bases de datos"
+                ],
+                [
+                  "Plataformas tecnológicas",
+                  "6",
+                  "Gestión académica, aprendizaje virtual y simulación"
+                ],
+                [
+                  "Google Workspace for Education Plus",
+                  "Toda la comunidad",
+                  "Meet, Drive y Classroom para el trabajo colaborativo y la interacción virtual"
+                ]
               ]
             },
             {
@@ -8418,7 +8526,7 @@
                   "tono": "ambar"
                 }
               ],
-              "nota": "La valoración aumenta cuando quien responde ya ejerce la profesión: el 86,89 % de los egresados considera el material totalmente pertinente.",
+              "nota": "La valoración aumenta cuando quien responde ya ejerce la profesión: el 86,89 % de los egresados de Riohacha considera el material totalmente pertinente. En Maicao, el 77 % de los graduados lo ha usado y más del 90 % califica su calidad como muy buena o excelente.",
               "items": [
                 {
                   "l": "Han usado el material",
@@ -8495,27 +8603,42 @@
       ],
       "evidencias": [
         {
-          "t": "Inventario tecnológico IS 2025",
-          "d": "Equipos, redes y software por sede",
-          "f": "Ene 2025",
-          "url": ""
+          "t": "Medios educativos y sistemas de información 2025",
+          "d": "Inversión, colecciones, consultas, préstamos y capacitaciones de la Biblioteca para el programa · Anexo 32",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-10/anexo-32-medios-educativos-sistema-informacion-2025.pdf"
         },
         {
-          "t": "Plan maestro de infraestructura 2024–2030",
-          "d": "Proyección de inversión física y tecnológica",
-          "f": "Mar 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
         {
-          "cat": "Infraestructura",
-          "items": [
-            "Inventario de equipos y redes",
-            "Proyectos de dotación ejecutados"
-          ]
+          "t": "Bitácora de factores del proceso de autoevaluación",
+          "d": "Aspectos evaluados, soportes y calificaciones de los doce factores · Anexo 8",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-8/anexo-08-bitacora-autoevaluacion.xlsx"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -8535,12 +8658,20 @@
           "v": "Política de tratamiento de la información y protección de datos"
         },
         {
+          "k": "Resolución 007 de 2022",
+          "v": "Ponderación de los factores y características del programa (Consejo de Facultad de Ingeniería)"
+        },
+        {
           "k": "Acuerdo 008 de 2021",
           "v": "Política de actualización y renovación de la infraestructura tecnológica"
         },
         {
           "k": "PETI 2026",
           "v": "Plan Estratégico de las Tecnologías de la Información"
+        },
+        {
+          "k": "NTC 4595",
+          "v": "Norma Técnica Colombiana para edificaciones educativas"
         }
       ]
     }
