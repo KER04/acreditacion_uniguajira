@@ -6187,8 +6187,15 @@ a.org-dato:hover { color: var(--doc-azul-texto); text-decoration: underline; }
 }
 .fac-tendencia i { width: 10px; height: 10px; border-radius: 50%; background: var(--texto-tono, var(--ug-azul)); flex: none; }
 
-.fac-cifras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
-@media (max-width: 700px) { .fac-cifras { grid-template-columns: 1fr; } }
+/* Dos tarjetas por fila sobre una rejilla de cuatro columnas: así, si el
+   número es impar, la última se centra en vez de dejar un hueco a su lado. */
+.fac-cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.fac-cifras > * { grid-column: span 2; }
+.fac-cifras > :last-child:nth-child(odd) { grid-column: 2 / span 2; }
+@media (max-width: 700px) {
+  .fac-cifras { grid-template-columns: 1fr; }
+  .fac-cifras > *, .fac-cifras > :last-child:nth-child(odd) { grid-column: auto; }
+}
 .fac-cifra {
   padding: 20px;
   border: 1px solid var(--doc-borde);

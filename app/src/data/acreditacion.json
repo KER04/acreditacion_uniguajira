@@ -6,9 +6,12 @@
       "score": 96.65,
       "summary": "El PEP articula el marco nacional, el institucional y el prospectivo, y se traduce en decisiones académicas concretas. Es el factor mejor calificado del programa.",
       "fortalezas": [
-        "Proyectos de investigación, innovación y extensión tecnológica enfocados en la transformación digital y las necesidades del entorno",
-        "Egresados con trayectoria, posicionamiento y pertinencia profesional en sectores estratégicos de la región",
-        "Percepción altamente satisfactoria sobre la calidad, el impacto y la relevancia del programa, con estudios actualizados como insumo para la planeación académica"
+        "El programa cuenta con un Proyecto Educativo del Programa (PEP) actualizado, coherente con las funciones misionales, alineado con el PEI y el Plan Prospectivo Institucional",
+        "Se dispone de estrategias efectivas de socialización y apropiación del PEP, garantizando su conocimiento por parte de estudiantes, docentes, egresados y administrativos",
+        "El programa desarrolla proyectos de investigación, innovación y extensión tecnológica con foco en transformación digital y necesidades del entorno",
+        "Los egresados evidencian trayectoria laboral, posicionamiento y pertinencia profesional en sectores clave del desarrollo regional",
+        "Las encuestas institucionales revelan una percepción altamente satisfactoria sobre la calidad, impacto y relevancia del programa",
+        "Existen estudios actualizados sobre tendencias, necesidades e impacto, que sirven como insumos estratégicos para la planeación académica y la toma de decisiones"
       ],
       "oportunidades": [],
       "caracteristicas": [
@@ -20,7 +23,34 @@
           "score": 98,
           "status": "pleno",
           "juicio": "Se cumple plenamente",
-          "desc": "Coherencia, vigencia y apropiación del PEP por parte de la comunidad académica."
+          "desc": "Coherencia, vigencia y apropiación del PEP por parte de la comunidad académica.",
+          "bloques": [
+            {
+              "tipo": "etiquetas",
+              "titulo": "Semilleros de investigación desde los primeros semestres",
+              "tono": "azul",
+              "items": [
+                "Sistemas Sociales Complejos",
+                "Setec",
+                "d'proit",
+                "Sembrando Futuro",
+                "Siis"
+              ],
+              "nota": "Trabajan en inteligencia artificial, sistemas de información, redes y educación con TIC. La participación se formaliza en Metodología de la Investigación y Proyecto de Investigación I y II, y en actividades de extensión articuladas a los semilleros."
+            },
+            {
+              "tipo": "lista",
+              "titulo": "Aprendizaje basado en proyectos y problemas reales del entorno",
+              "tono": "ambar",
+              "items": [
+                "Análisis y Diseño de Sistemas",
+                "Ingeniería de Software I y II",
+                "Formulación y Evaluación de Proyectos",
+                "Proyectos I y II"
+              ],
+              "nota": "En estas asignaturas los estudiantes abordan necesidades del contexto regional mediante el desarrollo de productos tecnológicos funcionales."
+            }
+          ]
         },
         {
           "n": "C2",
@@ -30,7 +60,205 @@
           "score": 95,
           "status": "pleno",
           "juicio": "Se cumple plenamente",
-          "desc": "Respuesta del programa a las necesidades del territorio y actualización frente a la disciplina."
+          "desc": "Respuesta del programa a las necesidades del territorio y actualización frente a la disciplina.",
+          "bloques": [
+            {
+              "tipo": "tabla",
+              "titulo": "Sistemas de información desarrollados por estudiantes y egresados",
+              "alin": [
+                "txt",
+                "txt"
+              ],
+              "cols": [
+                "Sistema",
+                "Para qué sirve"
+              ],
+              "filas": [
+                [
+                  "SIGINV",
+                  "Gestión de la investigación en la Universidad. Surgió de un proyecto del semillero SETEC"
+                ],
+                [
+                  "AURORA",
+                  "Gestión y seguimiento a graduados de la Universidad"
+                ],
+                [
+                  "GUNIG 2",
+                  "Gestión académica de la Universidad"
+                ],
+                [
+                  "Medical HIS-Ayuuleepala",
+                  "Historias clínicas en IPS de Maicao"
+                ],
+                [
+                  "SIGESCOLE",
+                  "Gestión escolar"
+                ],
+                [
+                  "Optisoft",
+                  "Gestión para ópticas"
+                ],
+                [
+                  "RETTSOFT",
+                  "Terminales de transporte"
+                ]
+              ],
+              "nota": "Además, un sistema contable para mipymes, sistemas de gestión de inventarios para laboratorios y un planificador turístico digital."
+            },
+            {
+              "tipo": "cifras",
+              "items": [
+                {
+                  "v": "+10",
+                  "l": "graduados vinculados al soporte y a nuevos módulos de los sistemas institucionales"
+                },
+                {
+                  "v": "14",
+                  "l": "egresados con empresa propia en software, ciberseguridad y consultoría en sistemas y redes, 2020–2024"
+                }
+              ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Proyección académica nacional e internacional · 2020–2024",
+              "items": [
+                {
+                  "v": "64",
+                  "l": "convenios vigentes: 24 nacionales y 40 internacionales"
+                },
+                {
+                  "v": "90",
+                  "l": "movilidades docentes: 33 nacionales y 57 internacionales"
+                },
+                {
+                  "v": "834",
+                  "l": "movilidades estudiantiles: 400 nacionales y 434 internacionales, entre intercambios, clases espejo, estancias e inmersión académica"
+                },
+                {
+                  "v": "+80",
+                  "l": "ponencias en eventos académicos nacionales e internacionales"
+                }
+              ],
+              "nota": "Fuente: informe de internacionalización (anexo 7)."
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Países de las instituciones con convenio",
+              "tono": "azul",
+              "items": [
+                "España",
+                "México",
+                "Perú",
+                "Chile",
+                "Estados Unidos",
+                "Brasil"
+              ]
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Redes en las que participa el programa",
+              "tono": "marino",
+              "items": [
+                "REDCOLSI",
+                "ACOFI",
+                "REDIS",
+                "ALBAN",
+                "ASCUN",
+                "Programa Delfín",
+                "Alianza del Pacífico"
+              ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Apreciación de los empleadores",
+              "items": [
+                {
+                  "v": "25",
+                  "l": "empresas con vínculo directo con el programa: 15 en Riohacha y 10 en Maicao"
+                },
+                {
+                  "v": "92,7 %",
+                  "l": "de satisfacción con el ajuste del perfil profesional a las necesidades del entorno"
+                }
+              ]
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Aporte de los egresados por dimensión · Sede Riohacha",
+              "unidad": "%",
+              "max": 100,
+              "items": [
+                {
+                  "l": "Tecnológico",
+                  "v": 91
+                },
+                {
+                  "l": "Académico",
+                  "v": 94
+                },
+                {
+                  "l": "Social",
+                  "v": 83
+                },
+                {
+                  "l": "Cultural",
+                  "v": 79
+                },
+                {
+                  "l": "Ambiental",
+                  "v": 71
+                }
+              ],
+              "nota": "Valoración de los empleadores en la encuesta institucional de autoevaluación (anexos 9 y 9.1)."
+            },
+            {
+              "tipo": "nota",
+              "k": "Respuesta del programa",
+              "tono": "ambar",
+              "v": "Los empleadores señalaron habilidades blandas, inglés técnico y tecnologías emergentes. El programa respondió con cursos de inglés técnico y con las líneas de profundización en inteligencia artificial, ciencia de datos y ciberseguridad."
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Objetivos de Desarrollo Sostenible a los que contribuye",
+              "tono": "ambar",
+              "items": [
+                "ODS 4 · Educación de calidad",
+                "ODS 8 · Trabajo decente y crecimiento económico",
+                "ODS 9 · Industria, innovación e infraestructura",
+                "ODS 10 · Reducción de las desigualdades"
+              ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Seguimiento a graduados",
+              "items": [
+                {
+                  "v": "74 %",
+                  "l": "de empleabilidad: 71 % en Riohacha y 77 % en Maicao"
+                },
+                {
+                  "v": "2,8 SMMLV",
+                  "l": "de salario promedio, frente a 2,7 de las instituciones de la zona norte"
+                },
+                {
+                  "v": "84 %",
+                  "l": "de los graduados ejerce su profesión en La Guajira"
+                }
+              ],
+              "nota": "Anexo 23, con información del Observatorio Laboral para la Educación, Adviser y Aurora, 2025."
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Competencias del perfil de egreso verificadas en el ejercicio profesional",
+              "tono": "azul",
+              "items": [
+                "Pensamiento computacional",
+                "Liderazgo",
+                "Solución de problemas",
+                "Gestión de proyectos"
+              ]
+            }
+          ]
         }
       ],
       "equipo": [
@@ -65,27 +293,84 @@
       ],
       "evidencias": [
         {
-          "t": "PEI 2020–2030 UniGuajira",
-          "d": "Proyecto Educativo Institucional vigente",
-          "f": "Mar 2025",
-          "url": ""
+          "t": "Proyecto Político Educativo Institucional (PPEI) 2017–2030",
+          "d": "Acuerdo 005 de 2017 del Consejo Superior, por el cual se aprueba el PPEI · Anexo 1",
+          "cat": "Normativa institucional",
+          "f": "2017",
+          "url": "/descargas/factor-1/anexo-01-ppei-2017-2030.pdf"
         },
         {
-          "t": "PEP Ingeniería de Sistemas 2024",
-          "d": "Proyecto Educativo del Programa actualizado",
-          "f": "Oct 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
         {
-          "cat": "Normativa",
-          "items": [
-            "Acuerdo de aprobación del PEI",
-            "Resolución rectoral adopción PEP"
-          ]
+          "t": "Acuerdo 019 de 2016 · Política general de admisiones",
+          "d": "Consejo Académico · Anexo 26",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-1/anexo-26-acuerdo-019-2016-admisiones.pdf"
+        },
+        {
+          "t": "Proyecto Educativo del Programa (PEP)",
+          "d": "Ingeniería de Sistemas · Anexo 5",
+          "cat": "Documentos del programa",
+          "f": "2024",
+          "url": "/descargas/factor-1/anexo-05-pep.pdf"
+        },
+        {
+          "t": "Resultados de aprendizaje y mecanismos de evaluación",
+          "d": "Ingeniería de Sistemas · Anexo 11",
+          "cat": "Documentos del programa",
+          "f": "2023",
+          "url": "/descargas/factor-1/anexo-11-resultados-de-aprendizaje.pdf"
+        },
+        {
+          "t": "Programa referencial de Ingeniería de Sistemas",
+          "d": "Base de la modificación del plan de estudios · Anexo 13",
+          "cat": "Documentos del programa",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-13-programa-referencial.pdf"
+        },
+        {
+          "t": "Análisis de comparabilidad",
+          "d": "Referentes nacionales e internacionales del programa · Anexo 6",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-06-analisis-comparabilidad.pdf"
+        },
+        {
+          "t": "Informe de internacionalización",
+          "d": "Convenios, movilidad y redes del programa · Anexo 7",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-07-informe-internacionalizacion.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
+        },
+        {
+          "t": "Informe de graduados de Ingeniería de Sistemas 2024-I",
+          "d": "Seguimiento a graduados · Anexo 23",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-1/anexo-23-informe-graduados-2024-I.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -365,6 +650,11 @@
             "cifraPie": "actividades de extensión entre 2019 y 2024"
           }
         ]
+      },
+      "evolucionNota": {
+        "k": "ARCU-SUR · Dimensión 2",
+        "tono": "azul",
+        "v": "En la acreditación anterior, además de la Dimensión 1, Contexto Institucional (91,15), se evaluó la Dimensión 2, Proyecto Académico —perfil del egresado, plan de estudios y su actualización—, que obtuvo 88,45: «Se cumple en alto grado»."
       }
     },
     {
@@ -2411,14 +2701,15 @@
       "n": 4,
       "t": "Egresados",
       "score": 94.58,
-      "summary": "Cómo sigue el programa a sus graduados y qué huella dejan en el entorno: 437 egresados en el periodo, 91,5 % de inserción laboral y 84 % trabajando en La Guajira.",
+      "summary": "Cómo sigue el programa a sus graduados y qué huella dejan en el entorno: 446 graduados en el periodo, 74 % de empleabilidad y 84 % ejerciendo en La Guajira.",
       "fortalezas": [
-        "Inserción laboral del 91,5 % y empleabilidad global del 74 %.",
-        "El 84 % de los graduados trabaja en La Guajira y aporta a la transformación tecnológica del departamento.",
-        "Salario promedio de 2,8 SMMLV, por encima del promedio regional de 2,7 SMMLV.",
-        "Muestra caracterizada con 95 % de confianza mediante Adviser, Aurora y el Observatorio Laboral para la Educación.",
-        "92,7 % de satisfacción de los empleadores con la pertinencia del perfil.",
-        "73,3 % de los egresados se desempeña en áreas TIC y afines a su formación."
+        "Alta tasa de inserción laboral de los egresados (74 %), con un 73,3 % desempeñándose en áreas afines al perfil profesional, lo que evidencia la pertinencia de la formación ofrecida",
+        "Implementación consolidada del sistema Adviser, con una cobertura del 86 % de la muestra estadística y un nivel de confianza del 96,7 %, lo que permite un seguimiento sistemático y basado en datos confiables",
+        "Alta satisfacción de los egresados con la formación recibida (84 %), especialmente en la sede Riohacha (86,6 %), lo que indica una percepción positiva frente a la calidad del programa",
+        "Vinculación activa de egresados como docentes del programa (6 en total), lo cual fortalece la retroalimentación formativa y consolida el ciclo virtuoso de formación-empleo-institucionalidad",
+        "Participación destacada en estudios de posgrado (12,4 %) y en actividades académicas e investigativas (18,7 %), con contribuciones en publicaciones científicas y vinculación a grupos de investigación",
+        "Reconocimientos institucionales y emprendimientos destacados liderados por egresados, que evidencian su capacidad de impacto y liderazgo en contextos regionales y nacionales",
+        "Percepción positiva de los empleadores respecto al desempeño profesional, técnico y actitudinal de los egresados, especialmente en competencias como liderazgo, resolución de problemas y trabajo en equipo"
       ],
       "oportunidades": [
         "Articular acciones para cerrar la brecha de percepción de pertinencia entre las sedes Riohacha y Maicao.",
@@ -2441,22 +2732,23 @@
               "titulo": "Población graduada y rigor del seguimiento",
               "items": [
                 {
-                  "v": "437",
-                  "l": "graduados entre 2020-II y 2025-I: 256 en Riohacha y 181 en Maicao"
+                  "v": "446",
+                  "l": "graduados entre 2020-II y 2025-I: 265 en Riohacha y 181 en Maicao"
                 },
                 {
                   "v": "321",
                   "l": "graduados caracterizados: 179 en Riohacha y 142 en Maicao, sobre una muestra óptima de 282"
                 },
                 {
-                  "v": "95 %",
-                  "l": "de confianza estadística, con un margen de error del 5 %"
+                  "v": "72,0 %",
+                  "l": "de la población graduada caracterizada, por encima de la muestra óptima"
                 },
                 {
-                  "v": "86 %",
-                  "l": "meta muestral, medida sobre la muestra estadística"
+                  "v": "95 %",
+                  "l": "de confianza estadística, con un margen de error del 5 %"
                 }
-              ]
+              ],
+              "nota": "Muestreo aleatorio simple sobre el total de graduados registrados, priorizando la heterogeneidad por cohortes y por sede."
             },
             {
               "tipo": "barras",
@@ -2495,7 +2787,7 @@
               "tipo": "barras",
               "titulo": "Fuentes que se cruzan en el seguimiento",
               "max": 151,
-              "nota": "Registros por fuente: 27 en Adviser (Riohacha), 143 en Aurora (54 de Riohacha y 89 de Maicao) y 151 en el OLE (98 y 53). Trianguladas, suman 321 graduados caracterizados.",
+              "nota": "Registros por fuente: 27 en Adviser (Riohacha), 143 en Aurora (54 de Riohacha y 89 de Maicao) y 151 en el OLE (98 y 53). Cruzar lo que declara el graduado con su registro de cotización en el OLE da solidez a los indicadores de empleabilidad e ingresos.",
               "items": [
                 {
                   "l": "Adviser · instrumento institucional",
@@ -2541,7 +2833,84 @@
               "tipo": "nota",
               "k": "Principales empleadores",
               "tono": "marino",
-              "v": "Universidad de La Guajira, Gobernación de La Guajira, alcaldías locales, Fundación Cerrejón, CompuGuajira S.A.S., Tecnoguia Ltda., Soluciones TICS del Caribe y ServiRedes S.A.S."
+              "v": "La Universidad de La Guajira es el principal empleador, junto al Ministerio de Educación Nacional, la Secretaría de Educación Departamental, la Gobernación de La Guajira, alcaldías municipales y la Fundación Cerrejón para el Fortalecimiento Institucional. En el sector privado: CompuGuajira S.A.S., Tecnoguia Ltda., Soluciones TICS del Caribe, Sistemas e Informática del Caribe S.A.S. y ServiRedes S.A.S."
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Cargos que ocupan",
+              "tono": "azul",
+              "items": [
+                "Desarrolladores de software",
+                "Administradores de sistemas",
+                "Analistas de datos",
+                "Asesores técnicos",
+                "Consultores",
+                "Ingenieros de soporte",
+                "Docentes universitarios"
+              ]
+            },
+            {
+              "tipo": "pares",
+              "titulo": "Cómo valoran los graduados su formación · encuesta institucional",
+              "unidad": "%",
+              "max": 100,
+              "series": [
+                {
+                  "l": "Riohacha",
+                  "tono": "azul"
+                },
+                {
+                  "l": "Maicao",
+                  "tono": "ambar"
+                }
+              ],
+              "items": [
+                {
+                  "l": "Calidad de la formación: excelente",
+                  "v": [
+                    86.6,
+                    43
+                  ]
+                },
+                {
+                  "l": "Contribuyó significativamente a su desarrollo profesional",
+                  "v": [
+                    82.4,
+                    49
+                  ]
+                },
+                {
+                  "l": "Competencias altamente pertinentes para el mercado",
+                  "v": [
+                    64.8,
+                    38
+                  ]
+                }
+              ],
+              "nota": "Encuestas institucionales de autoevaluación en cada sede (anexos 9 y 9.1). En Maicao la mayoría restante respondió «muy buena» o «buena»."
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Calificación de la formación recibida · encuesta del Centro de Graduados",
+              "unidad": "%",
+              "max": 100,
+              "items": [
+                {
+                  "l": "Excelente",
+                  "v": 27,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Muy buena",
+                  "v": 40,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Buena",
+                  "v": 33
+                }
+              ],
+              "nota": "102 graduados de ambas sedes. Ninguna respuesta en categorías negativas."
             }
           ]
         },
@@ -2556,16 +2925,43 @@
           "desc": "Dónde trabajan, cuánto ganan, qué producen y cómo los valoran quienes los contratan.",
           "bloques": [
             {
+              "tipo": "tabla",
+              "titulo": "Impacto del estamento egresado",
+              "cols": [
+                "Indicador",
+                "Valor"
+              ],
+              "filas": [
+                [
+                  "Tasa de empleabilidad del programa",
+                  "74 %"
+                ],
+                [
+                  "Satisfacción con la formación recibida",
+                  "84,0 %"
+                ],
+                [
+                  "Correspondencia con el perfil profesional",
+                  "73,3 %"
+                ],
+                [
+                  "Graduados con estudios de posgrado",
+                  "12,4 %"
+                ],
+                [
+                  "Graduados en actividades académicas o investigativas",
+                  "18,7 %"
+                ]
+              ],
+              "nota": "Sobre los 321 graduados caracterizados. Fuente: Centro de Graduados (anexo 23)."
+            },
+            {
               "tipo": "cifras",
               "titulo": "Inserción laboral e impacto territorial",
               "items": [
                 {
-                  "v": "91,5 %",
-                  "l": "tasa directa de inserción laboral"
-                },
-                {
                   "v": "74 %",
-                  "l": "de empleabilidad según el OLE: 77 % en Maicao y 71 % en Riohacha"
+                  "l": "de los graduados caracterizados está vinculado laboralmente, por encima del 71 % de las IES de la zona Caribe: 77 % en Maicao y 71 % en Riohacha"
                 },
                 {
                   "v": "73,3 %",
@@ -2573,7 +2969,7 @@
                 },
                 {
                   "v": "84 %",
-                  "l": "trabaja en La Guajira: el talento se queda en la región"
+                  "l": "ejerce en La Guajira; le sigue Bogotá con el 5 %"
                 }
               ]
             },
@@ -2582,7 +2978,7 @@
               "titulo": "Distribución por rango salarial",
               "unidad": "%",
               "max": 40,
-              "nota": "Promedio de 2,8 SMMLV, por encima del 2,7 de las IES de la zona norte.",
+              "nota": "Ingreso promedio de 2,8 SMMLV —3,0 en Riohacha y 2,7 en Maicao—, frente a 2,7 de las IES de la zona norte. El tiempo promedio de inserción laboral es inferior a un año tras la graduación.",
               "items": [
                 {
                   "l": "1 SMMLV",
@@ -2697,12 +3093,12 @@
             {
               "tipo": "impacto",
               "titulo": "Formación posgradual y vínculo con el programa",
-              "nota": "Incentivos institucionales: descuentos de hasta el 40 % y el 50 % en los posgrados propios de Uniguajira y convenios con UNIR, FUNIBER y RINSA.",
+              "nota": "Alianzas con programas como Talento Guajiro, y descuentos y cupos especiales en los posgrados de la Universidad de La Guajira.",
               "items": [
                 {
                   "k": "Posgrados",
-                  "valor": "52",
-                  "l": "graduados con maestría; 4 con cupo becario o comisión de estudios y 20 becados",
+                  "valor": "12,4 %",
+                  "l": "de los graduados ha cursado estudios de posgrado; 10 accedieron a incentivos de formación de alto nivel, 6 de Riohacha y 4 de Maicao",
                   "tono": "azul"
                 },
                 {
@@ -2724,9 +3120,10 @@
               "titulo": "Producción científica y educación continua",
               "tono": "marino",
               "items": [
-                "El 10,58 % de los egresados ha generado publicaciones científicas: 18 libros, 3 artículos y 6 ponencias.",
-                "13 proyectos de investigación desarrollados y 3 vinculaciones como Joven Investigador.",
-                "290 participaciones en educación continua: 180 en cursos y diplomados, 110 en foros y talleres."
+                "El 10,58 % de los egresados de Riohacha ha participado en publicaciones científicas, entre artículos en revistas registradas y capítulos de libro; en Maicao no hay reportes.",
+                "El 8,47 % en Riohacha y el 2,27 % en Maicao está activo en grupos de investigación, y más del 55 % en ambas sedes quiere participar.",
+                "Egresados vinculados a proyectos de investigación como jóvenes investigadores, tutores de práctica y conferencistas invitados.",
+                "290 participaciones en educación continua entre 2020 y 2025: 180 en cursos, seminarios, diplomados y congresos, y 110 en foros, ferias, conferencias, encuentros y talleres."
               ]
             },
             {
@@ -2739,13 +3136,118 @@
               "tipo": "nota",
               "k": "Rafael Ricardo Amaya Ortíz",
               "tono": "ambar",
-              "v": "Creador de una microempresa de redes y telecomunicaciones en Riohacha que brinda posibilidades laborales a estudiantes de la Universidad de La Guajira."
+              "v": "Fundador de Wortik, que desde hace más de cinco años lleva internet a zonas rurales y apartadas del Distrito de Riohacha, donde los operadores tradicionales tienen baja cobertura."
             },
             {
               "tipo": "nota",
               "k": "José Carlos Gómez Armenta",
               "tono": "ambar",
-              "v": "Mentor de Apps.co (MinTIC) y docente innovador. Gestionó más de $1.280 millones en capital semilla del Fondo Emprender."
+              "v": "Beneficiario del Fondo Emprender y mentor de Apps.co. Ha gestionado más de $1.280 millones para proyectos que integran las TIC con el turismo, la hotelería y la gastronomía en Riohacha."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Empresas emprendidas por graduados del programa",
+              "alin": [
+                null,
+                "txt",
+                "txt",
+                "txt",
+                "txt"
+              ],
+              "cols": [
+                "Graduado",
+                "Proyecto o empresa",
+                "Sede",
+                "Sector",
+                "Observaciones"
+              ],
+              "filas": [
+                [
+                  "José Carlos Gómez Armenta",
+                  "Múltiples proyectos TIC y turísticos",
+                  "Riohacha",
+                  "TIC, turismo, hotelería, gastronomía",
+                  "Gestión de $1.280 millones en recursos, beneficiario Fondo Emprender, mentor Apps.co"
+                ],
+                [
+                  "Onelis Johana González Gamarra",
+                  "Mi Marca Personal",
+                  "Riohacha",
+                  "Marca personal y servicios digitales",
+                  "Empresa activa, reportada en Adviser"
+                ],
+                [
+                  "Glerys María Carmona Orozco",
+                  "Efecty",
+                  "Riohacha",
+                  "Servicios financieros",
+                  "Empresa activa, registrada en Adviser"
+                ],
+                [
+                  "Edgar José Márquez Martínez",
+                  "EIDYKOS SAS",
+                  "Riohacha",
+                  "Soluciones tecnológicas y software",
+                  "Empresa formal, activa, genera entre 1 y 10 empleos"
+                ]
+              ],
+              "nota": "Fuente: Centro de Graduados."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Graduados reconocidos por la Universidad, 2021–2024",
+              "alin": [
+                null,
+                "txt",
+                "txt",
+                "txt",
+                null
+              ],
+              "cols": [
+                "Graduado",
+                "Reconocimiento",
+                "Modalidad",
+                "Sede",
+                "Año"
+              ],
+              "filas": [
+                [
+                  "Khaterinne Paola Medina Rodríguez",
+                  "Deporte",
+                  "Profesional",
+                  "Riohacha",
+                  "2021"
+                ],
+                [
+                  "Jesús Gabriel Arévalo Aguilar",
+                  "Emprendimiento",
+                  "Profesional",
+                  "Riohacha",
+                  "2022"
+                ],
+                [
+                  "Oriana Vanessa Kammerer Villar",
+                  "Desempeño sobresaliente",
+                  "Profesional",
+                  "Riohacha",
+                  "2022"
+                ],
+                [
+                  "Alex Yunior Vides Nieto",
+                  "Desempeño sobresaliente",
+                  "Profesional",
+                  "Maicao",
+                  "2022"
+                ],
+                [
+                  "José Carlos Gómez Armenta",
+                  "Empresarismo y Emprendimiento",
+                  "Profesional",
+                  "Riohacha",
+                  "2024"
+                ]
+              ],
+              "nota": "Reconocimientos entregados en ceremonias oficiales del Centro de Graduados."
             },
             {
               "tipo": "pares",
@@ -2799,7 +3301,7 @@
                   ]
                 }
               ],
-              "nota": "Valoración de los empleadores por dimensión del desempeño, en cada sede."
+              "nota": "Apreciación de los empleadores sobre el aporte de los graduados en cada dimensión, por sede (figura 25 del informe)."
             },
             {
               "tipo": "dato",
@@ -2808,56 +3310,46 @@
               "l": "de satisfacción general de los empleadores con la pertinencia del perfil frente a las exigencias del entorno"
             },
             {
-              "tipo": "barras",
-              "titulo": "Cómo valoran los empleadores el perfil",
-              "unidad": "%",
-              "max": 100,
-              "items": [
-                {
-                  "l": "Conoce plenamente el perfil profesional y ocupacional",
-                  "v": 81,
-                  "tono": "azul"
-                },
-                {
-                  "l": "Lo considera relevante para el medio",
-                  "v": 92,
-                  "tono": "azul"
-                },
-                {
-                  "l": "Pertinencia del perfil: muy buena o excelente",
-                  "v": 100,
-                  "tono": "marino"
-                },
-                {
-                  "l": "Actualización continua del perfil: muy buena o excelente",
-                  "v": 75,
-                  "tono": "marino"
-                }
-              ]
-            },
-            {
-              "tipo": "barras",
-              "titulo": "Cómo valoran los graduados su formación (muy buena o excelente)",
-              "unidad": "%",
-              "max": 100,
-              "items": [
-                {
-                  "l": "Calidad de la formación recibida",
-                  "v": 83.9,
-                  "tono": "azul"
-                },
-                {
-                  "l": "Contribución al desarrollo profesional y al proyecto de vida",
-                  "v": 80.4,
-                  "tono": "azul"
-                },
-                {
-                  "l": "Competencias adquiridas",
-                  "v": 71.3,
-                  "tono": "marino"
-                }
+              "tipo": "tabla",
+              "titulo": "Cómo califican los empleadores el aporte de los graduados",
+              "cols": [
+                "Aspecto",
+                "Excelente",
+                "Bueno"
               ],
-              "nota": "Fuente: Sistema de Información del Graduado, Aurora, 2026."
+              "filas": [
+                [
+                  "Relevancia del perfil frente al mercado laboral",
+                  "57 %",
+                  "43 %"
+                ],
+                [
+                  "Solución de problemas organizacionales",
+                  "57 %",
+                  "—"
+                ],
+                [
+                  "Incremento de la productividad",
+                  "57 %",
+                  "—"
+                ],
+                [
+                  "Aumento de la competitividad",
+                  "57 %",
+                  "—"
+                ],
+                [
+                  "Mejora en la calidad del servicio o producto",
+                  "56 %",
+                  "—"
+                ],
+                [
+                  "Fomento a la innovación",
+                  "16 %",
+                  "85 %"
+                ]
+              ],
+              "nota": "La raya indica que el informe no da el porcentaje de «bueno» en ese aspecto."
             }
           ]
         }
@@ -2887,27 +3379,42 @@
       ],
       "evidencias": [
         {
-          "t": "Informe Sistema Adviser 2025",
-          "d": "Cobertura, caracterización y tasas de egresados",
-          "f": "Dic 2025",
-          "url": ""
+          "t": "Acuerdo 019 de 2018 · Política de seguimiento al graduado",
+          "d": "Consejo Superior · Anexo 22",
+          "cat": "Normativa institucional",
+          "f": "2018",
+          "url": "/descargas/factor-4/anexo-22-acuerdo-019-2018-seguimiento-graduados.pdf"
         },
         {
-          "t": "Encuesta de satisfacción de empleadores",
-          "d": "Resultados consolidados 2024–2025",
-          "f": "Mar 2025",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Proyecto Político Educativo Institucional (PPEI) 2017–2030",
+          "d": "Acuerdo 005 de 2017 del Consejo Superior · Anexo 1",
+          "cat": "Normativa institucional",
+          "f": "2017",
+          "url": "/descargas/factor-1/anexo-01-ppei-2017-2030.pdf"
+        },
         {
-          "cat": "Seguimiento",
-          "items": [
-            "Base de datos Sistema Adviser",
-            "Encuesta empleadores 2024–2025"
-          ]
+          "t": "Informe de graduados de Ingeniería de Sistemas 2024-I",
+          "d": "Centro de Graduados · Anexo 23",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-1/anexo-23-informe-graduados-2024-I.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -2921,7 +3428,21 @@
           "k": "Resolución SPE 0459 de 2022",
           "v": "Autorización de la bolsa de empleo institucional como gestor y colocador virtual"
         }
-      ]
+      ],
+      "comparativo": {
+        "titulo": "Comparación con la evaluación anterior",
+        "bajada": "En ARCU-SUR los graduados se evaluaron como componente 3.2 de la Dimensión 3, Comunidad Universitaria; hoy son un factor propio del modelo CNA.",
+        "antes": {
+          "score": 84.28,
+          "modelo": "Modelo ARCU-SUR · Dimensión 3, componente 3.2",
+          "juicio": "Se cumple en alto grado"
+        },
+        "despues": {
+          "score": 94.58,
+          "modelo": "Modelo CNA · Acuerdo 02 de 2020",
+          "juicio": "Se cumple plenamente"
+        }
+      }
     },
     {
       "n": 5,
@@ -4259,7 +4780,7 @@
       "n": 7,
       "t": "Interacción con el Entorno Nacional e Internacional",
       "score": 93.3,
-      "summary": "Cómo se relaciona el programa con el país y con el mundo: 59 convenios de cooperación, 1.814 movilidades académicas entre 2020 y 2025 y una política de multilingüismo que incluye el wayuunaiki.",
+      "summary": "Cómo se relaciona el programa con el país y con el mundo: 64 convenios vigentes, 924 movilidades académicas entre 2020 y 2024 y una política de multilingüismo que incluye el wayuunaiki.",
       "fortalezas": [
         "Presencia activa en redes académicas nacionales e internacionales: REDCOLSI, REDIS, ACOFI y ALININ.",
         "Participación sostenida de estudiantes en el Programa Delfín y en convenios internacionales.",
@@ -4275,7 +4796,7 @@
       "caracteristicas": [
         {
           "n": "7.1",
-          "name": "Interacción del programa con contextos nacionales e internacionales",
+          "name": "Inserción del programa en contextos académicos nacionales e internacionales",
           "peso": 41.43,
           "calificacion": 96,
           "score": 96,
@@ -4287,28 +4808,25 @@
               "tipo": "nota",
               "k": "Cómo se gestiona",
               "tono": "azul",
-              "v": "La internacionalización es transversal a la gestión y a las funciones sustantivas. La dirige la Oficina de Relaciones Internacionales (ORI) y la regula el Acuerdo 018 de 2023, Política de Internacionalización."
+              "v": "La internacionalización es transversal a la gestión y a las funciones sustantivas. La dirige la Oficina de Relaciones Internacionales (ORI) y la regula el Acuerdo 014 de 2016 del Consejo Superior, actualizado por el Acuerdo 018 de 2023, que establecen la Política de Internacionalización."
             },
             {
               "tipo": "cifras",
               "items": [
                 {
-                  "v": "59",
-                  "l": "convenios de cooperación: 40 internacionales (32 marco y 8 específicos) y 19 nacionales (18 marco y 1 específico)"
+                  "v": "64",
+                  "l": "convenios vigentes: 24 nacionales y 40 internacionales"
                 },
                 {
-                  "v": "1.814",
-                  "l": "movilidades académicas entre 2020 y 2025: 1.687 estudiantiles y 127 docentes"
+                  "v": "61",
+                  "l": "actividades con expertos internacionales entre 2020 y 2024: clases espejo, webinars, congresos, cursos y foros"
                 },
                 {
-                  "v": "79",
-                  "l": "actividades de internacionalización en casa: 16 foros y congresos, 15 clases espejo y proyectos COIL, 26 talleres y cursos, y 22 webinars"
-                },
-                {
-                  "v": "3",
-                  "l": "estudiantes en el programa PILA: 2 en Argentina y México (2023) y 1 en Perú (2025)"
+                  "v": "4",
+                  "l": "estudiantes en el programa PILA, en Argentina, México y España"
                 }
-              ]
+              ],
+              "nota": "Fuente: informe de internacionalización (anexo 7)."
             },
             {
               "tipo": "etiquetas",
@@ -4342,7 +4860,7 @@
               "tipo": "nota",
               "k": "Comparabilidad curricular",
               "tono": "marino",
-              "v": "El análisis comparativo contrastó el programa con la Universidad de Antioquia, la Universidad de La Salle, la Universidad Nacional, la Universidad de Cartagena, la Universidad del Norte, la Universidad Libre, LUT University, el Instituto Nacional de Ciencias Aplicadas de Toulouse (INSA Toulouse), la Universidad Politécnica de Madrid y la Universidad de Arizona. Identificó tendencias en inteligencia artificial, ciencia de datos, ciberseguridad, desarrollo ágil, computación en la nube y blockchain."
+              "v": "El análisis comparativo contrastó el programa con la Universidad de Antioquia, la Universidad de La Salle, la Universidad Nacional, la Universidad de Cartagena, la Universidad del Norte, la Universidad Libre, LUT University, el Instituto Nacional de Ciencias Aplicadas de Toulouse (INSA Toulouse), la Universidad Politécnica de Madrid y la Universidad de Arizona. Identificó tendencias en inteligencia artificial, ciencia de datos, ciberseguridad, desarrollo ágil, computación en la nube y blockchain (anexo 6)."
             },
             {
               "tipo": "tabla",
@@ -4372,7 +4890,7 @@
             },
             {
               "tipo": "etiquetas",
-              "titulo": "Redes académicas y científicas · 10 en total",
+              "titulo": "Redes académicas y científicas",
               "tono": "marino",
               "items": [
                 "REDIS",
@@ -4380,37 +4898,22 @@
                 "REDCOLSI",
                 "Programa Delfín",
                 "ALININ",
-                "RCI de ASCUN",
+                "ASCUN",
                 "Alianza del Pacífico",
                 "RINSA"
               ]
-            },
-            {
-              "tipo": "cifras",
-              "titulo": "Formación docente en internacionalización",
-              "items": [
-                {
-                  "v": "52",
-                  "l": "docentes en las capacitaciones Uniguajira de internacionalización del currículo, la investigación y COIL, de 2020 a 2025"
-                },
-                {
-                  "v": "40",
-                  "l": "docentes en diplomados de la UNIR"
-                }
-              ],
-              "nota": "Fuente: presentación del Factor 7 ante los pares (ORI)."
             }
           ]
         },
         {
           "n": "7.2",
-          "name": "Relaciones externas de profesores y estudiantes",
+          "name": "Relaciones externas de estudiantes y profesores",
           "peso": 31.43,
           "calificacion": 89,
           "score": 89,
           "status": "alto",
           "juicio": "Se cumple en alto grado",
-          "desc": "La movilidad de ida y vuelta, lo que la comunidad opina de la cooperación y dónde está el margen de mejora.",
+          "desc": "La movilidad de ida y vuelta y lo que la comunidad opina de la cooperación.",
           "bloques": [
             {
               "tipo": "nota",
@@ -4422,35 +4925,27 @@
               "tipo": "cifras",
               "items": [
                 {
-                  "v": "967",
-                  "l": "movilidades estudiantiles nacionales (702 salientes y 265 entrantes), frente a 720 internacionales (366 y 354), 2020–2025"
+                  "v": "834",
+                  "l": "movilidades estudiantiles entre 2020 y 2024: 400 nacionales y 434 internacionales"
                 },
                 {
-                  "v": "127",
-                  "l": "movilidades docentes: 66 nacionales (37 salientes y 29 entrantes) y 61 internacionales (37 y 24)"
-                },
-                {
-                  "v": "453",
-                  "l": "movilidades estudiantiles nacionales en 2025, el mayor registro de la serie"
+                  "v": "90",
+                  "l": "movilidades docentes: 33 nacionales y 57 internacionales"
                 },
                 {
                   "v": "+2.000",
                   "l": "estudiantes alcanzados por la internacionalización en casa"
                 },
                 {
-                  "v": "36",
-                  "l": "ponencias entre 2020 y 2024: 21 nacionales y 15 internacionales"
-                },
-                {
-                  "v": "87",
-                  "l": "beneficiarios de becas y convocatorias de movilidad entre 2021 y 2025"
+                  "v": "+80",
+                  "l": "ponencias en eventos académicos de alto nivel"
                 }
               ]
             },
             {
               "tipo": "pares",
               "titulo": "Movilidad estudiantil por año",
-              "max": 453,
+              "max": 281,
               "series": [
                 {
                   "l": "Nacional",
@@ -4465,8 +4960,8 @@
                 {
                   "l": "2020",
                   "v": [
-                    34,
-                    118
+                    30,
+                    119
                   ]
                 },
                 {
@@ -4486,31 +4981,24 @@
                 {
                   "l": "2023",
                   "v": [
-                    113,
-                    106
+                    43,
+                    103
                   ]
                 },
                 {
                   "l": "2024",
                   "v": [
-                    321,
-                    175
-                  ]
-                },
-                {
-                  "l": "2025",
-                  "v": [
-                    453,
-                    285
+                    281,
+                    176
                   ]
                 }
               ],
-              "nota": "Salientes más entrantes. Fuente: presentación del Factor 7 ante los pares (ORI)."
+              "nota": "Fuente: cuadro maestro de internacionalización (tabla 69 del informe)."
             },
             {
               "tipo": "pares",
               "titulo": "Movilidad docente por año",
-              "max": 26,
+              "max": 17,
               "series": [
                 {
                   "l": "Nacional",
@@ -4533,155 +5021,38 @@
                   "l": "2021",
                   "v": [
                     2,
-                    1
+                    5
                   ]
                 },
                 {
                   "l": "2022",
                   "v": [
                     1,
-                    3
+                    8
                   ]
                 },
                 {
                   "l": "2023",
                   "v": [
-                    11,
-                    10
+                    5,
+                    15
                   ]
                 },
                 {
                   "l": "2024",
                   "v": [
-                    18,
+                    17,
                     16
-                  ]
-                },
-                {
-                  "l": "2025",
-                  "v": [
-                    26,
-                    18
                   ]
                 }
               ],
-              "nota": "Salientes más entrantes. Fuente: presentación del Factor 7 ante los pares (ORI)."
+              "nota": "Fuente: cuadro maestro de internacionalización (tabla 69 del informe)."
             },
             {
               "tipo": "nota",
               "k": "Lectura",
               "tono": "azul",
-              "v": "Tras la caída de 2021 y 2022, la movilidad se recupera en 2023 y alcanza su máximo en 2025. En el acumulado, la movilidad nacional supera a la internacional en los dos estamentos."
-            },
-            {
-              "tipo": "tabla",
-              "titulo": "Becas y convocatorias de movilidad",
-              "cols": [
-                "Programa",
-                "País",
-                "Estudiantes",
-                "Año",
-                "Destino o patrocinador"
-              ],
-              "alin": [
-                "txt",
-                "txt",
-                null,
-                null,
-                "txt"
-              ],
-              "filas": [
-                [
-                  "Curso básico de chino",
-                  "Colombia",
-                  3,
-                  2021,
-                  "Instituto Confucio UTadeo · RCI"
-                ],
-                [
-                  "Becas de intercambio Tuna Guajira",
-                  "Colombia",
-                  1,
-                  2022,
-                  "Universidad Popular del Cesar"
-                ],
-                [
-                  "Pasantía RINSA Verano",
-                  "Perú",
-                  4,
-                  2022,
-                  "Grupo RINSA"
-                ],
-                [
-                  "Programa PILA",
-                  "Argentina y México",
-                  2,
-                  2023,
-                  "U. de Quilmes y U. Hipócrates"
-                ],
-                [
-                  "Misión Académica Chile · Expertos Internacionales ICETEX",
-                  "Chile",
-                  1,
-                  2023,
-                  "Universidad Técnica Federico Santa María"
-                ],
-                [
-                  "Wayira Go · intercambio académico",
-                  "España",
-                  2,
-                  2024,
-                  "Universidad de Castilla-La Mancha"
-                ],
-                [
-                  "Tuna Guajira · intercambio entrante",
-                  "Colombia",
-                  1,
-                  2024,
-                  "Universidad del Magdalena"
-                ],
-                [
-                  "Programa Delfín 2024 · pasantías entrantes",
-                  "México",
-                  4,
-                  2024,
-                  "Universidad de La Guajira"
-                ],
-                [
-                  "Programa PILA",
-                  "Perú",
-                  1,
-                  "2025-I",
-                  "Universidad Señor de Sipán"
-                ]
-              ],
-              "nota": "Beneficiarios por año: 4 en 2021, 12 en 2022, 15 en 2023, 20 en 2024 y 36 en 2025."
-            },
-            {
-              "tipo": "cifras",
-              "titulo": "Intercambios con homologación",
-              "items": [
-                {
-                  "v": "6",
-                  "l": "intercambios salientes homologados: Castilla-La Mancha (2), Quilmes, Hipócrates, Nacional del Sur y Popular del Cesar"
-                },
-                {
-                  "v": "4",
-                  "l": "estudiantes entrantes: Rafael Núñez, Magdalena, Autónoma del Perú y Señor de Sipán"
-                }
-              ]
-            },
-            {
-              "tipo": "etiquetas",
-              "titulo": "Estrategias de movilidad",
-              "tono": "ambar",
-              "items": [
-                "Programa Delfín · 8 estudiantes",
-                "Expertos Internacionales · 1 estudiante",
-                "Tuna Guajira · 2 estudiantes",
-                "Wayira Go · 3 estudiantes",
-                "Diplomados UNIR · 40 docentes"
-              ]
+              "v": "Tras la caída de 2021 y 2022, la movilidad se recupera en 2023 y alcanza su máximo en 2024. En el acumulado, la movilidad internacional supera a la nacional en los dos estamentos."
             },
             {
               "tipo": "pares",
@@ -4744,7 +5115,7 @@
         },
         {
           "n": "7.3",
-          "name": "Habilidad comunicativa en una segunda lengua",
+          "name": "Habilidades comunicativas en una segunda lengua",
           "peso": 27.14,
           "calificacion": 94,
           "score": 94,
@@ -4789,39 +5160,9 @@
             },
             {
               "tipo": "barras",
-              "titulo": "Estudiantes en nivel B1 o superior de inglés en Saber Pro",
-              "unidad": "%",
-              "max": 40,
-              "items": [
-                {
-                  "l": "2021",
-                  "v": 17.2
-                },
-                {
-                  "l": "2022",
-                  "v": 20.3
-                },
-                {
-                  "l": "2023",
-                  "v": 12.7
-                },
-                {
-                  "l": "2024",
-                  "v": 24.1
-                },
-                {
-                  "l": "2025",
-                  "v": 39.2,
-                  "tono": "azul"
-                }
-              ],
-              "nota": "Fuente: presentación del Factor 7 ante los pares (ORI)."
-            },
-            {
-              "tipo": "barras",
               "titulo": "Participación en espacios complementarios de segunda lengua, 2020–2024",
               "max": 100,
-              "nota": "Participantes por espacio. En ámbar, los talleres de lengua ancestral previstos en la Política de Multilingüismo.",
+              "nota": "Participantes por espacio. En ámbar, los talleres de lengua ancestral previstos en la Política de Multilingüismo. Fuente: informe del Centro de Lenguas (anexo 30).",
               "items": [
                 {
                   "l": "Actividades interculturales y ferias bilingües · estudiantes",
@@ -4899,32 +5240,77 @@
       ],
       "evidencias": [
         {
-          "t": "Convenios internacionales vigentes 2025",
-          "d": "MIT, U. Arizona, LUT University y otros",
-          "f": "Act. 2025",
-          "url": ""
+          "t": "Acuerdo 014 de 2016 · Políticas de internacionalización",
+          "d": "Consejo Superior · Anexo 27",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-27-acuerdo-014-2016-internacionalizacion.pdf"
         },
         {
-          "t": "Informe ORI 2024",
-          "d": "Movilidades entrantes y salientes",
-          "f": "Feb 2025",
-          "url": ""
-        }
-      ],
-      "anexos": [
-        {
-          "cat": "Convenios",
-          "items": [
-            "Textos originales de convenios firmados"
-          ]
+          "t": "Acuerdo 018 de 2023 · Actualización de la Política de Internacionalización",
+          "d": "Consejo Superior",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-7/acuerdo-018-2023-politica-internacionalizacion.pdf"
         },
         {
-          "cat": "Movilidad",
-          "items": [
-            "Listado de movilidades 2020–2024"
-          ]
+          "t": "Acuerdo 006 de 2016 · Movilidad estudiantil",
+          "d": "Consejo Académico · Anexo 28",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-28-acuerdo-006-2016-movilidad-estudiantil.pdf"
+        },
+        {
+          "t": "Acuerdo 003 de 2021 · Política de Multilingüismo",
+          "d": "Consejo Académico · Anexo 19",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-7/anexo-19-acuerdo-003-2021-multilinguismo.pdf"
+        },
+        {
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Informe de internacionalización",
+          "d": "Convenios, movilidad y redes del programa · Anexo 7",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-07-informe-internacionalizacion.pdf"
+        },
+        {
+          "t": "Informe del Centro de Lenguas",
+          "d": "Diagnósticos de inglés y espacios de segunda lengua · Anexo 30",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-7/anexo-30-informe-centro-de-lenguas.pdf"
+        },
+        {
+          "t": "Análisis de comparabilidad",
+          "d": "Referentes nacionales e internacionales del programa · Anexo 6",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-06-analisis-comparabilidad.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -4932,8 +5318,12 @@
       "pesoTotal": 100,
       "normativa": [
         {
+          "k": "Acuerdo 014 de 2016",
+          "v": "Políticas de internacionalización (Consejo Superior)"
+        },
+        {
           "k": "Acuerdo 018 de 2023",
-          "v": "Política de Internacionalización"
+          "v": "Actualiza la Política de Internacionalización (Consejo Superior)"
         },
         {
           "k": "Acuerdo 006 de 2016",
@@ -4951,7 +5341,21 @@
           "k": "Resolución 0160 de 2018",
           "v": "Unidades de Apoyo de la Oficina de Relaciones Internacionales (UARI): directora y asesor de la ORI y docentes líderes de internacionalización de cada facultad"
         }
-      ]
+      ],
+      "comparativo": {
+        "titulo": "Comparación con la evaluación anterior",
+        "bajada": "En ARCU-SUR la interacción nacional e internacional se valoraba dentro de la Dimensión 3, Comunidad Universitaria; hoy es un factor propio con tres características.",
+        "antes": {
+          "score": 88.83,
+          "modelo": "Modelo ARCU-SUR · Dimensión 3",
+          "juicio": "Se cumple en alto grado"
+        },
+        "despues": {
+          "score": 93.3,
+          "modelo": "Modelo CNA · Acuerdo 02 de 2020",
+          "juicio": "Se cumple plenamente"
+        }
+      }
     },
     {
       "n": 8,

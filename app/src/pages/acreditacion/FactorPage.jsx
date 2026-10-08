@@ -518,6 +518,14 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
                 <span>puntos entre {ev[0].anio} y {ev[ev.length - 1].anio}</span>
               </div>
             )}
+            {/* Lo que la medición de una tarjeta no alcanza a decir: otra
+                dimensión del mismo modelo, evaluada aparte. */}
+            {factor.evolucionNota && (
+              <div className="fac-callout" style={{ ...vars(factor.evolucionNota.tono), marginTop: 16 }}>
+                <span className="fac-callout__k">{factor.evolucionNota.k}</span>
+                <span className="fac-callout__v">{factor.evolucionNota.v}</span>
+              </div>
+            )}
           </Seccion>
         )}
 
