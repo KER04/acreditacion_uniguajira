@@ -373,7 +373,7 @@
       "score": 91.34,
       "summary": "Lo que el programa hace por el estudiante desde que entra hasta que se gradúa: la oferta extracurricular, el acompañamiento, el trabajo autónomo, el reglamento que lo ampara y los apoyos que lo sostienen.",
       "fortalezas": [
-        "Consolidación de las estrategias de permanencia: más de 3.800 atenciones entre 2019 y 2024",
+        "Consolidación de las estrategias de permanencia: 5.132 atenciones en las dos sedes entre 2020 y 2024",
         "Alto conocimiento, apropiación y aplicación del Reglamento Estudiantil por parte de estudiantes y docentes",
         "Participación significativa en actividades de formación integral, extensión e investigación",
         "Percepción altamente positiva de los estímulos académicos y los apoyos socioeconómicos",
@@ -527,6 +527,28 @@
               "k": "Investigación formativa",
               "tono": "ambar",
               "v": "Semilleros SETEC, Innovatech Dev —reconocido mediante la Resolución 0794 de 2023—, GREIN, SETI e Ingeniería I+D+I. Siete ponencias estudiantiles: cuatro en 2023 y tres en 2024."
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Participación en Bienestar Social Universitario, 2020–2024",
+              "items": [
+                {
+                  "v": "21.752",
+                  "l": "participaciones estudiantiles en 755 actividades"
+                },
+                {
+                  "v": "8.836",
+                  "l": "participaciones en 2024, frente a 1.402 en 2020"
+                },
+                {
+                  "v": "15.364",
+                  "l": "en Riohacha, once veces las de 2020"
+                },
+                {
+                  "v": "6.388",
+                  "l": "en Maicao, casi tres veces las de 2020"
+                }
+              ]
             }
           ]
         },
@@ -669,6 +691,38 @@
                   "tono": "ambar"
                 }
               ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Retención y alertas tempranas",
+              "items": [
+                {
+                  "v": "92,83 %",
+                  "l": "de retención en 2024-II, el mejor valor de la serie"
+                },
+                {
+                  "v": "74 de 74",
+                  "l": "estudiantes identificados por el SIAT siguen matriculados; 36 estaban en clasificación crítica"
+                }
+              ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Matrícula e ingreso",
+              "items": [
+                {
+                  "v": "1.082",
+                  "l": "estudiantes matriculados en 2024-II, 65,7 % más que los 653 de 2020-I, sin un solo retroceso desde 2021-II"
+                },
+                {
+                  "v": "674",
+                  "l": "inscritos en 2024, frente a 186 en 2020; selectividad del 52,4 %"
+                },
+                {
+                  "v": "97,5 %",
+                  "l": "de absorción en 2024: 344 de 353 admitidos se matricularon"
+                }
+              ]
             }
           ]
         },
@@ -705,6 +759,12 @@
                   "l": "de los docentes reconoce las estrategias de evaluación; más del 90 % las considera pertinentes"
                 }
               ]
+            },
+            {
+              "tipo": "nota",
+              "k": "Un caso: HandSpeak",
+              "tono": "ambar",
+              "v": "Guante inteligente del semillero R.E.D Tech que traduce lengua de señas colombiana a texto y voz con inteligencia artificial. Obtuvo 100 puntos en el IX Encuentro Departamental de Semilleros (Nodo Guajira 2026) y clasificó a la fase nacional de RedCOLSI. Estudiantes: Sally Gutiérrez Bermúdez y Jose Barreto Toro; docentes: Eduardo Sierra Fragozo y Henry Ríos Meza."
             }
           ]
         },
@@ -757,12 +817,6 @@
                   "l": "casos tramitados ante el Consejo de Facultad, 2020-2024"
                 }
               ]
-            },
-            {
-              "tipo": "nota",
-              "k": "Acción de mejora",
-              "tono": "ambar",
-              "v": "La brecha está en la socialización docente en Maicao —78,4 % frente a 92,9 % en Riohacha—. El programa proyecta fortalecer la inducción normativa y crear módulos de revisión reglamentaria en las aulas virtuales."
             }
           ]
         },
@@ -828,16 +882,30 @@
       ],
       "equipo": [
         {
-          "n": "Adanud Segundo Meza Valle",
+          "n": "Adanud Meza Valle",
           "cargo": "Director del programa",
-          "rol": "Líder del factor",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "MSc. Catalina Uriana Iguarán",
-          "cargo": "Docente tiempo completo",
-          "rol": "Análisis de permanencia",
+          "n": "Luis Rafael Viecco Rivadeneira",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Jesús Gabriel Arévalo Aguilar",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Roger David Pimienta Barros",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
           "foto": ""
         }
@@ -943,9 +1011,9 @@
       "n": 3,
       "t": "Profesores",
       "score": 94.19,
-      "summary": "Planta docente altamente cualificada (95.2% con posgrado), con sólida producción académica, desarrollo profesoral sostenido y evaluación transparente.",
+      "summary": "Planta docente altamente cualificada (86,7 % con formación posgradual), con sólida producción académica, desarrollo profesoral sostenido y evaluación transparente.",
       "fortalezas": [
-        "95.2% de docentes con posgrado: 68.2% maestría y 27% doctorado.",
+        "86,7 % de formación posgradual y núcleo disciplinar de 22 docentes, con 68,2 % de maestría y 27 % de doctorado.",
         "160+ productos académicos generados en los últimos 5 años.",
         "$127M de inversión en estímulos a la trayectoria profesoral en sede Riohacha.",
         "15 ascensos en el escalafón docente desde 2020.",
@@ -1022,6 +1090,10 @@
               "tipo": "cifras",
               "items": [
                 {
+                  "v": "13",
+                  "l": "docentes que ingresaron a la planta tras el concurso de méritos: diez en Riohacha y tres en Maicao"
+                },
+                {
                   "v": "8",
                   "l": "profesores de planta de tiempo completo nuevos en 2024-2: cinco en Riohacha y tres en Maicao"
                 },
@@ -1050,13 +1122,19 @@
                   "tono": "marino"
                 },
                 {
-                  "k": "Ocasionales de TC · Riohacha",
-                  "de": 7,
-                  "a": 14,
-                  "l": "Se duplicaron en el mismo periodo.",
+                  "k": "Planta · Riohacha",
+                  "de": 13,
+                  "a": 22,
+                  "l": "De 13 docentes de planta en 2020-1 a 22 en 2025-1, tras el concurso de méritos.",
                   "tono": "ambar"
                 }
               ]
+            },
+            {
+              "tipo": "nota",
+              "k": "Los ocasionales",
+              "tono": "marino",
+              "v": "En Riohacha pasaron de 7 en 2020-1 a un pico de 14 en 2023-1, y volvieron a 7 en 2024-2, a medida que crecía la planta."
             },
             {
               "tipo": "nota",
@@ -1259,6 +1337,33 @@
               "nota": "La matrícula de Riohacha creció un 117,59 % entre 2019-1 y 2024-2, de 324 a 705 estudiantes; la de Maicao un 26,94 %, de 297 a 377. Maicao venía de picos de 38 estudiantes por docente y converge con Riohacha en 2024-2."
             },
             {
+              "tipo": "tabla",
+              "titulo": "Docentes con doctorado o maestría, por vinculación",
+              "cols": [
+                "Vinculación",
+                "Riohacha",
+                "Maicao"
+              ],
+              "filas": [
+                [
+                  "Planta",
+                  "84 %",
+                  "100 %"
+                ],
+                [
+                  "Ocasionales",
+                  "83 %",
+                  "86 %"
+                ],
+                [
+                  "Hora cátedra",
+                  "62 %",
+                  "82 %"
+                ]
+              ],
+              "nota": "En 2024-2 el programa contaba con 15 docentes de planta, 7 ocasionales y 48 de hora cátedra en Riohacha, y 5, 7 y 39 en Maicao."
+            },
+            {
               "tipo": "impacto",
               "titulo": "Formación de la planta, de 2020-1 a 2025-1",
               "items": [
@@ -1394,7 +1499,11 @@
               "items": [
                 {
                   "v": "8",
-                  "l": "comisiones de estudio otorgadas al programa: siete de doctorado y una de maestría"
+                  "l": "comisiones de estudio otorgadas al programa, siete de ellas doctorales"
+                },
+                {
+                  "v": "95",
+                  "l": "participaciones de docentes del programa en actividades de desarrollo profesoral"
                 },
                 {
                   "v": "61",
@@ -1447,7 +1556,45 @@
                   "tono": "marino"
                 }
               ],
-              "nota": "Entre 2018 y 2025 la Universidad otorgó 50 comisiones de doctorado y 10 de maestría. Ocho de ellas fueron para el programa."
+              "nota": "Entre 2018 y 2025 la Universidad otorgó 50 comisiones de doctorado y 10 de maestría. Ocho fueron para el programa, siete de ellas doctorales."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Formación financiada a docentes del programa",
+              "cols": [
+                "Apoyo",
+                "Docentes"
+              ],
+              "alin": [
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Comisiones de estudio (siete doctorales)",
+                  8
+                ],
+                [
+                  "Maestrías con recursos propios",
+                  5
+                ],
+                [
+                  "Convenio UNIR · inteligencia artificial",
+                  4
+                ],
+                [
+                  "Capacitación en inteligencia artificial y ciencia de datos",
+                  4
+                ],
+                [
+                  "Diseño instruccional y educación digital",
+                  4
+                ],
+                [
+                  "Becas Bicentenario",
+                  2
+                ]
+              ],
+              "nota": "Presentación del Factor 3 ante los pares, sección Ingeniería de Sistemas."
             },
             {
               "tipo": "barras",
@@ -1610,11 +1757,11 @@
               "items": [
                 {
                   "v": "12",
-                  "l": "docentes promovidos por el CIARP entre 2019 y 2024: ocho de Riohacha y cuatro de Maicao"
+                  "l": "reconocimientos a la trayectoria académica, formativa e investigativa"
                 },
                 {
-                  "v": "13",
-                  "l": "docentes homenajeados por antigüedad, entre diez y cuarenta años de servicio"
+                  "v": "1",
+                  "l": "distinción de honor de la Vicerrectoría de Docencia"
                 }
               ]
             }
@@ -1787,6 +1934,53 @@
               "v": "El contraste define el problema: donde menos se reciben estímulos, más alto se valora su efecto. Lo que el plan de mejoramiento debe atender es la cobertura, no la pertinencia del reconocimiento."
             },
             {
+              "tipo": "tabla",
+              "titulo": "Reconocimientos salariales por año",
+              "cols": [
+                "Concepto",
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024"
+              ],
+              "filas": [
+                [
+                  "Ascenso en el escalafón",
+                  6,
+                  2,
+                  "—",
+                  4,
+                  3
+                ],
+                [
+                  "Productividad académica",
+                  10,
+                  3,
+                  10,
+                  7,
+                  10
+                ],
+                [
+                  "Bonificación",
+                  3,
+                  1,
+                  1,
+                  2,
+                  1
+                ],
+                [
+                  "Título de posgrado",
+                  3,
+                  1,
+                  1,
+                  "—",
+                  "—"
+                ]
+              ],
+              "nota": "La experiencia calificada se reconoce a todos los docentes cada año. Presentación del Factor 3 ante los pares, sección Ingeniería de Sistemas."
+            },
+            {
               "tipo": "lista",
               "titulo": "Lo que la remuneración reconoce",
               "tono": "azul",
@@ -1948,6 +2142,69 @@
               "nota": "Ninguna calificación insuficiente en las dos sedes. El único registro en «aceptable» corresponde a un docente de hora cátedra de Maicao."
             },
             {
+              "tipo": "tabla",
+              "titulo": "Promedio de la evaluación docente, de 0 a 100",
+              "cols": [
+                "Sede y vinculación",
+                "2022-2",
+                "2023-1",
+                "2023-2",
+                "2024-1",
+                "2024-2"
+              ],
+              "filas": [
+                [
+                  "Riohacha · planta",
+                  "92,1",
+                  "93,6",
+                  "96,2",
+                  "94,2",
+                  "94,8"
+                ],
+                [
+                  "Riohacha · ocasional",
+                  "93,2",
+                  "93,68",
+                  "96,0",
+                  "97,4",
+                  "96,7"
+                ],
+                [
+                  "Riohacha · hora cátedra",
+                  "85,6",
+                  "89,9",
+                  "90,9",
+                  "91,9",
+                  "93,1"
+                ],
+                [
+                  "Maicao · planta",
+                  "95,16",
+                  "95,7",
+                  "98,4",
+                  "97,0",
+                  "97,8"
+                ],
+                [
+                  "Maicao · ocasional",
+                  "95,4",
+                  "95,4",
+                  "97,5",
+                  "97,1",
+                  "97,23"
+                ],
+                [
+                  "Maicao · hora cátedra",
+                  "88,8",
+                  "90,4",
+                  "92,4",
+                  "93,9",
+                  "93,3"
+                ]
+              ],
+              "nota": "Todas las vinculaciones se mantienen en el rango «excelente» desde 2023-2, y la hora cátedra es la que más sube: de 85,6 a 93,1 en Riohacha."
+            },
+            {
               "tipo": "barras",
               "titulo": "Transparencia del proceso, según cada actor",
               "unidad": "%",
@@ -1982,16 +2239,30 @@
       ],
       "equipo": [
         {
-          "n": "Dr. Héctor Brito Mendoza",
-          "cargo": "Investigador principal GITUG",
-          "rol": "Líder del factor",
+          "n": "Adanud Meza Valle",
+          "cargo": "Director del programa",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "MSc. Andrea Bolaños Curvelo",
-          "cargo": "Docente tiempo completo",
-          "rol": "Análisis de dedicación",
+          "n": "Luis Rafael Viecco Rivadeneira",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Jesús Gabriel Arévalo Aguilar",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Roger David Pimienta Barros",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
           "foto": ""
         }
@@ -2145,7 +2416,7 @@
         "Inserción laboral del 91,5 % y empleabilidad global del 74 %.",
         "El 84 % de los graduados trabaja en La Guajira y aporta a la transformación tecnológica del departamento.",
         "Salario promedio de 2,8 SMMLV, por encima del promedio regional de 2,7 SMMLV.",
-        "Muestra caracterizada con 96,7 % de confianza mediante el sistema Adviser.",
+        "Muestra caracterizada con 95 % de confianza mediante Adviser, Aurora y el Observatorio Laboral para la Educación.",
         "92,7 % de satisfacción de los empleadores con la pertinencia del perfil.",
         "73,3 % de los egresados se desempeña en áreas TIC y afines a su formación."
       ],
@@ -2174,11 +2445,11 @@
                   "l": "graduados entre 2020-II y 2025-I: 256 en Riohacha y 181 en Maicao"
                 },
                 {
-                  "v": "277",
-                  "l": "egresados caracterizados directamente, el 39,4 % del histórico total"
+                  "v": "321",
+                  "l": "graduados caracterizados: 179 en Riohacha y 142 en Maicao, sobre una muestra óptima de 282"
                 },
                 {
-                  "v": "96,7 %",
+                  "v": "95 %",
                   "l": "de confianza estadística, con un margen de error del 5 %"
                 },
                 {
@@ -2223,17 +2494,17 @@
             {
               "tipo": "barras",
               "titulo": "Fuentes que se cruzan en el seguimiento",
-              "max": 277,
-              "nota": "Registros por fuente. Trianguladas, dejan más de 321 reportes activos consolidados.",
+              "max": 151,
+              "nota": "Registros por fuente: 27 en Adviser (Riohacha), 143 en Aurora (54 de Riohacha y 89 de Maicao) y 151 en el OLE (98 y 53). Trianguladas, suman 321 graduados caracterizados.",
               "items": [
                 {
-                  "l": "Adviser v2 · instrumento institucional",
-                  "v": 277,
-                  "tono": "azul"
+                  "l": "Adviser · instrumento institucional",
+                  "v": 27
                 },
                 {
                   "l": "Observatorio Laboral para la Educación (OLE)",
-                  "v": 151
+                  "v": 151,
+                  "tono": "azul"
                 },
                 {
                   "l": "Plataforma Aurora",
@@ -2408,14 +2679,14 @@
                   "3,7 %"
                 ],
                 [
-                  "Internacional · Chile",
-                  "1",
-                  "0",
-                  "1",
-                  "0,4 %"
+                  "Internacional · Chile, Panamá y Estados Unidos",
+                  "—",
+                  "—",
+                  "3",
+                  "1,3 %"
                 ]
               ],
-              "nota": "Entre paréntesis, la participación dentro de cada sede. Base: 235 egresados con ubicación laboral registrada."
+              "nota": "Entre paréntesis, la participación dentro de cada sede. Base: 238 graduados con ubicación laboral registrada, 235 en Colombia."
             },
             {
               "tipo": "nota",
@@ -2429,9 +2700,9 @@
               "nota": "Incentivos institucionales: descuentos de hasta el 40 % y el 50 % en los posgrados propios de Uniguajira y convenios con UNIR, FUNIBER y RINSA.",
               "items": [
                 {
-                  "k": "Posgrados y becas",
+                  "k": "Posgrados",
                   "valor": "52",
-                  "l": "cupos becarios en maestrías, más 4 comisiones de estudio",
+                  "l": "graduados con maestría; 4 con cupo becario o comisión de estudios y 20 becados",
                   "tono": "azul"
                 },
                 {
@@ -2461,14 +2732,14 @@
             {
               "tipo": "dato",
               "tono": "ambar",
-              "v": "14",
-              "l": "empresas consolidadas por egresados, entre ellas Kekiiwaa, HardSoft, LogrosStaff y TorJoro"
+              "v": "6",
+              "l": "empresas de egresados mapeadas: Kekiiwaa, Soluciones HardSoft, LogrosStaff, Suministros y Servicios XIO, TorJoro e ImprontaMTStudio"
             },
             {
               "tipo": "nota",
               "k": "Rafael Ricardo Amaya Ortíz",
               "tono": "ambar",
-              "v": "Fundador de Wortik, empresa de telecomunicaciones que lleva internet a zonas rurales y genera empleo tecnológico en Riohacha."
+              "v": "Creador de una microempresa de redes y telecomunicaciones en Riohacha que brinda posibilidades laborales a estudiantes de la Universidad de La Guajira."
             },
             {
               "tipo": "nota",
@@ -2535,23 +2806,82 @@
               "tono": "azul",
               "v": "92,7 %",
               "l": "de satisfacción general de los empleadores con la pertinencia del perfil frente a las exigencias del entorno"
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Cómo valoran los empleadores el perfil",
+              "unidad": "%",
+              "max": 100,
+              "items": [
+                {
+                  "l": "Conoce plenamente el perfil profesional y ocupacional",
+                  "v": 81,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Lo considera relevante para el medio",
+                  "v": 92,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Pertinencia del perfil: muy buena o excelente",
+                  "v": 100,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Actualización continua del perfil: muy buena o excelente",
+                  "v": 75,
+                  "tono": "marino"
+                }
+              ]
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Cómo valoran los graduados su formación (muy buena o excelente)",
+              "unidad": "%",
+              "max": 100,
+              "items": [
+                {
+                  "l": "Calidad de la formación recibida",
+                  "v": 83.9,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Contribución al desarrollo profesional y al proyecto de vida",
+                  "v": 80.4,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Competencias adquiridas",
+                  "v": 71.3,
+                  "tono": "marino"
+                }
+              ],
+              "nota": "Fuente: Sistema de Información del Graduado, Aurora, 2026."
             }
           ]
         }
       ],
       "equipo": [
         {
-          "n": "Adanud Segundo Meza Valle",
-          "cargo": "Director del programa",
-          "rol": "Líder del factor",
+          "n": "Diana Margarita Escobar Méndez",
+          "cargo": "Docente ocasional",
+          "rol": "Docente líder",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Katy Cecilia Herrera Estrada",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "Diana Cotes Brito",
-          "cargo": "Representante egresados",
-          "rol": "Seguimiento y articulación",
-          "sede": "riohacha",
+          "n": "Sara Luz Villero Contreras",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
           "foto": ""
         }
       ],
@@ -3311,22 +3641,231 @@
               "k": "Con quién",
               "tono": "marino",
               "v": "Articulación con los colegios Almirante Padilla y Fischione y con zonas rurales como Camarones."
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Extensión y proyección social, 2020–2025",
+              "items": [
+                {
+                  "v": "192",
+                  "l": "actividades de extensión en las dos sedes"
+                },
+                {
+                  "v": "33.083",
+                  "l": "personas beneficiadas"
+                },
+                {
+                  "v": "120",
+                  "l": "actividades en Riohacha, con 19.527 beneficiarios"
+                },
+                {
+                  "v": "72",
+                  "l": "actividades en Maicao, con 13.556 beneficiarios"
+                }
+              ]
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Actividades por año y sede",
+              "cols": [
+                "Sede",
+                "2020",
+                "2021",
+                "2022",
+                "2023",
+                "2024",
+                "2025",
+                "Total"
+              ],
+              "filas": [
+                [
+                  "Riohacha",
+                  5,
+                  6,
+                  16,
+                  23,
+                  30,
+                  40,
+                  120
+                ],
+                [
+                  "Maicao",
+                  0,
+                  7,
+                  6,
+                  23,
+                  18,
+                  18,
+                  72
+                ]
+              ],
+              "nota": "Riohacha: 70 eventos, 42 proyectos y 8 cursos de educación continua. Maicao: 39 eventos, 29 proyectos y 4 cursos."
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Personas atendidas por línea de profundización, 2020–2025",
+              "items": [
+                {
+                  "l": "TIC en la educación · 17 actividades",
+                  "v": 3360,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Ciencias básicas de la ingeniería · 12",
+                  "v": 3091,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Realidad extendida (XR) · 12",
+                  "v": 2818,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Desarrollo de software · 28",
+                  "v": 2251,
+                  "tono": "ambar"
+                },
+                {
+                  "l": "Gestión de sistemas en CT+I · 10",
+                  "v": 1506,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Inteligencia artificial · 9",
+                  "v": 1262,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Auditoría y seguridad · 7",
+                  "v": 584,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Ciencia y minería de datos · 8",
+                  "v": 324,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Redes y telemática · 7",
+                  "v": 157,
+                  "tono": "marino"
+                },
+                {
+                  "l": "Gobernabilidad de TI · 1",
+                  "v": 95,
+                  "tono": "marino"
+                }
+              ],
+              "nota": "Las diez líneas reúnen 111 de las 192 actividades (57,8 %) y 15.448 personas; el desarrollo de software lidera con el 25 % de las actividades. Las 81 restantes, con 17.635 personas, son del componente transversal e institucional."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Proyectos y talleres destacados",
+              "cols": [
+                "Proyecto",
+                "Sede",
+                "Beneficiarios"
+              ],
+              "alin": [
+                "txt",
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Vivero Virtual: apropiación de tecnologías XR en La Guajira",
+                  "Riohacha y Maicao",
+                  668
+                ],
+                [
+                  "Riego Mi Majayura: riego inteligente con IoT en Majayura, Maicao",
+                  "Riohacha y Maicao",
+                  406
+                ],
+                [
+                  "Taller Programando y Aprendiendo con Arduino",
+                  "Riohacha",
+                  35
+                ],
+                [
+                  "Taller de Robótica, Aprendiendo a Hacer y Crear",
+                  "Riohacha",
+                  23
+                ],
+                [
+                  "Programando en la Escuela",
+                  "Riohacha",
+                  22
+                ],
+                [
+                  "Pensamiento Computacional: competencias de los docentes del Almirante Padilla",
+                  "Riohacha",
+                  20
+                ]
+              ]
+            },
+            {
+              "tipo": "nota",
+              "k": "Espacios de participación",
+              "tono": "marino",
+              "v": "Ocho espacios formalizados, entre ellos la Mesa de participación para la innovación empresarial de La Guajira, de la que surgió la iniciativa Guajira Innova, y la Mesa técnica del Plan de Cierre de Brechas de Competitividad, donde el programa identificó brechas en formación TIC."
             }
           ]
         }
       ],
       "equipo": [
         {
-          "n": "Dra. Luz Marina Ipuana",
-          "cargo": "Coordinadora curricular",
-          "rol": "Líder del factor",
+          "n": "Nayeli Mejía Riveira",
+          "cargo": "Docente de planta",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "Dr. Pablo Mengual Solano",
-          "cargo": "Docente tiempo completo",
-          "rol": "Análisis curricular",
+          "n": "Andrés David Solano Barliza",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Marlyn Alicia Aarón Gonzálvez",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Carlos Alberto Alfaro Camargo",
+          "cargo": "Docente catedrático",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Diana Escobar Méndez",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Leyla Figueroa Royero",
+          "cargo": "Docente del programa",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Alfonso Rafael Rocha Martínez",
+          "cargo": "Docente catedrático",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Carlos Palacio Manjarrez",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
           "sede": "maicao",
           "foto": ""
         }
@@ -3475,6 +4014,20 @@
                   "tono": "ambar"
                 }
               ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Resultados recientes",
+              "items": [
+                {
+                  "v": "11,05 % → 7,17 %",
+                  "l": "deserción por periodo de 2023-2 a 2024-2, una reducción de 3,88 puntos"
+                },
+                {
+                  "v": "98 %",
+                  "l": "de absorción en admisión en ambas sedes en 2024-2, y superior al 90 % en 11 de los 17 periodos evaluados"
+                }
+              ]
             }
           ]
         },
@@ -3499,37 +4052,37 @@
               "titulo": "Rutas de acompañamiento y su efectividad",
               "cols": [
                 "Estrategia",
-                "Estudiantes atendidos",
+                "Estudiantes del programa",
                 "Éxito académico"
               ],
               "filas": [
                 [
                   "Tutorías académicas",
-                  "1.237",
+                  "590",
                   "90,7 %"
                 ],
                 [
                   "Acompañamiento al aprendizaje",
-                  "1.203",
+                  "298",
                   "88,2 %"
                 ],
                 [
                   "Promoción a la graduación exitosa",
-                  "277",
+                  "203",
                   "92 %"
                 ],
                 [
                   "Acompañamiento a estudiantes repitentes",
-                  "202",
+                  "119",
                   "97 %"
                 ],
                 [
                   "Mentorías por pares",
-                  "153",
+                  "171",
                   "94 %"
                 ]
               ],
-              "nota": "Cifras institucionales. El éxito académico reúne permanencia, culminación y graduación. Las cinco rutas suman los 3.072 estudiantes atendidos."
+              "nota": "Estudiantes del programa atendidos por cada estrategia. El éxito académico reúne permanencia, culminación y graduación. Fuente: Bienestar Social Universitario."
             },
             {
               "tipo": "barras",
@@ -3645,17 +4198,31 @@
       ],
       "equipo": [
         {
-          "n": "Adanud Segundo Meza Valle",
-          "cargo": "Director del programa",
-          "rol": "Líder del factor",
+          "n": "Katy Herrera Estrada",
+          "cargo": "Docente de planta",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "MSc. Catalina Uriana Iguarán",
-          "cargo": "Docente tiempo completo",
-          "rol": "Análisis SIAT y permanencia",
+          "n": "Breider Páez Martínez",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Henrry David Ríos Meza",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Ronald Torres Mendoza",
+          "cargo": "Docente catedrático",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
           "foto": ""
         }
       ],
@@ -3692,7 +4259,7 @@
       "n": 7,
       "t": "Interacción con el Entorno Nacional e Internacional",
       "score": 93.3,
-      "summary": "Cómo se relaciona el programa con el país y con el mundo: 64 convenios de cooperación, 924 movilidades académicas entre 2020 y 2024 y una política de multilingüismo que incluye el wayuunaiki.",
+      "summary": "Cómo se relaciona el programa con el país y con el mundo: 59 convenios de cooperación, 1.814 movilidades académicas entre 2020 y 2025 y una política de multilingüismo que incluye el wayuunaiki.",
       "fortalezas": [
         "Presencia activa en redes académicas nacionales e internacionales: REDCOLSI, REDIS, ACOFI y ALININ.",
         "Participación sostenida de estudiantes en el Programa Delfín y en convenios internacionales.",
@@ -3720,26 +4287,26 @@
               "tipo": "nota",
               "k": "Cómo se gestiona",
               "tono": "azul",
-              "v": "La internacionalización es transversal a la gestión y a las funciones sustantivas. La dirige la Oficina de Relaciones Internacionales (ORI) y la regula el Acuerdo 014 de 2016, de Políticas de Internacionalización."
+              "v": "La internacionalización es transversal a la gestión y a las funciones sustantivas. La dirige la Oficina de Relaciones Internacionales (ORI) y la regula el Acuerdo 018 de 2023, Política de Internacionalización."
             },
             {
               "tipo": "cifras",
               "items": [
                 {
-                  "v": "64",
-                  "l": "convenios de cooperación: 40 internacionales y 24 nacionales, cerca de dos internacionales por cada nacional"
+                  "v": "59",
+                  "l": "convenios de cooperación: 40 internacionales (32 marco y 8 específicos) y 19 nacionales (18 marco y 1 específico)"
                 },
                 {
-                  "v": "924",
-                  "l": "movilidades académicas entre 2020 y 2024: 834 estudiantiles y 90 docentes"
+                  "v": "1.814",
+                  "l": "movilidades académicas entre 2020 y 2025: 1.687 estudiantiles y 127 docentes"
                 },
                 {
-                  "v": "61",
-                  "l": "eventos internacionales: clases espejo, webinars, congresos, cursos y foros"
+                  "v": "79",
+                  "l": "actividades de internacionalización en casa: 16 foros y congresos, 15 clases espejo y proyectos COIL, 26 talleres y cursos, y 22 webinars"
                 },
                 {
-                  "v": "4",
-                  "l": "estudiantes en el programa PILA, en Argentina, México y España"
+                  "v": "3",
+                  "l": "estudiantes en el programa PILA: 2 en Argentina y México (2023) y 1 en Perú (2025)"
                 }
               ]
             },
@@ -3758,10 +4325,24 @@
               ]
             },
             {
+              "tipo": "etiquetas",
+              "titulo": "Asignaturas con contenido y bibliografía internacional",
+              "tono": "marino",
+              "items": [
+                "Ingeniería de Software",
+                "Estructura de Datos",
+                "Compiladores",
+                "Sistemas Operativos",
+                "Electiva de Profundización II",
+                "Sistemas de Información",
+                "Gerencia de Proyectos TI"
+              ]
+            },
+            {
               "tipo": "nota",
               "k": "Comparabilidad curricular",
               "tono": "marino",
-              "v": "El análisis de comparabilidad (Anexo 6) contrastó el plan con programas acreditados de la Universidad Politécnica de Madrid, la Universidad de Arizona, LUT University y el MIT, entre otros. Identificó tendencias en inteligencia artificial, ciencia de datos, ciberseguridad, desarrollo ágil, computación en la nube y blockchain."
+              "v": "El análisis comparativo contrastó el programa con la Universidad de Antioquia, la Universidad de La Salle, la Universidad Nacional, la Universidad de Cartagena, la Universidad del Norte, la Universidad Libre, LUT University, el Instituto Nacional de Ciencias Aplicadas de Toulouse (INSA Toulouse), la Universidad Politécnica de Madrid y la Universidad de Arizona. Identificó tendencias en inteligencia artificial, ciencia de datos, ciberseguridad, desarrollo ágil, computación en la nube y blockchain."
             },
             {
               "tipo": "tabla",
@@ -3791,7 +4372,7 @@
             },
             {
               "tipo": "etiquetas",
-              "titulo": "Redes académicas de cooperación científica",
+              "titulo": "Redes académicas y científicas · 10 en total",
               "tono": "marino",
               "items": [
                 "REDIS",
@@ -3799,10 +4380,25 @@
                 "REDCOLSI",
                 "Programa Delfín",
                 "ALININ",
-                "ASCUN",
+                "RCI de ASCUN",
                 "Alianza del Pacífico",
                 "RINSA"
               ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Formación docente en internacionalización",
+              "items": [
+                {
+                  "v": "52",
+                  "l": "docentes en las capacitaciones Uniguajira de internacionalización del currículo, la investigación y COIL, de 2020 a 2025"
+                },
+                {
+                  "v": "40",
+                  "l": "docentes en diplomados de la UNIR"
+                }
+              ],
+              "nota": "Fuente: presentación del Factor 7 ante los pares (ORI)."
             }
           ]
         },
@@ -3826,35 +4422,35 @@
               "tipo": "cifras",
               "items": [
                 {
-                  "v": "434",
-                  "l": "movilidades estudiantiles internacionales, frente a 400 nacionales"
+                  "v": "967",
+                  "l": "movilidades estudiantiles nacionales (702 salientes y 265 entrantes), frente a 720 internacionales (366 y 354), 2020–2025"
                 },
                 {
-                  "v": "90",
-                  "l": "movilidades docentes: 57 internacionales y 33 nacionales"
+                  "v": "127",
+                  "l": "movilidades docentes: 66 nacionales (37 salientes y 29 entrantes) y 61 internacionales (37 y 24)"
                 },
                 {
-                  "v": "281",
-                  "l": "movilidades estudiantiles nacionales en 2024, el mayor registro de la serie"
+                  "v": "453",
+                  "l": "movilidades estudiantiles nacionales en 2025, el mayor registro de la serie"
                 },
                 {
                   "v": "+2.000",
                   "l": "estudiantes alcanzados por la internacionalización en casa"
                 },
                 {
-                  "v": "+80",
-                  "l": "ponencias en eventos académicos de alto nivel"
+                  "v": "36",
+                  "l": "ponencias entre 2020 y 2024: 21 nacionales y 15 internacionales"
                 },
                 {
-                  "v": "+60",
-                  "l": "eventos con participación extranjera entre 2020 y 2024"
+                  "v": "87",
+                  "l": "beneficiarios de becas y convocatorias de movilidad entre 2021 y 2025"
                 }
               ]
             },
             {
               "tipo": "pares",
               "titulo": "Movilidad estudiantil por año",
-              "max": 281,
+              "max": 453,
               "series": [
                 {
                   "l": "Nacional",
@@ -3869,8 +4465,8 @@
                 {
                   "l": "2020",
                   "v": [
-                    30,
-                    119
+                    34,
+                    118
                   ]
                 },
                 {
@@ -3890,23 +4486,31 @@
                 {
                   "l": "2023",
                   "v": [
-                    43,
-                    103
+                    113,
+                    106
                   ]
                 },
                 {
                   "l": "2024",
                   "v": [
-                    281,
-                    176
+                    321,
+                    175
+                  ]
+                },
+                {
+                  "l": "2025",
+                  "v": [
+                    453,
+                    285
                   ]
                 }
-              ]
+              ],
+              "nota": "Salientes más entrantes. Fuente: presentación del Factor 7 ante los pares (ORI)."
             },
             {
               "tipo": "pares",
               "titulo": "Movilidad docente por año",
-              "max": 17,
+              "max": 26,
               "series": [
                 {
                   "l": "Nacional",
@@ -3929,37 +4533,155 @@
                   "l": "2021",
                   "v": [
                     2,
-                    5
+                    1
                   ]
                 },
                 {
                   "l": "2022",
                   "v": [
                     1,
-                    8
+                    3
                   ]
                 },
                 {
                   "l": "2023",
                   "v": [
-                    5,
-                    15
+                    11,
+                    10
                   ]
                 },
                 {
                   "l": "2024",
                   "v": [
-                    17,
+                    18,
                     16
                   ]
+                },
+                {
+                  "l": "2025",
+                  "v": [
+                    26,
+                    18
+                  ]
                 }
-              ]
+              ],
+              "nota": "Salientes más entrantes. Fuente: presentación del Factor 7 ante los pares (ORI)."
             },
             {
               "tipo": "nota",
               "k": "Lectura",
               "tono": "azul",
-              "v": "En ambos estamentos el componente internacional supera al nacional. Tras la caída de 2021 y 2022, la movilidad se recupera con fuerza en 2023 y alcanza su máximo en 2024."
+              "v": "Tras la caída de 2021 y 2022, la movilidad se recupera en 2023 y alcanza su máximo en 2025. En el acumulado, la movilidad nacional supera a la internacional en los dos estamentos."
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Becas y convocatorias de movilidad",
+              "cols": [
+                "Programa",
+                "País",
+                "Estudiantes",
+                "Año",
+                "Destino o patrocinador"
+              ],
+              "alin": [
+                "txt",
+                "txt",
+                null,
+                null,
+                "txt"
+              ],
+              "filas": [
+                [
+                  "Curso básico de chino",
+                  "Colombia",
+                  3,
+                  2021,
+                  "Instituto Confucio UTadeo · RCI"
+                ],
+                [
+                  "Becas de intercambio Tuna Guajira",
+                  "Colombia",
+                  1,
+                  2022,
+                  "Universidad Popular del Cesar"
+                ],
+                [
+                  "Pasantía RINSA Verano",
+                  "Perú",
+                  4,
+                  2022,
+                  "Grupo RINSA"
+                ],
+                [
+                  "Programa PILA",
+                  "Argentina y México",
+                  2,
+                  2023,
+                  "U. de Quilmes y U. Hipócrates"
+                ],
+                [
+                  "Misión Académica Chile · Expertos Internacionales ICETEX",
+                  "Chile",
+                  1,
+                  2023,
+                  "Universidad Técnica Federico Santa María"
+                ],
+                [
+                  "Wayira Go · intercambio académico",
+                  "España",
+                  2,
+                  2024,
+                  "Universidad de Castilla-La Mancha"
+                ],
+                [
+                  "Tuna Guajira · intercambio entrante",
+                  "Colombia",
+                  1,
+                  2024,
+                  "Universidad del Magdalena"
+                ],
+                [
+                  "Programa Delfín 2024 · pasantías entrantes",
+                  "México",
+                  4,
+                  2024,
+                  "Universidad de La Guajira"
+                ],
+                [
+                  "Programa PILA",
+                  "Perú",
+                  1,
+                  "2025-I",
+                  "Universidad Señor de Sipán"
+                ]
+              ],
+              "nota": "Beneficiarios por año: 4 en 2021, 12 en 2022, 15 en 2023, 20 en 2024 y 36 en 2025."
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Intercambios con homologación",
+              "items": [
+                {
+                  "v": "6",
+                  "l": "intercambios salientes homologados: Castilla-La Mancha (2), Quilmes, Hipócrates, Nacional del Sur y Popular del Cesar"
+                },
+                {
+                  "v": "4",
+                  "l": "estudiantes entrantes: Rafael Núñez, Magdalena, Autónoma del Perú y Señor de Sipán"
+                }
+              ]
+            },
+            {
+              "tipo": "etiquetas",
+              "titulo": "Estrategias de movilidad",
+              "tono": "ambar",
+              "items": [
+                "Programa Delfín · 8 estudiantes",
+                "Expertos Internacionales · 1 estudiante",
+                "Tuna Guajira · 2 estudiantes",
+                "Wayira Go · 3 estudiantes",
+                "Diplomados UNIR · 40 docentes"
+              ]
             },
             {
               "tipo": "pares",
@@ -4006,12 +4728,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "tipo": "nota",
-              "k": "Margen de mejora",
-              "tono": "ambar",
-              "v": "La cooperación es conocida y bien valorada en los tres estamentos. Falta traducirla en beneficios directos, sobre todo para los estudiantes."
             },
             {
               "tipo": "lista",
@@ -4073,6 +4789,36 @@
             },
             {
               "tipo": "barras",
+              "titulo": "Estudiantes en nivel B1 o superior de inglés en Saber Pro",
+              "unidad": "%",
+              "max": 40,
+              "items": [
+                {
+                  "l": "2021",
+                  "v": 17.2
+                },
+                {
+                  "l": "2022",
+                  "v": 20.3
+                },
+                {
+                  "l": "2023",
+                  "v": 12.7
+                },
+                {
+                  "l": "2024",
+                  "v": 24.1
+                },
+                {
+                  "l": "2025",
+                  "v": 39.2,
+                  "tono": "azul"
+                }
+              ],
+              "nota": "Fuente: presentación del Factor 7 ante los pares (ORI)."
+            },
+            {
+              "tipo": "barras",
               "titulo": "Participación en espacios complementarios de segunda lengua, 2020–2024",
               "max": 100,
               "nota": "Participantes por espacio. En ámbar, los talleres de lengua ancestral previstos en la Política de Multilingüismo.",
@@ -4130,16 +4876,23 @@
       ],
       "equipo": [
         {
-          "n": "Dra. Luz Marina Ipuana",
-          "cargo": "Líder ORI del programa",
-          "rol": "Líder del factor",
-          "sede": "riohacha",
+          "n": "Slayder Darío Gutiérrez Villarreal",
+          "cargo": "Docente ocasional",
+          "rol": "Docente líder",
+          "sede": "maicao",
           "foto": ""
         },
         {
-          "n": "MSc. Jorge Epieyú Palmar",
-          "cargo": "Docente tiempo completo",
-          "rol": "Gestión de convenios",
+          "n": "Farith Pérez Sáez",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Fabio Orlando Moya Camacho",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
           "foto": ""
         }
@@ -4179,8 +4932,8 @@
       "pesoTotal": 100,
       "normativa": [
         {
-          "k": "Acuerdo 014 de 2016",
-          "v": "Políticas de Internacionalización (Consejo Superior)"
+          "k": "Acuerdo 018 de 2023",
+          "v": "Política de Internacionalización"
         },
         {
           "k": "Acuerdo 006 de 2016",
@@ -4193,6 +4946,10 @@
         {
           "k": "Acuerdo 003 de 2021",
           "v": "Política de Multilingüismo (Consejo Académico)"
+        },
+        {
+          "k": "Resolución 0160 de 2018",
+          "v": "Unidades de Apoyo de la Oficina de Relaciones Internacionales (UARI): directora y asesor de la ORI y docentes líderes de internacionalización de cada facultad"
         }
       ]
     },
@@ -4697,16 +5454,30 @@
       ],
       "equipo": [
         {
-          "n": "Dr. Héctor Brito Mendoza",
-          "cargo": "Director GITUG",
-          "rol": "Líder del factor",
+          "n": "Leaneth Pitre Ruiz",
+          "cargo": "Docente de planta",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "Dr. Samuel Cotes Ramírez",
-          "cargo": "Líder Caribe.AI",
-          "rol": "Análisis de producción",
+          "n": "Lisseth Paola Castañeda Vega",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Hobber Berrio Caballero",
+          "cargo": "Docente del programa",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Andrés David Vides Prado",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "maicao",
           "foto": ""
         }
@@ -5136,10 +5907,17 @@
       ],
       "equipo": [
         {
-          "n": "MSc. Catalina Uriana Iguarán",
-          "cargo": "Docente tiempo completo",
-          "rol": "Enlace con bienestar",
+          "n": "David Fernández Pérez",
+          "cargo": "Docente ocasional",
+          "rol": "Docente líder",
           "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Eduardo Luis Lara Ortega",
+          "cargo": "Docente catedrático",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
           "foto": ""
         }
       ],
@@ -5625,17 +6403,31 @@
       ],
       "equipo": [
         {
-          "n": "MSc. Andrea Bolaños Curvelo",
-          "cargo": "Coord. laboratorios y semilleros",
-          "rol": "Líder del factor",
+          "n": "Miguel Humberto Romero Acuña",
+          "cargo": "Docente de planta",
+          "rol": "Docente líder",
           "sede": "riohacha",
           "foto": ""
         },
         {
-          "n": "Dr. Pablo Mengual Solano",
-          "cargo": "Docente tiempo completo",
-          "rol": "Análisis de recursos pedagógicos",
-          "sede": "maicao",
+          "n": "Jair Salcedo Andrade",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Gonzalo Beltrán Alvarado",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Carlos Deluque Garizado",
+          "cargo": "Docente del programa",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
           "foto": ""
         }
       ],
@@ -5758,12 +6550,6 @@
                   "v": 68
                 }
               ]
-            },
-            {
-              "tipo": "nota",
-              "k": "Foco de fortalecimiento",
-              "tono": "ambar",
-              "v": "En Riohacha hay distancia entre conocer los espacios (83 %) y percibir que la opinión incide (65 %). El programa la asume como foco de trabajo, junto con una vinculación más sistemática de los egresados."
             }
           ]
         },
@@ -5812,20 +6598,14 @@
                 {
                   "l": "Aplicación del reglamento estudiantil",
                   "v": 55,
-                  "tono": "ambar"
+                  "tono": "azul"
                 },
                 {
                   "l": "Calidad percibida de las estrategias de permanencia",
                   "v": 49.02,
-                  "tono": "ambar"
+                  "tono": "azul"
                 }
               ]
-            },
-            {
-              "tipo": "nota",
-              "k": "Plan de mejoramiento",
-              "tono": "ambar",
-              "v": "En ámbar, los dos indicadores que el programa incorporó a su plan de mejoramiento: la difusión de las estrategias de permanencia y la aplicación del reglamento estudiantil."
             }
           ]
         },
@@ -6132,10 +6912,31 @@
       ],
       "equipo": [
         {
-          "n": "Adanud Segundo Meza Valle",
-          "cargo": "Director del programa",
-          "rol": "Líder del factor",
+          "n": "Diego Madrid Orrego",
+          "cargo": "Docente ocasional",
+          "rol": "Docente líder",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Sandy Romero Cuello",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Jaider José Quintero Mendoza",
+          "cargo": "Docente de planta",
+          "rol": "Equipo de trabajo",
+          "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Remberto Paternina Barboza",
+          "cargo": "Docente catedrático",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
           "foto": ""
         }
       ],
@@ -6695,10 +7496,24 @@
       ],
       "equipo": [
         {
-          "n": "MSc. Andrea Bolaños Curvelo",
-          "cargo": "Docente tiempo completo",
-          "rol": "Inventario de laboratorios",
+          "n": "Slayder Darío Gutiérrez Villarreal",
+          "cargo": "Docente ocasional",
+          "rol": "Docente líder",
+          "sede": "maicao",
+          "foto": ""
+        },
+        {
+          "n": "Robert Quintero Laverde",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
           "sede": "riohacha",
+          "foto": ""
+        },
+        {
+          "n": "Arturo Javier Acosta Alfaro",
+          "cargo": "Docente ocasional",
+          "rol": "Equipo de trabajo",
+          "sede": "maicao",
           "foto": ""
         }
       ],
@@ -6808,51 +7623,57 @@
   ],
   "equipo": [
     {
-      "n": "Adanud Segundo Meza Valle",
+      "n": "Adanud Meza Valle",
       "cargo": "Director del programa",
-      "rol": "Liderazgo del proceso de autoevaluación",
+      "rol": "Líder de los factores 1, 2 y 3",
       "color": "var(--ug-azul)"
     },
     {
-      "n": "Dra. Luz Marina Ipuana",
-      "cargo": "Coordinadora de autoevaluación",
-      "rol": "Articulación metodológica",
+      "n": "Nayeli Mejía Riveira",
+      "cargo": "Apoyo a la autoevaluación",
+      "rol": "Líder del factor 5",
       "color": "var(--ug-amarillo)"
     },
     {
-      "n": "Dr. Héctor Brito Mendoza",
-      "cargo": "Representante docente",
-      "rol": "Líder factores investigación",
-      "color": "var(--ug-azul)"
-    },
-    {
-      "n": "MSc. Jorge Epieyú Palmar",
-      "cargo": "Representante docente",
-      "rol": "Líder factor internacionalización",
+      "n": "Diana Margarita Escobar Méndez",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 4",
       "color": "var(--ug-flamingo)"
     },
     {
-      "n": "Dr. Samuel Cotes Ramírez",
-      "cargo": "Representante docente",
-      "rol": "Análisis producción investigativa",
+      "n": "Katy Herrera Estrada",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 6",
+      "color": "var(--ug-azul)"
+    },
+    {
+      "n": "Slayder Darío Gutiérrez Villarreal",
+      "cargo": "Docente del programa",
+      "rol": "Líder de los factores 7 y 12",
       "color": "var(--ug-amarillo)"
     },
     {
-      "n": "MSc. Andrea Bolaños Curvelo",
-      "cargo": "Coordinadora extensión",
-      "rol": "Líder recursos y medios educativos",
+      "n": "Leaneth Pitre Ruiz",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 8",
       "color": "var(--ug-flamingo)"
     },
     {
-      "n": "Daniela Pushaina",
-      "cargo": "Representante estudiantil",
-      "rol": "Voz estudiantil activa",
+      "n": "David Fernández Pérez",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 9",
       "color": "var(--ug-azul)"
     },
     {
-      "n": "Diana Cotes Brito",
-      "cargo": "Representante egresados",
-      "rol": "Seguimiento a egresados",
+      "n": "Miguel Humberto Romero Acuña",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 10",
+      "color": "var(--ug-amarillo)"
+    },
+    {
+      "n": "Diego Madrid Orrego",
+      "cargo": "Docente del programa",
+      "rol": "Líder del factor 11",
       "color": "var(--ug-flamingo)"
     }
   ],
