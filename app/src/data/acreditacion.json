@@ -660,14 +660,14 @@
     {
       "n": 2,
       "t": "Estudiantes",
-      "score": 91.34,
+      "score": 91.37,
       "summary": "Lo que el programa hace por el estudiante desde que entra hasta que se gradúa: la oferta extracurricular, el acompañamiento, el trabajo autónomo, el reglamento que lo ampara y los apoyos que lo sostienen.",
       "fortalezas": [
-        "Consolidación de las estrategias de permanencia: 5.132 atenciones en las dos sedes entre 2020 y 2024",
+        "Consolidación de estrategias de permanencia académica, con más de 3.800 atenciones entre 2019 y 2024",
         "Alto conocimiento, apropiación y aplicación del Reglamento Estudiantil por parte de estudiantes y docentes",
         "Participación significativa en actividades de formación integral, extensión e investigación",
-        "Percepción altamente positiva de los estímulos académicos y los apoyos socioeconómicos",
-        "Articulación efectiva con Bienestar Universitario y las demás áreas institucionales"
+        "Percepción altamente positiva sobre los estímulos académicos y apoyos socioeconómicos",
+        "Articulación efectiva con Bienestar Universitario y otras áreas institucionales para acompañamiento integral"
       ],
       "oportunidades": [
         "Incrementar la participación estudiantil en actividades extracurriculares en la sede Maicao, donde el 75,38 % declara no haber participado en actividades autónomas",
@@ -678,7 +678,7 @@
         {
           "n": "C3",
           "name": "Participación en actividades de formación integral",
-          "peso": 22,
+          "peso": 21.75,
           "calificacion": 88.75,
           "score": 88.75,
           "status": "alto",
@@ -778,33 +778,41 @@
               ]
             },
             {
-              "tipo": "barras",
-              "titulo": "Participación en actividades académicas",
-              "nota": "Congresos, simposios, foros y eventos académicos. Fuente: módulo de extensión y proyección social.",
-              "max": 3107,
-              "items": [
-                {
-                  "l": "2020",
-                  "v": 217
-                },
-                {
-                  "l": "2021",
-                  "v": 867
-                },
-                {
-                  "l": "2022",
-                  "v": 1934
-                },
-                {
-                  "l": "2023",
-                  "v": 3107,
-                  "tono": "azul"
-                },
-                {
-                  "l": "2024",
-                  "v": 1397
-                }
-              ]
+              "tipo": "tabla",
+              "titulo": "Participación de estudiantes en actividades de formación integral",
+              "cols": [
+                "Año",
+                "Actividades interculturales",
+                "Actividades académicas"
+              ],
+              "filas": [
+                [
+                  "2020",
+                  "—",
+                  "217"
+                ],
+                [
+                  "2021",
+                  "31",
+                  "867"
+                ],
+                [
+                  "2022",
+                  "50",
+                  "1.934"
+                ],
+                [
+                  "2023",
+                  "200",
+                  "3.107"
+                ],
+                [
+                  "2024",
+                  "227",
+                  "1.397"
+                ]
+              ],
+              "nota": "Actividades académicas: congresos, simposios, foros y eventos. Fuente: módulo de extensión y proyección social e informe de Bienestar (tabla 21)."
             },
             {
               "tipo": "nota",
@@ -816,7 +824,7 @@
               "tipo": "nota",
               "k": "Investigación formativa",
               "tono": "ambar",
-              "v": "Semilleros SETEC, Innovatech Dev —reconocido mediante la Resolución 0794 de 2023—, GREIN, SETI e Ingeniería I+D+I. Siete ponencias estudiantiles: cuatro en 2023 y tres en 2024."
+              "v": "Semilleros SETEC, Innovatech Dev —reconocido mediante la Resolución 0794 de 2023—, GREIN, SETI e Ingeniería I+D+I. Siete ponencias estudiantiles, cuatro en 2023 y tres en 2024, desde los semilleros SETEC, Diproit, SIIS y Sembrando Futuro, en los Encuentros Anuales de Semilleros de Uniguajira (VII y VIII), los Encuentros Departamentales del Nodo Guajira Multiculturalidad (VI y VII) y el XXVII Encuentro Nacional y XXI Internacional de Semilleros de RedCOLSI."
             },
             {
               "tipo": "cifras",
@@ -839,13 +847,46 @@
                   "l": "en Maicao, casi tres veces las de 2020"
                 }
               ]
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Participaciones en Bienestar por área, 2020–2024",
+              "items": [
+                {
+                  "l": "Permanencia y graduación",
+                  "v": 5127,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Desarrollo humano",
+                  "v": 4854,
+                  "tono": "azul"
+                },
+                {
+                  "l": "Salud",
+                  "v": 4031
+                },
+                {
+                  "l": "Deporte",
+                  "v": 3295
+                },
+                {
+                  "l": "Cultura",
+                  "v": 2308
+                },
+                {
+                  "l": "Promoción socioeconómica",
+                  "v": 2137
+                }
+              ],
+              "nota": "Suma de las dos sedes: 21.752 participaciones."
             }
           ]
         },
         {
           "n": "C4",
           "name": "Orientación y seguimiento a estudiantes",
-          "peso": 21,
+          "peso": 21.0,
           "calificacion": 92,
           "score": 92,
           "status": "pleno",
@@ -856,17 +897,47 @@
               "tipo": "dato",
               "tono": "azul",
               "v": "7,17 %",
-              "l": "de deserción en 2024-2. Es el dato vigente: el último valor liberado por SPADIES, posterior a la radicación del informe de autoevaluación"
+              "l": "de deserción en 2024-II, el último dato liberado por SPADIES, por debajo del promedio nacional de 8,65 % con corte de 2024"
+            },
+            {
+              "tipo": "barras",
+              "titulo": "Tasa de deserción por periodo",
+              "unidad": "%",
+              "max": 16,
+              "items": [
+                {
+                  "l": "2020-I",
+                  "v": 10.74
+                },
+                {
+                  "l": "2021-I",
+                  "v": 14.95
+                },
+                {
+                  "l": "2022-I",
+                  "v": 11.96
+                },
+                {
+                  "l": "2023-I",
+                  "v": 8.67
+                },
+                {
+                  "l": "2024-II",
+                  "v": 7.17,
+                  "tono": "azul"
+                }
+              ],
+              "nota": "Fuente: SPADIES y cuadros maestros CNA."
             },
             {
               "tipo": "dato",
               "v": "4.156",
-              "l": "participaciones en servicios de desarrollo humano entre 2019 y 2024"
+              "l": "participaciones en servicios de desarrollo humano en la sede Riohacha entre 2019 y 2024; consolidadas las dos sedes, el área suma 4.854 entre 2020 y 2024"
             },
             {
               "tipo": "tabla",
-              "titulo": "Servicios de desarrollo humano",
-              "nota": "Fuente: Bienestar Social Universitario.",
+              "titulo": "Servicios de desarrollo humano · sede Riohacha, 2019–2024",
+              "nota": "Total: 4.156 participaciones. Fuente: Bienestar Social Universitario, sede Riohacha (anexo 10).",
               "cols": [
                 "Servicio",
                 "Participaciones"
@@ -899,6 +970,18 @@
                 [
                   "Atención psicológica",
                   "176"
+                ],
+                [
+                  "Prevención de alcohol y sustancias psicoactivas",
+                  "205"
+                ],
+                [
+                  "Ruta de atención para la violencia",
+                  "155"
+                ],
+                [
+                  "Equidad para la mujer",
+                  "23"
                 ]
               ]
             },
@@ -910,8 +993,8 @@
             },
             {
               "tipo": "barras",
-              "titulo": "Estrategias de permanencia y graduación exitosa",
-              "nota": "Intervenciones registradas entre 2019 y 2024. Fuente: Bienestar Social Universitario.",
+              "titulo": "Estrategias de permanencia y graduación exitosa · sede Riohacha",
+              "nota": "Intervenciones registradas entre 2019 y 2024. Fuente: Bienestar Social Universitario, sede Riohacha (anexo 10).",
               "max": 1418,
               "items": [
                 {
@@ -941,7 +1024,7 @@
               "items": [
                 {
                   "v": "3.860",
-                  "l": "intervenciones totales en el periodo 2019-2024"
+                  "l": "intervenciones en la sede Riohacha entre 2019 y 2024; consolidadas las dos sedes, el área suma 5.127 participaciones entre 2020 y 2024"
                 },
                 {
                   "v": "191",
@@ -997,12 +1080,39 @@
               ]
             },
             {
+              "tipo": "tabla",
+              "titulo": "Efecto del acompañamiento · primer corte de 2026-2",
+              "cols": [
+                "Grupo",
+                "Promedio",
+                "Asignaturas bajo 3,0"
+              ],
+              "filas": [
+                [
+                  "Identificados por el SIAT (74)",
+                  "3,43",
+                  "29,6 %"
+                ],
+                [
+                  "En situación crítica",
+                  "3,42",
+                  "31,2 %"
+                ],
+                [
+                  "Resto del programa",
+                  "3,58",
+                  "22,0 %"
+                ]
+              ],
+              "nota": "Cruce del Sistema Institucional de Alertas Tempranas con 7.913 registros de notas. La diferencia de 0,15 puntos mantiene al grupo en riesgo dentro del rango aprobatorio."
+            },
+            {
               "tipo": "cifras",
               "titulo": "Matrícula e ingreso",
               "items": [
                 {
                   "v": "1.082",
-                  "l": "estudiantes matriculados en 2024-II, 65,7 % más que los 653 de 2020-I, sin un solo retroceso desde 2021-II"
+                  "l": "estudiantes matriculados en 2024-II —705 en Riohacha y 377 en Maicao—, 65,7 % más que los 653 de 2020-I, sin un solo retroceso desde 2021-II"
                 },
                 {
                   "v": "674",
@@ -1019,7 +1129,7 @@
         {
           "n": "C5",
           "name": "Capacidad de trabajo autónomo",
-          "peso": 19,
+          "peso": 19.0,
           "calificacion": 93,
           "score": 93,
           "status": "pleno",
@@ -1055,13 +1165,54 @@
               "k": "Un caso: HandSpeak",
               "tono": "ambar",
               "v": "Guante inteligente del semillero R.E.D Tech que traduce lengua de señas colombiana a texto y voz con inteligencia artificial. Obtuvo 100 puntos en el IX Encuentro Departamental de Semilleros (Nodo Guajira 2026) y clasificó a la fase nacional de RedCOLSI. Estudiantes: Sally Gutiérrez Bermúdez y Jose Barreto Toro; docentes: Eduardo Sierra Fragozo y Henry Ríos Meza."
+            },
+            {
+              "tipo": "impacto",
+              "titulo": "Aporte relativo · ICFES, de Saber 11 a Saber Pro",
+              "nota": "262 trayectorias individuales entre 2020 y 2025, del Saber 11 al Saber Pro. Es una medición externa e independiente de los instrumentos del programa.",
+              "items": [
+                {
+                  "k": "Percentil nacional",
+                  "de": "18",
+                  "a": "36",
+                  "l": "posición de la cohorte al ingresar y al egresar: el doble de la posición con que entró",
+                  "tono": "azul"
+                },
+                {
+                  "k": "Mejoran",
+                  "valor": "74,8 %",
+                  "l": "de los estudiantes sube en su posición relativa",
+                  "tono": "marino"
+                },
+                {
+                  "k": "Se mantienen",
+                  "valor": "19,5 %",
+                  "l": "conserva su posición; solo el 5,7 % la reduce",
+                  "tono": "ambar"
+                }
+              ]
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Actividades académicas extracurriculares de carácter autónomo",
+              "items": [
+                {
+                  "v": "69,16 %",
+                  "l": "de los estudiantes de Riohacha califica su experiencia como excelente"
+                },
+                {
+                  "v": "75,38 %",
+                  "l": "de los estudiantes de Maicao declara no haber participado en ellas"
+                }
+              ],
+              "nota": "Encuestas institucionales de autoevaluación (anexos 9 y 9.1)."
             }
           ]
         },
         {
           "n": "C6",
           "name": "Reglamento estudiantil y política académica",
-          "peso": 19,
+          "peso": 18.75,
           "calificacion": 94.5,
           "score": 94.5,
           "status": "pleno",
@@ -1107,13 +1258,78 @@
                   "l": "casos tramitados ante el Consejo de Facultad, 2020-2024"
                 }
               ]
+            },
+            {
+              "tipo": "pares",
+              "titulo": "Apropiación del reglamento por los estudiantes",
+              "unidad": "%",
+              "max": 100,
+              "series": [
+                {
+                  "l": "Riohacha",
+                  "tono": "azul"
+                },
+                {
+                  "l": "Maicao",
+                  "tono": "ambar"
+                }
+              ],
+              "items": [
+                {
+                  "l": "Lo ha leído o participó en su socialización",
+                  "v": [
+                    90,
+                    89.7
+                  ]
+                },
+                {
+                  "l": "Aplicación excelente",
+                  "v": [
+                    53.7,
+                    41.1
+                  ]
+                },
+                {
+                  "l": "Aplicación muy buena",
+                  "v": [
+                    31.5,
+                    40.6
+                  ]
+                },
+                {
+                  "l": "Totalmente pertinente",
+                  "v": [
+                    47.1,
+                    45.1
+                  ]
+                }
+              ],
+              "nota": "En Riohacha, además, el 46,7 % lo considera muy pertinente."
+            },
+            {
+              "tipo": "cifras",
+              "titulo": "Docentes y divulgación",
+              "items": [
+                {
+                  "v": "100 %",
+                  "l": "de los docentes de las dos sedes conoce el Reglamento Estudiantil"
+                },
+                {
+                  "v": "49,2 % · 57,5 %",
+                  "l": "de los docentes de Riohacha y de Maicao califica su aplicación como excelente"
+                },
+                {
+                  "v": "98",
+                  "l": "estudiantes en las jornadas de socialización de Bienestar entre 2023 y 2025"
+                }
+              ]
             }
           ]
         },
         {
           "n": "C7",
           "name": "Estímulos y apoyos para estudiantes",
-          "peso": 20,
+          "peso": 19.5,
           "calificacion": 89,
           "score": 89,
           "status": "alto",
@@ -1202,52 +1418,95 @@
       ],
       "evidencias": [
         {
-          "t": "Tabla 19",
-          "d": "Calificación de las características — Factor 2",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 026 de 2018 · Reglamento Estudiantil",
+          "d": "Consejo Superior · Anexo 12",
+          "cat": "Normativa institucional",
+          "f": "2018",
+          "url": "/descargas/factor-2/anexo-12-acuerdo-026-2018-reglamento-estudiantil.pdf"
         },
         {
-          "t": "Tabla 1",
-          "d": "Participación por tipo de actividad en Maicao y Riohacha",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 013 de 2020 · Estatuto General de Bienestar Social Universitario",
+          "d": "Consejo Superior · Anexo 8",
+          "cat": "Normativa institucional",
+          "f": "2020",
+          "url": "/descargas/factor-2/anexo-08-acuerdo-013-2020-estatuto-bienestar.pdf"
         },
         {
-          "t": "Tabla 20",
-          "d": "Participación de estudiantes en actividades de formación integral",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 016 de 2023 · Políticas de permanencia y graduación exitosa",
+          "d": "Consejo Académico · Anexo 24",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-2/anexo-24-acuerdo-016-2023-permanencia-graduacion.pdf"
         },
         {
-          "t": "Tabla 21",
-          "d": "Participación de los estudiantes en el área de desarrollo humano",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 021 de 2023 · Modificación de las políticas de permanencia",
+          "d": "Consejo Académico · Anexo 25",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-2/anexo-25-acuerdo-021-2023-modifica-permanencia.pdf"
         },
         {
-          "t": "Tabla 22",
-          "d": "Participación en el área de permanencia y graduación exitosa",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 019 de 2016 · Política general de admisiones",
+          "d": "Consejo Académico · Anexo 26",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-1/anexo-26-acuerdo-019-2016-admisiones.pdf"
         },
         {
-          "t": "Figura 8",
-          "d": "Participación por tipo de actividad — sedes Riohacha y Maicao",
-          "f": "",
-          "url": ""
+          "t": "Acuerdo 006 de 2016 · Movilidad estudiantil",
+          "d": "Consejo Académico · Anexo 28",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-28-acuerdo-006-2016-movilidad-estudiantil.pdf"
         },
         {
-          "t": "Figura 9",
-          "d": "Percepción sobre la aplicación del reglamento estudiantil",
-          "f": "",
-          "url": ""
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
         },
         {
-          "t": "Figura 10",
-          "d": "Percepción estudiantil sobre estímulos académicos y apoyos socioeconómicos",
-          "f": "",
-          "url": ""
+          "t": "Resultados de aprendizaje y mecanismos de evaluación",
+          "d": "Ingeniería de Sistemas · Anexo 11",
+          "cat": "Documentos del programa",
+          "f": "2023",
+          "url": "/descargas/factor-1/anexo-11-resultados-de-aprendizaje.pdf"
+        },
+        {
+          "t": "Programa referencial de Ingeniería de Sistemas",
+          "d": "Contenidos de las asignaturas, incluida la Cátedra Uniguajira · Anexo 13",
+          "cat": "Documentos del programa",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-13-programa-referencial.pdf"
+        },
+        {
+          "t": "Informe de Bienestar Social Universitario",
+          "d": "Participación de estudiantes, docentes y administrativos del programa · Anexo 10",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-2/anexo-10-informe-bienestar-social-universitario.pdf"
+        },
+        {
+          "t": "Informe de internacionalización",
+          "d": "Convenios, movilidad y redes del programa · Anexo 7",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-07-informe-internacionalizacion.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
       "anexos": [],
@@ -1255,17 +1514,17 @@
       "metodologiaFactor": "",
       "documentos": [],
       "ponderacion": 8,
-      "pesoTotal": 101,
+      "pesoTotal": 100,
       "comparativo": {
         "titulo": "Comparación con la evaluación anterior",
         "bajada": "El mismo factor medido con dos modelos distintos.",
         "antes": {
           "score": 88.5,
-          "modelo": "Modelo ARCU-SUR",
+          "modelo": "Modelo ARCU-SUR · Dimensión 3, componente 3.1",
           "juicio": "Se cumple en alto grado"
         },
         "despues": {
-          "score": 91.34,
+          "score": 91.37,
           "modelo": "Modelo CNA · Acuerdo 02 de 2020",
           "juicio": "Se cumple plenamente"
         }
@@ -1282,6 +1541,14 @@
         {
           "k": "Acuerdo 016 de 2023",
           "v": "Política de permanencia y graduación exitosa"
+        },
+        {
+          "k": "Acuerdo 021 de 2023",
+          "v": "Modifica la política de permanencia y graduación exitosa"
+        },
+        {
+          "k": "Acuerdo 006 de 2016",
+          "v": "Reglamenta la movilidad estudiantil"
         },
         {
           "k": "Resolución 0689 de 2024",
@@ -1301,14 +1568,13 @@
       "n": 3,
       "t": "Profesores",
       "score": 94.19,
-      "summary": "Planta docente altamente cualificada (86,7 % con formación posgradual), con sólida producción académica, desarrollo profesoral sostenido y evaluación transparente.",
+      "summary": "Planta docente altamente cualificada —121 profesores en 2024-2, con 84 % de doctores o magísteres entre la planta de Riohacha y 100 % en la de Maicao—, sólida producción académica, desarrollo profesoral sostenido y evaluación transparente.",
       "fortalezas": [
-        "86,7 % de formación posgradual y núcleo disciplinar de 22 docentes, con 68,2 % de maestría y 27 % de doctorado.",
-        "160+ productos académicos generados en los últimos 5 años.",
-        "$127M de inversión en estímulos a la trayectoria profesoral en sede Riohacha.",
-        "15 ascensos en el escalafón docente desde 2020.",
-        "Estabilidad con núcleo básico de docentes de tiempo completo con contratación indefinida.",
-        "Evaluación docente valorada como transparente, justa y eficaz por la comunidad académica."
+        "Existencia de un núcleo básico de profesores de tiempo completo con contratación a término indefinido, lo que garantiza estabilidad institucional y continuidad en los procesos formativos",
+        "Alta cualificación del cuerpo docente: el 68,2 % cuenta con formación de maestría y el 27 % con doctorado, lo que fortalece la investigación, la extensión y el logro de resultados de aprendizaje",
+        "La evaluación docente es ampliamente aceptada y valorada por estudiantes, directivos y docentes como transparente, justa y eficaz, sin registros de calificaciones insuficientes en los últimos años",
+        "Producción académica sostenida con impacto: más de 160 productos en los últimos 5 años entre libros, artículos científicos, ponencias y capítulos de libro, que respaldan la innovación y la calidad del proceso educativo",
+        "Aplicación efectiva del Estatuto Profesoral y del Reglamento de Vinculación, lo cual asegura procesos meritocráticos de ingreso y ascenso en el escalafón"
       ],
       "oportunidades": [
         "Fortalecer la visibilidad de los criterios de evaluación para la asignación de estímulos, para incrementar la participación docente."
@@ -1316,8 +1582,8 @@
       "caracteristicas": [
         {
           "n": "3.1",
-          "name": "Selección, vinculación y permanencia de profesores",
-          "peso": 14.04,
+          "name": "Selección, vinculación y permanencia",
+          "peso": 14.03,
           "calificacion": 95,
           "score": 95,
           "status": "pleno",
@@ -1448,7 +1714,7 @@
               "tipo": "nota",
               "k": "El mayor peso",
               "tono": "ambar",
-              "v": "Con 20,07 de los 100 puntos del factor, es la característica que más pesa en Profesores: una quinta parte de la calificación del factor más ponderado de todo el proceso."
+              "v": "Con 20,07 de los 100 puntos del factor, es la característica que más pesa en Profesores: una quinta parte de la calificación de uno de los factores de mayor peso del proceso."
             },
             {
               "tipo": "lista",
@@ -1482,15 +1748,10 @@
                   "Acuerdo 015 de 2021"
                 ],
                 [
-                  "Escalafón profesoral",
+                  "Evaluación del desempeño profesoral y asignación de puntos",
                   "Acuerdo 015 de 2022"
-                ],
-                [
-                  "Evaluación del desempeño profesoral",
-                  "Acuerdo 019 de 2022"
                 ]
-              ],
-              "nota": "La presentación de septiembre de 2025 atribuye la evaluación del desempeño al Acuerdo 019 de 2022; el informe ejecutivo la atribuye al Acuerdo 015 de 2022, que aquí figura como el del escalafón. Conviene confirmar cuál rige."
+              ]
             },
             {
               "tipo": "barras",
@@ -1624,7 +1885,7 @@
                   "30,67"
                 ]
               ],
-              "nota": "La matrícula de Riohacha creció un 117,59 % entre 2019-1 y 2024-2, de 324 a 705 estudiantes; la de Maicao un 26,94 %, de 297 a 377. Maicao venía de picos de 38 estudiantes por docente y converge con Riohacha en 2024-2."
+              "nota": "La matrícula de Riohacha creció un 117,59 % entre 2019-1 y 2024-2, de 324 a 705 estudiantes; la de Maicao un 26,94 %, de 297 a 377. Maicao venía de un máximo de 37,13 estudiantes por docente en 2021-1 y converge con Riohacha en 2024-2."
             },
             {
               "tipo": "tabla",
@@ -1802,6 +2063,21 @@
               ]
             },
             {
+              "tipo": "cifras",
+              "titulo": "Oferta para la formación del profesorado",
+              "items": [
+                {
+                  "v": "19",
+                  "l": "becas de posgrado nacionales e internacionales difundidas por la ORI entre 2022 y 2024"
+                },
+                {
+                  "v": "14",
+                  "l": "sesiones de los Seminarios Permanentes de Calidad de la Facultad en 2022 y 2023, a las que asisten todos los profesores de tiempo completo"
+                }
+              ],
+              "nota": "Fuente: Oficina de Relaciones Internacionales y dirección del programa (tablas 32 y 34 del informe)."
+            },
+            {
               "tipo": "barras",
               "titulo": "Comisiones de estudio de doctorado otorgadas por la Universidad, por año",
               "items": [
@@ -1960,6 +2236,11 @@
                   "l": "Las califica muy buenas o excelentes · Maicao",
                   "v": 89.7,
                   "tono": "marino"
+                },
+                {
+                  "l": "Mejoraron la calidad del proceso formativo · Riohacha",
+                  "v": 89.7,
+                  "tono": "marino"
                 }
               ],
               "nota": "El Plan de Capacitación, Actualización y Perfeccionamiento Docente 2022-2025 lo adopta el Acuerdo 012 de 2023 del Consejo Académico. La internacionalización se rige por el Acuerdo 014 de 2016 y el multilingüismo por el Acuerdo 003 de 2021."
@@ -1968,7 +2249,7 @@
         },
         {
           "n": "3.5",
-          "name": "Estímulo a la trayectoria profesoral",
+          "name": "Estímulos a la trayectoria profesoral",
           "peso": 10.07,
           "calificacion": 90.5,
           "score": 90.5,
@@ -2054,12 +2335,126 @@
                   "l": "distinción de honor de la Vicerrectoría de Docencia"
                 }
               ]
+            },
+            {
+              "tipo": "pares",
+              "titulo": "El régimen de estímulos, según el profesorado",
+              "unidad": "%",
+              "max": 100,
+              "series": [
+                {
+                  "l": "Riohacha",
+                  "tono": "azul"
+                },
+                {
+                  "l": "Maicao",
+                  "tono": "ambar"
+                }
+              ],
+              "items": [
+                {
+                  "l": "Conoce el régimen",
+                  "v": [
+                    90,
+                    72
+                  ]
+                },
+                {
+                  "l": "Valora positivamente su impacto",
+                  "v": [
+                    85,
+                    78
+                  ]
+                }
+              ]
+            },
+            {
+              "tipo": "tabla",
+              "titulo": "Reconocimientos de los Planes Anuales de Estímulos e Incentivos",
+              "alin": [
+                null,
+                "txt",
+                null
+              ],
+              "cols": [
+                "Docente",
+                "Reconocimiento",
+                "Fecha"
+              ],
+              "filas": [
+                [
+                  "Carlos Alberto Alfaro Camargo",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Fabio Orlando Moya Camacho",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Hobber José Berrio Caballero",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Jaider José Quintero Mendoza",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Jair Enrique Salcedo Andrade",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Leaneth Rafaelina Pitre Ruiz",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Marlon José Bastidas Barranco",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Nayeli Naidee Mejía Riveira",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Sandy Elena Romero Cuello",
+                  "10 años como docente de planta",
+                  "10/12/2024"
+                ],
+                [
+                  "Gonzalo Beltrán Alvarado",
+                  "25 años de servicio a la institución",
+                  "5/12/2023"
+                ],
+                [
+                  "Samuel Eligio Zambrano Rojas",
+                  "40 años de servicio a la institución",
+                  "5/12/2023"
+                ],
+                [
+                  "Marlin Aarón Gonzálvez",
+                  "30 años de servicio a la institución",
+                  "13/12/2022"
+                ],
+                [
+                  "Pilar Pomárico Pimienta",
+                  "Por destacarse en cargos directivos",
+                  "13/12/2022"
+                ]
+              ],
+              "nota": "13 docentes homenajeados por antigüedad y trayectoria. Fuente: dirección de talento humano (tabla 35 del informe)."
             }
           ]
         },
         {
           "n": "3.6",
-          "name": "Producción, permanencia, utilización e impacto del material docente",
+          "name": "Producción, pertinencia, utilización e impacto del material docente",
           "peso": 11.34,
           "calificacion": 96.6,
           "score": 96.6,
@@ -2145,7 +2540,7 @@
             },
             {
               "tipo": "barras",
-              "titulo": "Uso y pertinencia del material, según el profesorado",
+              "titulo": "Uso y pertinencia del material, según los estudiantes",
               "unidad": "%",
               "max": 100,
               "items": [
@@ -2181,7 +2576,7 @@
         },
         {
           "n": "3.7",
-          "name": "Remuneración por mérito",
+          "name": "Remuneración por méritos",
           "peso": 8.13,
           "calificacion": 87,
           "score": 87,
@@ -2221,7 +2616,7 @@
               "tipo": "nota",
               "k": "La lectura",
               "tono": "marino",
-              "v": "El contraste define el problema: donde menos se reciben estímulos, más alto se valora su efecto. Lo que el plan de mejoramiento debe atender es la cobertura, no la pertinencia del reconocimiento."
+              "v": "El contraste es claro: donde menos se reciben estímulos, más alto se valora su efecto."
             },
             {
               "tipo": "tabla",
@@ -2291,6 +2686,10 @@
                 {
                   "v": "82,8 %",
                   "l": "de los docentes de Riohacha está totalmente de acuerdo con que los estímulos contribuyen al mejoramiento continuo"
+                },
+                {
+                  "v": "69,2 %",
+                  "l": "de los docentes de Maicao está totalmente de acuerdo con que los estímulos fomentan el compromiso institucional"
                 }
               ]
             },
@@ -2516,7 +2915,7 @@
                   "tono": "marino"
                 }
               ],
-              "nota": "En equidad de los criterios coinciden el 95 % de los directivos, el 91 % de los estudiantes y el 88 % de los profesores; en eficacia, el 95 % del profesorado, el 91 % de los directivos y el 90 % de los estudiantes."
+              "nota": "En equidad de los criterios coinciden el 95 % de los directivos, el 91 % de los estudiantes y el 88 % de los profesores; en eficacia, el 95 % del profesorado, el 91 % de los directivos y el 90 % de los estudiantes.; en coherencia con el nivel de formación y la modalidad del programa, el 94 % de los directivos, el 92 % de los estudiantes y el 93 % de los profesores."
             },
             {
               "tipo": "nota",
@@ -2559,82 +2958,95 @@
       ],
       "evidencias": [
         {
-          "t": "Tabla 25. Docentes por tipo de vinculación",
-          "d": "Planta, ocasionales y hora cátedra por sede y periodo",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tablas 26 y 27. Docentes vinculados en 2024-2",
-          "d": "Listado nominal de las sedes Maicao y Riohacha",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tabla 28. Docentes de tiempo completo por años de experiencia",
-          "d": "Experiencia profesional y docente por tramos",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tabla 29. Ascensos de escalafón en los últimos cinco años",
-          "d": "Quince ascensos entre 2020 y 2024",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tabla 31. Comisiones de estudio, posgrados y cursos",
-          "d": "Docentes en formación avanzada y continua",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tabla 32. Capacitaciones en los Seminarios Permanentes de la Calidad",
-          "d": "Oferta institucional de actualización docente",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tabla 33. Reconocimientos a docentes",
-          "d": "Planes Anuales de Estímulos e Incentivos",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Tablas 35 a 38. Procedimiento de evaluación docente",
-          "d": "Fuentes, trece etapas, ponderaciones y escala de valoración",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Figura 17. Relación estudiante por docente de tiempo completo",
-          "d": "Serie por sede y periodo, 2020-1 a 2024-2",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Figura 20. Montos financiados por tipo de estímulo",
-          "d": "Destino de los recursos en las dos sedes",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Figura 22. Productos de investigación relacionados con el programa",
-          "d": "Los 161 productos del periodo, por tipo",
-          "f": "2025",
-          "url": ""
-        },
-        {
-          "t": "Figura 24. Percepción sobre la evaluación docente",
-          "d": "Transparencia, equidad, eficacia y coherencia, 2024",
-          "f": "2025",
-          "url": ""
-        },
-        {
           "t": "Acuerdo 005 de 2006 · Estatuto Profesoral",
-          "d": "Norma de carrera docente vigente",
+          "d": "Consejo Superior · Anexo 14",
+          "cat": "Normativa institucional",
           "f": "2006",
-          "url": ""
+          "url": "/descargas/factor-3/anexo-14-acuerdo-005-2006-estatuto-profesoral.pdf"
+        },
+        {
+          "t": "Acuerdo 015 de 2022 · Evaluación del desempeño profesoral",
+          "d": "Modifica los capítulos XII y XIII del Estatuto Profesoral · Anexo 21",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-3/anexo-21-acuerdo-015-2022-evaluacion-desempeno.pdf"
+        },
+        {
+          "t": "Acuerdo 001 de 2025 · Vinculación de profesores ocasionales y de hora cátedra",
+          "d": "Consejo Superior · Anexo 16",
+          "cat": "Normativa institucional",
+          "f": "2025",
+          "url": "/descargas/factor-3/anexo-16-acuerdo-001-2025-vinculacion-ocasionales-catedra.pdf"
+        },
+        {
+          "t": "Resolución 0592 de 2021 · Concurso público de méritos para docentes de planta",
+          "d": "Rectoría · Anexo 15",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-3/anexo-15-resolucion-0592-2021-concurso-docente.pdf"
+        },
+        {
+          "t": "Acuerdo 012 de 2023 · Plan de Capacitación, Actualización y Perfeccionamiento Docente 2022–2025",
+          "d": "Consejo Académico · Anexo 18",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-3/anexo-18-acuerdo-012-2023-plan-capacitacion-docente.pdf"
+        },
+        {
+          "t": "Acuerdo 002 de 2021 · Reglamento de propiedad intelectual",
+          "d": "Consejo Superior · Anexo 20",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-3/anexo-20-acuerdo-002-2021-propiedad-intelectual.pdf"
+        },
+        {
+          "t": "Acuerdo 014 de 2016 · Políticas de internacionalización",
+          "d": "Consejo Superior · Anexo 27",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-27-acuerdo-014-2016-internacionalizacion.pdf"
+        },
+        {
+          "t": "Acuerdo 003 de 2021 · Política de Multilingüismo",
+          "d": "Consejo Académico · Anexo 19",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-7/anexo-19-acuerdo-003-2021-multilinguismo.pdf"
+        },
+        {
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Informe de mecanismos de selección y vinculación docente",
+          "d": "Vicerrectoría Académica · Anexo 17",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-3/anexo-17-informe-mecanismos-seleccion-docente.pdf"
+        },
+        {
+          "t": "Informe de internacionalización",
+          "d": "Convenios, movilidad y redes del programa · Anexo 7",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-07-informe-internacionalizacion.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
       "anexos": [],
@@ -2673,11 +3085,7 @@
         },
         {
           "k": "Acuerdo 015 de 2022",
-          "v": "Escalafón profesoral. El informe ejecutivo lo cita también como base de la evaluación del desempeño."
-        },
-        {
-          "k": "Acuerdo 019 de 2022",
-          "v": "Evaluación del desempeño profesoral: cuatro fuentes, trece etapas y escala de cinco niveles."
+          "v": "Modifica los capítulos XII, del desempeño profesoral, y XIII, de la evaluación y asignación de puntos, del Estatuto Profesoral: cuatro fuentes de evaluación, trece etapas y escala de cinco niveles."
         },
         {
           "k": "Acuerdo 012 de 2023",
@@ -2695,7 +3103,22 @@
           "k": "Acuerdos 014 de 2016 y 003 de 2021",
           "v": "Internacionalización y multilingüismo."
         }
-      ]
+      ],
+      "comparativo": {
+        "titulo": "Comparación con la evaluación anterior",
+        "bajada": "En ARCU-SUR el cuerpo profesoral se evaluó en el componente 3.3, Docentes, de la Dimensión 3; hoy es un factor propio con ocho características.",
+        "antes": {
+          "score": 88.3,
+          "modelo": "Modelo ARCU-SUR · Dimensión 3, componente 3.3",
+          "juicio": "Se cumple en alto grado"
+        },
+        "despues": {
+          "score": 94.19,
+          "modelo": "Modelo CNA · Acuerdo 02 de 2020",
+          "juicio": "Se cumple plenamente"
+        }
+      },
+      "pesoTotal": 100
     },
     {
       "n": 4,
@@ -3451,7 +3874,7 @@
       "summary": "El diseño del currículo, cómo se enseña y cómo se comprueba lo aprendido: 169 créditos, resultados de aprendizaje evaluados en cuatro ciclos con Taxonomía SOLO y las nueve características en cumplimiento pleno.",
       "fortalezas": [
         "Resultados de aprendizaje evaluados con Taxonomía SOLO y Bloom Revisada en cuatro ciclos acumulativos (Acuerdo 013 de 2021).",
-        "El 35 % de los estudiantes evaluados en los ciclos avanzados alcanzó el nivel multiestructural o relacional.",
+        "El 35 % de los estudiantes evaluados alcanzó el nivel multiestructural de la Taxonomía SOLO.",
         "Proyección social masiva y con retorno al aula: 14.037 personas beneficiadas entre 2020 y 2024 en más de 100 actividades de extensión.",
         "15 de las 19 oportunidades del Plan de Mejoramiento superadas; las 4 restantes siguen en ejecución.",
         "Saber Pro: 143 puntos globales en 2025, por encima de la institución en los seis años medidos.",
@@ -3683,7 +4106,7 @@
                   "sub": "Ciudadanía y rol social de la ingeniería",
                   "detalles": [
                     "Semilleros, extensión y trabajo colaborativo",
-                    "61 eventos académicos internacionales y 6 intercambios (2020–2024)"
+                    "61 eventos académicos internacionales (2020–2024) y 6 intercambios (2022–2024)"
                   ]
                 }
               ]
@@ -3751,7 +4174,7 @@
                 },
                 {
                   "v": "+250",
-                  "l": "estudiantes en movilidad, en más de 60 actividades globales y pasantías"
+                  "l": "estudiantes participaron en las 61 actividades internacionales: webinars, clases espejo y talleres"
                 }
               ]
             },
@@ -3774,36 +4197,51 @@
           "desc": "Docentes y estudiantes la conocen; el reto está en que más estudiantes la practiquen.",
           "bloques": [
             {
-              "tipo": "barras",
+              "tipo": "pares",
               "titulo": "Conocimiento y práctica de la interdisciplinariedad",
               "unidad": "%",
               "max": 100,
+              "series": [
+                {
+                  "l": "Riohacha",
+                  "tono": "azul"
+                },
+                {
+                  "l": "Maicao",
+                  "tono": "ambar"
+                }
+              ],
               "items": [
                 {
                   "l": "Docentes que la conocen",
-                  "v": 98,
-                  "tono": "azul"
+                  "v": [
+                    98.57,
+                    98.04
+                  ]
                 },
                 {
                   "l": "Docentes que participan",
-                  "v": 80,
-                  "tono": "azul"
+                  "v": [
+                    80,
+                    72.55
+                  ]
                 },
                 {
                   "l": "Estudiantes que la conocen",
-                  "v": 85
+                  "v": [
+                    85.2,
+                    82.56
+                  ]
                 },
                 {
-                  "l": "Estudiantes que participan · Riohacha",
-                  "v": 32,
-                  "tono": "ambar"
-                },
-                {
-                  "l": "Estudiantes que participan · Maicao",
-                  "v": 12,
-                  "tono": "terracota"
+                  "l": "Estudiantes que participan",
+                  "v": [
+                    32,
+                    11.79
+                  ]
                 }
-              ]
+              ],
+              "nota": "Encuestas de autoevaluación a docentes y estudiantes de las dos sedes."
             },
             {
               "tipo": "dato",
@@ -3854,7 +4292,7 @@
               "tipo": "dato",
               "tono": "ambar",
               "v": "8,67 %",
-              "l": "de deserción en 2023-1, el mínimo histórico, gracias a las tutorías y la nivelación en asignaturas críticas"
+              "l": "de deserción en 2023-1, tras las tutorías y la nivelación en asignaturas críticas"
             },
             {
               "tipo": "nota",
@@ -3996,7 +4434,7 @@
               "tipo": "dato",
               "tono": "azul",
               "v": "35 %",
-              "l": "de los estudiantes evaluados en los ciclos avanzados alcanzó el nivel multiestructural o relacional de la Taxonomía SOLO"
+              "l": "de los estudiantes evaluados alcanzó el nivel multiestructural de la Taxonomía SOLO"
             }
           ]
         },
@@ -4096,7 +4534,7 @@
               "tipo": "nota",
               "k": "Validación externa",
               "tono": "ambar",
-              "v": "El 92,7 % de satisfacción de los empleadores y el 91,5 % de inserción laboral confirman desde afuera el efecto de esos ajustes."
+              "v": "El 92,7 % de satisfacción de los empleadores y el 74 % de empleabilidad de los graduados confirman desde afuera el efecto de esos ajustes."
             }
           ]
         },
@@ -4153,7 +4591,7 @@
                 },
                 {
                   "v": "476",
-                  "l": "docentes involucrados"
+                  "l": "participaciones docentes en las actividades de extensión"
                 }
               ]
             },
@@ -4393,27 +4831,91 @@
       ],
       "evidencias": [
         {
-          "t": "Microcurrículos actualizados 2025",
-          "d": "Syllabus vigente con resultados de aprendizaje",
-          "f": "Feb 2025",
-          "url": ""
+          "t": "Acuerdo 013 de 2021 · Lineamientos para los resultados de aprendizaje",
+          "d": "Consejo Académico · Anexo 31",
+          "cat": "Normativa institucional",
+          "f": "2021",
+          "url": "/descargas/factor-5/anexo-31-acuerdo-013-2021-resultados-de-aprendizaje.pdf"
         },
         {
-          "t": "Informe de reforma curricular — Acuerdo 013",
-          "d": "Análisis, propuesta y aprobación",
-          "f": "Ago 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Acuerdo 026 de 2018 · Reglamento Estudiantil",
+          "d": "Consejo Superior · Anexo 12",
+          "cat": "Normativa institucional",
+          "f": "2018",
+          "url": "/descargas/factor-2/anexo-12-acuerdo-026-2018-reglamento-estudiantil.pdf"
+        },
         {
-          "cat": "Currículo",
-          "items": [
-            "Malla curricular 169 cr",
-            "Matriz de competencias y resultados de aprendizaje"
-          ]
+          "t": "Acuerdo 014 de 2016 · Políticas de internacionalización",
+          "d": "Consejo Superior · Anexo 27",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-27-acuerdo-014-2016-internacionalizacion.pdf"
+        },
+        {
+          "t": "Acuerdo 006 de 2016 · Movilidad estudiantil",
+          "d": "Consejo Académico · Anexo 28",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-7/anexo-28-acuerdo-006-2016-movilidad-estudiantil.pdf"
+        },
+        {
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Proyecto Educativo del Programa (PEP)",
+          "d": "Ingeniería de Sistemas · Anexo 5",
+          "cat": "Documentos del programa",
+          "f": "2024",
+          "url": "/descargas/factor-1/anexo-05-pep.pdf"
+        },
+        {
+          "t": "Resultados de aprendizaje y mecanismos de evaluación",
+          "d": "Ingeniería de Sistemas · Anexo 11",
+          "cat": "Documentos del programa",
+          "f": "2023",
+          "url": "/descargas/factor-1/anexo-11-resultados-de-aprendizaje.pdf"
+        },
+        {
+          "t": "Programa referencial de Ingeniería de Sistemas",
+          "d": "Base de la modificación del plan de estudios · Anexo 13",
+          "cat": "Documentos del programa",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-13-programa-referencial.pdf"
+        },
+        {
+          "t": "Análisis de comparabilidad",
+          "d": "Referentes nacionales e internacionales del programa · Anexo 6",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-06-analisis-comparabilidad.pdf"
+        },
+        {
+          "t": "Informe de internacionalización",
+          "d": "Convenios, movilidad y redes del programa · Anexo 7",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-07-informe-internacionalizacion.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],
@@ -4465,7 +4967,7 @@
       "caracteristicas": [
         {
           "n": "6.1",
-          "name": "Políticas, estrategias y estructura para la permanencia y graduación",
+          "name": "Políticas, estrategias y estructura para la permanencia y la graduación",
           "peso": 29.57,
           "calificacion": 90,
           "score": 90,
@@ -4545,8 +5047,8 @@
                   "l": "deserción por periodo de 2023-2 a 2024-2, una reducción de 3,88 puntos"
                 },
                 {
-                  "v": "98 %",
-                  "l": "de absorción en admisión en ambas sedes en 2024-2, y superior al 90 % en 11 de los 17 periodos evaluados"
+                  "v": "98 % · 97 %",
+                  "l": "de absorción en 2024-2 en Riohacha y en Maicao; superior al 90 % en 11 de los 18 periodos evaluados en las dos sedes"
                 }
               ]
             }
@@ -4554,7 +5056,7 @@
         },
         {
           "n": "6.2",
-          "name": "Caracterización de los estudiantes y sistema de alerta temprana",
+          "name": "Caracterización de estudiantes y sistema de alertas tempranas",
           "peso": 24.57,
           "calificacion": 95,
           "score": 95,
@@ -4573,66 +5075,93 @@
               "titulo": "Rutas de acompañamiento y su efectividad",
               "cols": [
                 "Estrategia",
-                "Estudiantes del programa",
-                "Éxito académico"
+                "Atendidos",
+                "Permanecen",
+                "Graduados",
+                "Desertores",
+                "Otros estados"
               ],
               "filas": [
                 [
-                  "Tutorías académicas",
-                  "590",
-                  "90,7 %"
+                  "Tutorías",
+                  "1.237",
+                  "951",
+                  "76",
+                  "30",
+                  "180"
                 ],
                 [
                   "Acompañamiento al aprendizaje",
-                  "298",
-                  "88,2 %"
+                  "1.203",
+                  "1.117",
+                  "2",
+                  "47",
+                  "37"
                 ],
                 [
-                  "Promoción a la graduación exitosa",
-                  "203",
-                  "92 %"
+                  "Promoción a la graduación",
+                  "277",
+                  "172",
+                  "48",
+                  "19",
+                  "38"
                 ],
                 [
-                  "Acompañamiento a estudiantes repitentes",
-                  "119",
-                  "97 %"
+                  "Atención a repitentes",
+                  "202",
+                  "178",
+                  "10",
+                  "10",
+                  "4"
                 ],
                 [
-                  "Mentorías por pares",
-                  "171",
-                  "94 %"
+                  "Mentorías",
+                  "153",
+                  "147",
+                  "0",
+                  "0",
+                  "6"
+                ],
+                [
+                  "Total",
+                  "3.072",
+                  "2.565",
+                  "136",
+                  "106",
+                  "265"
                 ]
               ],
-              "nota": "Estudiantes del programa atendidos por cada estrategia. El éxito académico reúne permanencia, culminación y graduación. Fuente: Bienestar Social Universitario."
+              "nota": "Estudiantes del programa atendidos entre 2019 y 2024 por las estrategias que activan las alertas. Otros estados: retiros y sin matrícula. Fuente: Bienestar Social Universitario (tabla 60 del informe)."
             },
             {
               "tipo": "barras",
-              "titulo": "Éxito académico por estrategia",
+              "titulo": "Permanecen o se graduaron, por estrategia",
               "unidad": "%",
               "max": 100,
               "items": [
                 {
-                  "l": "Acompañamiento a estudiantes repitentes",
-                  "v": 97,
+                  "l": "Mentorías",
+                  "v": 96.1,
                   "tono": "azul"
                 },
                 {
-                  "l": "Mentorías por pares",
-                  "v": 94
-                },
-                {
-                  "l": "Promoción a la graduación exitosa",
-                  "v": 92
-                },
-                {
-                  "l": "Tutorías académicas",
-                  "v": 90.7
+                  "l": "Atención a repitentes",
+                  "v": 93.1
                 },
                 {
                   "l": "Acompañamiento al aprendizaje",
-                  "v": 88.2
+                  "v": 93.0
+                },
+                {
+                  "l": "Tutorías",
+                  "v": 83.0
+                },
+                {
+                  "l": "Promoción a la graduación",
+                  "v": 79.4
                 }
-              ]
+              ],
+              "nota": "Proporción de los atendidos por cada estrategia que sigue activa o ya se graduó, calculada con la tabla 60 del informe."
             },
             {
               "tipo": "nota",
@@ -4650,7 +5179,7 @@
         },
         {
           "n": "6.3",
-          "name": "Ajustes a los aspectos curriculares",
+          "name": "Ajuste a los aspectos curriculares",
           "peso": 23.26,
           "calificacion": 95,
           "score": 95,
@@ -4673,7 +5202,7 @@
         {
           "n": "6.4",
           "name": "Mecanismos de selección",
-          "peso": 22.6,
+          "peso": 22.61,
           "calificacion": 93,
           "score": 93,
           "status": "pleno",
@@ -4712,7 +5241,7 @@
               "tipo": "nota",
               "k": "Equidad de acceso",
               "tono": "azul",
-              "v": "El Acta 005 de 2024 del Comité Curricular modificó el peso de selección: redistribuyó el componente de inglés hacia matemáticas, lectura crítica y ciencias sociales para aspirantes indígenas y de comunidades vulnerables."
+              "v": "El Acta 005 de mayo de 2024, resultado de las discusiones del Comité Curricular, eliminó para los aspirantes indígenas el peso del 20 % del componente de inglés y lo redistribuyó entre matemáticas, lectura crítica y ciencias sociales."
             }
           ]
         }
@@ -4749,27 +5278,70 @@
       ],
       "evidencias": [
         {
-          "t": "Informe SPADIES — Cohortes 2019–2024",
-          "d": "Tasas de deserción y graduación por período",
-          "f": "Mar 2025",
-          "url": ""
+          "t": "Acuerdo 016 de 2023 · Políticas de permanencia y graduación exitosa",
+          "d": "Consejo Académico · Anexo 24",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-2/anexo-24-acuerdo-016-2023-permanencia-graduacion.pdf"
         },
         {
-          "t": "Reporte SIAT 2024",
-          "d": "Intervenciones y resultados del sistema de alertas",
-          "f": "Dic 2024",
-          "url": ""
-        }
-      ],
-      "anexos": [
+          "t": "Acuerdo 021 de 2023 · Modificación de las políticas de permanencia",
+          "d": "Consejo Académico · Anexo 25",
+          "cat": "Normativa institucional",
+          "f": "2023",
+          "url": "/descargas/factor-2/anexo-25-acuerdo-021-2023-modifica-permanencia.pdf"
+        },
         {
-          "cat": "Permanencia",
-          "items": [
-            "Tasas de deserción por cohorte",
-            "Informe de tutorías intensivas"
-          ]
+          "t": "Acuerdo 019 de 2016 · Política general de admisiones",
+          "d": "Consejo Académico · Anexo 26",
+          "cat": "Normativa institucional",
+          "f": "2016",
+          "url": "/descargas/factor-1/anexo-26-acuerdo-019-2016-admisiones.pdf"
+        },
+        {
+          "t": "Acuerdo 026 de 2018 · Reglamento Estudiantil",
+          "d": "Consejo Superior · Anexo 12",
+          "cat": "Normativa institucional",
+          "f": "2018",
+          "url": "/descargas/factor-2/anexo-12-acuerdo-026-2018-reglamento-estudiantil.pdf"
+        },
+        {
+          "t": "Acuerdo 013 de 2020 · Estatuto General de Bienestar Social Universitario",
+          "d": "Consejo Superior · Anexo 8",
+          "cat": "Normativa institucional",
+          "f": "2020",
+          "url": "/descargas/factor-2/anexo-08-acuerdo-013-2020-estatuto-bienestar.pdf"
+        },
+        {
+          "t": "Resolución 007 de 2022 · Ponderación de factores",
+          "d": "Pesos de las características aprobados por la Facultad · Anexo 4",
+          "cat": "Normativa institucional",
+          "f": "2022",
+          "url": "/descargas/factor-1/anexo-04-resolucion-007-2022-ponderacion.pdf"
+        },
+        {
+          "t": "Informe de Bienestar Social Universitario",
+          "d": "Participación de estudiantes, docentes y administrativos del programa · Anexo 10",
+          "cat": "Estudios e informes",
+          "f": "2024",
+          "url": "/descargas/factor-2/anexo-10-informe-bienestar-social-universitario.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Riohacha",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-informe-encuestas-riohacha.pdf"
+        },
+        {
+          "t": "Informe de encuestas · Sede Maicao",
+          "d": "Apreciación de estudiantes, docentes, egresados y empleadores · Anexo 9.1",
+          "cat": "Estudios e informes",
+          "f": "2025",
+          "url": "/descargas/factor-1/anexo-09-1-informe-encuestas-maicao.pdf"
         }
       ],
+      "anexos": [],
       "presentacionUrl": "",
       "metodologiaFactor": "",
       "documentos": [],

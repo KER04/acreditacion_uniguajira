@@ -423,11 +423,11 @@ export default function FactorPage({ factor, allFactores, onBack, onNavigate }) 
   const delta = ev.length > 1 ? ev[ev.length - 1].score - ev[0].score : null
 
   const caso = factor.caso
-  /* Los pesos de las características normalmente suman 100, pero el factor 2
-     los trae sumando 101 en la fuente. Se usa el total real para que el peso
-     de cada una se lea sobre la base correcta. */
+  /* Los pesos de las características suman 100. Si un factor no lo declara se
+     usa la suma real, redondeada: con decimales, una suma como la del factor 3
+     (99,99 por redondeo de la resolución) no debe salir como 99,99000000000001. */
   const pesoTotal = factor.pesoTotal
-    ?? (factor.caracteristicas ?? []).reduce((a, c) => a + (Number(c.peso) || 0), 0)
+    ?? Math.round((factor.caracteristicas ?? []).reduce((a, c) => a + (Number(c.peso) || 0), 0) * 100) / 100
   const conDetalle = (factor.caracteristicas ?? []).filter(c => c.bloques?.length)
   const pert = factor.pertinencia
 
